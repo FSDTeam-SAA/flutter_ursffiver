@@ -15,7 +15,7 @@ class AppText {
       fontFamily: _fontFamily,
       fontSize: fontSize,
       fontWeight: fontWeight,
-      color: color ?? AppColors.primaryText,
+      color: color ?? AppColors.primaryTextblack,
     );
   }
 

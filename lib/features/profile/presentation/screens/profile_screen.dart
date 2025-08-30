@@ -5,8 +5,11 @@ import 'package:flutter_ursffiver/core/theme/text_style.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/change_password_scree.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/interests_screen.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/terms_condition_screen.dart';
+import '../widget/invite_friend.dart';
 import '../widget/logout_widget.dart';
 import 'edit_personal_informetion_scree.dart';
+import 'privacy_settings_screen.dart';
+import 'report_problem_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -60,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => InterestsScreen(currentInterests: []),
+                          builder: (_) => InterestsPage(),
                         ),
                       );
                     }),
@@ -70,7 +73,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => Scaffold()),
+                          MaterialPageRoute(
+                            builder: (_) => PrivacySettingsScreen(),
+                          ),
                         );
                       },
                     ),
@@ -78,12 +83,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Icons.person_2_outlined,
                       'Invite Friend',
                       () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => Scaffold()),
+                        showDialog(
+                          context: context,
+                          builder: (context) => const InviteFriend(
+                            shareLink:
+                                "https://speet.app", // pass your link here
+                          ),
                         );
                       },
+                      isLast: true,
                     ),
+
                     _buildMenuItem(
                       Icons.heart_broken_rounded,
                       'Support Our Mission',
@@ -100,7 +110,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => Scaffold()),
+                          MaterialPageRoute(
+                            builder: (_) => ReportProblemScreen(),
+                          ),
                         );
                       },
                     ),
@@ -110,7 +122,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => TermsConditionScreen()),
+                          MaterialPageRoute(
+                            builder: (_) => TermsConditionScreen(),
+                          ),
                         );
                       },
                     ),
@@ -141,10 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _buildMenuItem(Icons.logout, 'Logout', () {
                       showDialog(
                         context: context,
-                        builder: (context) => LogoutDialog(
-                          onConfirm: () {
-                          },
-                        ),
+                        builder: (context) => LogoutDialog(onConfirm: () {}),
                       );
                     }, isLast: true),
                   ],

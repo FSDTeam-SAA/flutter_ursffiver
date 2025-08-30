@@ -33,6 +33,7 @@ class AppColors {
   static const Color interestsblue = Color(0xFF3F42EE);
   static const Color interestsyellow = Color(0xFFFFBF0F);
   static const Color interestsred = Color(0xFFF2415A);
+  static const Color interestsgreen = Color(0xFF27BE69);
 
 
   static const Color tabselect = Color(0xFF6447CE);

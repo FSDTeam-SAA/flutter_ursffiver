@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/features/home/presentation/screen/delete.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../common/app_logo.dart';
+import 'notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -47,7 +49,12 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.notifications_none, color: Colors.black),
             iconSize: 32,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
+              );
+            },
           ),
         ],
       ),
@@ -189,24 +196,72 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               const SizedBox(height: 20),
-
-              /// Primary Interests
               const Text(
                 "Primary Interests",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: interests
-                    .map(
-                      (interest) => Chip(
-                        label: Text(interest),
-                        backgroundColor: Colors.blue.shade100,
-                      ),
-                    )
-                    .toList(),
+
+              SizedBox(height: 8),
+
+              GridView.count(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 3,
+                crossAxisSpacing: 6,
+                mainAxisSpacing: 0,
+                childAspectRatio: 3,
+                children: [
+                  Chip(
+                    label: Text('Acting/Theate...'),
+                    backgroundColor: AppColors.interestsblue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(color: Colors.transparent),
+                    ),
+                  ),
+                  Chip(
+                    label: Text('Escape Room...'),
+                    backgroundColor: AppColors.interestsyellow,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(color: Colors.transparent),
+                    ),
+                  ),
+                  Chip(
+                    label: Text('Arcade Gami...'),
+                    backgroundColor: AppColors.interestsred,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(color: Colors.transparent),
+                    ),
+                  ),
+                  Chip(
+                    label: Text('Arcade Gami...'),
+                    backgroundColor: AppColors.interestsyellow,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(color: Colors.transparent),
+                    ),
+                  ),
+                  Chip(
+                    label: Text('Expedition Tra...'),
+                    backgroundColor: AppColors.interestsred,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(color: Colors.transparent),
+                    ),
+                  ),
+                  Chip(
+                    label: Text('Acting/Theate...'),
+                    backgroundColor: AppColors.interestsgreen,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(color: Colors.transparent),
+                    ),
+                  ),
+                ],
               ),
+
               const SizedBox(height: 20),
 
               /// Location Range
@@ -215,21 +270,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: List.generate(
-              //     ranges.length,
-              //     (index) => ChoiceChip(
-              //       label: Text(ranges[index]),
-              //       selected: selectedRange == index,
-              //       onSelected: (val) {
-              //         setState(() {
-              //           selectedRange = index;
-              //         });
-              //       },
-              //     ),
-              //   ),
-              // ),
               SizedBox(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -237,31 +277,31 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: List.generate(
                       ranges.length,
                       (index) => Padding(
-                        padding: const EdgeInsets.only(
-                          right: 8,
-                        ),
+                        padding: const EdgeInsets.only(right: 8),
                         child: ChoiceChip(
                           label: SizedBox(
-                            height: 62, // control box height
-                            width: 62, // control box width
-                            child: Row(
-                              //mainAxisAlignment: MainAxisAlignment.center,
+                            height: 52,
+                            width: 48,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Icon(
-                                  Icons.location_on,
-                                  size: 18,
+                                  Icons.location_on_outlined,
+                                  size: 24,
                                   color: selectedRange == index
-                                      ? Colors.white
+                                      ? AppColors.primarybutton
                                       : Colors.grey,
                                 ),
-                                const SizedBox(width: 6),
+                                const SizedBox(height: 6),
                                 Flexible(
                                   child: Text(
                                     ranges[index],
                                     overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: selectedRange == index
-                                          ? Colors.white
+                                          ? AppColors.primarybutton
                                           : Colors.black87,
                                       fontSize: 13,
                                     ),
@@ -276,10 +316,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               selectedRange = index;
                             });
                           },
-                          selectedColor: Color(0xFFECEDFD),
-                          backgroundColor: Colors.grey.shade200,
+                          selectedColor: const Color(0xFFECEDFD),
+                          backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(
+                              color: selectedRange == index
+                                  ? AppColors.primarybutton
+                                  : AppColors.textFieldBorder,
+                              width: 1.5,
+                            ),
                           ),
                           showCheckmark: false,
                         ),
@@ -287,6 +333,107 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
+              ),
+
+              const SizedBox(height: 20),
+
+              Row(
+                children: [
+                  Column(
+                    children: [
+                      const Text(
+                        "Nearby Actors",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.refresh,
+                          size: 24,
+                          color: AppColors.primarybutton,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          "Refresh",
+                          style: AppText.mdMedium_16_500.copyWith(
+                            color: AppColors.primarybutton,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              InkWell(
+                onTap: () {},
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.filter_alt_outlined,
+                      color: AppColors.primarybutton,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Filtering",
+                      style: AppText.mdMedium_16_500.copyWith(
+                        color: AppColors.primarybutton,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  // Wrapping UserProfileCard with a Container to add decoration
+                  Container(
+                    padding: const EdgeInsets.all(
+                      16,
+                    ), // Padding around the card
+                    decoration: BoxDecoration(
+                      color: Colors.white, // Background color of the card
+                      borderRadius: BorderRadius.circular(16),
+                      shape: BoxShape.rectangle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1), // Light shadow
+                          blurRadius: 12, // Shadow blur effect
+                          offset: const Offset(0, 4), // Shadow offset
+                        ),
+                      ],
+                    ),
+                    child: UserProfileCard(
+                      name: 'Brooklyn Simmons',
+                      imagePath:
+                          'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-v4l97iRrPrLQLU1ADUuxSzEBgqj965.png',
+                      distance: '5 ft',
+                      status: 'Available',
+                      onActivityHi: () {},
+                      onExperience: () {},
+                      onChat: () {},
+                      onInfo: () {},
+                      tags: [],
+                      tagColors: [],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
