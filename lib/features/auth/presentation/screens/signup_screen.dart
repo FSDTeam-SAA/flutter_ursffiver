@@ -1,0 +1,725 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/gestures.dart';
+import 'login_screen.dart'; // update path/name
+
+import 'onboarding_screen.dart';
+
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
+
+  @override
+  State<SignupScreen> createState() => _SignupScreen();
+}
+
+class _SignupScreen extends State<SignupScreen> {
+  // Brand
+  static const _brandGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [Color(0xFF4C5CFF), Color(0xFF8F79FF)],
+  );
+  static const _borderColor = Color(0xFFE6E6E9);
+
+  final _formKey = GlobalKey<FormState>();
+
+  final _firstName = TextEditingController();
+  final _lastName = TextEditingController();
+  final _userName = TextEditingController();
+  final _email = TextEditingController();
+  final _dob = TextEditingController();
+  final _bio = TextEditingController();
+  final _password = TextEditingController();
+  final _confirmPassword = TextEditingController();
+
+  bool _showPassword = false;
+  bool _showConfirm = false;
+
+  String? _gender;
+  String? _ageRange;
+
+  @override
+  void dispose() {
+    _firstName.dispose();
+    _lastName.dispose();
+    _userName.dispose();
+    _email.dispose();
+    _dob.dispose();
+    _bio.dispose();
+    _password.dispose();
+    _confirmPassword.dispose();
+    super.dispose();
+  }
+
+  InputDecoration _decoration(String hint) => InputDecoration(
+    hintText: hint,
+    filled: true,
+    fillColor: Colors.white,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: _borderColor),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: Color(0xFFBAC0FF)),
+    ),
+  );
+
+  TextStyle get _labelStyle => const TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w700,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final caption = Theme.of(context)
+        .textTheme
+        .bodySmall
+        ?.copyWith(color: Colors.black54, height: 1.35);
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarColor: Colors.white,
+          systemNavigationBarIconBrightness: Brightness.dark,
+        ),
+        child: SafeArea(
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Brand
+                  const _GradientText('SPEET', gradient: _brandGradient, size: 18, weight: FontWeight.w900),
+                  const SizedBox(height: 10),
+
+                  // Title + subtitle
+                  const Text(
+                    'Create Your Account',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Join the community and start connecting with\n             people around you in seconds.',
+                    style: caption,
+                  ),
+                  const SizedBox(height: 18),
+
+                  // First/Last
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _Labeled(
+                          label: 'First Name',
+                          child: TextFormField(
+                            controller: _firstName,
+                            textInputAction: TextInputAction.next,
+                            decoration: _decoration('Name Here'),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _Labeled(
+                          label: 'Last Name',
+                          child: TextFormField(
+                            controller: _lastName,
+                            textInputAction: TextInputAction.next,
+                            decoration: _decoration('Name Here'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+
+                  _Labeled(
+                    label: 'User Name',
+                    child: TextFormField(
+                      controller: _userName,
+                      textInputAction: TextInputAction.next,
+                      decoration: _decoration('User Name Here'),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  _Labeled(
+                    label: 'Email Address',
+                    child: TextFormField(
+                      controller: _email,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: _decoration('hello@example.com'),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  _Labeled(
+                    label: 'Date of Birth',
+                    child: TextFormField(
+                      controller: _dob,
+                      readOnly: true,
+                      decoration: _decoration('DD/MM/YY').copyWith(
+                        suffixIcon: const Icon(Icons.event_outlined),
+                      ),
+                      onTap: () async {
+                        final now = DateTime.now();
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime(now.year - 18, now.month, now.day),
+                          firstDate: DateTime(1900),
+                          lastDate: now,
+                        );
+                        if (picked != null) {
+                          _dob.text = '${picked.day.toString().padLeft(2, '0')}/'
+                              '${picked.month.toString().padLeft(2, '0')}/'
+                              '${picked.year.toString().substring(2)}';
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Privacy note card
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF2F2),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: const Color(0xFFFFD4D4)),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(top: 2),
+                          child: Icon(Icons.warning, color: Colors.red, size: 22),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            "Privacy Protected Information\n"
+                                "Your birth date is only required for Apple and Google app store compliance to verify you’re 18+. "
+                                "This information is never visible to other users, not used for marketing or recommendations, "
+                                "and not shared with any third parties. It remains completely private and secure.",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Gender + Age Range
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _Labeled(
+                          label: 'Gender',
+                          child: _Dropdown<String>(
+                            value: _gender,
+                            hint: 'Select',
+                            items: const ['Male', 'Female', 'Non-binary', 'Prefer not to say'],
+                            onChanged: (v) => setState(() => _gender = v),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _Labeled(
+                          label: 'Age Range',
+                          child: _Dropdown<String>(
+                            value: _ageRange,
+                            hint: 'Select',
+                            items: const ['18–24', '25–34', '35–44', '45–54', '55+'],
+                            onChanged: (v) => setState(() => _ageRange = v),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Bio
+                  _Labeled(
+                    label: 'Bio (Optional)',
+                    labelTrailing: Text(
+                      '${_bio.text.length}/500',
+                      style: const TextStyle(fontSize: 12, color: Colors.black54),
+                    ),
+                    child: SizedBox(
+                      height: 140,
+                      // child: TextFormField(
+                      //   controller: _bio,
+                      //   maxLines: null,
+                      //   maxLength: 500,
+                      //   decoration: _decoration('Write something about yourself!').copyWith(
+                      //     counterText: '', // we show our own counter above
+                      //   ),
+                      //   onChanged: (_) => setState(() {}),
+                      // ),
+                      child: const _BioSection(),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Your bio will be visible to nearby users as a preview of who you are.',
+                    style: caption,
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Create Password
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      'Create Password',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: _password,
+                    obscureText: !_showPassword,
+                    decoration: _decoration('• • • • • • • •').copyWith(
+                      suffixIcon: IconButton(
+                        icon: Icon(_showPassword ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () => setState(() => _showPassword = !_showPassword),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  _RulesBox(
+                    rules: const [
+                      'Minimum 8 characters',
+                      'At least 1 uppercase letter',
+                      'At least 1 lowercase letter',
+                      'At least 1 number',
+                      'At least 1 special character (e.g., !@#\$%)',
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+
+                  //confirm passowrd
+
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      'Confirm Password',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: _confirmPassword,
+                    obscureText: !_showConfirm,
+                    decoration: _decoration('• • • • • • • •').copyWith(
+                      suffixIcon: IconButton(
+                        icon: Icon(_showConfirm ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () => setState(() => _showConfirm = !_showConfirm),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // CTA
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4C5CFF),
+                        foregroundColor: Colors.white,
+                        shape:
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                      onPressed: () {
+                        // TODO: validate and proceed
+                      },
+                      child: const Text('Create Account',
+                          style: TextStyle(fontWeight: FontWeight.w700)),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Already have account
+                  // Center(
+                  //
+                  //   child: Text.rich(
+                  //     TextSpan(
+                  //       text: 'Already have an account? ',
+                  //       style: caption,
+                  //
+                  //       children: const [
+                  //         TextSpan(
+                  //           text: 'Sign in',
+                  //           style: TextStyle(
+                  //             color: Color(0xFF4C5CFF),
+                  //             fontWeight: FontWeight.w700,
+                  //             decoration: TextDecoration.underline,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+
+                  Center(
+                    child: Text.rich(
+                      TextSpan(
+                        text: 'Already have an account? ',
+                        style: caption,
+                        children: [
+                          TextSpan(
+                            text: 'Sign in',
+                            style: const TextStyle(
+                              color: Color(0xFF4C5CFF),
+                              fontWeight: FontWeight.w700,
+                              decoration: TextDecoration.underline,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (_) => const SignInScreen()),
+                                );
+                              },
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  // Terms
+                  Center(
+                    child: Text.rich(
+                      TextSpan(
+                        text: 'By continuing, you agree to SPEET’s ',
+                        style: caption,
+                        children: const [
+                          TextSpan(
+                            text: 'Terms of Service',
+                            style: TextStyle(
+                              color: Color(0xFF4C5CFF),
+                              fontWeight: FontWeight.w700,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                          TextSpan(text: ' and '),
+                          TextSpan(
+                            text: 'Privacy Policy',
+                            style: TextStyle(
+                              color: Color(0xFF4C5CFF),
+                              fontWeight: FontWeight.w700,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                          TextSpan(text: '.'),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// --- Bio section -------------------------------------------------------------
+class _BioSection extends StatefulWidget {
+  const _BioSection({this.controller});
+  final TextEditingController? controller;
+
+  @override
+  State<_BioSection> createState() => _BioSectionState();
+}
+
+class _BioSectionState extends State<_BioSection> {
+  static const _maxChars = 500;
+
+
+  late final TextEditingController _ctl =
+      widget.controller ?? TextEditingController();
+
+  @override
+  void dispose() {
+    if (widget.controller == null) _ctl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const baseBlack = Color(0xFF030712);
+    const neutral300 = Color(0xFFC0C0C6);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Title + counter (top-right)
+        Row(
+          children: [
+
+
+            // const Text.rich(
+            //   TextSpan(
+            //     text: 'Bio ',
+            //     style: TextStyle(
+            //       fontFamily: 'Poppins',
+            //       fontSize: 16,
+            //       fontWeight: FontWeight.w700,
+            //       color: baseBlack,
+            //     ),
+            //     children: [
+            //       TextSpan(
+            //         text: '(Optional)',
+            //         style: TextStyle(
+            //           fontWeight: FontWeight.w500,
+            //           color: Color(0xFF6B7280),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+
+
+            const Spacer(),
+            ValueListenableBuilder<TextEditingValue>(
+              valueListenable: _ctl,
+              builder: (_, v, __) {
+                final n = v.text.characters.length;
+                return Text(
+                  '$n/$_maxChars',
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12,
+                    color: Color(0xFF6B7280),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+
+        // Text area (140px tall)
+        Expanded(
+          // height: 140,
+          child: TextField(
+            controller: _ctl,
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+            maxLength: _maxChars,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            // hide default counter (we draw our own above)
+            buildCounter: (_, {required int currentLength, required bool isFocused, int? maxLength}) => null,
+            // 6 lines usually lands ~140px with padding; SizedBox enforces it precisely
+            minLines: null,
+            maxLines: null,
+            expands: true,
+
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: baseBlack,
+              height: 1.4,
+            ),
+            decoration: InputDecoration(
+              hintText: 'Write something about yourself',
+              hintStyle: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                color: Color(0xFF9CA3AF),
+              ),
+              isDense: true,
+              contentPadding: const EdgeInsets.fromLTRB(12, 8, 12, 8), // L12 R12 T8 B8
+              filled: true,
+              fillColor: Colors.white,
+              // neutral/300 border, 4px radius
+              enabledBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+                borderSide: BorderSide(color: neutral300, width: 1),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                borderSide: BorderSide( width: 1.5),
+              ),
+            ),
+            // cursorColor: OnBoardingScreen._brandBlue,
+          ),
+        ),
+
+        const SizedBox(height: 8),
+
+        // const Text(
+        //   'Your bio will be visible to nearby users as a preview of who you are.',
+        //   style: TextStyle(
+        //     fontFamily: 'Poppins',
+        //     fontSize: 13,
+        //     height: 1.35,
+        //     color: Color(0xFF374151),
+        //   ),
+        // ),
+      ],
+    );
+  }
+}
+
+
+/* ---------- UI helpers ---------- */
+
+class _Labeled extends StatelessWidget {
+  const _Labeled({required this.label, required this.child, this.labelTrailing});
+
+  final String label;
+  final Widget child;
+  final Widget? labelTrailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(label,
+                style:
+                const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+            const Spacer(),
+            if (labelTrailing != null) labelTrailing!,
+          ],
+        ),
+        const SizedBox(height: 8),
+        child,
+      ],
+    );
+  }
+}
+
+class _Dropdown<T> extends StatelessWidget {
+  const _Dropdown({
+    required this.value,
+    required this.items,
+    required this.onChanged,
+    required this.hint,
+  });
+
+  final T? value;
+  final List<String> items;
+  final ValueChanged<T?> onChanged;
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField<T>(
+      value: value,
+      isExpanded: true,
+      items: items
+          .map((e) => DropdownMenuItem<T>(value: e as T, child: Text(e)))
+          .toList(),
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        hintText: hint,
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: _SignupScreen._borderColor),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFBAC0FF)),
+        ),
+      ),
+      icon: const Icon(Icons.keyboard_arrow_down_rounded),
+    );
+  }
+}
+
+class _RulesBox extends StatelessWidget {
+  const _RulesBox({required this.rules});
+  final List<String> rules;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE6E6E9)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: rules
+            .map((r) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3),
+          child: Row(
+            children: [
+              const Icon(Icons.fiber_manual_record,
+                  size: 8, color: Colors.black54),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  r,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: Colors.black87),
+                ),
+              ),
+            ],
+          ),
+        ))
+            .toList(),
+      ),
+    );
+  }
+}
+
+class _GradientText extends StatelessWidget {
+  const _GradientText(
+      this.text, {
+        required this.gradient,
+        this.size = 24,
+        this.weight = FontWeight.w900,
+      });
+
+  final String text;
+  final Gradient gradient;
+  final double size;
+  final FontWeight weight;
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (rect) => gradient.createShader(rect),
+      blendMode: BlendMode.srcIn,
+      child: Text(
+        text,
+        style: TextStyle(fontSize: size, fontWeight: weight, letterSpacing: 1.1),
+      ),
+    );
+  }
+}
