@@ -21,6 +21,15 @@ class _SignupScreen extends State<SignupScreen> {
   );
   static const _borderColor = Color(0xFFE6E6E9);
 
+  // === Password rule checks ===
+  bool _hasMinLength(String v) => v.length >= 8;
+  bool _hasUppercase(String v) => RegExp(r'[A-Z]').hasMatch(v);
+  bool _hasLowercase(String v) => RegExp(r'[a-z]').hasMatch(v);
+  bool _hasNumber(String v) => RegExp(r'\d').hasMatch(v);
+// raw string: no need to escape $
+  bool _hasSpecial(String v) => RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(v);
+
+
   final _formKey = GlobalKey<FormState>();
 
   final _firstName = TextEditingController();
@@ -70,6 +79,13 @@ class _SignupScreen extends State<SignupScreen> {
     fontSize: 13,
     fontWeight: FontWeight.w700,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    _password.addListener(() => setState(() {}));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -250,22 +266,16 @@ class _SignupScreen extends State<SignupScreen> {
                   // Bio
                   _Labeled(
                     label: 'Bio (Optional)',
-                    labelTrailing: Text(
-                      '${_bio.text.length}/500',
-                      style: const TextStyle(fontSize: 12, color: Colors.black54),
+                    labelTrailing: ValueListenableBuilder<TextEditingValue>(
+                      valueListenable: _bio,
+                      builder: (_, v, __) => Text(
+                        '${v.text.length}/500',
+                        style: const TextStyle(fontSize: 12, color: Colors.black54),
+                      ),
                     ),
                     child: SizedBox(
-                      height: 140,
-                      // child: TextFormField(
-                      //   controller: _bio,
-                      //   maxLines: null,
-                      //   maxLength: 500,
-                      //   decoration: _decoration('Write something about yourself!').copyWith(
-                      //     counterText: '', // we show our own counter above
-                      //   ),
-                      //   onChanged: (_) => setState(() {}),
-                      // ),
-                      child: const _BioSection(),
+                      height: 150,
+                      child: _BioSection(controller: _bio), // share controller
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -296,14 +306,15 @@ class _SignupScreen extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
+
                   _RulesBox(
-                    rules: const [
-                      'Minimum 8 characters',
-                      'At least 1 uppercase letter',
-                      'At least 1 lowercase letter',
-                      'At least 1 number',
-                      'At least 1 special character (e.g., !@#\$%)',
-                    ],
+                    checks: {
+                      'Minimum 8 characters'                     : _hasMinLength(_password.text),
+                      'At least 1 uppercase letter'              : _hasUppercase(_password.text),
+                      'At least 1 lowercase letter'              : _hasLowercase(_password.text),
+                      'At least 1 number'                        : _hasNumber(_password.text),
+                      'At least 1 special character (e.g., !@#\$%)': _hasSpecial(_password.text),
+                    },
                   ),
                   const SizedBox(height: 12),
 
@@ -480,27 +491,6 @@ class _BioSectionState extends State<_BioSection> {
           children: [
 
 
-            // const Text.rich(
-            //   TextSpan(
-            //     text: 'Bio ',
-            //     style: TextStyle(
-            //       fontFamily: 'Poppins',
-            //       fontSize: 16,
-            //       fontWeight: FontWeight.w700,
-            //       color: baseBlack,
-            //     ),
-            //     children: [
-            //       TextSpan(
-            //         text: '(Optional)',
-            //         style: TextStyle(
-            //           fontWeight: FontWeight.w500,
-            //           color: Color(0xFF6B7280),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-
 
             const Spacer(),
             ValueListenableBuilder<TextEditingValue>(
@@ -521,21 +511,21 @@ class _BioSectionState extends State<_BioSection> {
         ),
         const SizedBox(height: 8),
 
-        // Text area (140px tall)
+
         Expanded(
-          // height: 140,
           child: TextField(
             controller: _ctl,
             keyboardType: TextInputType.multiline,
             textInputAction: TextInputAction.newline,
             maxLength: _maxChars,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            // hide default counter (we draw our own above)
             buildCounter: (_, {required int currentLength, required bool isFocused, int? maxLength}) => null,
-            // 6 lines usually lands ~140px with padding; SizedBox enforces it precisely
+
+            // 👇 make the content (and hint) stick to the top-left
+            textAlignVertical: TextAlignVertical.top,
+            expands: true,
             minLines: null,
             maxLines: null,
-            expands: true,
 
             style: const TextStyle(
               fontFamily: 'Poppins',
@@ -551,34 +541,26 @@ class _BioSectionState extends State<_BioSection> {
                 color: Color(0xFF9CA3AF),
               ),
               isDense: true,
-              contentPadding: const EdgeInsets.fromLTRB(12, 8, 12, 8), // L12 R12 T8 B8
+              // extra top padding so text doesn’t collide with the border
+              contentPadding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
               filled: true,
               fillColor: Colors.white,
-              // neutral/300 border, 4px radius
               enabledBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(4)),
+                borderRadius: BorderRadius.all(Radius.circular(12)),
                 borderSide: BorderSide(color: neutral300, width: 1),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(4)),
-                borderSide: BorderSide( width: 1.5),
+              focusedBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderSide: BorderSide(width: 1.5),
               ),
             ),
-            // cursorColor: OnBoardingScreen._brandBlue,
           ),
         ),
 
+
         const SizedBox(height: 8),
 
-        // const Text(
-        //   'Your bio will be visible to nearby users as a preview of who you are.',
-        //   style: TextStyle(
-        //     fontFamily: 'Poppins',
-        //     fontSize: 13,
-        //     height: 1.35,
-        //     color: Color(0xFF374151),
-        //   ),
-        // ),
+
       ],
     );
   }
@@ -656,9 +638,51 @@ class _Dropdown<T> extends StatelessWidget {
   }
 }
 
+// class _RulesBox extends StatelessWidget {
+//   const _RulesBox({required this.rules});
+//   final List<String> rules;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: double.infinity,
+//       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(12),
+//         border: Border.all(color: const Color(0xFFE6E6E9)),
+//       ),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: rules
+//             .map((r) => Padding(
+//           padding: const EdgeInsets.symmetric(vertical: 3),
+//           child: Row(
+//             children: [
+//               const Icon(Icons.fiber_manual_record,
+//                   size: 8, color: Colors.black54),
+//               const SizedBox(width: 8),
+//               Expanded(
+//                 child: Text(
+//                   r,
+//                   style: Theme.of(context)
+//                       .textTheme
+//                       .bodySmall
+//                       ?.copyWith(color: Colors.black87),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ))
+//             .toList(),
+//       ),
+//     );
+//   }
+// }
+
 class _RulesBox extends StatelessWidget {
-  const _RulesBox({required this.rules});
-  final List<String> rules;
+  const _RulesBox({required this.checks});
+  final Map<String, bool> checks;
 
   @override
   Widget build(BuildContext context) {
@@ -672,31 +696,37 @@ class _RulesBox extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: rules
-            .map((r) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 3),
-          child: Row(
-            children: [
-              const Icon(Icons.fiber_manual_record,
-                  size: 8, color: Colors.black54),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  r,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: Colors.black87),
+        children: checks.entries.map((e) {
+          final text  = e.key;
+          final valid = e.value;
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3),
+            child: Row(
+              children: [
+                Icon(
+                  valid ? Icons.check_circle : Icons.radio_button_unchecked,
+                  size: 16,
+                  color: valid ? Colors.green : Colors.black45,
                 ),
-              ),
-            ],
-          ),
-        ))
-            .toList(),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    text,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: valid ? Colors.green : Colors.black87,
+                      fontWeight: valid ? FontWeight.w600 : FontWeight.normal,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }
 }
+
 
 class _GradientText extends StatelessWidget {
   const _GradientText(
@@ -723,3 +753,4 @@ class _GradientText extends StatelessWidget {
     );
   }
 }
+

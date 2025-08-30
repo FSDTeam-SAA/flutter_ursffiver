@@ -142,7 +142,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: _fieldDecoration('hello@example.com'),
                     validator: (v) =>
-                    (v == null || v.isEmpty) ? 'Required' : null,
+                    (v == null || v.isEmpty) ? 'Please Enter Your Correct Email' : null,
                   ),
                   const SizedBox(height: 14),
 
@@ -190,13 +190,13 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     validator: (_) =>
-                    _showPasswordError ? 'Please enter correct password' : null,
+                    _showPasswordError ? 'Please Enter Correct Password' : null,
                   ),
                   if (_showPasswordError)
                     const Padding(
                       padding: EdgeInsets.only(top: 6),
                       child: Text(
-                        'Please enter correct password',
+                        'Please Enter Correct Password',
                         style: TextStyle(color: Colors.red),
                       ),
                     ),

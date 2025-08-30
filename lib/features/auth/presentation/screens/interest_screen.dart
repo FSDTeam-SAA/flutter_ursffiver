@@ -2,6 +2,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../common/app_logo.dart';
+
 class InterestScreen extends StatefulWidget {
   const InterestScreen({super.key});
 
@@ -82,7 +84,12 @@ class _InterestScreenState extends State<InterestScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const _LogoMark(),
+                Center(
+                  child: const AppLogo(
+                    height: 50,
+                    width: 50,
+                  ),
+                ),
                 const SizedBox(height: 10),
                 const Text(
                   'What are your Primary Interests?',
@@ -711,24 +718,24 @@ class _CreateCustomDialogState extends State<_CreateCustomDialog> {
 
 /* ---------------- Brand mark used at screen top ---------------- */
 
-class _LogoMark extends StatelessWidget {
-  const _LogoMark();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        _GradientText(
-          'SPEET',
-          gradient: _InterestScreenState._brandGradient,
-          size: 18,
-        ),
-        SizedBox(height: 4),
-        _LogoUnderline(),
-      ],
-    );
-  }
-}
+// class _LogoMark extends StatelessWidget {
+//   const _LogoMark();
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: const [
+//         _GradientText(
+//           'SPEET',
+//           gradient: _InterestScreenState._brandGradient,
+//           size: 18,
+//         ),
+//         SizedBox(height: 4),
+//         _LogoUnderline(),
+//       ],
+//     );
+//   }
+// }
 
 class _LogoUnderline extends StatelessWidget {
   const _LogoUnderline();

@@ -31,11 +31,11 @@ class MyApp extends StatelessWidget {
       // home: SpeetScreen(),
       // home: OnBoardingScreen(),
       // home: SignupScreen(),
-      // home: SignInScreen(),
+      home: SignInScreen(),
       // home: ResetPasswordScreen(),
       // home: VerifyScreen(),
       // home: ResetScreen(),
-      home: InterestScreen(),
+      // home: InterestScreen(),
       // home: AfterInterestSelectedScreen(),
     );
   }
