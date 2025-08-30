@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';     // 👈 add this
 import 'package:flutter_ursffiver/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
+import '../../../home/presentation/screen/home_screen.dart';
 import 'signup_screen.dart';                // 👈 your path
 
 class SignInScreen extends StatefulWidget {
@@ -71,6 +72,13 @@ class _SignInScreenState extends State<SignInScreen> {
     if (!valid || _password.text.isEmpty) {
       setState(() => _showPasswordError = true);
       return;
+    }else{
+      // Navigate to HomeScreen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const HomeScreen(),
+        ),
+      );
     }
   }
 

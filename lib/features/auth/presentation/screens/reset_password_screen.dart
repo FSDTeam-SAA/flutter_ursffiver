@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -110,7 +111,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       ),
                     ),
                     onPressed: () {
-                      // TODO: send reset code
+                      // Navigate to HomeScreen
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => const VerifyScreen(),
+                        ),
+                      );
                     },
                     child: const Text(
                       'Send Code',

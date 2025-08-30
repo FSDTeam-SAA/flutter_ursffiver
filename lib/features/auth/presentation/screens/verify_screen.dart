@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/reset_screen.dart';
 
 class VerifyScreen extends StatefulWidget {
   const VerifyScreen({super.key});
@@ -179,7 +180,12 @@ class _VerifyScreenState extends State<VerifyScreen> {
                       ),
                     ),
                     onPressed: () {
-                      // TODO: verify OTP (_otp)
+                      // Navigate to HomeScreen
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => const ResetScreen(),
+                        ),
+                      );
                     },
                     child: const Text(
                       'Verify',

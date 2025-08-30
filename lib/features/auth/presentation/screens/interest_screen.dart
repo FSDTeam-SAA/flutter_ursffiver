@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../common/app_logo.dart';
+import '../../../home/presentation/screen/home_screen.dart';
 
 class InterestScreen extends StatefulWidget {
   const InterestScreen({super.key});
@@ -211,7 +212,12 @@ class _InterestScreenState extends State<InterestScreen> {
             onPressed: () {
               setState(() => _showError = _count == 0);
               if (_count == 0) return;
-              // TODO: persist/send selections
+              // Navigate to HomeScreen
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) => const HomeScreen(),
+                ),
+              );
             },
             child: Text(
               'Save Interest ($_count/$_maxSelection)',

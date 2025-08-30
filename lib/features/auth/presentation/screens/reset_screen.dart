@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 
 class ResetScreen extends StatefulWidget {
   const ResetScreen({super.key});
@@ -158,7 +159,12 @@ class _ResetScreenState extends State<ResetScreen> {
                       ),
                     ),
                     onPressed: () {
-                      // TODO: validate & change password
+                      // Navigate to HomeScreen
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => const SignInScreen(),
+                        ),
+                      );
                     },
                     child: const Text(
                       'Change Password',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
+import 'interest_screen.dart';
 import 'login_screen.dart'; // update path/name
 
 import 'onboarding_screen.dart';
@@ -357,7 +358,14 @@ class _SignupScreen extends State<SignupScreen> {
                         RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
                       onPressed: () {
-                        // TODO: validate and proceed
+
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const InterestScreen(),
+                          ),
+                        );
+
+
                       },
                       child: const Text('Create Account',
                           style: TextStyle(fontWeight: FontWeight.w700)),
@@ -365,27 +373,7 @@ class _SignupScreen extends State<SignupScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Already have account
-                  // Center(
-                  //
-                  //   child: Text.rich(
-                  //     TextSpan(
-                  //       text: 'Already have an account? ',
-                  //       style: caption,
-                  //
-                  //       children: const [
-                  //         TextSpan(
-                  //           text: 'Sign in',
-                  //           style: TextStyle(
-                  //             color: Color(0xFF4C5CFF),
-                  //             fontWeight: FontWeight.w700,
-                  //             decoration: TextDecoration.underline,
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
+
 
                   Center(
                     child: Text.rich(
@@ -638,47 +626,7 @@ class _Dropdown<T> extends StatelessWidget {
   }
 }
 
-// class _RulesBox extends StatelessWidget {
-//   const _RulesBox({required this.rules});
-//   final List<String> rules;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: double.infinity,
-//       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(12),
-//         border: Border.all(color: const Color(0xFFE6E6E9)),
-//       ),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: rules
-//             .map((r) => Padding(
-//           padding: const EdgeInsets.symmetric(vertical: 3),
-//           child: Row(
-//             children: [
-//               const Icon(Icons.fiber_manual_record,
-//                   size: 8, color: Colors.black54),
-//               const SizedBox(width: 8),
-//               Expanded(
-//                 child: Text(
-//                   r,
-//                   style: Theme.of(context)
-//                       .textTheme
-//                       .bodySmall
-//                       ?.copyWith(color: Colors.black87),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ))
-//             .toList(),
-//       ),
-//     );
-//   }
-// }
+
 
 class _RulesBox extends StatelessWidget {
   const _RulesBox({required this.checks});
