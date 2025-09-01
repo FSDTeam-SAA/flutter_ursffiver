@@ -150,7 +150,8 @@ class OnBoardingScreen extends StatelessWidget {
                       children: [
                         _ChipsGrid(groups: _demoAllInterests),
                         _ChipsGrid(groups: _demoPopular),
-                        _ChipsGrid(groups: _demoCategories),
+                        // _ChipsGrid(groups: _demoCategories),
+                        _CategoriesGrid(groups: _demoCategories), // 👈 new
                       ],
                     ),
                   ),
@@ -252,6 +253,122 @@ class OnBoardingScreen extends StatelessWidget {
     );
   }
 }
+
+class _CategoriesGrid extends StatelessWidget {
+  const _CategoriesGrid({required this.groups});
+  final Map<String, List<String>> groups;
+
+  @override
+  Widget build(BuildContext context) {
+    // Build a flat list of categories with counts from the map:
+    final entries = groups.entries.toList(growable: false);
+
+    return _Card(
+      child: GridView.builder(
+        padding: EdgeInsets.zero,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          // Wider than tall, like the comps
+          childAspectRatio: 1.85,
+        ),
+        itemCount: entries.length,
+        itemBuilder: (context, i) {
+          final name = entries[i].key;                 // e.g. "Social Activities"
+          final count = entries[i].value.length;       // derive from items
+          final color = _accentForIndex(i);
+
+          return _CategoryCard(
+            name: name,
+            count: count,
+            accent: color,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _CategoryCard extends StatelessWidget {
+  const _CategoryCard({
+    required this.name,
+    required this.count,
+    required this.accent,
+  });
+
+  final String name;
+  final int count;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    final parts = name.split(' ');
+    final first = parts.isNotEmpty ? parts.first : name;
+    final second = parts.length > 1 ? parts.sublist(1).join(' ') : '';
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFE6E6E9)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Title with colored second word
+          RichText(
+            text: TextSpan(
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF111827),
+              ),
+              children: [
+                TextSpan(text: first),
+                if (second.isNotEmpty) const TextSpan(text: ' '),
+                if (second.isNotEmpty)
+                  TextSpan(
+                    text: second,
+                    style: TextStyle(color: accent),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '$count interests',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: const Color(0xFF6B7280),
+            ),
+          ),
+          const Spacer(),
+          // // Optional subtle chevron / affordance
+          // Align(
+          //   alignment: Alignment.bottomRight,
+          //   child: Icon(Icons.chevron_right, size: 18, color: accent.withOpacity(.9)),
+          // ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Rotating accent palette that matches the mock’s vibe
+Color _accentForIndex(int i) {
+  const palette = <Color>[
+    Color(0xFF6366F1), // indigo
+    Color(0xFF10B981), // green
+    Color(0xFFF59E0B), // amber
+    Color(0xFF8B5CF6), // violet
+    Color(0xFF06B6D4), // cyan
+    Color(0xFFEF4444), // red
+  ];
+  return palette[i % palette.length];
+}
+
 
 
 class _BrandWordWithUnderline extends StatelessWidget {
