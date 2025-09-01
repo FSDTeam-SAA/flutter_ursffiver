@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 
 import '../../../common/app_logo.dart';
 import '../../../home/presentation/screen/home_screen.dart';
@@ -215,7 +216,7 @@ class _InterestScreenState extends State<InterestScreen> {
               // Navigate to HomeScreen
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (_) => const HomeScreen(),
+                  builder: (_) => const SignInScreen(),
                 ),
               );
             },

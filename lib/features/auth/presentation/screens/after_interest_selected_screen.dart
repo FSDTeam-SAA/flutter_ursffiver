@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'login_screen.dart';
+// import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
+
+
 class AfterInterestSelectedScreen extends StatefulWidget {
   const AfterInterestSelectedScreen({super.key});
 
@@ -190,7 +194,9 @@ class _AfterInterestSelectedScreenState
             child: _GradientButton(
               gradient: _brandGradient,
               onPressed: () {
-                // TODO: next step
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const SignInScreen()),
+                );
               },
               child: Text(
                 'Save Interest ($_count/$_maxInterests)',

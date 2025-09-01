@@ -25,12 +25,46 @@ class _ResetScreenState extends State<ResetScreen> {
   bool _showPass = false;
   bool _showConfirm = false;
 
+  // validation flags
+  bool _lenOk = false;
+  bool _upperOk = false;
+  bool _lowerOk = false;
+  bool _numOk = false;
+  bool _specialOk = false;
+  bool _matchOk = false;
+
+  bool get _allOk =>
+      _lenOk && _upperOk && _lowerOk && _numOk && _specialOk && _matchOk;
+
+  @override
+  void initState() {
+    super.initState();
+    _password.addListener(_recompute);
+    _confirm.addListener(_recompute);
+  }
+
   @override
   void dispose() {
     _password.dispose();
     _confirm.dispose();
     super.dispose();
   }
+
+  void _recompute() {
+    final p = _password.text;
+    setState(() {
+      _lenOk   = p.length >= 8;
+      _upperOk = RegExp(r'[A-Z]').hasMatch(p);
+      _lowerOk = RegExp(r'[a-z]').hasMatch(p);
+      _numOk   = RegExp(r'\d').hasMatch(p);
+
+      // ✅ at least one NON-alphanumeric char; no tricky escapes
+      _specialOk = RegExp(r'[^A-Za-z0-9]').hasMatch(p);
+
+      _matchOk = _confirm.text.isNotEmpty && _confirm.text == p;
+    });
+  }
+
 
   InputDecoration _decoration(String hint) => InputDecoration(
     hintText: hint,
@@ -100,7 +134,7 @@ class _ResetScreenState extends State<ResetScreen> {
                 TextField(
                   controller: _password,
                   obscureText: !_showPass,
-                  decoration: _decoration('• • • • • • • •').copyWith(
+                  decoration: _decoration('Password').copyWith(
                     suffixIcon: IconButton(
                       icon: Icon(_showPass
                           ? Icons.visibility_off
@@ -112,17 +146,18 @@ class _ResetScreenState extends State<ResetScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                // Rules
+                // Rules (live)
                 Padding(
                   padding: const EdgeInsets.only(left: 6),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      _Rule('Minimum 8 characters'),
-                      _Rule('At least 1 uppercase letter'),
-                      _Rule('At least 1 lowercase letter'),
-                      _Rule('At least 1 number'),
-                      _Rule('At least 1 special character (e.g. !@#\$%)'),
+                    children: [
+                      _Rule('Minimum 8 characters', ok: _lenOk),
+                      _Rule('At least 1 uppercase letter', ok: _upperOk),
+                      _Rule('At least 1 lowercase letter', ok: _lowerOk),
+                      _Rule('At least 1 number', ok: _numOk),
+                      _Rule('At least 1 special character (e.g. !@#\$%)',
+                          ok: _specialOk),
                     ],
                   ),
                 ),
@@ -134,7 +169,7 @@ class _ResetScreenState extends State<ResetScreen> {
                 TextField(
                   controller: _confirm,
                   obscureText: !_showConfirm,
-                  decoration: _decoration('• • • • • • • •').copyWith(
+                  decoration: _decoration('Confirm Password').copyWith(
                     suffixIcon: IconButton(
                       icon: Icon(_showConfirm
                           ? Icons.visibility_off
@@ -144,6 +179,15 @@ class _ResetScreenState extends State<ResetScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 6),
+                if (!_matchOk && _confirm.text.isNotEmpty)
+                  const Padding(
+                    padding: EdgeInsets.only(left: 6, top: 2),
+                    child: Text(
+                      'Passwords do not match',
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
 
                 const Spacer(),
 
@@ -158,14 +202,16 @@ class _ResetScreenState extends State<ResetScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: () {
-                      // Navigate to HomeScreen
+                    onPressed: _allOk
+                        ? () {
+                      // Navigate to SignInScreen after successful validation
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (_) => const SignInScreen(),
                         ),
                       );
-                    },
+                    }
+                        : null, // disabled until all rules pass
                     child: const Text(
                       'Change Password',
                       style: TextStyle(fontWeight: FontWeight.w700),
@@ -185,25 +231,31 @@ class _ResetScreenState extends State<ResetScreen> {
 /* ---------- Small helpers & branded logo ---------- */
 
 class _Rule extends StatelessWidget {
-  const _Rule(this.text);
+  const _Rule(this.text, {required this.ok});
   final String text;
+  final bool ok;
 
   @override
   Widget build(BuildContext context) {
+    final color = ok ? const Color(0xFF10B981) : Colors.black54; // green vs neutral
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('•  ',
-              style: TextStyle(color: Colors.black87, height: 1.4)),
+          Icon(
+            ok ? Icons.check_circle : Icons.radio_button_unchecked,
+            size: 16,
+            color: color,
+          ),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               text,
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
-                  ?.copyWith(color: Colors.black87, height: 1.4),
+                  ?.copyWith(color: color, height: 1.4),
             ),
           ),
         ],
@@ -317,3 +369,4 @@ class _GradientMask extends StatelessWidget {
     );
   }
 }
+

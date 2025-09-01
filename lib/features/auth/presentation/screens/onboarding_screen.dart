@@ -37,7 +37,6 @@ class OnBoardingScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-
                   // ------- Header (use this where you build the Row) -------
                   Center(
                     child: Row(
@@ -49,29 +48,25 @@ class OnBoardingScreen extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 24,
-                            fontWeight: FontWeight.w600,   // SemiBold
-                            height: 1.2,                   // 120%
+                            fontWeight: FontWeight.w600, // SemiBold
+                            height: 1.2, // 120%
                             letterSpacing: 0.0,
-                            color: Color(0xFF030712),      // base/black
+                            color: Color(0xFF030712), // base/black
                           ),
                         ),
                         const SizedBox(width: 8),
                         // const _BrandWordWithUnderline(text: 'SPEET'),
-                        const AppLogo(height: 90,width: 50),
-
+                        const AppLogo(height: 90, width: 50),
                       ],
                     ),
                   ),
 
-
-
                   const SizedBox(height: 8),
                   Text(
                     "YoUrs truly local",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w700),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Text(
@@ -88,35 +83,35 @@ class OnBoardingScreen extends StatelessWidget {
                           icon: Icons.people_alt_outlined,
                           title: 'Real-World, In-Person Encounters',
                           subtitle:
-                          'Break free from digital-only interaction and meet nearby people face-to-face who share your interests and passions.',
+                              'Break free from digital-only interaction and meet nearby people face-to-face who share your interests and passions.',
                         ),
                         Divider(height: 24),
                         _FeatureTile(
                           icon: Icons.place_outlined,
                           title: 'Location-Based Matching',
                           subtitle:
-                          'Discover people nearby, from a few feet away to a few miles around you.',
+                              'Discover people nearby, from a few feet away to a few miles around you.',
                         ),
                         Divider(height: 24),
                         _FeatureTile(
                           icon: Icons.shield_outlined,
                           title: 'Verified Users',
                           subtitle:
-                          'Choose to interact with unverified or verified users for enhanced safety.',
+                              'Choose to interact with unverified or verified users for enhanced safety.',
                         ),
                         Divider(height: 24),
                         _FeatureTile(
                           icon: Icons.cached_outlined,
                           title: 'Dynamic Availability',
                           subtitle:
-                          'Let others know when you’re on or off and set your location range.',
+                              'Let others know when you’re on or off and set your location range.',
                         ),
                         Divider(height: 24),
                         _FeatureTile(
                           icon: Icons.workspace_premium_outlined,
                           title: 'Social Badges System',
                           subtitle:
-                          'Recognize qualities like communication skills, community contributions and more.',
+                              'Recognize qualities like communication skills, community contributions and more.',
                         ),
                       ],
                     ),
@@ -126,10 +121,10 @@ class OnBoardingScreen extends StatelessWidget {
                   // Interests section
                   Text(
                     'Find People Who Share \n     Your Interests',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w800, height: 1.3),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      height: 1.3,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Text(
@@ -176,7 +171,7 @@ class OnBoardingScreen extends StatelessWidget {
                           icon: Icons.gpp_good_outlined,
                           title: 'Verified Member',
                           text:
-                          'Sign up as a verified user to express the app’s highest commitment to trust and safety. Your account and identity details are securely verified.',
+                              'Sign up as a verified user to express the app’s highest commitment to trust and safety. Your account and identity details are securely verified.',
                         ),
                         SizedBox(height: 10),
                         _TrustTile(
@@ -184,7 +179,7 @@ class OnBoardingScreen extends StatelessWidget {
                           icon: Icons.gpp_bad_outlined,
                           title: 'Unverified Member',
                           text:
-                          'Sign up as an unverified member to quickly access the app with fewer steps. You can convert to a verified account whenever you’re ready.',
+                              'Sign up as an unverified member to quickly access the app with fewer steps. You can convert to a verified account whenever you’re ready.',
                         ),
                       ],
                     ),
@@ -205,9 +200,8 @@ class OnBoardingScreen extends StatelessWidget {
                     text: 'Create Account',
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const SignupScreen()),
+                        MaterialPageRoute(builder: (_) => const SignInScreen()),
                       );
-
                     },
                   ),
                   const SizedBox(height: 8),
@@ -215,10 +209,9 @@ class OnBoardingScreen extends StatelessWidget {
                     child: Text.rich(
                       TextSpan(
                         text: 'By continuing, you agree to SPEET’s ',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelSmall
-                            ?.copyWith(color: Colors.black54),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.labelSmall?.copyWith(color: Colors.black54),
                         children: const [
                           TextSpan(
                             text: 'Terms of \nService',
@@ -275,15 +268,11 @@ class _CategoriesGrid extends StatelessWidget {
         ),
         itemCount: entries.length,
         itemBuilder: (context, i) {
-          final name = entries[i].key;                 // e.g. "Social Activities"
-          final count = entries[i].value.length;       // derive from items
+          final name = entries[i].key; // e.g. "Social Activities"
+          final count = entries[i].value.length; // derive from items
           final color = _accentForIndex(i);
 
-          return _CategoryCard(
-            name: name,
-            count: count,
-            accent: color,
-          );
+          return _CategoryCard(name: name, count: count, accent: color);
         },
       ),
     );
@@ -340,9 +329,9 @@ class _CategoryCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             '$count interests',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: const Color(0xFF6B7280),
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: const Color(0xFF6B7280)),
           ),
           const Spacer(),
           // // Optional subtle chevron / affordance
@@ -369,16 +358,14 @@ Color _accentForIndex(int i) {
   return palette[i % palette.length];
 }
 
-
-
 class _BrandWordWithUnderline extends StatelessWidget {
   const _BrandWordWithUnderline({required this.text});
   final String text;
 
   static const _textStyle = TextStyle(
     fontFamily: 'Poppins',
-    fontSize: 26,                 // slightly larger per comps
-    fontWeight: FontWeight.w900,  // extra bold
+    fontSize: 26, // slightly larger per comps
+    fontWeight: FontWeight.w900, // extra bold
     letterSpacing: 1.2,
   );
 
@@ -409,10 +396,7 @@ class _BrandWordWithUnderline extends StatelessWidget {
             ),
           ),
           // Gradient underline (pill + tiny arrows)
-          Positioned(
-            bottom: 2,
-            child: _GradientUnderline(width: w),
-          ),
+          Positioned(bottom: 2, child: _GradientUnderline(width: w)),
         ],
       ),
     );
@@ -494,7 +478,6 @@ class _UnderlinePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-
 /* ---------- Small UI pieces ---------- */
 
 class _GradientMask extends StatelessWidget {
@@ -568,14 +551,15 @@ class _FeatureTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w800, fontSize: 14)),
-              const SizedBox(height: 4),
               Text(
-                subtitle,
-                style: Theme.of(context).textTheme.bodySmall,
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 14,
+                ),
               ),
+              const SizedBox(height: 4),
+              Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
             ],
           ),
         ),
@@ -583,7 +567,6 @@ class _FeatureTile extends StatelessWidget {
     );
   }
 }
-
 
 class _SegmentedTabs extends StatelessWidget {
   const _SegmentedTabs({required this.tabs});
@@ -621,7 +604,6 @@ class _SegmentedTabs extends StatelessWidget {
   }
 }
 
-
 class _ChipsGrid extends StatelessWidget {
   const _ChipsGrid({required this.groups});
   final Map<String, List<String>> groups;
@@ -639,9 +621,13 @@ class _ChipsGrid extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w800, fontSize: 13)),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13,
+                ),
+              ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
@@ -671,10 +657,7 @@ class _Tag extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE6E6E9)),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.labelMedium,
-      ),
+      child: Text(text, style: Theme.of(context).textTheme.labelMedium),
     );
   }
 }
@@ -697,18 +680,19 @@ class _TrustTile extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Transform.rotate(
-          angle: 0,
-          child: Icon(icon, color: color, size: 24),
-        ),
+        Transform.rotate(angle: 0, child: Icon(icon, color: color, size: 24)),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w800, fontSize: 14)),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 14,
+                ),
+              ),
               const SizedBox(height: 4),
               Text(text, style: Theme.of(context).textTheme.bodySmall),
             ],
@@ -733,7 +717,9 @@ class _PrimaryButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: OnBoardingScreen._brandBlue,
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
         ),
         onPressed: onPressed,
         child: Text(text, style: const TextStyle(fontWeight: FontWeight.w700)),
@@ -754,11 +740,19 @@ class _SecondaryButton extends StatelessWidget {
       height: 48,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
           side: const BorderSide(color: Color(0xFFCFD2D8)),
         ),
         onPressed: onPressed,
-        child: Text(text, style: const TextStyle(fontWeight: FontWeight.w700,color: Colors.black)),
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
+        ),
       ),
     );
   }
@@ -793,12 +787,7 @@ const Map<String, List<String>> _demoPopular = {
     'Live Music',
     'Book Clubs',
   ],
-  'Outdoors': [
-    'Hiking',
-    'Camping',
-    'Cycling',
-    'Kayaking',
-  ],
+  'Outdoors': ['Hiking', 'Camping', 'Cycling', 'Kayaking'],
 };
 
 const Map<String, List<String>> _demoCategories = {
