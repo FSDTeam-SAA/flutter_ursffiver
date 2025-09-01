@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';     // 👈 add this
 import 'package:flutter_ursffiver/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
+import '../../../common/app_logo.dart';
 import '../../../home/presentation/screen/home_screen.dart';
 import 'signup_screen.dart';                // 👈 your path
 
@@ -115,18 +116,19 @@ class _SignInScreenState extends State<SignInScreen> {
                         style:
                         TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
                       ),
-                      const _GradientText(
-                        'SPEET',
-                        gradient: _brandGradient,
-                        size: 22,
-                        weight: FontWeight.w900,
-                      ),
+                      // const _GradientText(
+                      //   'SPEET',
+                      //   gradient: _brandGradient,
+                      //   size: 22,
+                      //   weight: FontWeight.w900,
+                      // ),
+                      const AppLogo(height: 70,width: 50),
                     ],
                   ),
                   const SizedBox(height: 6),
                   const Center(
                     child: Text(
-                      'Yours truly local',
+                      'YoUrs truly local',
                       style:
                       TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
                     ),
@@ -186,7 +188,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   TextFormField(
                     controller: _password,
                     obscureText: !_showPassword,
-                    decoration: _fieldDecoration('• • • • • • • •').copyWith(
+                    decoration: _fieldDecoration('Password').copyWith(
                       suffixIcon: IconButton(
                         icon: Icon(
                           _showPassword

@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isAvailable = true;
-  String statusMessage = "Ready to connect - Tap to set status";
+  String statusMessage = "Ready to connect - Click to set status";
   final TextEditingController customMessageController = TextEditingController();
   bool isEditing = false;
   int selectedRange = 2;

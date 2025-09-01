@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
 
+import '../../../common/app_logo.dart';
+
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({super.key});
 
@@ -37,30 +39,35 @@ class OnBoardingScreen extends StatelessWidget {
                 children: [
 
                   // ------- Header (use this where you build the Row) -------
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Welcome to',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,   // SemiBold
-                          height: 1.2,                   // 120%
-                          letterSpacing: 0.0,
-                          color: Color(0xFF030712),      // base/black
+                  Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Welcome to',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,   // SemiBold
+                            height: 1.2,                   // 120%
+                            letterSpacing: 0.0,
+                            color: Color(0xFF030712),      // base/black
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      const _BrandWordWithUnderline(text: 'SPEET'),
-                    ],
+                        const SizedBox(width: 8),
+                        // const _BrandWordWithUnderline(text: 'SPEET'),
+                        const AppLogo(height: 90,width: 50),
+
+                      ],
+                    ),
                   ),
 
 
 
                   const SizedBox(height: 8),
                   Text(
-                    "You're truly local",
+                    "YoUrs truly local",
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium

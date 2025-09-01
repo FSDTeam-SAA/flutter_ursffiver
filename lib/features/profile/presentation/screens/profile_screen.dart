@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Profile',
+                    'My Profile',
                     style: AppText.xxlSemiBold_24_600.copyWith(
                       color: AppColors.primaryTextblack,
                     ),

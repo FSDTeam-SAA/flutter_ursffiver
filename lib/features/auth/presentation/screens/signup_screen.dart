@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
+import '../../../common/app_logo.dart';
 import 'interest_screen.dart';
 import 'login_screen.dart'; // update path/name
 
@@ -113,8 +116,9 @@ class _SignupScreen extends State<SignupScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Brand
-                  const _GradientText('SPEET', gradient: _brandGradient, size: 18, weight: FontWeight.w900),
-                  const SizedBox(height: 10),
+                  // const _GradientText('SPEET', gradient: _brandGradient, size: 18, weight: FontWeight.w900),
+                  const AppLogo(height:100,width:50 ),
+                  // const SizedBox(height: 10),
 
                   // Title + subtitle
                   const Text(
@@ -299,7 +303,7 @@ class _SignupScreen extends State<SignupScreen> {
                   TextFormField(
                     controller: _password,
                     obscureText: !_showPassword,
-                    decoration: _decoration('• • • • • • • •').copyWith(
+                    decoration: _decoration('Password').copyWith(
                       suffixIcon: IconButton(
                         icon: Icon(_showPassword ? Icons.visibility_off : Icons.visibility),
                         onPressed: () => setState(() => _showPassword = !_showPassword),
@@ -337,7 +341,7 @@ class _SignupScreen extends State<SignupScreen> {
                   TextFormField(
                     controller: _confirmPassword,
                     obscureText: !_showConfirm,
-                    decoration: _decoration('• • • • • • • •').copyWith(
+                    decoration: _decoration('Confirm Password').copyWith(
                       suffixIcon: IconButton(
                         icon: Icon(_showConfirm ? Icons.visibility_off : Icons.visibility),
                         onPressed: () => setState(() => _showConfirm = !_showConfirm),
@@ -480,21 +484,21 @@ class _BioSectionState extends State<_BioSection> {
 
 
 
-            const Spacer(),
-            ValueListenableBuilder<TextEditingValue>(
-              valueListenable: _ctl,
-              builder: (_, v, __) {
-                final n = v.text.characters.length;
-                return Text(
-                  '$n/$_maxChars',
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: Color(0xFF6B7280),
-                  ),
-                );
-              },
-            ),
+            // const Spacer(),
+            // ValueListenableBuilder<TextEditingValue>(
+            //   valueListenable: _ctl,
+            //   builder: (_, v, __) {
+            //     final n = v.text.characters.length;
+            //     return Text(
+            //       '$n/$_maxChars',
+            //       style: const TextStyle(
+            //         fontFamily: 'Poppins',
+            //         fontSize: 12,
+            //         color: Color(0xFF6B7280),
+            //       ),
+            //     );
+            //   },
+            // ),
           ],
         ),
         const SizedBox(height: 8),
