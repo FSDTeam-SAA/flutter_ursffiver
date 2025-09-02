@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/theme/app_theme.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/reset_screen.dart';
 import 'features/auth/presentation/screens/splash_screen.dart';
 
 void main() {
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light,
       themeMode: ThemeMode.light,
       title: 'Flutter Demo',
-      home: SplashScreen(),
+      // home: SplashScreen(),
+      home: ResetScreen(),
     );
   }
 }
