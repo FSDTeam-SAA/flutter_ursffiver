@@ -1,11 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/gestures.dart';     // 👈 add this
+import 'package:flutter/gestures.dart'; // 👈 add this
 import 'package:flutter_ursffiver/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
+import 'package:flutter_ursffiver/features/nabber_screen.dart';
 import '../../../home/presentation/screen/home_screen.dart';
-import 'signup_screen.dart';                // 👈 your path
+import 'signup_screen.dart'; // 👈 your path
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -68,26 +69,23 @@ class _SignInScreenState extends State<SignInScreen> {
   void _submit() {
     // Demo validation to match the mock's error state.
     // Replace with your auth logic.
-    final valid = _formKey.currentState?.validate() ?? false;
-    if (!valid || _password.text.isEmpty) {
-      setState(() => _showPasswordError = true);
-      return;
-    }else{
-      // Navigate to HomeScreen
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
-        ),
-      );
-    }
+    // final valid = _formKey.currentState?.validate() ?? false;
+    // if (!valid || _password.text.isEmpty) {
+    //   setState(() => _showPasswordError = true);
+    //   return;
+    // }else{
+    // Navigate to HomeScreen
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const BottomNavExample()));
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    final caption = Theme.of(context)
-        .textTheme
-        .bodySmall
-        ?.copyWith(color: Colors.black54, height: 1.4);
+    final caption = Theme.of(
+      context,
+    ).textTheme.bodySmall?.copyWith(color: Colors.black54, height: 1.4);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -112,8 +110,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     children: [
                       const Text(
                         'Sign In to ',
-                        style:
-                        TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                       const _GradientText(
                         'SPEET',
@@ -127,16 +127,18 @@ class _SignInScreenState extends State<SignInScreen> {
                   const Center(
                     child: Text(
                       'Yours truly local',
-                      style:
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Spontaneously and on the spot, transform digital\n'
-                        'connections into real-life meetups with nearby\n'
-                        'people who share your interests – all within\n'
-                        'minutes.',
+                    'connections into real-life meetups with nearby\n'
+                    'people who share your interests – all within\n'
+                    'minutes.',
                     style: caption,
                     textAlign: TextAlign.center,
                   ),
@@ -149,8 +151,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     controller: _email,
                     keyboardType: TextInputType.emailAddress,
                     decoration: _fieldDecoration('hello@example.com'),
-                    validator: (v) =>
-                    (v == null || v.isEmpty) ? 'Please Enter Your Correct Email' : null,
+                    validator: (v) => (v == null || v.isEmpty)
+                        ? 'Please Enter Your Correct Email'
+                        : null,
                   ),
                   const SizedBox(height: 14),
 
@@ -162,7 +165,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const ResetPasswordScreen()),
+                            MaterialPageRoute(
+                              builder: (_) => const ResetPasswordScreen(),
+                            ),
                           );
                         },
                         style: TextButton.styleFrom(
@@ -197,8 +202,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             setState(() => _showPassword = !_showPassword),
                       ),
                     ),
-                    validator: (_) =>
-                    _showPasswordError ? 'Please Enter Correct Password' : null,
+                    validator: (_) => _showPasswordError
+                        ? 'Please Enter Correct Password'
+                        : null,
                   ),
                   if (_showPasswordError)
                     const Padding(
@@ -217,7 +223,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         value: _keepSignedIn,
                         onChanged: (v) => setState(() => _keepSignedIn = v!),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4)),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                         activeColor: _brandBlue,
                         side: const BorderSide(color: _borderColor),
                       ),
@@ -247,8 +254,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 16),
 
-
-
                   Center(
                     child: Text.rich(
                       TextSpan(
@@ -258,14 +263,16 @@ class _SignInScreenState extends State<SignInScreen> {
                           TextSpan(
                             text: 'Sign up',
                             style: const TextStyle(
-                              color: _brandBlue,                // use your token
+                              color: _brandBlue, // use your token
                               fontWeight: FontWeight.w700,
                               decoration: TextDecoration.underline,
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (_) => const SignupScreen()),
+                                  MaterialPageRoute(
+                                    builder: (_) => const SignupScreen(),
+                                  ),
                                 );
                               },
                           ),
@@ -274,7 +281,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-
 
                   const SizedBox(height: 18),
 
@@ -322,11 +328,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
 class _GradientText extends StatelessWidget {
   const _GradientText(
-      this.text, {
-        required this.gradient,
-        this.size = 24,
-        this.weight = FontWeight.w900,
-      });
+    this.text, {
+    required this.gradient,
+    this.size = 24,
+    this.weight = FontWeight.w900,
+  });
 
   final String text;
   final Gradient gradient;
@@ -340,7 +346,11 @@ class _GradientText extends StatelessWidget {
       blendMode: BlendMode.srcIn,
       child: Text(
         text,
-        style: TextStyle(fontSize: size, fontWeight: weight, letterSpacing: 1.1),
+        style: TextStyle(
+          fontSize: size,
+          fontWeight: weight,
+          letterSpacing: 1.1,
+        ),
       ),
     );
   }
