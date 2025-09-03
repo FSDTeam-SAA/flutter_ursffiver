@@ -49,6 +49,12 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: false,
         actions: [
           IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.verified_user_outlined),
+            iconSize: 28,
+            color: AppColors.secondaryText,
+          ),
+          IconButton(
             icon: Icon(Icons.notifications_none, color: Colors.black),
             iconSize: 32,
             onPressed: () {
@@ -66,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// Availability toggle
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -405,19 +410,6 @@ class _HomeScreenState extends State<HomeScreen> {
               Gap.h12,
               Column(
                 children: [
-                    UserProfileCard(
-                    name: 'Brooklyn Simmons',
-                    imagePath: 'assets/image/profile.png',
-                    distance: '5 ft',
-                    status: 'Available',
-                    onActivityHi: () {},
-                    onExperience: () {},
-                    onChat: () {},
-                    onInfo: () {},
-                  ),
-                  SizedBox(height: 8),
-                  Divider(color: Colors.grey),
-                  SizedBox(height: 8),  // Add some space between user profiles
                   UserProfileCard(
                     name: 'Brooklyn Simmons',
                     imagePath: 'assets/image/profile.png',
@@ -430,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 8),
                   Divider(color: Colors.grey),
-                  SizedBox(height: 8), 
+                  SizedBox(height: 8), // Add some space between user profiles
                   UserProfileCard(
                     name: 'Brooklyn Simmons',
                     imagePath: 'assets/image/profile.png',
@@ -443,7 +435,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 8),
                   Divider(color: Colors.grey),
-                  SizedBox(height: 8), 
+                  SizedBox(height: 8),
+                  UserProfileCard(
+                    name: 'Brooklyn Simmons',
+                    imagePath: 'assets/image/profile.png',
+                    distance: '5 ft',
+                    status: 'Available',
+                    onActivityHi: () {},
+                    onExperience: () {},
+                    onChat: () {},
+                    onInfo: () {},
+                  ),
+                  SizedBox(height: 8),
+                  Divider(color: Colors.grey),
+                  SizedBox(height: 8),
                   UserProfileCard(
                     name: 'Brooklyn Simmons',
                     imagePath: 'assets/image/profile.png',
