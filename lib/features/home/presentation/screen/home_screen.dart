@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/delete.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../common/app_logo.dart';
 import 'notification_screen.dart';
@@ -40,9 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
+        automaticallyImplyLeading: false,
         title: AppLogo(height: 30, width: 100),
         centerTitle: false,
         actions: [
@@ -400,38 +402,83 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+              Gap.h12,
               Column(
                 children: [
-                  // Wrapping UserProfileCard with a Container to add decoration
-                  Container(
-                    padding: const EdgeInsets.all(
-                      16,
-                    ), // Padding around the card
-                    decoration: BoxDecoration(
-                      color: Colors.white, // Background color of the card
-                      borderRadius: BorderRadius.circular(16),
-                      shape: BoxShape.rectangle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1), // Light shadow
-                          blurRadius: 12, // Shadow blur effect
-                          offset: const Offset(0, 4), // Shadow offset
-                        ),
-                      ],
-                    ),
-                    child: UserProfileCard(
-                      name: 'Brooklyn Simmons',
-                      imagePath:
-                          'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-v4l97iRrPrLQLU1ADUuxSzEBgqj965.png',
-                      distance: '5 ft',
-                      status: 'Available',
-                      onActivityHi: () {},
-                      onExperience: () {},
-                      onChat: () {},
-                      onInfo: () {},
-                      tags: [],
-                      tagColors: [],
-                    ),
+                    UserProfileCard(
+                    name: 'Brooklyn Simmons',
+                    imagePath: 'assets/image/profile.png',
+                    distance: '5 ft',
+                    status: 'Available',
+                    onActivityHi: () {},
+                    onExperience: () {},
+                    onChat: () {},
+                    onInfo: () {},
+                  ),
+                  SizedBox(height: 8),
+                  Divider(color: Colors.grey),
+                  SizedBox(height: 8),  // Add some space between user profiles
+                  UserProfileCard(
+                    name: 'Brooklyn Simmons',
+                    imagePath: 'assets/image/profile.png',
+                    distance: '5 ft',
+                    status: 'Available',
+                    onActivityHi: () {},
+                    onExperience: () {},
+                    onChat: () {},
+                    onInfo: () {},
+                  ),
+                  SizedBox(height: 8),
+                  Divider(color: Colors.grey),
+                  SizedBox(height: 8), 
+                  UserProfileCard(
+                    name: 'Brooklyn Simmons',
+                    imagePath: 'assets/image/profile.png',
+                    distance: '5 ft',
+                    status: 'Available',
+                    onActivityHi: () {},
+                    onExperience: () {},
+                    onChat: () {},
+                    onInfo: () {},
+                  ),
+                  SizedBox(height: 8),
+                  Divider(color: Colors.grey),
+                  SizedBox(height: 8), 
+                  UserProfileCard(
+                    name: 'Brooklyn Simmons',
+                    imagePath: 'assets/image/profile.png',
+                    distance: '5 ft',
+                    status: 'Available',
+                    onActivityHi: () {},
+                    onExperience: () {},
+                    onChat: () {},
+                    onInfo: () {},
+                  ),
+                  SizedBox(height: 8),
+                  Divider(color: Colors.grey),
+                  SizedBox(height: 8), // Add some space between user profiles
+                  UserProfileCard(
+                    name: 'Brooklyn Simmons',
+                    imagePath: 'assets/image/profile.png',
+                    distance: '5 ft',
+                    status: 'Available',
+                    onActivityHi: () {},
+                    onExperience: () {},
+                    onChat: () {},
+                    onInfo: () {},
+                  ),
+                  SizedBox(height: 8),
+                  Divider(color: Colors.grey),
+                  SizedBox(height: 8),
+                  UserProfileCard(
+                    name: 'Brooklyn Simmons',
+                    imagePath: 'assets/image/profile.png',
+                    distance: '5 ft',
+                    status: 'Available',
+                    onActivityHi: () {},
+                    onExperience: () {},
+                    onChat: () {},
+                    onInfo: () {},
                   ),
                 ],
               ),

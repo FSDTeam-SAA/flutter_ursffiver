@@ -23,7 +23,9 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text("Privacy Settings",
             style: AppText.xlSemiBold_20_600.copyWith(color: Colors.black)),
         centerTitle: false,

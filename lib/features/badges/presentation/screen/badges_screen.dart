@@ -32,6 +32,8 @@ class _BadgesPageState extends State<BadgesPage>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
         title: Text(
           'Badges',
           style: AppText.xxlSemiBold_24_600.copyWith(

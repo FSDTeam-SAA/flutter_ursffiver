@@ -1,4 +1,3 @@
-
 // import 'package:flutter/material.dart';
 // import 'package:flutter_ursffiver/core/theme/app_gap.dart';
 
@@ -26,196 +25,151 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.all(16),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(16),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black.withOpacity(0.08),
-//             blurRadius: 12,
-//             offset: const Offset(0, 4),
-//           ),
-//         ],
-//       ),
-//       child: Row(
-//         children: [
-//           // Profile Image
-//           Container(
-//             width: 60,
-//             height: 60,
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(12),
-//               image: DecorationImage(
-//                 image: imagePath.startsWith('http')
-//                     ? NetworkImage(imagePath)
-//                     : AssetImage(imagePath) as ImageProvider,
-//                 fit: BoxFit.cover,
-//               ),
+//     return Row(
+//       children: [
+//         Container(
+//           width: 90,
+//           height: 130,
+//           decoration: BoxDecoration(
+//             borderRadius: BorderRadius.circular(12),
+//             image: DecorationImage(
+//               image: AssetImage(imagePath), // Using AssetImage instead of NetworkImage
+//               fit: BoxFit.cover,
 //             ),
 //           ),
-//           Gap.h16,
-//           // User Info
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
+//         ),
+//         const SizedBox(width: 16),
+//         // Main Content
+//         Expanded(
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               // Name
+//               Text(
+//                 name,
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.bold,
+//                   fontSize: 18,
+//                   color: Colors.black87,
+//                 ),
+//               ),
+//               const SizedBox(height: 8),
+
+//               // Distance and Status
+//               Row(
+//                 children: [
+//                   const Icon(Icons.location_on, size: 16, color: Colors.grey),
+//                   const SizedBox(width: 4),
+//                   Text(
+//                     distance,
+//                     style: TextStyle(fontSize: 14, color: Colors.grey),
+//                   ),
+//                   const SizedBox(width: 16),
+//                   Text(
+//                     status,
+//                     style: TextStyle(
+//                       fontSize: 14,
+//                       color: status == 'Available' ? Colors.green : Colors.grey,
+//                       fontWeight: FontWeight.w500,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               const SizedBox(height: 12),
+
+//               // Tags
+//               Column(
+//                 children: [
+//                   Row(
+//                     children: [
+//                       _buildTag(
+//                         "Acting/Th...",
+//                         Colors.blue.shade100,
+//                         Colors.blue.shade700,
+//                       ),
+//                       Gap.w4,
+//                       _buildTag(
+//                         "Expedition...",
+//                         Colors.green.shade100,
+//                         Colors.green.shade700,
+//                       ),
+//                     ],
+//                   ),
+//                   Gap.h4,
+//                   Row(
+//                     children: [
+//                       _buildTag(
+//                         "Escape Ro...",
+//                         Colors.pink.shade100,
+//                         Colors.pink.shade700,
+//                       ),
+//                       Gap.w4,
+//                       _buildTag(
+//                         "Arcade G...",
+//                         Colors.amber.shade100,
+//                         Colors.amber.shade700,
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         ),
+//         Gap.w4,
+//         Column(
+//           children: [
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //               children: [
-//                 // Name and Status Row
-//                 Row(
-//                   children: [
-//                     Text(
-//                       name,
-//                       style: const TextStyle(
-//                         fontSize: 16,
-//                         fontWeight: FontWeight.w600,
-//                         color: Colors.black,
-//                       ),
-//                     ),
-//                     const Spacer(),
-//                     Row(
-//                       children: [
-//                         Container(
-//                           padding: const EdgeInsets.all(8),
-//                           decoration: BoxDecoration(
-//                             color: Colors.blue[50],
-//                             borderRadius: BorderRadius.circular(8),
-//                           ),
-//                           child: GestureDetector(
-//                             onTap: onChat,
-//                             child: Icon(
-//                               Icons.chat_bubble_outline,
-//                               size: 16,
-//                               color: Colors.blue[600],
-//                             ),
-//                           ),
-//                         ),
-//                         const SizedBox(width: 8),
-//                         Container(
-//                           padding: const EdgeInsets.all(8),
-//                           decoration: BoxDecoration(
-//                             color: Colors.grey[100],
-//                             borderRadius: BorderRadius.circular(8),
-//                           ),
-//                           child: GestureDetector(
-//                             onTap: onInfo,
-//                             child: Icon(
-//                               Icons.info_outline,
-//                               size: 16,
-//                               color: Colors.grey[600],
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ],
+//                 Icon(
+//                   Icons.message_outlined,
+//                   color: Colors.blue.shade600,
+//                   size: 28,
 //                 ),
-//                 const SizedBox(height: 8),
-//                 // Distance and Availability
-//                 Row(
-//                   children: [
-//                     Icon(
-//                       Icons.location_on,
-//                       size: 14,
-//                       color: Colors.grey[600],
-//                     ),
-//                     const SizedBox(width: 4),
-//                     Text(
-//                       distance,
-//                       style: TextStyle(
-//                         fontSize: 14,
-//                         color: Colors.grey[600],
-//                       ),
-//                     ),
-//                     const SizedBox(width: 16),
-//                     Container(
-//                       padding: const EdgeInsets.symmetric(
-//                         horizontal: 8,
-//                         vertical: 4,
-//                       ),
-//                       decoration: BoxDecoration(
-//                         color: Colors.green[50],
-//                         borderRadius: BorderRadius.circular(12),
-//                       ),
-//                       child: Text(
-//                         status,
-//                         style: TextStyle(
-//                           fontSize: 12,
-//                           fontWeight: FontWeight.w500,
-//                           color: Colors.green[600],
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//                 const SizedBox(height: 12),
-//                 // Action Buttons
-//                 Row(
-//                   children: [
-//                     Expanded(
-//                       child: ElevatedButton(
-//                         onPressed: onActivityHi,
-//                         style: ElevatedButton.styleFrom(
-//                           backgroundColor: Colors.purple[100],
-//                           foregroundColor: Colors.purple[700],
-//                           elevation: 0,
-//                           padding: const EdgeInsets.symmetric(vertical: 8),
-//                           shape: RoundedRectangleBorder(
-//                             borderRadius: BorderRadius.circular(20),
-//                           ),
-//                         ),
-//                         child: const Text(
-//                           'Activity/Hi',
-//                           style: TextStyle(
-//                             fontSize: 12,
-//                             fontWeight: FontWeight.w500,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     const SizedBox(width: 8),
-//                     Expanded(
-//                       child: ElevatedButton(
-//                         onPressed: onExperience,
-//                         style: ElevatedButton.styleFrom(
-//                           backgroundColor: Colors.green[100],
-//                           foregroundColor: Colors.green[700],
-//                           elevation: 0,
-//                           padding: const EdgeInsets.symmetric(vertical: 8),
-//                           shape: RoundedRectangleBorder(
-//                             borderRadius: BorderRadius.circular(20),
-//                           ),
-//                         ),
-//                         child: const Text(
-//                           'Experience',
-//                           style: TextStyle(
-//                             fontSize: 12,
-//                             fontWeight: FontWeight.w500,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
+//                 Gap.w12,
+//                 Icon(Icons.help_outline_sharp, color: Colors.grey, size: 28),
 //               ],
 //             ),
-//           ),
-//         ],
-//       ),
+//           ],
+//         ),
+//       ],
 //     );
 //   }
 // }
 
+// ////////////////////
+// Widget _buildTag(String text, Color backgroundColor, Color textColor) {
+//   return Container(
+//     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+//     height: 30, // Fixed height
+//     width: 90, // Fixed width
+//     decoration: BoxDecoration(
+//       color: backgroundColor,
+//       borderRadius: BorderRadius.circular(8),
+//     ),
+//     child: Center(
+//       child: Text(
+//         text,
+//         style: TextStyle(
+//           fontSize: 10,
+//           color: textColor,
+//           fontWeight: FontWeight.w500,
+//         ),
+//         textAlign: TextAlign.center, // Center the text
+//       ),
+//     ),
+//   );
+// }
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
+import 'package:flutter_ursffiver/features/home/presentation/screen/user-profile_screen.dart';
 
 class UserProfileCard extends StatelessWidget {
   final String name;
   final String imagePath;
   final String distance;
   final String status;
-  final List<String> tags; // New list of tags
-  final List<Color> tagColors; // Corresponding tag colors
   final VoidCallback onActivityHi;
   final VoidCallback onExperience;
   final VoidCallback onChat;
@@ -227,8 +181,6 @@ class UserProfileCard extends StatelessWidget {
     required this.imagePath,
     required this.distance,
     required this.status,
-    required this.tags,
-    required this.tagColors,
     required this.onActivityHi,
     required this.onExperience,
     required this.onChat,
@@ -237,146 +189,147 @@ class UserProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => UserProfileScreen()),
+        );
+      },
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Profile Image
           Container(
-            width: 60,
-            height: 60,
+            width: 90,
+            height: 130,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(
-                image: imagePath.startsWith('http')
-                    ? NetworkImage(imagePath)
-                    : AssetImage(imagePath) as ImageProvider,
+                image: AssetImage(imagePath),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          Gap.h16,
-          // User Info
+          const SizedBox(width: 16),
+          // Main Content
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Name, Distance & Status
+                // Name
+                Text(
+                  name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+
+                // Distance and Status
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            name,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Icon(Icons.location_on, size: 14, color: Colors.grey[600]),
-                              const SizedBox(width: 4),
-                              Text(
-                                distance,
-                                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                              ),
-                              const SizedBox(width: 12),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: Colors.green[50],
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  status,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.green[600],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                    const Icon(Icons.location_on, size: 16, color: Colors.grey),
+                    const SizedBox(width: 4),
+                    Text(
+                      distance,
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                    const SizedBox(width: 16),
+                    Text(
+                      status,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: status == 'Available' ? Colors.green : Colors.grey,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    // Chat & Info Icons
+                  ],
+                ),
+                const SizedBox(height: 12),
+
+                // Tags
+                Column(
+                  children: [
                     Row(
                       children: [
-                        GestureDetector(
-                          onTap: onChat,
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.blue[50],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Icon(Icons.chat_bubble_outline, size: 16, color: Colors.blue[600]),
-                          ),
+                        _buildTag(
+                          "Acting/Th...",
+                          Colors.blue.shade100,
+                          Colors.blue.shade700,
                         ),
-                        const SizedBox(width: 8),
-                        GestureDetector(
-                          onTap: onInfo,
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Icon(Icons.info_outline, size: 16, color: Colors.grey[600]),
-                          ),
+                        Gap.w4,
+                        _buildTag(
+                          "Expedition...",
+                          Colors.green.shade100,
+                          Colors.green.shade700,
+                        ),
+                      ],
+                    ),
+                    Gap.h4,
+                    Row(
+                      children: [
+                        _buildTag(
+                          "Escape Ro...",
+                          Colors.pink.shade100,
+                          Colors.pink.shade700,
+                        ),
+                        Gap.w4,
+                        _buildTag(
+                          "Arcade G...",
+                          Colors.amber.shade100,
+                          Colors.amber.shade700,
                         ),
                       ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                // Tags Row
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 4,
-                  children: List.generate(tags.length, (index) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: tagColors[index],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        tags[index],
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    );
-                  }),
-                ),
               ],
             ),
+          ),
+          Gap.w4,
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    Icons.message_outlined,
+                    color: Colors.blue.shade600,
+                    size: 28,
+                  ),
+                  Gap.w12,
+                  Icon(Icons.help_outline_sharp, color: Colors.grey, size: 28),
+                ],
+              ),
+            ],
           ),
         ],
       ),
     );
   }
+}
+
+////////////////////
+Widget _buildTag(String text, Color backgroundColor, Color textColor) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+    height: 30, // Fixed height
+    width: 90, // Fixed width
+    decoration: BoxDecoration(
+      color: backgroundColor,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Center(
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 10,
+          color: textColor,
+          fontWeight: FontWeight.w500,
+        ),
+        textAlign: TextAlign.center, // Center the text
+      ),
+    ),
+  );
 }
