@@ -141,6 +141,7 @@ class OnBoardingScreen extends StatelessWidget {
                   // Tab content (fixed height inside scroll view)
                   SizedBox(
                     height: 260,
+                    // width: 117,
                     child: TabBarView(
                       children: [
                         _ChipsGrid(groups: _demoAllInterests),
@@ -614,7 +615,7 @@ class _ChipsGrid extends StatelessWidget {
       child: ListView.separated(
         padding: EdgeInsets.zero,
         itemCount: groups.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 10),
+        separatorBuilder: (_, __) => const SizedBox(height: 26),
         itemBuilder: (context, index) {
           final title = groups.keys.elementAt(index);
           final items = groups[title]!;
