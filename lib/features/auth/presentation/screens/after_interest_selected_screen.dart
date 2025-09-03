@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/features/common/app_logo.dart';
 
 import 'login_screen.dart';
 // import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
@@ -61,7 +62,9 @@ class _AfterInterestSelectedScreenState
             children: [
               const SizedBox(height: 6),
               // SPEET badge
-              const Center(child: _BrandWordWithUnderline(gradient: _brandGradient)),
+              // const Center(child: _BrandWordWithUnderline(gradient: _brandGradient)),
+              Center(child: const AppLogo(height: 90,width: 50,)),
+
               const SizedBox(height: 18),
 
               // Title & subtitle

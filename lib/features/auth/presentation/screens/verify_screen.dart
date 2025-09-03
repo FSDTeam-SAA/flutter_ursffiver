@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/reset_screen.dart';
+import 'package:flutter_ursffiver/features/common/app_logo.dart';
 
 class VerifyScreen extends StatefulWidget {
   const VerifyScreen({super.key});
@@ -77,7 +78,10 @@ class _VerifyScreenState extends State<VerifyScreen> {
               children: [
                 const SizedBox(height: 4),
                 // Brand mark
-                const _LogoMark(),
+                // const _LogoMark(),
+
+                const AppLogo(height: 24,width: 52,),
+
                 const SizedBox(height: 14),
 
                 // Title + subtitle

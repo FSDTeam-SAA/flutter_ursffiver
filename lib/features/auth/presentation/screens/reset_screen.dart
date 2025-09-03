@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
+import 'package:flutter_ursffiver/features/common/app_logo.dart';
 
 class ResetScreen extends StatefulWidget {
   const ResetScreen({super.key});
@@ -108,7 +109,8 @@ class _ResetScreenState extends State<ResetScreen> {
               children: [
                 const SizedBox(height: 4),
                 // Brand mark
-                const _LogoMark(),
+                // const _LogoMark(),
+                const AppLogo(height: 24,width: 52,),
                 const SizedBox(height: 14),
 
                 // Title + subtitle
