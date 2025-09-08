@@ -49,7 +49,7 @@ class LabeledDropdown extends StatelessWidget {
     this.hintTextSize = 14,
     this.hintTextWeight = FontWeight.w400,
     this.itemTextSize = 16,
-    this.itemTextColor = Colors.white,
+    this.itemTextColor = Colors.black,
     this.itemTextWeight = FontWeight.w500,
     this.height = 48, // default height
   });

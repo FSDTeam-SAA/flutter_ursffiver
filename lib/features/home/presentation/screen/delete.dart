@@ -37,7 +37,7 @@ class UserProfileCard extends StatelessWidget {
         children: [
           Container(
             width: 90,
-            height: 150,
+            height: 130,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(

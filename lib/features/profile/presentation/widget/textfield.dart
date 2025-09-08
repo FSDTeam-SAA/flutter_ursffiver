@@ -2,12 +2,111 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 
+// class LabeledDropdown extends StatelessWidget {
+//   final String? title;
+//   final String hintText;
+//   final List<String> items;
+//   final String? value;
+//   final ValueChanged<String?> onChanged;
+
+//   // Shared style parameters
+//   final double textSize;
+//   final Color textColor;
+//   final Color borderColor;
+//   final Color focusedBorderColor;
+//   final double borderRadius;
+//   final Color backgroundColor;
+
+//   // Hint text style
+//   final Color hintTextColor;
+//   final double hintTextSize;
+//   final FontWeight hintTextWeight;
+
+//   const LabeledDropdown({
+//     super.key,
+//     this.title,
+//     required this.hintText,
+//     required this.items,
+//     this.value,
+//     required this.onChanged,
+//     this.textSize = 14,
+//     this.textColor = Colors.black,
+//     this.borderColor = AppColors.primaryTextblack, // light gray
+//     this.focusedBorderColor = Colors.blue,
+//     this.borderRadius = 8,
+//     this.backgroundColor = Colors.white, // (0xFFF5F5F5), 
+//     this.hintTextColor = const Color(0xFF9E9E9E),
+//     this.hintTextSize = 14,
+//     this.hintTextWeight = FontWeight.w400,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(bottom: 12),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           if (title != null && title!.isNotEmpty) ...[
+//             Text(
+//               title!,
+//               style: TextStyle(
+//                 fontSize: textSize,
+//                 fontWeight: FontWeight.w500,
+//                 color: textColor,
+//               ),
+//             ),
+//             const SizedBox(height: 6),
+//           ],
+//           DropdownButtonFormField<String>(
+//             value: value,
+//             style: TextStyle(fontSize: textSize, color: textColor),
+//             decoration: InputDecoration(
+//               hintText: hintText,
+//               hintStyle: TextStyle(
+//                 fontSize: hintTextSize,
+//                 color: hintTextColor,
+//                 fontWeight: hintTextWeight,
+//               ),
+//               filled: true,
+//               fillColor: backgroundColor,
+//               contentPadding:
+//                   const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+//               border: OutlineInputBorder(
+//                 borderRadius: BorderRadius.circular(borderRadius),
+//               ),
+//               enabledBorder: OutlineInputBorder(
+//                 borderRadius: BorderRadius.circular(borderRadius),
+//                 borderSide: BorderSide(color: borderColor),
+//               ),
+//               focusedBorder: OutlineInputBorder(
+//                 borderRadius: BorderRadius.circular(borderRadius),
+//                 borderSide: BorderSide(color: focusedBorderColor, width: 2),
+//               ),
+//             ),
+//             items: items
+//                 .map((e) => DropdownMenuItem(
+//                       value: e,
+//                       child: Text(e, style: TextStyle(fontSize: textSize)),
+//                     ))
+//                 .toList(),
+//             onChanged: onChanged,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+import 'package:flutter/material.dart';
+import '../../../../core/theme/app_colors.dart';
+
 class LabeledDropdown extends StatelessWidget {
   final String? title;
   final String hintText;
   final List<String> items;
   final String? value;
-  final ValueChanged<String?> onChanged;
+  final ValueChanged<String?>? onChanged; // ✅ make nullable
 
   // Shared style parameters
   final double textSize;
@@ -28,13 +127,13 @@ class LabeledDropdown extends StatelessWidget {
     required this.hintText,
     required this.items,
     this.value,
-    required this.onChanged,
+    this.onChanged, // ✅ nullable
     this.textSize = 14,
     this.textColor = Colors.black,
-    this.borderColor = AppColors.primaryTextblack, // light gray
+    this.borderColor = AppColors.primaryTextblack,
     this.focusedBorderColor = Colors.blue,
     this.borderRadius = 8,
-    this.backgroundColor = Colors.white, // (0xFFF5F5F5), 
+    this.backgroundColor = Colors.white,
     this.hintTextColor = const Color(0xFF9E9E9E),
     this.hintTextSize = 14,
     this.hintTextWeight = FontWeight.w400,
@@ -90,13 +189,15 @@ class LabeledDropdown extends StatelessWidget {
                       child: Text(e, style: TextStyle(fontSize: textSize)),
                     ))
                 .toList(),
-            onChanged: onChanged,
+            onChanged: onChanged, // ✅ works now
           ),
         ],
       ),
     );
   }
 }
+
+
 
 
 

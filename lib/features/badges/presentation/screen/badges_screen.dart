@@ -34,11 +34,39 @@ class _BadgesPageState extends State<BadgesPage>
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        title: Text(
-          'Badges',
-          style: AppText.xxlSemiBold_24_600.copyWith(
-            color: AppColors.primaryTextblack,
-          ),
+
+        title: Row(
+          children: [
+            Row(
+              children: [
+                Icon(Icons.workspace_premium_outlined,size: 32, color: AppColors.primarybutton),
+                const SizedBox(width: 4),
+                Text(
+                  'Badge Management',
+                  style: AppText.xlSemiBold_20_700.copyWith(
+                    color: AppColors.primaryTextblack,
+                  ),
+                ),
+              ],
+            ),
+            Spacer(),
+            Row(
+              children: [
+                InkWell(
+                  onTap: () {},
+                  child: Row(
+                    children: [
+                      Icon(Icons.contact_support_outlined, color: AppColors.primarybutton),
+                      SizedBox(width: 6),
+                      Text("Badge Guide", style: AppText.smMedium_14_600.copyWith(
+                        color: AppColors.primarybutton,
+                      )),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
         centerTitle: false,
         bottom: TabBar(
@@ -290,6 +318,7 @@ class AwardedBadgesWidget extends StatelessWidget {
     );
   }
 }
+
 class AllBadgesWidget extends StatelessWidget {
   const AllBadgesWidget({super.key});
 
@@ -369,11 +398,13 @@ class AllBadgesWidget extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final badge = badges[index];
                   final isCommunication = badge['type'] == 'Communication';
-                  final badgeColor =
-                      isCommunication ? Colors.blue[100] : Colors.green[100];
-                  final textColor =
-                      isCommunication ? Colors.blue : Colors.green;
-        
+                  final badgeColor = isCommunication
+                      ? Colors.blue[100]
+                      : Colors.green[100];
+                  final textColor = isCommunication
+                      ? Colors.blue
+                      : Colors.green;
+
                   return Container(
                     margin: const EdgeInsets.only(bottom: 12),
                     padding: const EdgeInsets.all(16),
@@ -398,7 +429,9 @@ class AllBadgesWidget extends StatelessWidget {
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: badgeColor,
                                 borderRadius: BorderRadius.circular(8),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/delete.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -16,8 +17,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isAvailable = true;
-  String statusMessage = "Ready to connect - Click to set status";
+  String? statusMessage; // fixed: nullable for dropdown
   final TextEditingController customMessageController = TextEditingController();
+  final FocusNode _customStatusFocus = FocusNode();
   bool isEditing = false;
   int selectedRange = 2;
 
@@ -50,17 +52,19 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.verified_user_outlined),
+            icon: const Icon(Icons.verified_user_outlined),
             iconSize: 28,
             color: AppColors.secondaryText,
           ),
           IconButton(
-            icon: Icon(Icons.notifications_none, color: Colors.black),
+            icon: const Icon(Icons.notifications_none, color: Colors.black),
             iconSize: 32,
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NotificationScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const NotificationScreen(),
+                ),
               );
             },
           ),
@@ -72,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /// Availability Switch
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -85,7 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Text(
-                        "Tap the button to become visible",
+                        isAvailable
+                            ? "You are available to connect"
+                            : "You are not available to connect",
                         style: AppText.xsRegular_12_400.copyWith(
                           color: AppColors.secondaryText,
                         ),
@@ -103,97 +110,102 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               const SizedBox(height: 20),
-
-              /// Share status section
               Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 1,
-                color: isAvailable
-                    ? Color(0xFFF5F5FE)
-                    : Colors.white, // <-- change color
+                color: isAvailable ? const Color(0xFFF5F5FE) : Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Share what you’re up for and\nconnect with nearby SPEETsters:",
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.primaryTextblack,
+                          color: Colors.black,
                         ),
                       ),
                       const SizedBox(height: 12),
 
-                      /// Status box
-                      InkWell(
-                        onTap: isAvailable
-                            ? () {
-                                setState(() {
-                                  isEditing = true;
-                                });
-                              }
-                            : null, // disable tap if not available
-                        child: Container(
-                          height: 48, // set height
-                          width: double.infinity, // full width of parent
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: isAvailable
-                                  ? AppColors.textFieldBorder
-                                  : AppColors.textFieldBorder,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          alignment: Alignment
-                              .centerLeft, // keep text aligned to the left
-                          child: Text(
-                            statusMessage,
-                            style: TextStyle(
-                              color: isAvailable ? Colors.black87 : Colors.grey,
-                            ),
+                      /// Status dropdown
+                      AbsorbPointer(
+                        absorbing: !isAvailable,
+                        child: Opacity(
+                          opacity: isAvailable ? 1.0 : 0.6,
+                          child: LabeledDropdown(
+                            height: 52,
+                            title: "Status",
+                            hintText: "Select status",
+                            items: const [
+                              "Available",
+                              "Not Available",
+                              "Pending",
+                            ],
+                            value: statusMessage,
+                            textSize: 14,
+                            textColor: isAvailable
+                                ? Colors.black87
+                                : Colors.grey,
+                            borderColor: isAvailable
+                                ? AppColors.buttonTextColor
+                                : Colors.grey[300]!,
+
+                            //borderColor: AppColors.textFieldBorder,
+                            //focusedBorderColor: Colors.blue,
+                            borderRadius: 8,
+                            //backgroundColor: Colors.white,
+                            hintTextColor: Colors.grey,
+                            hintTextSize: 14,
+                            hintTextWeight: FontWeight.w400,
+                            onChanged: (String? value) {
+                              setState(() {
+                                statusMessage = value!;
+                              });
+                            },
                           ),
                         ),
                       ),
+
                       Row(
                         children: [
-                          Column(
-                            children: [
-                              Text(
-                                "Or enter a custom status:",
-                                style: AppText.xsRegular_12_400.copyWith(
-                                  color: AppColors.primaryTextblack,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            "Or enter a custom status:",
+                            style: AppText.xsRegular_12_400.copyWith(
+                              color: AppColors.primaryTextblack,
+                            ),
                           ),
-                          Spacer(),
-                          Column(
-                            children: [
-                              TextButton(
-                                onPressed: () {},
-                                child: const Text("Edit"),
-                              ),
-                            ],
+                          const Spacer(),
+                          TextButton(
+                            onPressed: isAvailable
+                                ? () {
+                                    FocusScope.of(
+                                      context,
+                                    ).requestFocus(_customStatusFocus);
+                                  }
+                                : null, // disable button if switch off
+                            child: const Text("Edit"),
                           ),
                         ],
                       ),
-
-                      /// Custom message box
-                      TextField(
-                        enabled: isAvailable, // disable typing if off
-                        controller: customMessageController,
-                        decoration: InputDecoration(
-                          hintText: "Click to enter a custom status message...",
-                          hintStyle: AppText.xsRegular_12_400.copyWith(
-                            color: AppColors.primaryTextblack,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                      SizedBox(
+                        height: 52,
+                        child: TextField(
+                          enabled: isAvailable,
+                          focusNode: _customStatusFocus,
+                          controller: customMessageController,
+                          decoration: InputDecoration(
+                            hintText:
+                                "Click to enter a custom status message...",
+                            hintStyle: AppText.xsRegular_12_400.copyWith(
+                              color: AppColors.primaryTextblack,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                         ),
                       ),
@@ -207,64 +219,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Primary Interests",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-
-              SizedBox(height: 8),
-
-              GridView.count(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                crossAxisCount: 3,
-                crossAxisSpacing: 6,
-                mainAxisSpacing: 0,
-                childAspectRatio: 3,
-                children: [
-                  Chip(
-                    label: Text('Acting/Theate...'),
-                    backgroundColor: AppColors.interestsblue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(color: Colors.transparent),
-                    ),
+              const SizedBox(height: 8),
+              InterestsGrid(
+                chips: [
+                  InterestChip(
+                    label: 'Acting/Theatre',
+                    color: AppColors.interestsblue,
                   ),
-                  Chip(
-                    label: Text('Escape Room...'),
-                    backgroundColor: AppColors.interestsyellow,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(color: Colors.transparent),
-                    ),
+                  InterestChip(
+                    label: 'Escape Room',
+                    color: AppColors.interestsyellow,
                   ),
-                  Chip(
-                    label: Text('Arcade Gami...'),
-                    backgroundColor: AppColors.interestsred,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(color: Colors.transparent),
-                    ),
+                  InterestChip(
+                    label: 'Arcade Gaming',
+                    color: AppColors.interestsred,
                   ),
-                  Chip(
-                    label: Text('Arcade Gami...'),
-                    backgroundColor: AppColors.interestsyellow,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(color: Colors.transparent),
-                    ),
-                  ),
-                  Chip(
-                    label: Text('Expedition Tra...'),
-                    backgroundColor: AppColors.interestsred,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(color: Colors.transparent),
-                    ),
-                  ),
-                  Chip(
-                    label: Text('Acting/Theate...'),
-                    backgroundColor: AppColors.interestsgreen,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(color: Colors.transparent),
-                    ),
+                  InterestChip(
+                    label: 'Expedition Trail',
+                    color: AppColors.interestsgreen,
                   ),
                 ],
               ),
@@ -277,65 +249,62 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              SizedBox(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(
-                      ranges.length,
-                      (index) => Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: ChoiceChip(
-                          label: SizedBox(
-                            height: 52,
-                            width: 48,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.location_on_outlined,
-                                  size: 24,
-                                  color: selectedRange == index
-                                      ? AppColors.primarybutton
-                                      : Colors.grey,
-                                ),
-                                const SizedBox(height: 6),
-                                Flexible(
-                                  child: Text(
-                                    ranges[index],
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: selectedRange == index
-                                          ? AppColors.primarybutton
-                                          : Colors.black87,
-                                      fontSize: 13,
-                                    ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(
+                    ranges.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChoiceChip(
+                        label: SizedBox(
+                          height: 52,
+                          width: 48,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.location_on_outlined,
+                                size: 24,
+                                color: selectedRange == index
+                                    ? AppColors.primarybutton
+                                    : Colors.grey,
+                              ),
+                              const SizedBox(height: 6),
+                              Flexible(
+                                child: Text(
+                                  ranges[index],
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: selectedRange == index
+                                        ? AppColors.primarybutton
+                                        : Colors.black87,
+                                    fontSize: 13,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          selected: selectedRange == index,
-                          onSelected: (val) {
-                            setState(() {
-                              selectedRange = index;
-                            });
-                          },
-                          selectedColor: const Color(0xFFECEDFD),
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                              color: selectedRange == index
-                                  ? AppColors.primarybutton
-                                  : AppColors.textFieldBorder,
-                              width: 1.5,
-                            ),
-                          ),
-                          showCheckmark: false,
                         ),
+                        selected: selectedRange == index,
+                        onSelected: (val) {
+                          setState(() {
+                            selectedRange = index;
+                          });
+                        },
+                        selectedColor: const Color(0xFFECEDFD),
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                            color: selectedRange == index
+                                ? AppColors.primarybutton
+                                : AppColors.textFieldBorder,
+                            width: 1.5,
+                          ),
+                        ),
+                        showCheckmark: false,
                       ),
                     ),
                   ),
@@ -344,20 +313,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 20),
 
+              /// Nearby Actors
               Row(
                 children: [
-                  Column(
-                    children: [
-                      const Text(
-                        "Nearby Actors",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  const Text(
+                    "Nearby Actors",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   TextButton(
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
@@ -367,7 +330,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     onPressed: () {},
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           Icons.refresh,
@@ -407,90 +369,80 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+
               Gap.h12,
+
+              /// Example user cards
               Column(
-                children: [
-                  UserProfileCard(
-                    name: 'Brooklyn Simmons',
-                    imagePath: 'assets/image/profile.png',
-                    distance: '5 ft',
-                    status: 'Available',
-                    onActivityHi: () {},
-                    onExperience: () {},
-                    onChat: () {},
-                    onInfo: () {},
+                children: List.generate(
+                  30,
+                  (index) => Column(
+                    children: [
+                      UserProfileCard(
+                        name: 'Brooklyn Simmons',
+                        imagePath: 'assets/image/profile.png',
+                        distance: '5 ft',
+                        status: 'Available',
+                        onActivityHi: () {},
+                        onExperience: () {},
+                        onChat: () {},
+                        onInfo: () {},
+                      ),
+                      const SizedBox(height: 8),
+                      const Divider(color: Colors.grey),
+                      const SizedBox(height: 8),
+                    ],
                   ),
-                  SizedBox(height: 8),
-                  Divider(color: Colors.grey),
-                  SizedBox(height: 8), // Add some space between user profiles
-                  UserProfileCard(
-                    name: 'Brooklyn Simmons',
-                    imagePath: 'assets/image/profile.png',
-                    distance: '5 ft',
-                    status: 'Available',
-                    onActivityHi: () {},
-                    onExperience: () {},
-                    onChat: () {},
-                    onInfo: () {},
-                  ),
-                  SizedBox(height: 8),
-                  Divider(color: Colors.grey),
-                  SizedBox(height: 8),
-                  UserProfileCard(
-                    name: 'Brooklyn Simmons',
-                    imagePath: 'assets/image/profile.png',
-                    distance: '5 ft',
-                    status: 'Available',
-                    onActivityHi: () {},
-                    onExperience: () {},
-                    onChat: () {},
-                    onInfo: () {},
-                  ),
-                  SizedBox(height: 8),
-                  Divider(color: Colors.grey),
-                  SizedBox(height: 8),
-                  UserProfileCard(
-                    name: 'Brooklyn Simmons',
-                    imagePath: 'assets/image/profile.png',
-                    distance: '5 ft',
-                    status: 'Available',
-                    onActivityHi: () {},
-                    onExperience: () {},
-                    onChat: () {},
-                    onInfo: () {},
-                  ),
-                  SizedBox(height: 8),
-                  Divider(color: Colors.grey),
-                  SizedBox(height: 8), // Add some space between user profiles
-                  UserProfileCard(
-                    name: 'Brooklyn Simmons',
-                    imagePath: 'assets/image/profile.png',
-                    distance: '5 ft',
-                    status: 'Available',
-                    onActivityHi: () {},
-                    onExperience: () {},
-                    onChat: () {},
-                    onInfo: () {},
-                  ),
-                  SizedBox(height: 8),
-                  Divider(color: Colors.grey),
-                  SizedBox(height: 8),
-                  UserProfileCard(
-                    name: 'Brooklyn Simmons',
-                    imagePath: 'assets/image/profile.png',
-                    distance: '5 ft',
-                    status: 'Available',
-                    onActivityHi: () {},
-                    onExperience: () {},
-                    onChat: () {},
-                    onInfo: () {},
-                  ),
-                ],
+                ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+// prymary interasts chip widget
+// Model for each chip
+class InterestChip {
+  final String label;
+  final Color color;
+
+  InterestChip({required this.label, required this.color});
+}
+
+// Reusable Grid widget
+class InterestsGrid extends StatelessWidget {
+  final List<InterestChip> chips;
+
+  const InterestsGrid({super.key, required this.chips});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisCount: 3,
+      crossAxisSpacing: 6,
+      mainAxisSpacing: 6,
+      childAspectRatio: 3,
+      children: chips
+          .map(
+            (chip) => Chip(
+              label: Text(
+                chip.label,
+                style: AppText.mdMedium_16_500.copyWith(color: Colors.white),
+              ),
+              backgroundColor: chip.color,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+                side: BorderSide.none,
+              ),
+              
+            ),
+          )
+          .toList(),
     );
   }
 }
