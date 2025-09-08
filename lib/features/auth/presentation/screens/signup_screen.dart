@@ -117,20 +117,92 @@ class _SignupScreen extends State<SignupScreen> {
                 children: [
                   // Brand
                   // const _GradientText('SPEET', gradient: _brandGradient, size: 18, weight: FontWeight.w900),
-                  const AppLogo(height:100,width:50 ),
+                  Row(mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Create a  ',
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                      ),
+                      const AppLogo(height:110,width:80 ),
+
+                    ],
+                  ),
+                  
+                  Text("Yours truly Local",style: TextStyle(fontSize: 16),),
                   // const SizedBox(height: 10),
 
                   // Title + subtitle
-                  const Text(
-                    'Create Your Account',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
-                  ),
+
                   const SizedBox(height: 6),
                   Text(
-                    'Join the community and start connecting with\n             people around you in seconds.',
+                    "Spontaneously and on the spot, transform digital connections into real-life meetups with nearby people who share your interests - all within minutes.",
                     style: caption,
+                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 18),
+               
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.grey[200],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(children: [
+                            SizedBox(height: 15,),
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+                            
+                            Text("What interests you ?",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
+                            Container(width: 80,height: 7,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4),color: Colors.deepPurpleAccent,),)
+                          ],),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            child: Text("Select interest to find people who share your passions",style: TextStyle(fontWeight: FontWeight.w500,color: Colors.grey,fontSize: 14,fontStyle: FontStyle.italic),),
+                          ),
+                          Container(decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: Colors.white,
+
+                          ),
+                            height: 48,width: double.infinity,
+                          child: Center(child: Text("Click to select you interests",style: TextStyle(fontSize: 16,color: Colors.grey,fontWeight: FontWeight.w700),)),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            child: RichText(
+                              text: TextSpan(
+                                text: "Selected: ",
+                                style: TextStyle(color: Colors.black, fontSize: 16),
+                                children: [
+                                  TextSpan(
+                                    text: "0/15 interests  ",
+
+                                  ),
+                                  TextSpan(
+                                    text: "Please Select at least 1 ",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            child: Text("You interest help us connect you with like minded people nearby",textAlign: TextAlign.center,),
+                          )
+
+                        ],),
+                      ),
+                    ),
+                  ),
+
+
 
                   // First/Last
                   Row(

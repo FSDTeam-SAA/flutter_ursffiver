@@ -26,6 +26,7 @@ class _SignInScreenState extends State<SignInScreen> {
   static const _borderColor = Color(0xFFE6E6E9);
 
   final _formKey = GlobalKey<FormState>();
+  final _username = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
 
@@ -152,9 +153,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   TextFormField(
                     controller: _email,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: _fieldDecoration('hello@example.com'),
+                    decoration: _fieldDecoration('Email address'),
                     validator: (v) => (v == null || v.isEmpty)
-                        ? 'Please Enter Your Correct Email'
+                        ? 'Please Enter Your Correct Name'
                         : null,
                   ),
                   const SizedBox(height: 14),
@@ -219,7 +220,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   const SizedBox(height: 12),
 
                   // Keep me signed in
-                  Row(
+                 Row(
                     children: [
                       Checkbox(
                         value: _keepSignedIn,
