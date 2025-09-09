@@ -30,9 +30,8 @@ class _SignupScreen extends State<SignupScreen> {
   bool _hasUppercase(String v) => RegExp(r'[A-Z]').hasMatch(v);
   bool _hasLowercase(String v) => RegExp(r'[a-z]').hasMatch(v);
   bool _hasNumber(String v) => RegExp(r'\d').hasMatch(v);
-// raw string: no need to escape $
+  // raw string: no need to escape $
   bool _hasSpecial(String v) => RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(v);
-
 
   final _formKey = GlobalKey<FormState>();
 
@@ -79,10 +78,8 @@ class _SignupScreen extends State<SignupScreen> {
     ),
   );
 
-  TextStyle get _labelStyle => const TextStyle(
-    fontSize: 13,
-    fontWeight: FontWeight.w700,
-  );
+  TextStyle get _labelStyle =>
+      const TextStyle(fontSize: 13, fontWeight: FontWeight.w700);
 
   @override
   void initState() {
@@ -90,13 +87,11 @@ class _SignupScreen extends State<SignupScreen> {
     _password.addListener(() => setState(() {}));
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final caption = Theme.of(context)
-        .textTheme
-        .bodySmall
-        ?.copyWith(color: Colors.black54, height: 1.35);
+    final caption = Theme.of(
+      context,
+    ).textTheme.bodySmall?.copyWith(color: Colors.black54, height: 1.35);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -117,29 +112,31 @@ class _SignupScreen extends State<SignupScreen> {
                 children: [
                   // Brand
                   // const _GradientText('SPEET', gradient: _brandGradient, size: 18, weight: FontWeight.w900),
-                  Row(mainAxisAlignment: MainAxisAlignment.center,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
                         'Create a  ',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                      const AppLogo(height:110,width:80 ),
-
+                      const AppLogo(height: 110, width: 80),
                     ],
                   ),
-                  
-                  Text("Yours truly Local",style: TextStyle(fontSize: 16),),
+
+                  Text("Yours truly Local", style: TextStyle(fontSize: 16)),
+
                   // const SizedBox(height: 10),
 
                   // Title + subtitle
-
                   const SizedBox(height: 6),
                   Text(
                     "Spontaneously and on the spot, transform digital connections into real-life meetups with nearby people who share your interests - all within minutes.",
                     style: caption,
                     textAlign: TextAlign.center,
                   ),
-               
 
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
@@ -151,58 +148,92 @@ class _SignupScreen extends State<SignupScreen> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Column(children: [
-                            SizedBox(height: 15,),
-                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
-                            
-                            Text("What interests you ?",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
-                            Container(width: 80,height: 7,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4),color: Colors.deepPurpleAccent,),)
-                          ],),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            child: Text("Select interest to find people who share your passions",style: TextStyle(fontWeight: FontWeight.w500,color: Colors.grey,fontSize: 14,fontStyle: FontStyle.italic),),
-                          ),
-                          Container(decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: Colors.white,
-
-                          ),
-                            height: 48,width: double.infinity,
-                          child: Center(child: Text("Click to select you interests",style: TextStyle(fontSize: 16,color: Colors.grey,fontWeight: FontWeight.w700),)),
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            child: RichText(
-                              text: TextSpan(
-                                text: "Selected: ",
-                                style: TextStyle(color: Colors.black, fontSize: 16),
-                                children: [
-                                  TextSpan(
-                                    text: "0/15 interests  ",
-
+                        child: Column(
+                          children: [
+                            SizedBox(height: 15),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "What interests you ?",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                  TextSpan(
-                                    text: "Please Select at least 1 ",
-                                    style: TextStyle(color: Colors.red),
+                                ),
+                                Container(
+                                  width: 80,
+                                  height: 7,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: Colors.deepPurpleAccent,
                                   ),
-                                ],
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              child: Text(
+                                "Select interest to find people who share your passions",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                  fontStyle: FontStyle.italic,
+                                ),
                               ),
                             ),
-                          ),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                color: Colors.white,
+                              ),
+                              height: 48,
+                              width: double.infinity,
+                              child: Center(
+                                child: Text(
+                                  "Click to select you interests",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ),
 
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            child: Text("You interest help us connect you with like minded people nearby",textAlign: TextAlign.center,),
-                          )
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: "Selected: ",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                  children: [
+                                    TextSpan(text: "0/15 interests  "),
+                                    TextSpan(
+                                      text: "Please Select at least 1 ",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
 
-                        ],),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              child: Text(
+                                "You interest help us connect you with like minded people nearby",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-
-
 
                   // First/Last
                   Row(
@@ -258,19 +289,24 @@ class _SignupScreen extends State<SignupScreen> {
                     child: TextFormField(
                       controller: _dob,
                       readOnly: true,
-                      decoration: _decoration('DD/MM/YY').copyWith(
-                        suffixIcon: const Icon(Icons.event_outlined),
-                      ),
+                      decoration: _decoration(
+                        'DD/MM/YY',
+                      ).copyWith(suffixIcon: const Icon(Icons.event_outlined)),
                       onTap: () async {
                         final now = DateTime.now();
                         final picked = await showDatePicker(
                           context: context,
-                          initialDate: DateTime(now.year - 18, now.month, now.day),
+                          initialDate: DateTime(
+                            now.year - 18,
+                            now.month,
+                            now.day,
+                          ),
                           firstDate: DateTime(1900),
                           lastDate: now,
                         );
                         if (picked != null) {
-                          _dob.text = '${picked.day.toString().padLeft(2, '0')}/'
+                          _dob.text =
+                              '${picked.day.toString().padLeft(2, '0')}/'
                               '${picked.month.toString().padLeft(2, '0')}/'
                               '${picked.year.toString().substring(2)}';
                         }
@@ -293,15 +329,19 @@ class _SignupScreen extends State<SignupScreen> {
                       children: [
                         const Padding(
                           padding: EdgeInsets.only(top: 2),
-                          child: Icon(Icons.warning, color: Colors.red, size: 22),
+                          child: Icon(
+                            Icons.warning,
+                            color: Colors.red,
+                            size: 22,
+                          ),
                         ),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
                             "Privacy Protected Information\n"
-                                "Your birth date is only required for Apple and Google app store compliance to verify you’re 18+. "
-                                "This information is never visible to other users, not used for marketing or recommendations, "
-                                "and not shared with any third parties. It remains completely private and secure.",
+                            "Your birth date is only required for Apple and Google app store compliance to verify you’re 18+. "
+                            "This information is never visible to other users, not used for marketing or recommendations, "
+                            "and not shared with any third parties. It remains completely private and secure.",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ),
@@ -319,7 +359,12 @@ class _SignupScreen extends State<SignupScreen> {
                           child: _Dropdown<String>(
                             value: _gender,
                             hint: 'Select',
-                            items: const ['Male', 'Female', 'Non-binary', 'Prefer not to say'],
+                            items: const [
+                              'Male',
+                              'Female',
+                              'Non-binary',
+                              'Prefer not to say',
+                            ],
                             onChanged: (v) => setState(() => _gender = v),
                           ),
                         ),
@@ -331,7 +376,13 @@ class _SignupScreen extends State<SignupScreen> {
                           child: _Dropdown<String>(
                             value: _ageRange,
                             hint: 'Select',
-                            items: const ['18–24', '25–34', '35–44', '45–54', '55+'],
+                            items: const [
+                              '18–24',
+                              '25–34',
+                              '35–44',
+                              '45–54',
+                              '55+',
+                            ],
                             onChanged: (v) => setState(() => _ageRange = v),
                           ),
                         ),
@@ -347,7 +398,10 @@ class _SignupScreen extends State<SignupScreen> {
                       valueListenable: _bio,
                       builder: (_, v, __) => Text(
                         '${v.text.length}/500',
-                        style: const TextStyle(fontSize: 12, color: Colors.black54),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                        ),
                       ),
                     ),
                     child: SizedBox(
@@ -368,7 +422,10 @@ class _SignupScreen extends State<SignupScreen> {
                     child: const Text(
                       'Create Password',
                       textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -377,8 +434,13 @@ class _SignupScreen extends State<SignupScreen> {
                     obscureText: !_showPassword,
                     decoration: _decoration('Password').copyWith(
                       suffixIcon: IconButton(
-                        icon: Icon(_showPassword ? Icons.visibility_off : Icons.visibility),
-                        onPressed: () => setState(() => _showPassword = !_showPassword),
+                        icon: Icon(
+                          _showPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () =>
+                            setState(() => _showPassword = !_showPassword),
                       ),
                     ),
                   ),
@@ -386,17 +448,21 @@ class _SignupScreen extends State<SignupScreen> {
 
                   _RulesBox(
                     checks: {
-                      'Minimum 8 characters'                     : _hasMinLength(_password.text),
-                      'At least 1 uppercase letter'              : _hasUppercase(_password.text),
-                      'At least 1 lowercase letter'              : _hasLowercase(_password.text),
-                      'At least 1 number'                        : _hasNumber(_password.text),
-                      'At least 1 special character (e.g., !@#\$%)': _hasSpecial(_password.text),
+                      'Minimum 8 characters': _hasMinLength(_password.text),
+                      'At least 1 uppercase letter': _hasUppercase(
+                        _password.text,
+                      ),
+                      'At least 1 lowercase letter': _hasLowercase(
+                        _password.text,
+                      ),
+                      'At least 1 number': _hasNumber(_password.text),
+                      'At least 1 special character (e.g., !@#\$%)':
+                          _hasSpecial(_password.text),
                     },
                   ),
                   const SizedBox(height: 12),
 
                   //confirm passowrd
-
                   Align(
                     alignment: Alignment.centerLeft,
                     child: const Text(
@@ -415,8 +481,13 @@ class _SignupScreen extends State<SignupScreen> {
                     obscureText: !_showConfirm,
                     decoration: _decoration('Confirm Password').copyWith(
                       suffixIcon: IconButton(
-                        icon: Icon(_showConfirm ? Icons.visibility_off : Icons.visibility),
-                        onPressed: () => setState(() => _showConfirm = !_showConfirm),
+                        icon: Icon(
+                          _showConfirm
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () =>
+                            setState(() => _showConfirm = !_showConfirm),
                       ),
                     ),
                   ),
@@ -430,26 +501,24 @@ class _SignupScreen extends State<SignupScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4C5CFF),
                         foregroundColor: Colors.white,
-                        shape:
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
                       onPressed: () {
-
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => const InterestScreen(),
                           ),
                         );
-
-
                       },
-                      child: const Text('Create Account',
-                          style: TextStyle(fontWeight: FontWeight.w700)),
+                      child: const Text(
+                        'Create Account',
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
-
-
 
                   Center(
                     child: Text.rich(
@@ -467,7 +536,9 @@ class _SignupScreen extends State<SignupScreen> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (_) => const SignInScreen()),
+                                  MaterialPageRoute(
+                                    builder: (_) => const SignInScreen(),
+                                  ),
                                 );
                               },
                           ),
@@ -532,7 +603,6 @@ class _BioSection extends StatefulWidget {
 class _BioSectionState extends State<_BioSection> {
   static const _maxChars = 500;
 
-
   late final TextEditingController _ctl =
       widget.controller ?? TextEditingController();
 
@@ -553,9 +623,6 @@ class _BioSectionState extends State<_BioSection> {
         // Title + counter (top-right)
         Row(
           children: [
-
-
-
             // const Spacer(),
             // ValueListenableBuilder<TextEditingValue>(
             //   valueListenable: _ctl,
@@ -575,7 +642,6 @@ class _BioSectionState extends State<_BioSection> {
         ),
         const SizedBox(height: 8),
 
-
         Expanded(
           child: TextField(
             controller: _ctl,
@@ -583,7 +649,13 @@ class _BioSectionState extends State<_BioSection> {
             textInputAction: TextInputAction.newline,
             maxLength: _maxChars,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            buildCounter: (_, {required int currentLength, required bool isFocused, int? maxLength}) => null,
+            buildCounter:
+                (
+                  _, {
+                  required int currentLength,
+                  required bool isFocused,
+                  int? maxLength,
+                }) => null,
 
             // 👇 make the content (and hint) stick to the top-left
             textAlignVertical: TextAlignVertical.top,
@@ -621,20 +693,20 @@ class _BioSectionState extends State<_BioSection> {
           ),
         ),
 
-
         const SizedBox(height: 8),
-
-
       ],
     );
   }
 }
 
-
 /* ---------- UI helpers ---------- */
 
 class _Labeled extends StatelessWidget {
-  const _Labeled({required this.label, required this.child, this.labelTrailing});
+  const _Labeled({
+    required this.label,
+    required this.child,
+    this.labelTrailing,
+  });
 
   final String label;
   final Widget child;
@@ -647,9 +719,10 @@ class _Labeled extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(label,
-                style:
-                const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+            ),
             const Spacer(),
             if (labelTrailing != null) labelTrailing!,
           ],
@@ -687,7 +760,10 @@ class _Dropdown<T> extends StatelessWidget {
         hintText: hint,
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 12,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: _SignupScreen._borderColor),
@@ -701,8 +777,6 @@ class _Dropdown<T> extends StatelessWidget {
     );
   }
 }
-
-
 
 class _RulesBox extends StatelessWidget {
   const _RulesBox({required this.checks});
@@ -721,7 +795,7 @@ class _RulesBox extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: checks.entries.map((e) {
-          final text  = e.key;
+          final text = e.key;
           final valid = e.value;
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 3),
@@ -751,14 +825,13 @@ class _RulesBox extends StatelessWidget {
   }
 }
 
-
 class _GradientText extends StatelessWidget {
   const _GradientText(
-      this.text, {
-        required this.gradient,
-        this.size = 24,
-        this.weight = FontWeight.w900,
-      });
+    this.text, {
+    required this.gradient,
+    this.size = 24,
+    this.weight = FontWeight.w900,
+  });
 
   final String text;
   final Gradient gradient;
@@ -772,9 +845,12 @@ class _GradientText extends StatelessWidget {
       blendMode: BlendMode.srcIn,
       child: Text(
         text,
-        style: TextStyle(fontSize: size, fontWeight: weight, letterSpacing: 1.1),
+        style: TextStyle(
+          fontSize: size,
+          fontWeight: weight,
+          letterSpacing: 1.1,
+        ),
       ),
     );
   }
 }
-

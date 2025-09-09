@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
 
 import '../../../common/app_logo.dart';
 
@@ -203,7 +204,7 @@ class OnBoardingScreen extends StatelessWidget {
                     text: 'Create Account',
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const SignInScreen()),
+                        MaterialPageRoute(builder: (_) => const SignupScreen()),
                       );
                     },
                   ),
@@ -361,50 +362,50 @@ Color _accentForIndex(int i) {
   return palette[i % palette.length];
 }
 
-class _BrandWordWithUnderline extends StatelessWidget {
-  const _BrandWordWithUnderline({required this.text});
-  final String text;
+// class _BrandWordWithUnderline extends StatelessWidget {
+//   const _BrandWordWithUnderline({required this.text});
+//   final String text;
 
-  static const _textStyle = TextStyle(
-    fontFamily: 'Poppins',
-    fontSize: 26, // slightly larger per comps
-    fontWeight: FontWeight.w900, // extra bold
-    letterSpacing: 1.2,
-  );
+//   static const _textStyle = TextStyle(
+//     fontFamily: 'Poppins',
+//     fontSize: 26, // slightly larger per comps
+//     fontWeight: FontWeight.w900, // extra bold
+//     letterSpacing: 1.2,
+//   );
 
-  @override
-  Widget build(BuildContext context) {
-    // Measure text so the underline matches width precisely
-    final tp = TextPainter(
-      text: const TextSpan(text: 'SPEET', style: _textStyle),
-      textDirection: TextDirection.ltr,
-    )..layout();
+//   @override
+//   // Widget build(BuildContext context) {
+//   //   // Measure text so the underline matches width precisely
+//   //   final tp = TextPainter(
+//   //     text: const TextSpan(text: 'SPEET', style: _textStyle),
+//   //     textDirection: TextDirection.ltr,
+//   //   )..layout();
 
-    final w = tp.width;
+//   //   final w = tp.width;
 
-    return SizedBox(
-      width: w,
-      height: 40, // enough room for text + underline
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          // Gradient text
-          const Positioned.fill(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: _GradientMask(
-                gradient: OnBoardingScreen._brandGradient,
-                child: Text('SPEET', style: _textStyle),
-              ),
-            ),
-          ),
-          // Gradient underline (pill + tiny arrows)
-          Positioned(bottom: 2, child: _GradientUnderline(width: w)),
-        ],
-      ),
-    );
-  }
-}
+//   //   return SizedBox(
+//   //     width: w,
+//   //     height: 40, // enough room for text + underline
+//   //     child: Stack(
+//   //       alignment: Alignment.bottomCenter,
+//   //       children: [
+//   //         // Gradient text
+//   //         const Positioned.fill(
+//   //           child: Align(
+//   //             alignment: Alignment.topLeft,
+//   //             child: _GradientMask(
+//   //               gradient: OnBoardingScreen._brandGradient,
+//   //               child: Text('SPEET', style: _textStyle),
+//   //             ),
+//   //           ),
+//   //         ),
+//   //         // Gradient underline (pill + tiny arrows)
+//   //         Positioned(bottom: 2, child: _GradientUnderline(width: w)),
+//   //       ],
+//   //     ),
+//   //   );
+//   // }
+// }
 
 class _GradientUnderline extends StatelessWidget {
   const _GradientUnderline({required this.width});
