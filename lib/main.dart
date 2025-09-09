@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/theme/app_theme.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/interest_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/speet_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light,
       themeMode: ThemeMode.light,
       title: 'Flutter Demo',
-      // home: SplashScreen(),
+      // home: InterestScreen(),
       home: SpeetScreen(),
     );
   }
