@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/delete.dart';
+import 'package:flutter_ursffiver/features/home/presentation/screen/user_verification_screen.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
@@ -32,12 +33,30 @@ class _HomeScreenState extends State<HomeScreen> {
     "Cooking",
   ];
 
+  // final List<String> ranges = [
+  //   "Bluetooth",
+  //   "Nearby",
+  //   "Up to 1 mile",
+  //   "Up to 5 miles",
+  //   "Up to 10 miles",
+  // ];
+
+  // Define ranges
   final List<String> ranges = [
     "Bluetooth",
     "Nearby",
     "Up to 1 mile",
     "Up to 5 miles",
     "Up to 10 miles",
+  ];
+
+  // Define icons (same length as ranges)
+  final List<IconData> rangeIcons = [
+    Icons.bluetooth, // Bluetooth
+    Icons.location_on_outlined,
+    Icons.location_on_outlined,
+    Icons.location_on_outlined,
+    Icons.location_on_outlined,
   ];
 
   @override
@@ -51,10 +70,17 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: false,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const VerificationScreen(),
+                ),
+              );
+            },
             icon: const Icon(Icons.verified_user_outlined),
             iconSize: 28,
-            color: AppColors.secondaryText,
+            color: AppColors.interestsgreen,
           ),
           IconButton(
             icon: const Icon(Icons.notifications_none, color: Colors.black),
@@ -91,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Text(
                         isAvailable
-                            ? "You are available to connect"
+                            ? "You are visible to other nearby"
                             : "You are not available to connect",
                         style: AppText.xsRegular_12_400.copyWith(
                           color: AppColors.secondaryText,
@@ -139,11 +165,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: LabeledDropdown(
                             height: 52,
                             title: "Status",
-                            hintText: "Select status",
+                            hintText: "Ready to connect - tap to set status",
                             items: const [
-                              "Available",
-                              "Not Available",
-                              "Pending",
+                              "Ready to connect - tap to set status",
+                              "Looking to chat with someone nearby right now",
+                              "Free for coffee or quick meetup",
+                              "Want to grab food together?",
+                              "Walking my dog - join me!",
+                              "New here - looking for local friends",
+                              "Available for spontaneous adventures",
+                              "Study buddy needed",
+                              "Workout partner wanted",
                             ],
                             value: statusMessage,
                             textSize: 14,
@@ -170,6 +202,27 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
 
+                      // Row(
+                      //   children: [
+                      //     Text(
+                      //       "Or enter a custom status:",
+                      //       style: AppText.xsRegular_12_400.copyWith(
+                      //         color: AppColors.primaryTextblack,
+                      //       ),
+                      //     ),
+                      //     const Spacer(),
+                      //     TextButton(
+                      //       onPressed: isAvailable
+                      //           ? () {
+                      //               FocusScope.of(
+                      //                 context,
+                      //               ).requestFocus(_customStatusFocus);
+                      //             }
+                      //           : null, // disable button if switch off
+                      //       child: const Text("Edit"),
+                      //     ),
+                      //   ],
+                      // ),
                       Row(
                         children: [
                           Text(
@@ -179,16 +232,77 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const Spacer(),
-                          TextButton(
-                            onPressed: isAvailable
-                                ? () {
-                                    FocusScope.of(
-                                      context,
-                                    ).requestFocus(_customStatusFocus);
-                                  }
-                                : null, // disable button if switch off
-                            child: const Text("Edit"),
-                          ),
+                          if (!isEditing) ...[
+                            // 👇 Show Edit button
+                            TextButton(
+                              onPressed: isAvailable
+                                  ? () {
+                                      setState(() {
+                                        isEditing = true;
+                                      });
+                                      FocusScope.of(
+                                        context,
+                                      ).requestFocus(_customStatusFocus);
+                                    }
+                                  : null, // disable if not available
+                              child: const Text("Edit"),
+                            ),
+                          ] else ...[
+                            // 👇 Show Cancel + Save buttons
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  isEditing = false; // save & exit edit mode
+                                });
+                                FocusScope.of(context).unfocus();
+                                // TODO: Save logic here
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.cancel,
+                                    size: 18,
+                                    color: Colors.red,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    "cancel",
+                                    style: AppText.mdMedium_16_500.copyWith(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  isEditing = false;
+                                });
+                                FocusScope.of(context).unfocus();
+                                // TODO: Save logic here
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.check,
+                                    size: 18,
+                                    color: AppColors.primarybutton,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    "Save",
+                                    style: AppText.mdMedium_16_500.copyWith(
+                                      color: AppColors.primarybutton,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                       SizedBox(
@@ -231,8 +345,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: AppColors.interestsyellow,
                   ),
                   InterestChip(
+                    label: 'Expedition Trail',
+                    color: AppColors.interestsgreen,
+                  ),
+                  InterestChip(
+                    label: 'Escape Room',
+                    color: AppColors.interestsyellow,
+                  ),
+                  InterestChip(
                     label: 'Arcade Gaming',
                     color: AppColors.interestsred,
+                  ),
+                  InterestChip(
+                    label: 'Acting/Theatre',
+                    color: AppColors.interestsblue,
                   ),
                   InterestChip(
                     label: 'Expedition Trail',
@@ -249,6 +375,67 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
+              // SingleChildScrollView(
+              //   scrollDirection: Axis.horizontal,
+              //   child: Row(
+              //     children: List.generate(
+              //       ranges.length,
+              //       (index) => Padding(
+              //         padding: const EdgeInsets.only(right: 8),
+              //         child: ChoiceChip(
+              //           label: SizedBox(
+              //             height: 52,
+              //             width: 48,
+              //             child: Column(
+              //               mainAxisAlignment: MainAxisAlignment.center,
+              //               children: [
+              //                 Icon(
+              //                   Icons.location_on_outlined,
+              //                   size: 24,
+              //                   color: selectedRange == index
+              //                       ? AppColors.primarybutton
+              //                       : Colors.grey,
+              //                 ),
+              //                 const SizedBox(height: 6),
+              //                 Flexible(
+              //                   child: Text(
+              //                     ranges[index],
+              //                     overflow: TextOverflow.ellipsis,
+              //                     textAlign: TextAlign.center,
+              //                     style: TextStyle(
+              //                       color: selectedRange == index
+              //                           ? AppColors.primarybutton
+              //                           : Colors.black87,
+              //                       fontSize: 13,
+              //                     ),
+              //                   ),
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //           selected: selectedRange == index,
+              //           onSelected: (val) {
+              //             setState(() {
+              //               selectedRange = index;
+              //             });
+              //           },
+              //           selectedColor: const Color(0xFFECEDFD),
+              //           backgroundColor: Colors.white,
+              //           shape: RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(10),
+              //             side: BorderSide(
+              //               color: selectedRange == index
+              //                   ? AppColors.primarybutton
+              //                   : AppColors.textFieldBorder,
+              //               width: 1.5,
+              //             ),
+              //           ),
+              //           showCheckmark: false,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -258,13 +445,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.only(right: 8),
                       child: ChoiceChip(
                         label: SizedBox(
-                          height: 52,
-                          width: 48,
+                          height: 62,
+                          width: 58,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.location_on_outlined,
+                                rangeIcons[index], // 👈 different icon for each chip
                                 size: 24,
                                 color: selectedRange == index
                                     ? AppColors.primarybutton
@@ -274,13 +461,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               Flexible(
                                 child: Text(
                                   ranges[index],
-                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2, // allow up to 2 lines
                                   textAlign: TextAlign.center,
+                                  overflow: TextOverflow
+                                      .ellipsis, // optional safeguard if text is too long
                                   style: TextStyle(
                                     color: selectedRange == index
                                         ? AppColors.primarybutton
                                         : Colors.black87,
-                                    fontSize: 13,
+                                    fontSize: 12,
+                                    height:
+                                        1.2, // tighter line height for better alignment
                                   ),
                                 ),
                               ),
@@ -437,9 +628,8 @@ class InterestsGrid extends StatelessWidget {
               backgroundColor: chip.color,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
-                side: BorderSide.none,
+                side: BorderSide(color: Colors.transparent, width: 1.5),
               ),
-              
             ),
           )
           .toList(),

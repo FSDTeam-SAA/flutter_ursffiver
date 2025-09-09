@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/features/badges/presentation/screen/badge_guide_screen.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
@@ -53,7 +54,14 @@ class _BadgesPageState extends State<BadgesPage>
             Row(
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BadgeGuideScreen(),
+                      ),
+                    );
+                  },
                   child: Row(
                     children: [
                       Icon(Icons.contact_support_outlined, color: AppColors.primarybutton),
