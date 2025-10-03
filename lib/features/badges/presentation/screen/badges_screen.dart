@@ -126,7 +126,7 @@ class ReceivedBadgesWidget extends StatelessWidget {
           children: [
             // Header
             const Text(
-              "Badges You've Awarded",
+              "Your Received Badges",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,

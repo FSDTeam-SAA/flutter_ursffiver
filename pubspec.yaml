@@ -43,6 +43,8 @@ dependencies:
   qr_flutter: ^4.1.0
   flutter_lints: ^6.0.0
   lints: ^6.0.0
+  google_maps_flutter: ^2.9.0
+  another_flushbar: ^1.12.30
 
 dev_dependencies:
   flutter_test:

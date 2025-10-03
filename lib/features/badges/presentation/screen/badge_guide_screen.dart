@@ -370,7 +370,6 @@ class BadgeEtiquette extends StatelessWidget {
   }
 }
 
-
 //================= FAQ Section =================//
 
 class FAQScreen extends StatelessWidget {
@@ -382,27 +381,27 @@ class FAQScreen extends StatelessWidget {
       {
         "question": "Why do badges have a 120 character limit for messages?",
         "answer":
-            "The limit keeps messages positive, concise, and focused on specific strengths."
+            "The character limit keeps badge messages focused on specific positive attributes. This helps prevent negative feedback, lengthy explanations, or off-topic content. Brief, positive messages better serve the badge system's purpose of highlighting strengths and building community trust.",
       },
       {
         "question": "Can I hide badges I've received?",
         "answer":
-            "Yes, you can manage the visibility of any badge you've received through your Badge Management page. Hidden badges will still be visible to you but won't appear on your public profile. You can toggle visibility at any time."
+            "Yes, you can manage the visibility of any badge you've received through your Badge Management page. Hidden badges will still be visible to you but won't appear on your public profile. You can toggle visibility at any time.",
       },
       {
         "question": "Can I award multiple badges to the same person?",
         "answer":
-            "Yes, you can award different badges to the same person if they’ve demonstrated multiple strengths."
+            "Yes, you can award multiple different badge types to the same person after meaningful interactions. This allows you to recognize various positive qualities they demonstrated during your meeting. However, the system is designed to encourage distribution of badges across your network rather than concentrating them on few individuals.",
       },
       {
         "question": "How are badges displayed on my profile?",
         "answer":
-            "Badges appear in your profile’s badge section, highlighting the qualities recognized by others."
+            "Your profile shows the badge types you've received, with counters for multiple instances of the same badge. For example, if three people award you the Great 'Listener' badge, it will appear once with '×3' to indicate the count. Badges are ordered by frequency, with the most awarded badges displayed first.",
       },
       {
         "question": "Can I edit or delete a badge I've awarded?",
         "answer":
-            "No, once a badge is awarded, it cannot be edited or removed to preserve authenticity."
+            "Currently, badges cannot be edited or deleted after being awarded. This ensures the integrity of the badge system. Please consider your message carefully before awarding a badge, keeping in mind the 120 character limit and positive focus.",
       },
     ];
 
@@ -441,7 +440,11 @@ class FAQScreen extends StatelessWidget {
               children: [
                 ExpansionTile(
                   tilePadding: EdgeInsets.zero,
-                  childrenPadding: const EdgeInsets.only(left: 0, right: 0, bottom: 12),
+                  childrenPadding: const EdgeInsets.only(
+                    left: 0,
+                    right: 0,
+                    bottom: 12,
+                  ),
                   title: Text(
                     faq["question"]!,
                     style: const TextStyle(

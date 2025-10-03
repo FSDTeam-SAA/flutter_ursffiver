@@ -1,7 +1,12 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/delete.dart';
+import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_verification_screen.dart';
+import 'package:flutter_ursffiver/features/home/presentation/widget/invitation_notification_widget.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/widget/location_share.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
@@ -70,26 +75,69 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: false,
         actions: [
           IconButton(
+            icon: const Icon(Icons.donut_large_rounded, color: Colors.black),
+            iconSize: 28,
+            onPressed: () {
+              showDialog(
+                context: context,
+                barrierDismissible: false, // prevent closing by tapping outside
+                builder: (context) => Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: LocationShare(
+                      onAccept: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LiveLocationSharingWidget(
+                              sharingWith: '',
+                              userInitials: '',
+                              userName: '',
+                            ),
+                          ),
+                        );
+                      },
+                      onDecline: () {
+                        debugPrint("❌ Declined");
+                      },
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+
+          ///
+          IconButton(
+            icon: Icon(Icons.donut_large_rounded, color: Colors.black),
+            iconSize: 28,
+            onPressed: () {
+              FixedNotificationBanner.show(context);
+            },
+          ),
+
+          //////////////////
+          IconButton(
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const VerificationScreen(),
+                  builder: (context) => UnVerificationScreen(),
                 ),
               );
             },
-            icon: const Icon(Icons.verified_user_outlined),
+            icon: Icon(Icons.verified_user_outlined),
             iconSize: 28,
-            color: AppColors.interestsgreen,
+            color: AppColors.textFieldTextiHint,
           ),
           IconButton(
-            icon: const Icon(Icons.notifications_none, color: Colors.black),
+            icon: Icon(Icons.notifications_none, color: Colors.black),
             iconSize: 32,
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const NotificationScreen(),
+                  builder: (context) => NotificationScreen(),
                 ),
               );
             },
@@ -97,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,11 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderColor: isAvailable
                                 ? AppColors.buttonTextColor
                                 : Colors.grey[300]!,
-
-                            //borderColor: AppColors.textFieldBorder,
-                            //focusedBorderColor: Colors.blue,
                             borderRadius: 8,
-                            //backgroundColor: Colors.white,
                             hintTextColor: Colors.grey,
                             hintTextSize: 14,
                             hintTextWeight: FontWeight.w400,
@@ -201,28 +245,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-
-                      // Row(
-                      //   children: [
-                      //     Text(
-                      //       "Or enter a custom status:",
-                      //       style: AppText.xsRegular_12_400.copyWith(
-                      //         color: AppColors.primaryTextblack,
-                      //       ),
-                      //     ),
-                      //     const Spacer(),
-                      //     TextButton(
-                      //       onPressed: isAvailable
-                      //           ? () {
-                      //               FocusScope.of(
-                      //                 context,
-                      //               ).requestFocus(_customStatusFocus);
-                      //             }
-                      //           : null, // disable button if switch off
-                      //       child: const Text("Edit"),
-                      //     ),
-                      //   ],
-                      // ),
                       Row(
                         children: [
                           Text(
@@ -233,7 +255,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const Spacer(),
                           if (!isEditing) ...[
-                            // 👇 Show Edit button
                             TextButton(
                               onPressed: isAvailable
                                   ? () {
@@ -244,15 +265,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context,
                                       ).requestFocus(_customStatusFocus);
                                     }
-                                  : null, // disable if not available
+                                  : null,
                               child: const Text("Edit"),
                             ),
                           ] else ...[
-                            // 👇 Show Cancel + Save buttons
                             TextButton(
                               onPressed: () {
                                 setState(() {
-                                  isEditing = false; // save & exit edit mode
+                                  isEditing = false;
                                 });
                                 FocusScope.of(context).unfocus();
                                 // TODO: Save logic here
@@ -375,67 +395,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              // SingleChildScrollView(
-              //   scrollDirection: Axis.horizontal,
-              //   child: Row(
-              //     children: List.generate(
-              //       ranges.length,
-              //       (index) => Padding(
-              //         padding: const EdgeInsets.only(right: 8),
-              //         child: ChoiceChip(
-              //           label: SizedBox(
-              //             height: 52,
-              //             width: 48,
-              //             child: Column(
-              //               mainAxisAlignment: MainAxisAlignment.center,
-              //               children: [
-              //                 Icon(
-              //                   Icons.location_on_outlined,
-              //                   size: 24,
-              //                   color: selectedRange == index
-              //                       ? AppColors.primarybutton
-              //                       : Colors.grey,
-              //                 ),
-              //                 const SizedBox(height: 6),
-              //                 Flexible(
-              //                   child: Text(
-              //                     ranges[index],
-              //                     overflow: TextOverflow.ellipsis,
-              //                     textAlign: TextAlign.center,
-              //                     style: TextStyle(
-              //                       color: selectedRange == index
-              //                           ? AppColors.primarybutton
-              //                           : Colors.black87,
-              //                       fontSize: 13,
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //           selected: selectedRange == index,
-              //           onSelected: (val) {
-              //             setState(() {
-              //               selectedRange = index;
-              //             });
-              //           },
-              //           selectedColor: const Color(0xFFECEDFD),
-              //           backgroundColor: Colors.white,
-              //           shape: RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(10),
-              //             side: BorderSide(
-              //               color: selectedRange == index
-              //                   ? AppColors.primarybutton
-              //                   : AppColors.textFieldBorder,
-              //               width: 1.5,
-              //             ),
-              //           ),
-              //           showCheckmark: false,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
+
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -451,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                rangeIcons[index], // 👈 different icon for each chip
+                                rangeIcons[index],
                                 size: 24,
                                 color: selectedRange == index
                                     ? AppColors.primarybutton
@@ -461,17 +421,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               Flexible(
                                 child: Text(
                                   ranges[index],
-                                  maxLines: 2, // allow up to 2 lines
+                                  maxLines: 2,
                                   textAlign: TextAlign.center,
-                                  overflow: TextOverflow
-                                      .ellipsis, // optional safeguard if text is too long
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: selectedRange == index
                                         ? AppColors.primarybutton
                                         : Colors.black87,
                                     fontSize: 12,
-                                    height:
-                                        1.2, // tighter line height for better alignment
+                                    height: 1.2,
                                   ),
                                 ),
                               ),
@@ -508,7 +466,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 children: [
                   const Text(
-                    "Nearby Actors",
+                    "People Nearby",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
@@ -594,8 +552,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// prymary interasts chip widget
-// Model for each chip
 class InterestChip {
   final String label;
   final Color color;
@@ -603,7 +559,6 @@ class InterestChip {
   InterestChip({required this.label, required this.color});
 }
 
-// Reusable Grid widget
 class InterestsGrid extends StatelessWidget {
   final List<InterestChip> chips;
 
@@ -611,13 +566,9 @@ class InterestsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 3,
-      crossAxisSpacing: 6,
-      mainAxisSpacing: 6,
-      childAspectRatio: 3,
+    return Wrap(
+      spacing: 4,
+      runSpacing: 4,
       children: chips
           .map(
             (chip) => Chip(
@@ -627,8 +578,8 @@ class InterestsGrid extends StatelessWidget {
               ),
               backgroundColor: chip.color,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-                side: BorderSide(color: Colors.transparent, width: 1.5),
+                borderRadius: BorderRadius.circular(16),
+                side: const BorderSide(color: Colors.transparent, width: 1.5),
               ),
             ),
           )
