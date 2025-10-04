@@ -1,26 +1,28 @@
-part of 'auth_service.dart';
+part of '../app_pigeon.dart';
 
 base class Auth{
   final String? _accessToken;
   final String? _refreshToken;
-  final String userId;
+  final Map<String, dynamic> data;
 
   Auth._internal({
     required String? accessToken,
     required String? refreshToken,
-    required this.userId,
+    required this.data,
   }): _accessToken = accessToken, _refreshToken = refreshToken;
 
   bool get isVerified => _accessToken != null && _refreshToken != null;
-
+  
   Auth copyWith({
     String? accessToken,
     String? refreshToken,
+    DateTime ? accessTokenExpiresAt,
+    DateTime ? refreshTokenExpiresAt
   }) {
     return Auth._internal(
       accessToken: accessToken ?? _accessToken,
       refreshToken: refreshToken ?? _refreshToken,
-      userId: userId ,
+      data: data,
     );
   }
 
@@ -28,26 +30,30 @@ base class Auth{
     return Auth._internal(
       accessToken: json['access_token'] as String?,
       refreshToken: json['refresh_token'] as String?,
-      userId: json['userId'] as String,
+      data: json['data'] == null ? {} : json['data'] as dynamic,
     );
   }
 
-  factory Auth._fromJson(String source) {
-    return Auth.fromMap(jsonDecode(source));
+  static Auth? _tryFromJsonString(String source) {
+    try {
+      return Auth.fromMap(jsonDecode(source));
+    } catch (e) {
+      return null;
+    }
+    
   }
 
   Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{
+    return <String, dynamic>{
       'access_token': _accessToken,
       'refresh_token': _refreshToken,
-      'userId': userId,
+      'data': data,
     };
-    return data;
   }
 
   @override
   String toString() {
-    return 'Auth{accessToken: $_accessToken, refreshToken: $_refreshToken, tokenType: $userId,}';
+    return 'Auth{accessToken: $_accessToken, refreshToken: $_refreshToken, data: $data,}';
   }
 
   @override
@@ -57,10 +63,12 @@ base class Auth{
     return other is Auth &&
         other._accessToken == _accessToken &&
         other._refreshToken == _refreshToken &&
-        other.userId == userId;
+        other.data == data;
   }
 
   @override
-  int get hashCode => Object.hash(_accessToken, _refreshToken, userId);
+  int get hashCode => Object.hash(_accessToken, _refreshToken, data);
 }
+
+
 

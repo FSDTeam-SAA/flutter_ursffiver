@@ -1,4 +1,4 @@
-part of 'auth_service.dart';
+part of '../app_pigeon.dart';
 
 sealed class AuthStatus {
   const AuthStatus();
@@ -41,8 +41,34 @@ class AuthLoading extends AuthStatus{
   }
 }
 
+class NotVerified extends AuthStatus {
+  final String userId;
+  
+  NotVerified({required this.userId});
+
+  @override
+  String toString() {
+    return 'EmailVerification(userId: $userId)';
+  }
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is NotVerified && other.userId == userId;
+  }
+
+  @override
+  int get hashCode => userId.hashCode;
+}
+
 class Authenticated extends AuthStatus {
   final Auth auth;
+
+  // SocketServiceParams get socketServiceParams => SocketServiceParams(
+  //   url: ApiEndpoints.socketUrl,
+  //   token: auth._accessToken ?? '',
+  //   userId: auth.userId,
+  // );
   
   Authenticated({required this.auth});
 

@@ -12,7 +12,7 @@ class SnackbarNotifier {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message ?? "Success", maxLines: 3, style: TextStyle(color: Colors.white).bold.regular),
-        backgroundColor: const Color.fromARGB(255, 23, 117, 37),
+        backgroundColor: const Color.fromARGB(255, 20, 26, 35),
         behavior: SnackBarBehavior.floating,
         showCloseIcon: true,
       ),

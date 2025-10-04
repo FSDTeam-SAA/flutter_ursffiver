@@ -24,7 +24,7 @@ class _LiveLocationSharingWidgetState extends State<LiveLocationSharingWidget> {
   int _seconds = 29 * 60 + 44;
 
   GoogleMapController? _mapController;
-  final LatLng _initialPosition = const LatLng(23.8103, 90.4125); // Example: Dhaka
+  final LatLng _initialPosition = const LatLng(23.8103, 90.4125);
 
   @override
   void initState() {

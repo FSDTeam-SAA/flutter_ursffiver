@@ -1,4 +1,6 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
@@ -72,25 +74,6 @@ class ChatScreen extends StatelessWidget {
                   ),
                 );
               } else if (value == "location") {
-                // showDialog(
-                //   context: context,
-                //   barrierDismissible: false,
-                //   builder: (context) => Center(
-                //     child: SizedBox(
-                //       width:
-                //           MediaQuery.of(context).size.width *
-                //           0.9,
-                //       child: LocationShare(
-                //         onAccept: () {
-                //           debugPrint("Accepted");
-                //         },
-                //         onDecline: () {
-                //           debugPrint("Declined");
-                //         },
-                //       ),
-                //     ),
-                //   ),
-                // );
               }
             },
 

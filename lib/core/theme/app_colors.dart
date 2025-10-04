@@ -4,25 +4,24 @@ class AppColors {
   /// [Primary Background color]
   static const Color background = Color(0xFFFFFFFF);
   static const Color secondarybackground = Color(0xFF2B2B2B);
-  static const Color primarybutton = Color(0xFF3F42EE);
+  static const Color primarybutton = Color(0xFF1269C7);
   static const Color imagebackgrount = Color(0xFF1C2A3A);
 
   /// [Primary App Colors]
-  ///
 
   static const Color white = Color(0xFFFFFFFF);
 
   /// [Text colors]
   static const Color textFieldBackground = Color(0xFF121212);
-  static const Color textFieldTextiHint = Color(0xFF676877);
-  static const Color textFieldBorder = Color(0xFFC0C0C6);
+  static const Color textFieldTextiHint = Color(0xFFB0B0B0);
+  static const Color textFieldBorder = Color(0xFFB0B0B0);
   static const Color progressBg = Color(0xFFE7E8EA);
 
   static const Color textLink = Color(0xFF3B82F6);
 
   static const Color primaryText = Color(0xFFFFFFFF);
-  static const Color primaryTextblack = Color(0xFF030712);
-  static const Color secondaryTextblack = Color(0xFF676877);
+  static const Color primaryTextblack = Color(0xFF25272D);
+  static const Color secondaryTextblack = Color(0xFF7E8492);
   static const Color messageBoxbackground = Color(0xFFE5E5E5);
   static const Color buttonTextColor = Colors.black;
   static const Color buttonInactiveTextColor = Color.fromARGB(255, 9, 81, 158);
@@ -30,13 +29,13 @@ class AppColors {
   static const Color buttontext = Color(0xFF000000);
 
 
-  static const Color interestsblue = Color(0xFF3F42EE);
-  static const Color interestsyellow = Color.fromARGB(255, 131, 97, 2);
-  static const Color interestsred = Color(0xFFF2415A);
-  static const Color interestsgreen = Color(0xFF27BE69);
-
-
   static const Color tabselect = Color(0xFF6447CE);
+  static const Color interestsblue = Color(0xFF3F42EE);
+  static const Color interestsyellow = Color(0xFFFFBF0F);
+  static const Color interestsgreen = Color(0xFF27BE69);
+  static const Color interestsred = Color(0xFFF2415A);
+
+
   static const Color appber = Color(0xFFECEDFD);
 
   /// [delete]

@@ -1,5 +1,4 @@
 // on_boarding_screen.dart
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
@@ -71,7 +70,7 @@ class OnBoardingScreen extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     'Spontaneously and on the spot, transform digital connections into real-life meetups with nearby people who share your interests - all within minutes.',
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
@@ -122,7 +121,7 @@ class OnBoardingScreen extends StatelessWidget {
                   // Interests section
                   Text(
                     'Find People Who Share\nYour Interests',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w800,
                       height: 1.3,
                     ),
@@ -131,7 +130,7 @@ class OnBoardingScreen extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     "Don’t see what you’re looking for? You’ll be able to suggest custom interests after signing up!",
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
@@ -143,7 +142,7 @@ class OnBoardingScreen extends StatelessWidget {
 
                   // Tab content (fixed height inside scroll view)
                   SizedBox(
-                    height: 260,
+                    height: 300,
                     // width: 117,
                     child: TabBarView(
                       children: [
@@ -204,7 +203,7 @@ class OnBoardingScreen extends StatelessWidget {
                     text: 'Create Account',
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const SignupScreen()),
+                        MaterialPageRoute(builder: (_) => SignupScreen()),
                       );
                     },
                   ),
@@ -361,52 +360,6 @@ Color _accentForIndex(int i) {
   ];
   return palette[i % palette.length];
 }
-
-// class _BrandWordWithUnderline extends StatelessWidget {
-//   const _BrandWordWithUnderline({required this.text});
-//   final String text;
-
-//   static const _textStyle = TextStyle(
-//     fontFamily: 'Poppins',
-//     fontSize: 26, // slightly larger per comps
-//     fontWeight: FontWeight.w900, // extra bold
-//     letterSpacing: 1.2,
-//   );
-
-//   @override
-//   // Widget build(BuildContext context) {
-//   //   // Measure text so the underline matches width precisely
-//   //   final tp = TextPainter(
-//   //     text: const TextSpan(text: 'SPEET', style: _textStyle),
-//   //     textDirection: TextDirection.ltr,
-//   //   )..layout();
-
-//   //   final w = tp.width;
-
-//   //   return SizedBox(
-//   //     width: w,
-//   //     height: 40, // enough room for text + underline
-//   //     child: Stack(
-//   //       alignment: Alignment.bottomCenter,
-//   //       children: [
-//   //         // Gradient text
-//   //         const Positioned.fill(
-//   //           child: Align(
-//   //             alignment: Alignment.topLeft,
-//   //             child: _GradientMask(
-//   //               gradient: OnBoardingScreen._brandGradient,
-//   //               child: Text('SPEET', style: _textStyle),
-//   //             ),
-//   //           ),
-//   //         ),
-//   //         // Gradient underline (pill + tiny arrows)
-//   //         Positioned(bottom: 2, child: _GradientUnderline(width: w)),
-//   //       ],
-//   //     ),
-//   //   );
-//   // }
-// }
-
 class _GradientUnderline extends StatelessWidget {
   const _GradientUnderline({required this.width});
   final double width;
@@ -562,12 +515,12 @@ class _FeatureTile extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+                Text(subtitle, style: Theme.of(context).textTheme.bodyLarge),
               ],
             ),
           ),

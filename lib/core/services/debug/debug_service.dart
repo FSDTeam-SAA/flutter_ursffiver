@@ -22,7 +22,7 @@ class DebugService {
   DebugService._(this._allowsOnly);
 
   static DebugService? _instance;
-
+  /// Singletone
   factory DebugService.instance({required Set<DebugLabel> allowsOnly}) {
 
     _instance ??= DebugService._(allowsOnly);

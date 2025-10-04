@@ -1,9 +1,7 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/delete.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
-import 'package:flutter_ursffiver/features/home/presentation/screen/user_verification_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/invitation_notification_widget.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/widget/location_share.dart';
@@ -12,7 +10,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../common/app_logo.dart';
-import 'notification_screen.dart';
+import '../../../notification/screen/notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isAvailable = true;
-  String? statusMessage; // fixed: nullable for dropdown
+  String? statusMessage;
   final TextEditingController customMessageController = TextEditingController();
   final FocusNode _customStatusFocus = FocusNode();
   bool isEditing = false;
