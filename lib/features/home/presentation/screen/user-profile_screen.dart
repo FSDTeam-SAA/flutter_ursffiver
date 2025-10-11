@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_ursffiver/core/theme/app_colors.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/screen/inbox_screen.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/widget/badgeg_widget.dart';
 
@@ -11,7 +9,6 @@ class UserProfileScreen extends StatelessWidget {
 
   /////////////////
 
-  // Example badges
   final List<BadgeModel> _badges = [
     BadgeModel(icon: Icons.verified_user, count: 5, color: Colors.purpleAccent),
     BadgeModel(
@@ -36,7 +33,7 @@ class UserProfileScreen extends StatelessWidget {
       count: 1,
       color: Colors.greenAccent,
     ),
-    BadgeModel(icon: Icons.star, color: Colors.orangeAccent), // no count
+    BadgeModel(icon: Icons.star, color: Colors.orangeAccent),
   ];
 
   //////////////////
@@ -96,7 +93,7 @@ class UserProfileScreen extends StatelessWidget {
                       image: const DecorationImage(
                         image: AssetImage(
                           'assets/image/profile.png',
-                        ), // Change to your asset path
+                        ),
                         fit: BoxFit.cover,
                       ),
                       border: Border.all(color: Colors.grey.shade200, width: 2),

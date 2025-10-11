@@ -1,9 +1,11 @@
 // on_boarding_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
 
+import '../../../../main.dart';
 import '../../../common/app_logo.dart';
 
 class OnBoardingScreen extends StatelessWidget {
@@ -59,7 +61,6 @@ class OnBoardingScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-
 
                   Text(
                     "YoUrs truly local",
@@ -118,7 +119,6 @@ class OnBoardingScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 50),
 
-                  // Interests section
                   Text(
                     'Find People Who Share\nYour Interests',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -202,9 +202,8 @@ class OnBoardingScreen extends StatelessWidget {
                   _SecondaryButton(
                     text: 'Create Account',
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => SignupScreen()),
-                      );
+                      //Navigator.pushNamed(context, RouteNames.signup);
+                      navigatorKey.currentState?.pushNamed(RouteNames.signup);
                     },
                   ),
                   const SizedBox(height: 8),
@@ -256,7 +255,6 @@ class _CategoriesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Build a flat list of categories with counts from the map:
     final entries = groups.entries.toList(growable: false);
 
     return _Card(
@@ -360,6 +358,7 @@ Color _accentForIndex(int i) {
   ];
   return palette[i % palette.length];
 }
+
 class _GradientUnderline extends StatelessWidget {
   const _GradientUnderline({required this.width});
   final double width;
@@ -502,7 +501,7 @@ class _FeatureTile extends StatelessWidget {
             child: CircleAvatar(
               radius: 16,
 
-           backgroundColor: Colors.transparent,
+              backgroundColor: Colors.transparent,
 
               child: Center(child: Icon(icon, size: 22)),
             ),

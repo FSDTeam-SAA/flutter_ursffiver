@@ -119,9 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => UnVerificationScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => UnVerificationScreen()),
               );
             },
             icon: Icon(Icons.verified_user_outlined),
@@ -134,9 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => NotificationScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
               );
             },
           ),
@@ -528,12 +524,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       UserProfileCard(
                         name: 'Brooklyn Simmons',
                         imagePath: 'assets/image/profile.png',
-                        distance: '5 ft',
+                        height: '5 ft',
                         status: 'Available',
-                        onActivityHi: () {},
-                        onExperience: () {},
-                        onChat: () {},
-                        onInfo: () {},
+                        //onActivityHi: () {},
+                        //onExperience: () {},
+                        //onChat: () {},
+                        //onInfo: () {},
                       ),
                       const SizedBox(height: 8),
                       const Divider(color: Colors.grey),

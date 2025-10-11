@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/theme/app_colors.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
+import 'package:flutter_ursffiver/features/auth/interface/auth_interface.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/change_password_scree.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/interests_screen.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/support_our_mission.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/terms_condition_screen.dart';
+import 'package:get/get.dart';
 import '../widget/invite_friend.dart';
 import '../widget/logout_widget.dart';
 import 'edit_personal_informetion_scree.dart';
@@ -64,9 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _buildMenuItem(Icons.interests_outlined, 'Interests', () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => InterestsPage(),
-                        ),
+                        MaterialPageRoute(builder: (_) => InterestsPage()),
                       );
                     }),
                     _buildMenuItem(
@@ -157,7 +157,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _buildMenuItem(Icons.logout, 'Logout', () {
                       showDialog(
                         context: context,
-                        builder: (context) => LogoutDialog(onConfirm: () {}),
+                        builder: (context) => LogoutDialog(
+                          onConfirm: () {
+                            Get.find<AuthInterface>().logout();
+                          },
+                        ),
                       );
                     }, isLast: true),
                   ],

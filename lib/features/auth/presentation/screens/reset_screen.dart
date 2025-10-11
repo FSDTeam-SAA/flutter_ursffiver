@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
@@ -13,11 +12,6 @@ class ResetScreen extends StatefulWidget {
 
 class _ResetScreenState extends State<ResetScreen> {
   static const _brandBlue = Color(0xFF4C5CFF);
-  static const _brandGradient = LinearGradient(
-    colors: [Color(0xFF4C5CFF), Color(0xFF8F79FF)],
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-  );
   static const _borderColor = Color(0xFFE6E6E9);
 
   final _password = TextEditingController();
@@ -58,10 +52,8 @@ class _ResetScreenState extends State<ResetScreen> {
       _upperOk = RegExp(r'[A-Z]').hasMatch(p);
       _lowerOk = RegExp(r'[a-z]').hasMatch(p);
       _numOk   = RegExp(r'\d').hasMatch(p);
-
-      // ✅ at least one NON-alphanumeric char; no tricky escapes
       _specialOk = RegExp(r'[^A-Za-z0-9]').hasMatch(p);
-
+      
       _matchOk = _confirm.text.isNotEmpty && _confirm.text == p;
     });
   }
@@ -265,110 +257,3 @@ class _Rule extends StatelessWidget {
     );
   }
 }
-
-class _LogoMark extends StatelessWidget {
-  const _LogoMark();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        _GradientText('SPEET',
-            gradient: _ResetScreenState._brandGradient, size: 18),
-        SizedBox(height: 4),
-        _LogoUnderline(),
-      ],
-    );
-  }
-}
-
-class _LogoUnderline extends StatelessWidget {
-  const _LogoUnderline();
-
-  @override
-  Widget build(BuildContext context) {
-    const grad = _ResetScreenState._brandGradient;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        _GradientMask(gradient: grad, child: _ArrowIcon(left: true, size: 16)),
-        SizedBox(width: 8),
-        _GradientMask(gradient: grad, child: _Pill(width: 34, height: 7)),
-        SizedBox(width: 8),
-        _GradientMask(gradient: grad, child: _ArrowIcon(left: false, size: 16)),
-      ],
-    );
-  }
-}
-
-class _Pill extends StatelessWidget {
-  const _Pill({required this.width, required this.height});
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: const BoxDecoration(
-        gradient: _ResetScreenState._brandGradient,
-        borderRadius: BorderRadius.all(Radius.circular(100)),
-      ),
-    );
-  }
-}
-
-class _ArrowIcon extends StatelessWidget {
-  const _ArrowIcon({required this.left, this.size = 20});
-  final bool left;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    final icon = Icon(Icons.play_arrow_rounded, size: size);
-    return left ? Transform.rotate(angle: math.pi, child: icon) : icon;
-  }
-}
-
-class _GradientText extends StatelessWidget {
-  const _GradientText(
-      this.text, {
-        required this.gradient,
-        this.size = 24,
-        this.weight = FontWeight.w900,
-      });
-
-  final String text;
-  final Gradient gradient;
-  final double size;
-  final FontWeight weight;
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (r) => gradient.createShader(Offset.zero & r.size),
-      blendMode: BlendMode.srcIn,
-      child: Text(
-        text,
-        style: TextStyle(fontSize: size, fontWeight: weight, letterSpacing: 1.1),
-      ),
-    );
-  }
-}
-
-class _GradientMask extends StatelessWidget {
-  const _GradientMask({required this.gradient, required this.child});
-  final Gradient gradient;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (r) => gradient.createShader(Offset.zero & r.size),
-      blendMode: BlendMode.srcIn,
-      child: child,
-    );
-  }
-}
-

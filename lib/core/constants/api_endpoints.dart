@@ -93,16 +93,16 @@ base class ApiEndpoints {
 
 class _RemoteServer {
   static const String socketUrl =
-      'https://ttrueno-backend-5nhs.onrender.com';
+      'https://ursffiver-backend.onrender.com';
 
   static const String baseUrl =
-      'https://ttrueno-backend-5nhs.onrender.com/api/v1';
+      'https://ursffiver-backend.onrender.com/api/v1';
 }
 
 class _LocalHostWifi {
-  static const String socketUrl = 'http://10.10.5.46:5006';
+  static const String socketUrl = 'http://10.10.5.46:5001';
 
-  static const String baseUrl = 'http://10.10.5.46:5006/api/v1';
+  static const String baseUrl = 'http://10.10.5.46:5001/api/v1';
 }
 
 
@@ -110,9 +110,9 @@ class _Auth {
   @protected
   static const String _authRoute = '${ApiEndpoints.baseUrl}/auth';
   static const String login = '$_authRoute/login';
-  static const String signup = '$_authRoute/register/init';
-  static const String forgetPassword = '$_authRoute/forget-password';
-  static const String refreshToken = '$_authRoute/refresh-access-token';
+  static const String signup = '$_authRoute/signup';
+  static const String forgetPassword = '$_authRoute/forget';
+  static const String refreshToken = '$_authRoute/refresh-token';
   static const String verifyCode = '$_authRoute/verify-code';
   static const String registerVerify = '$_authRoute/register/verify';
   static const String resetPassword = '$_authRoute/reset-password';

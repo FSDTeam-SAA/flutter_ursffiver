@@ -1,80 +1,116 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/core/constants/route_names.dart';
+import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
+import 'package:flutter_ursffiver/features/auth/interface/auth_interface.dart';
+import 'package:flutter_ursffiver/features/auth/model/signup_model.dart';
+import 'package:flutter_ursffiver/main.dart';
 import 'package:get/get.dart';
-import '../model/signup_model.dart';
+import '../../../core/notifiers/button_status_notifier.dart';
+import '../../../core/notifiers/snackbar_notifier.dart';
 
-class SignupController extends GetxController {
-  final formKey = GlobalKey<FormState>();
+class SignUpController extends GetxController {
+  final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(
+    initialStatus: EnabledStatus(),
+  );
+  SnackbarNotifier? snackbarNotifier;
+  SignUpController();
 
-  final model = SignupModel().obs;
-
-  // Text controllers
-  final firstNameCtl = TextEditingController();
-  final lastNameCtl = TextEditingController();
-  final usernameCtl = TextEditingController();
-  final emailCtl = TextEditingController();
-  final dobCtl = TextEditingController();
-  final bioCtl = TextEditingController();
-  final passwordCtl = TextEditingController();
-  final confirmPasswordCtl = TextEditingController();
-
-  // UI states
-  var showPassword = false.obs;
-  var showConfirmPassword = false.obs;
-
-  // Dropdown options
-  final List<String> ageRanges = ["18-24", "25-34", "35-44", "45+"];
-  final List<String> allInterests = [
-    "Music", "Sports", "Movies", "Tech", "Books", "Travel", "Food", "Gaming"
-  ];
-
-  void togglePassword() => showPassword.value = !showPassword.value;
-  void toggleConfirmPassword() => showConfirmPassword.value = !showConfirmPassword.value;
-
-  void setGender(String? gender) {
-    model.update((m) => m?.gender = gender);
+  void initSignUpCntlr(SnackbarNotifier? snackbarNotifier) {
+    snackbarNotifier = snackbarNotifier;
   }
 
-  void setAgeRange(String? age) {
-    model.update((m) => m?.ageRange = age);
+  final firstName = ''.obs;
+  final lastName = ''.obs;
+  final username = ''.obs;
+  final email = ''.obs;
+  final dateOfBirth = ''.obs;
+  final gender = ''.obs;
+  final ageRange = ''.obs;
+  final bio = ''.obs;
+  final password = ''.obs;
+  final confirmPassword = ''.obs;
+
+  void setFirstName(String value) {
+    firstName.value = value;
+    processNotifier.setEnabled();
   }
 
-  void toggleInterest(String interest) {
-    model.update((m) {
-      if (m!.interests.contains(interest)) {
-        m.interests.remove(interest);
-      } else {
-        m.interests.add(interest);
-      }
-    });
+  void setLastName(String value) {
+    lastName.value = value;
+    processNotifier.setEnabled();
   }
 
-  bool validateForm() {
-    if (formKey.currentState?.validate() ?? false) {
-      model.update((m) {
-        m!.firstName = firstNameCtl.text;
-        m.lastName = lastNameCtl.text;
-        m.username = usernameCtl.text;
-        m.email = emailCtl.text;
-        m.dob = dobCtl.text;
-        m.bio = bioCtl.text;
-        m.password = passwordCtl.text;
-        m.confirmPassword = confirmPasswordCtl.text;
-      });
-      return true;
-    }
-    return false;
+  void setUsername(String value) {
+    username.value = value;
+    processNotifier.setEnabled();
   }
 
-  @override
-  void onClose() {
-    firstNameCtl.dispose();
-    lastNameCtl.dispose();
-    usernameCtl.dispose();
-    emailCtl.dispose();
-    dobCtl.dispose();
-    bioCtl.dispose();
-    passwordCtl.dispose();
-    confirmPasswordCtl.dispose();
-    super.onClose();
+  void setEmail(String value) {
+    email.value = value;
+    processNotifier.setEnabled();
+  }
+
+  void setDateOfBirth(String value) {
+    dateOfBirth.value = value;
+    processNotifier.setEnabled();
+  }
+
+  void setGender(String value) {
+    gender.value = value;
+    processNotifier.setEnabled();
+  }
+
+  void setAgeRange(String value) {
+    ageRange.value = value;
+    processNotifier.setEnabled();
+  }
+
+  void setBio(String value) {
+    bio.value = value;
+    processNotifier.setEnabled();
+  }
+
+  void setPassword(String value) {
+    password.value = value;
+    processNotifier.setEnabled();
+  }
+
+  void setConfirmPassword(String value) {
+    confirmPassword.value = value;
+    processNotifier.setEnabled();
+  }
+
+  // --- Create model ---
+  SignupRequestParam get signupModel => SignupRequestParam(
+    firstName: firstName.value,
+    lastName: lastName.value,
+    username: username.value,
+    email: email.value,
+    dateOfBirth: dateOfBirth.value,
+    gender: gender.value,
+    ageRange: ageRange.value,
+    bio: bio.value,
+    password: password.value,
+    confirmPassword: confirmPassword.value,
+  );
+
+  // --- Example signup method ---
+  Future<void> signup({
+    ProcessStatusNotifier? buttonNotifier,
+    SnackbarNotifier? snackbarNotifier,
+  }) async {
+    buttonNotifier?.setLoading();
+    final lr = await Get.find<AuthInterface>().signup(signupModel);
+    return handleFold(
+      either: lr,
+      errorSnackbarNotifier: snackbarNotifier,
+      successSnackbarNotifier: snackbarNotifier,
+      onError: (failure) {
+        buttonNotifier?.setError();
+      },
+      onSuccess: (success) {
+        buttonNotifier?.setSuccess();
+        navigatorKey.currentState?.pushNamed(RouteNames.emailVerification);
+      },
+    );
   }
 }

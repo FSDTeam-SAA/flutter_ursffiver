@@ -8,9 +8,9 @@ import '../debug/debug_service.dart';
 base class RefreshTokenResponse {
   final String accessToken;
   final String refreshToken;
-  final dynamic data;
+  final Map<String, dynamic>? data;
   RefreshTokenResponse({
-    required this.data,
+    this.data,
     required this.accessToken,
     required this.refreshToken,
   });
@@ -23,31 +23,35 @@ abstract interface class RefreshTokenManagerInterface {
   RefreshTokenManagerInterface(this.url);
   /// Makes a http call to the relative api to get refresh token. Returns [RefreshTokenResponse]
   /// This gets called by [AuthService] on expire of access-token.
-  Future<RefreshTokenResponse> refreshToken();
+  Future<RefreshTokenResponse> refreshToken({required String refreshToken});
 
   Future<bool> isExpiredTokenError({required DioException err});
 }
 
 class RefreshTokenManager implements RefreshTokenManagerInterface{
-  final Dio _dio;
+  final Dio _dio = Dio();
   final String refreshTokenUrl;
-  RefreshTokenManager(this._dio, this.refreshTokenUrl,);
+  RefreshTokenManager( this.refreshTokenUrl,);
 
   @override
   String get url => refreshTokenUrl;
 
   @override
-  Future<RefreshTokenResponse> refreshToken() async{
-    AuthDebugger().dekhao("Refreshing token with url: $url");
-    final response = await _dio.post(url);
+  Future<RefreshTokenResponse> refreshToken({required String refreshToken}) async{
+    AuthDebugger().dekhao("Refreshing token with url: $url, refreshToken: $refreshToken");
+    final response = await _dio.post(url, data: {
+      "refreshToken": refreshToken,
+    });
+    debugPrint("Refresh token response: ${response.data}");
     final data = extractBodyData(response);
     return RefreshTokenResponse(
       accessToken: data["accessToken"], 
       refreshToken: data["refreshToken"],
-      data: {
-        "userId": data["userId"],
-        "role": data["role"]
-      },);
+      data: (data["userId"] != null) ? 
+        {
+          "userId": data["userId"],
+        } : null
+    );
   }
   
   @override

@@ -36,6 +36,7 @@ base class Auth{
 
   static Auth? _tryFromJsonString(String source) {
     try {
+      debugPrint("Trying to decode source: $source");
       return Auth.fromMap(jsonDecode(source));
     } catch (e) {
       return null;

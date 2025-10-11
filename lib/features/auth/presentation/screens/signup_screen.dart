@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_ursffiver/core/common/reactive_buttons/r_icon.dart';
+import 'package:flutter_ursffiver/features/auth/controller/signup_controller.dart';
+import 'package:get/get.dart';
+import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/widget/sinup_widget.dart';
 import '../../../common/app_logo.dart';
-import 'interest_screen.dart';
 import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -46,8 +49,17 @@ class _SignupScreen extends State<SignupScreen> {
   String? _gender;
   String? _ageRange;
 
-  // === NEW: keep the currently selected interests for the counter outside the sheet
+  // interests
   Set<String> _selectedInterests = <String>{};
+
+  late final SignUpController signupController;
+
+  @override
+  void initState() {
+    super.initState();
+    // initialize controller via GetX
+    signupController = SignUpController();
+  }
 
   @override
   void dispose() {
@@ -77,16 +89,6 @@ class _SignupScreen extends State<SignupScreen> {
     ),
   );
 
-  TextStyle get _labelStyle =>
-      const TextStyle(fontSize: 13, fontWeight: FontWeight.w700);
-
-  @override
-  void initState() {
-    super.initState();
-    _password.addListener(() => setState(() {}));
-  }
-
-  // === NEW: launcher for the bottom sheet
   Future<Set<String>?> _openInterestPicker(BuildContext context) {
     return showModalBottomSheet<Set<String>>(
       context: context,
@@ -104,7 +106,7 @@ class _SignupScreen extends State<SignupScreen> {
   Widget build(BuildContext context) {
     final caption = Theme.of(
       context,
-    ).textTheme.bodySmall?.copyWith(color: Colors.black54, height: 1.35);
+    ).textTheme.bodySmall?.copyWith(color: Colors.black54);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -123,10 +125,9 @@ class _SignupScreen extends State<SignupScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Brand
                   AppLogo(height: 110, width: 80),
-
-                  Text(
+                  const SizedBox(height: 8),
+                  const Text(
                     "Create your account",
                     style: TextStyle(
                       color: Colors.black,
@@ -134,19 +135,15 @@ class _SignupScreen extends State<SignupScreen> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   Text(
-                    "Spontaneously and on the spot, transform digital connections into real-life meetups with nearby people who share your interests - all within minutes.",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black54,
-                    ),
+                    "Transform digital connections into real-life meetups with nearby people who share your interests.",
                     textAlign: TextAlign.center,
+                    style: caption,
                   ),
+                  const SizedBox(height: 20),
 
-                  // === INTEREST PICKER CARD (unchanged visual; now clickable)
+                  // === INTEREST PICKER ===
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Container(
@@ -267,7 +264,35 @@ class _SignupScreen extends State<SignupScreen> {
                     ),
                   ),
 
-                  // First/Last
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(4),
+                  //   onTap: () async {
+                  //     final result = await _openInterestPicker(context);
+                  //     if (result != null) {
+                  //       setState(() {
+                  //         _selectedInterests = result;
+                  //       });
+                  //     }
+                  //   },
+                  //   // child: Container(
+                  //   //   padding: const EdgeInsets.all(16),
+                  //   //   decoration: BoxDecoration(
+                  //   //     borderRadius: BorderRadius.circular(4),
+                  //   //     color: Colors.grey[200],
+                  //   //   ),
+                  //   //   child: Column(
+                  //   //     children: [
+                  //   //       const Text("What interests you?", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                  //   //       const SizedBox(height: 8),
+                  //   //       Text("${_selectedInterests.length}/15 selected",
+                  //   //           style: TextStyle(color: _selectedInterests.isEmpty ? Colors.red : Colors.black87)),
+                  //   //     ],
+                  //   //   ),
+                  //   // ),
+                  // ),
+                  const SizedBox(height: 20),
+
+                  // === INPUT FIELDS ===
                   Row(
                     children: [
                       Expanded(
@@ -275,8 +300,11 @@ class _SignupScreen extends State<SignupScreen> {
                           label: 'First Name',
                           child: TextFormField(
                             controller: _firstName,
-                            textInputAction: TextInputAction.next,
+                            onChanged: signupController.setFirstName,
                             decoration: _decoration('Name Here'),
+                            validator: (v) => (v == null || v.trim().isEmpty)
+                                ? 'Required'
+                                : null,
                           ),
                         ),
                       ),
@@ -286,8 +314,11 @@ class _SignupScreen extends State<SignupScreen> {
                           label: 'Last Name',
                           child: TextFormField(
                             controller: _lastName,
-                            textInputAction: TextInputAction.next,
+                            onChanged: signupController.setLastName,
                             decoration: _decoration('Name Here'),
+                            validator: (v) => (v == null || v.trim().isEmpty)
+                                ? 'Required'
+                                : null,
                           ),
                         ),
                       ),
@@ -299,8 +330,10 @@ class _SignupScreen extends State<SignupScreen> {
                     label: 'User Name',
                     child: TextFormField(
                       controller: _userName,
-                      textInputAction: TextInputAction.next,
+                      onChanged: signupController.setUsername,
                       decoration: _decoration('User Name Here'),
+                      validator: (v) =>
+                          (v == null || v.trim().isEmpty) ? 'Required' : null,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -309,9 +342,16 @@ class _SignupScreen extends State<SignupScreen> {
                     label: 'Email Address',
                     child: TextFormField(
                       controller: _email,
-                      textInputAction: TextInputAction.next,
+                      onChanged: signupController.setEmail,
                       keyboardType: TextInputType.emailAddress,
                       decoration: _decoration('hello@example.com'),
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) return 'Required';
+                        final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                        if (!emailRegex.hasMatch(v.trim()))
+                          return 'Invalid email';
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -337,47 +377,16 @@ class _SignupScreen extends State<SignupScreen> {
                           lastDate: now,
                         );
                         if (picked != null) {
-                          _dob.text =
-                              '${picked.day.toString().padLeft(2, '0')}/'
-                              '${picked.month.toString().padLeft(2, '0')}/'
-                              '${picked.year.toString().substring(2)}';
+                          // 1995-06-15
+                          // yyyy - mm - dd
+                          final formatted =
+                              "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                          _dob.text = formatted;
+                          signupController.setDateOfBirth(formatted);
                         }
                       },
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Privacy note card
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF2F2),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFFFFD4D4)),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 2),
-                          child: Icon(
-                            Icons.warning,
-                            color: Colors.red,
-                            size: 22,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            "Privacy Protected Information\n"
-                            "Your birth date is only required for Apple and Google app store compliance to verify you’re 18+. "
-                            "This information is never visible to other users, not used for marketing or recommendations, "
-                            "and not shared with any third parties. It remains completely private and secure.",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ),
-                      ],
+                      validator: (v) =>
+                          (v == null || v.trim().isEmpty) ? 'Required' : null,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -397,7 +406,10 @@ class _SignupScreen extends State<SignupScreen> {
                               'Non-binary',
                               'Prefer not to say',
                             ],
-                            onChanged: (v) => setState(() => _gender = v),
+                            onChanged: (v) {
+                              setState(() => _gender = v);
+                              signupController.setGender(v ?? '');
+                            },
                           ),
                         ),
                       ),
@@ -415,7 +427,10 @@ class _SignupScreen extends State<SignupScreen> {
                               '45–54',
                               '55+',
                             ],
-                            onChanged: (v) => setState(() => _ageRange = v),
+                            onChanged: (v) {
+                              setState(() => _ageRange = v);
+                              signupController.setAgeRange(v ?? '');
+                            },
                           ),
                         ),
                       ),
@@ -423,193 +438,165 @@ class _SignupScreen extends State<SignupScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Bio
                   _Labeled(
                     label: 'Bio (Optional)',
-                    labelTrailing: ValueListenableBuilder<TextEditingValue>(
-                      valueListenable: _bio,
-                      builder: (_, v, __) => Text(
-                        '${v.text.length}/500',
+                    labelTrailing: Obx(
+                      () => Text(
+                        '${signupController.bio.value.length}/500',
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.black54,
                         ),
                       ),
                     ),
-                    child: SizedBox(
-                      height: 150,
-                      child: _BioSection(controller: _bio), // share controller
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Your bio will be visible to nearby users as a preview of who you are.',
-                    style: caption,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Create Password
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Create Password',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _password,
-                    obscureText: !_showPassword,
-                    decoration: _decoration('Password').copyWith(
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _showPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                        ),
-                        onPressed: () =>
-                            setState(() => _showPassword = !_showPassword),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  RulesBox(
-                    checks: {
-                      'Minimum 8 characters': _hasMinLength(_password.text),
-                      'At least 1 uppercase letter': _hasUppercase(
-                        _password.text,
-                      ),
-                      'At least 1 lowercase letter': _hasLowercase(
-                        _password.text,
-                      ),
-                      'At least 1 number': _hasNumber(_password.text),
-                      'At least 1 special character (e.g., !@#\$%)':
-                          _hasSpecial(_password.text),
-                    },
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Confirm password
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Confirm Password',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _confirmPassword,
-                    obscureText: !_showConfirm,
-                    decoration: _decoration('Confirm Password').copyWith(
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _showConfirm
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                        ),
-                        onPressed: () =>
-                            setState(() => _showConfirm = !_showConfirm),
-                      ),
+                    child: TextFormField(
+                      controller: _bio,
+                      maxLines: 4,
+                      onChanged: signupController.setBio,
+                      decoration: _decoration('Write something about yourself'),
                     ),
                   ),
                   const SizedBox(height: 20),
 
-                  // CTA
+                  _Labeled(
+                    label: 'Create Password',
+                    child: TextFormField(
+                      controller: _password,
+                      obscureText: !_showPassword,
+                      onChanged: signupController.setPassword,
+                      decoration: _decoration('Password').copyWith(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _showPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () =>
+                              setState(() => _showPassword = !_showPassword),
+                        ),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Required';
+                        if (!_hasMinLength(v)) return 'Minimum 8 characters';
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  Obx(
+                    () => RulesBox(
+                      checks: {
+                        'Minimum 8 characters': _hasMinLength(_password.text),
+                        'At least 1 uppercase letter': _hasUppercase(
+                          signupController.password.value,
+                        ),
+                        'At least 1 lowercase letter': _hasLowercase(
+                          signupController.password.value,
+                        ),
+                        'At least 1 number': _hasNumber(_password.text),
+                        'At least 1 special character': _hasSpecial(
+                          signupController.password.value,
+                        ),
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  _Labeled(
+                    label: 'Confirm Password',
+                    child: TextFormField(
+                      controller: _confirmPassword,
+                      obscureText: !_showConfirm,
+                      onChanged: signupController.setConfirmPassword,
+                      decoration: _decoration('Confirm Password').copyWith(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _showConfirm
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () =>
+                              setState(() => _showConfirm = !_showConfirm),
+                        ),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Required';
+                        if (v != _password.text)
+                          return 'Passwords do not match';
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Create Account CTA
                   SizedBox(
                     width: double.infinity,
                     height: 48,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4C5CFF),
-                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const InterestScreen(),
-                          ),
-                        );
+                        if (_formKey.currentState!.validate()) {
+                          signupController.signup(
+                            buttonNotifier: signupController.processNotifier,
+                            snackbarNotifier: SnackbarNotifier(
+                              context: context,
+                            ),
+                          );
+                        }
                       },
-                      child: const Text(
-                        'Create Account',
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  Center(
-                    child: Text.rich(
-                      TextSpan(
-                        text: 'Already have an account? ',
-                        style: caption,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 4,
                         children: [
-                          TextSpan(
-                            text: 'Sign in',
-                            style: const TextStyle(
-                              color: Color(0xFF4C5CFF),
+                          const Text(
+                            'Create Account',
+                            style: TextStyle(
                               fontWeight: FontWeight.w700,
-                              decoration: TextDecoration.underline,
+                              color: Colors.white,
                             ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => const SignInScreen(),
-                                  ),
-                                );
-                              },
+                          ),
+                          RIcon(
+                            key: UniqueKey(),
+                            processStatusNotifier:
+                                signupController.processNotifier,
+                            iconWidget: Container(),
+                            loadingStateWidget: FittedBox(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
-
                   const SizedBox(height: 12),
 
-                  // Terms
-                  Center(
-                    child: Text.rich(
-                      TextSpan(
-                        text: 'By continuing, you agree to SPEET’s ',
-                        style: caption,
-                        children: const [
-                          TextSpan(
-                            text: 'Terms of Service',
-                            style: TextStyle(
-                              color: Color(0xFF4C5CFF),
-                              fontWeight: FontWeight.w700,
-                              decoration: TextDecoration.underline,
-                            ),
+                  Text.rich(
+                    TextSpan(
+                      text: 'Already have an account? ',
+                      style: caption,
+                      children: [
+                        TextSpan(
+                          text: 'Sign in',
+                          style: const TextStyle(
+                            color: Color(0xFF4C5CFF),
+                            fontWeight: FontWeight.w700,
+                            decoration: TextDecoration.underline,
                           ),
-                          TextSpan(text: ' and '),
-                          TextSpan(
-                            text: 'Privacy Policy',
-                            style: TextStyle(
-                              color: Color(0xFF4C5CFF),
-                              fontWeight: FontWeight.w700,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                          TextSpan(text: '.'),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => Get.to(() => const SignInScreen()),
+                        ),
+                      ],
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 18),
                 ],
@@ -621,8 +608,11 @@ class _SignupScreen extends State<SignupScreen> {
     );
   }
 }
+
+/* ---------- Helpers (included so _Labeled is available) ---------- */
+
 class _BioSection extends StatefulWidget {
-  const _BioSection({this.controller});
+  const _BioSection(this.controller);
   final TextEditingController? controller;
 
   @override
@@ -650,6 +640,7 @@ class _BioSectionState extends State<_BioSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 8),
+        // This Expanded only works when parent gives bounded height (as in original usage).
         Expanded(
           child: TextField(
             controller: _ctl,
@@ -659,7 +650,7 @@ class _BioSectionState extends State<_BioSection> {
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             buildCounter:
                 (
-                  _, {
+                  BuildContext _, {
                   required int currentLength,
                   required bool isFocused,
                   int? maxLength,
@@ -702,15 +693,12 @@ class _BioSectionState extends State<_BioSection> {
   }
 }
 
-/* ---------- UI helpers ---------- */
-
 class _Labeled extends StatelessWidget {
   const _Labeled({
     required this.label,
     required this.child,
     this.labelTrailing,
   });
-
   final String label;
   final Widget child;
   final Widget? labelTrailing;
@@ -744,7 +732,6 @@ class _Dropdown<T> extends StatelessWidget {
     required this.onChanged,
     required this.hint,
   });
-
   final T? value;
   final List<String> items;
   final ValueChanged<T?> onChanged;
@@ -781,32 +768,31 @@ class _Dropdown<T> extends StatelessWidget {
   }
 }
 
-class _GradientText extends StatelessWidget {
-  const _GradientText(
-    this.text, {
-    required this.gradient,
-    this.size = 24,
-    this.weight = FontWeight.w900,
-  });
+// class _GradientText extends StatelessWidget {
+//   const _GradientText(
+//     this.text, {
+//     required this.gradient,
+//     this.size = 24,
+//     this.weight = FontWeight.w900,
+//   });
+//   final String text;
+//   final Gradient gradient;
+//   final double size;
+//   final FontWeight weight;
 
-  final String text;
-  final Gradient gradient;
-  final double size;
-  final FontWeight weight;
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (rect) => gradient.createShader(rect),
-      blendMode: BlendMode.srcIn,
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: size,
-          fontWeight: weight,
-          letterSpacing: 1.1,
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return ShaderMask(
+//       shaderCallback: (rect) => gradient.createShader(rect),
+//       blendMode: BlendMode.srcIn,
+//       child: Text(
+//         text,
+//         style: TextStyle(
+//           fontSize: size,
+//           fontWeight: weight,
+//           letterSpacing: 1.1,
+//         ),
+//       ),
+//     );
+//   }
+// }

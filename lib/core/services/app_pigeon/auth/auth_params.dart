@@ -19,10 +19,10 @@ class SaveNewAuthParams {
 class UpdateAuthParams {
   final String accessToken;
   final String refreshToken;
-  final dynamic data;
+  Map<String, dynamic>? data;
   UpdateAuthParams({
     required this.accessToken,
     required this.refreshToken,
-    required this.data,
+    this.data,
   });
 }

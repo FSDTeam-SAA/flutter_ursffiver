@@ -5,23 +5,23 @@ import 'package:flutter_ursffiver/features/home/presentation/screen/user-profile
 class UserProfileCard extends StatelessWidget {
   final String name;
   final String imagePath;
-  final String distance;
+  final String height;
   final String status;
-  final VoidCallback onActivityHi;
-  final VoidCallback onExperience;
-  final VoidCallback onChat;
-  final VoidCallback onInfo;
+  //final VoidCallback onActivityHi;
+  //final VoidCallback onExperience;
+  //final VoidCallback onChat;
+  //final VoidCallback onInfo;
 
   const UserProfileCard({
     super.key,
     required this.name,
     required this.imagePath,
-    required this.distance,
+    required this.height,
     required this.status,
-    required this.onActivityHi,
-    required this.onExperience,
-    required this.onChat,
-    required this.onInfo,
+    //required this.onActivityHi,
+    //required this.onExperience,
+    //required this.onChat,
+    //required this.onInfo,
   });
 
   @override
@@ -47,7 +47,6 @@ class UserProfileCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          // Main Content
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +68,7 @@ class UserProfileCard extends StatelessWidget {
                     const Icon(Icons.location_on, size: 16, color: Colors.grey),
                     const SizedBox(width: 4),
                     Text(
-                      distance,
+                      height,
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                     const SizedBox(width: 16),
@@ -77,7 +76,9 @@ class UserProfileCard extends StatelessWidget {
                       status,
                       style: TextStyle(
                         fontSize: 14,
-                        color: status == 'Available' ? Colors.green : Colors.grey,
+                        color: status == 'Available'
+                            ? Colors.green
+                            : Colors.grey,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -130,13 +131,16 @@ class UserProfileCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    Icons.message_outlined,
+                  IconButton(
                     color: Colors.blue.shade600,
-                    size: 28,
+                    onPressed: () {},
+                    icon: Icon(Icons.message, size: 28),
                   ),
-                  Gap.w12,
-                  Icon(Icons.help_outline_sharp, color: Colors.grey, size: 28),
+                  IconButton(
+                    color: Colors.grey,
+                    onPressed: () {},
+                    icon: Icon(Icons.help_outline_sharp, size: 28),
+                  ),
                 ],
               ),
             ],
@@ -151,8 +155,8 @@ class UserProfileCard extends StatelessWidget {
 Widget _buildTag(String text, Color backgroundColor, Color textColor) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-    height: 30, // Fixed height
-    width: 90, // Fixed width
+    height: 30,
+    width: 95,
     decoration: BoxDecoration(
       color: backgroundColor,
       borderRadius: BorderRadius.circular(8),
@@ -165,7 +169,7 @@ Widget _buildTag(String text, Color backgroundColor, Color textColor) {
           color: textColor,
           fontWeight: FontWeight.w500,
         ),
-        textAlign: TextAlign.center, // Center the text
+        textAlign: TextAlign.center,
       ),
     ),
   );

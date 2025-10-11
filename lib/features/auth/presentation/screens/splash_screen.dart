@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-// import your designed SpeetScreen:
-import 'speet_screen.dart'; // <-- update the path if needed
+import 'speet_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -13,14 +12,13 @@ class SplashScreen extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(useMaterial3: true),
-      // Use a stateful view as `home:` so it has a Navigator above it
-      home: const _SplashView(),
+     home: const _SplashView(),
     );
   }
 }
 
 class _SplashView extends StatefulWidget {
-  const _SplashView({super.key});
+  const _SplashView();
 
   @override
   State<_SplashView> createState() => _SplashViewState();
@@ -57,7 +55,6 @@ class FramedPanel extends StatelessWidget {
           child: Container(
             decoration: const BoxDecoration(
               color: Colors.white,
-              // add splash artwork here
             ),
           ),
         ),

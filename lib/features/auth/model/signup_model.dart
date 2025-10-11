@@ -1,37 +1,37 @@
-class SignupModel {
-  String firstName;
-  String lastName;
-  String username;
-  String email;
-  String dob;
-  String bio;
-  String password;
-  String confirmPassword;
-  String? gender;
-  String? ageRange;
-  Set<String> interests;
+class SignupRequestParam {
+  final String? firstName;
+  final String? lastName;
+  final String? username;
+  final String? email;
+  final String? dateOfBirth;
+  final String? gender;
+  final String? ageRange;
+  final String? bio;
+  final String? password;
+  final String? confirmPassword;
 
-  SignupModel({
-    this.firstName = '',
-    this.lastName = '',
-    this.username = '',
-    this.email = '',
-    this.dob = '',
-    this.bio = '',
-    this.password = '',
-    this.confirmPassword = '',
-    this.gender,
-    this.ageRange,
-    this.interests = const {},
+  SignupRequestParam({
+    required this.firstName,
+    required this.lastName,
+    required this.username,
+    required this.email,
+    required this.dateOfBirth,
+    required this.gender,
+    required this.ageRange,
+    required this.bio,
+    required this.password,
+    required this.confirmPassword,
   });
-
-  // Password validation rules
-  bool get hasMinLength => password.length >= 8;
-  bool get hasUppercase => RegExp(r'[A-Z]').hasMatch(password);
-  bool get hasLowercase => RegExp(r'[a-z]').hasMatch(password);
-  bool get hasNumber => RegExp(r'\d').hasMatch(password);
-  bool get hasSpecial => RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password);
-
-  bool get isPasswordValid =>
-      hasMinLength && hasUppercase && hasLowercase && hasNumber && hasSpecial;
+  Map<String, dynamic> toJson() => {
+    'firstName': firstName,
+    'lastName': lastName,
+    'username': username,
+    'email': email,
+    'dateOfBirth': dateOfBirth,
+    'gender': gender?.trim().toLowerCase(),
+    'ageRange': ageRange,
+    'bio': bio,
+    'password': password,
+    'confirmPassword': confirmPassword,
+  };
 }

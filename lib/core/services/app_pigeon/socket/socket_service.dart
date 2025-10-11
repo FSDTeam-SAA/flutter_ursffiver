@@ -85,7 +85,7 @@ class SocketService {
 
     _init().then((_) {
       _socket?.on(eventName, (data) {
-        //debugPrint("Socket data: $data");
+        debugPrint("Socket data: $data");
         controller.add(data);
       });
     });

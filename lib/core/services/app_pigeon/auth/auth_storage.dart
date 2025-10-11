@@ -5,7 +5,6 @@ base class _AuthStorage {
   late final _AuthManger _authManager;
   late final _CurrentAuthUidManger _currentAuthUidManager;
   _AuthStorage({FlutterSecureStorage? secureStorage}): _secureStorage = secureStorage ?? FlutterSecureStorage(){
-    _authStreamController.add(AuthLoading());
     _authManager = _AuthManger( _secureStorage, _authDebugger);
     _currentAuthUidManager = _CurrentAuthUidManger(_secureStorage);
   }
@@ -24,25 +23,15 @@ base class _AuthStorage {
   
   /// Initializes auth storage listening, updates auth stream on change in secure storage
   init() async{
-    await getCurrentAuth().then((currentAuth) async{
-      final AuthStatus authStatus = _AuthStatusDecider.get(currentAuth);
-      _authStreamController.add(authStatus);
-    });
+    _authStreamController.add(AuthLoading());
+    // Initial auth status
+    final authStatus = await currentAuthStatus();
+    _authStreamController.add(authStatus);
+    // register-function for listening to changes in current auth
     void onCurrentAuthChange(String? encodedAuth) async{
-      _authDebugger.dekhao("Current auth changed in AuthStorage...");
-      if(encodedAuth == null ) {
-        _authStreamController.add(UnAuthenticated());
-        return;
-      }
-        
-        final auth = await getCurrentAuth();
-        if(auth == null) {
-          _authStreamController.add(UnAuthenticated());
-          return;
-        }
-        _authStreamController.add(Authenticated(auth: auth));
-      }
-    _authDebugger.dekhao("Registering listeners in auth storage.");
+      final authStatus = await currentAuthStatus();
+      _authStreamController.add(authStatus);
+    }
     _secureStorage.registerListener(key: currentAuthKey, listener: onCurrentAuthChange);
   }
 
@@ -67,12 +56,12 @@ base class _AuthStorage {
           refreshToken: saveAuthParams.refreshToken,
           data: saveAuthParams.data,
         );
-    // Save user auth
+    // >> Save user auth
     // ** Its important to save the auth first before saving the uid as current auth ref,
     // because any change with current-auth-ref will trigger the storage listener that listens with current-auth-ref's key.
     // If the auth is saved first, then only listeners will get the saved auth instance.
     await _authManager.write(uId: saveAuthParams.uid, auth: auth);
-    // Save as current auth. This will trigger the storage listener and will update the authstatus (as per the current implementation.       )
+    // Save as current auth. This will trigger the storage listener and will update the authstatus (as per the current implementation.)
     await _currentAuthUidManager.saveCurrentAuthRef(saveAuthParams.uid);
   }
 
@@ -129,7 +118,7 @@ class _AuthManger {
   final FlutterSecureStorage _secureStorage;
   final Debugger _debugger;
   _AuthManger(this._secureStorage, this._debugger);
-
+  /// Auths with uid as key
   final Map<String, Auth> _auths = {};
   Map<String, Auth> get auths => Map<String, Auth>.from(_auths);
 
@@ -146,7 +135,6 @@ class _AuthManger {
 
   Future<Auth?> read({required String uId}) async{
     final jsonString = await _secureStorage.read(key: userAuthKey(uid: uId));
-    _debugger.dekhao("Reading auth with uid: ${userAuthKey(uid: uId)}, data : $jsonString");
     if(jsonString == null) {
       return null;
     }
