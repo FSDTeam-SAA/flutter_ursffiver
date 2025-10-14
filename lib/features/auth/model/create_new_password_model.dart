@@ -1,16 +1,17 @@
 class CreatePasswordModel {
   final String email;
-  final String newPassword;
-  final String confirmPassword;
+  final String password;
+  final String otp;
 
   CreatePasswordModel({
     required this.email,
-    required this.newPassword,
-    required this.confirmPassword,
+    required this.password,
+    required this.otp,
   });
 
   Map<String, dynamic> toJson() => {
     'email': email,
-    'newPassword': newPassword,
+    'password': password,
+    'otp': otp
   };
 }

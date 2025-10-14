@@ -265,7 +265,10 @@ class _SignInScreenState extends State<SignInScreen> {
                               decoration: TextDecoration.underline,
                             ),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => Get.to(() => SignupScreen()),
+                              ..onTap = () => Navigator.pushNamed(
+                                    context,
+                                    RouteNames.signup
+                              ),
                           ),
                         ],
                       ),

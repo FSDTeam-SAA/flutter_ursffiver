@@ -4,7 +4,7 @@ import 'package:flutter_ursffiver/core/common/reactive_buttons/save_button.dart'
 import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/auth/controller/verify_account_view_controller.dart';
-import 'package:flutter_ursffiver/features/auth/presentation/screens/create_new_password.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:flutter_ursffiver/features/common/app_logo.dart';
 
@@ -56,6 +56,9 @@ class _VerifyScreenState extends State<VerifyScreen> {
       _nodes[index + 1].requestFocus();
     }
     //full typed otp String
+    final String otp = _controllers.map((e) => e.text).join();
+
+    controller.otp = otp;
     
   }
 
@@ -199,15 +202,15 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     loadingText: "Verifying...",
                     doneText: "Done",
                     onDone: () {
+                      
+                    },
+                    onSaveTap: () async {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ForgetPasswordScreen(),
+                          builder: (context) => ResetPasswordScreen(email: controller.email, otp: controller.otp),
                         ),
                       );
-                    },
-                    onSaveTap: () async {
-                      controller.verify();
                     },
                   ),
                 ),
