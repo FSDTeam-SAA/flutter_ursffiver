@@ -8,13 +8,31 @@ import 'package:get/get.dart';
 
 class CreateNewPasswordController extends GetxController {
   final String email;
-  CreateNewPasswordController({required this.email});
+  final String otp;
+  CreateNewPasswordController({required this.email, required this.otp});
+  final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(
+    initialStatus: DisabledStatus()
+  );
+
+  // validation flags
+  RxBool lenOk = RxBool(false);
+  RxBool upperOk = RxBool(false);
+  RxBool lowerOk = RxBool(false);
+  RxBool numOk = RxBool(false);
+  RxBool specialOk = RxBool(false);
+  RxBool matchOk = RxBool(false);
 
   String _newPassword = '';
   String get newPassword => _newPassword;
   set newPassword(String value) {
     _newPassword = value;
     debugPrint("New Password: $_newPassword");
+    recompute();
+    if(matchOk.value){
+      processNotifier.setEnabled();
+    } else {
+      processNotifier.setDisabled();
+    }
   }
 
   String _confirmPassword = '';
@@ -22,20 +40,31 @@ class CreateNewPasswordController extends GetxController {
   set confirmPassword(String value) {
     _confirmPassword = value;
     debugPrint("Confirm Password: $_confirmPassword");
+    debugPrint("New Password: $_newPassword");
+    recompute();
+    if(matchOk.value){
+      processNotifier.setEnabled();
+    } else {
+      processNotifier.setDisabled();
+    }
   }
 
-  bool get isFormValid {
-    return _newPassword.isNotEmpty &&
+
+  void recompute() {
+    final p = _newPassword;
+    lenOk.value = p.length >= 8;
+    upperOk.value = RegExp(r'[A-Z]').hasMatch(p);
+    lowerOk.value = RegExp(r'[a-z]').hasMatch(p);
+    numOk.value = RegExp(r'\d').hasMatch(p);
+    specialOk.value = RegExp(r'[^A-Za-z0-9]').hasMatch(p);
+
+    matchOk.value = _newPassword.isNotEmpty &&
         _confirmPassword.isNotEmpty &&
         _newPassword == _confirmPassword;
   }
 
-  final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(
-    initialStatus: EnabledStatus(),
-  );
-
-  void createNewPassword(SnackbarNotifier? snackbarNotifier) async {
-    if (isFormValid) {
+  void resetPassword(SnackbarNotifier? snackbarNotifier) async {
+    if (matchOk.value) {
       processNotifier.setEnabled();
     } else {
       processNotifier.setDisabled();
@@ -45,8 +74,8 @@ class CreateNewPasswordController extends GetxController {
         .createNewPassword(
           CreatePasswordModel(
             email: email,
-            newPassword: newPassword,
-            confirmPassword: confirmPassword,
+            password: newPassword,
+            otp: otp,
           ),
         )
         .then((lr) {

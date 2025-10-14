@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_ursffiver/core/common/reactive_buttons/r_icon.dart';
+import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/features/auth/controller/signup_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
@@ -592,7 +593,7 @@ class _SignupScreen extends State<SignupScreen> {
                             decoration: TextDecoration.underline,
                           ),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => Get.to(() => const SignInScreen()),
+                            ..onTap = () => Navigator.pushNamed(context, RouteNames.login),
                         ),
                       ],
                     ),

@@ -20,7 +20,7 @@ base class ApiEndpoints {
 
   static const String changePassword = _Auth.changePassword;
 
-  static const String createNewPassword = _Auth.createNewPassword;
+  static const String createNewPassword = _Auth.resetPassword;
 
   /// ### post
   static const String refreshToken = _Auth.refreshToken;
@@ -100,9 +100,9 @@ class _RemoteServer {
 }
 
 class _LocalHostWifi {
-  static const String socketUrl = 'http://10.10.5.46:5001';
+  static const String socketUrl = 'http://192.168.0.107:5001';
 
-  static const String baseUrl = 'http://10.10.5.46:5001/api/v1';
+  static const String baseUrl = 'http://192.168.0.107:5001/api/v1';
 }
 
 
@@ -117,7 +117,7 @@ class _Auth {
   static const String registerVerify = '$_authRoute/register/verify';
   //static const String resetPassword = '$_authRoute/reset-password';
   static const String changePassword = '$_authRoute/change-password';
-  static const String createNewPassword = '$_authRoute/reset-password';
+  static const String resetPassword = '$_authRoute/reset-password';
 }
 
 
