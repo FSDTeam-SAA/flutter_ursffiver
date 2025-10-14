@@ -46,10 +46,12 @@ final class AuthInterfaceImpl extends AuthInterface {
   FutureRequest<Success> login(LoginRequestParams params) async {
     return await asyncTryCatch(
       tryFunc: () async {
+        //call api
         final response = await appPigeon.post(
           ApiEndpoints.login,
           data: params.toJson(),
         );
+        // parse
         final body = extractBodyData(response);
         final loginResponse = LoginResponse.fromMap(body);
         await appPigeon.saveNewAuth(
@@ -60,6 +62,7 @@ final class AuthInterfaceImpl extends AuthInterface {
             data: {"userId": loginResponse.userId},
           ),
         );
+        // return
         return Success(message: extractSuccessMessage(response));
       },
     );
@@ -106,6 +109,7 @@ final class AuthInterfaceImpl extends AuthInterface {
   FutureRequest<Success> createNewPassword(CreatePasswordModel param) async {
     return await asyncTryCatch(
       tryFunc: () async {
+        debugPrint(param.toJson().toString());
         final response = await appPigeon.post(
           ApiEndpoints.createNewPassword,
           data: param.toJson(),

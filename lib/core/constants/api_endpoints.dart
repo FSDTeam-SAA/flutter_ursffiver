@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _RemoteServer.socketUrl;
+  static const String socketUrl = _LocalHostWifi.socketUrl;
 
-  static const String baseUrl = _RemoteServer.baseUrl;
+  static const String baseUrl = _LocalHostWifi.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -14,7 +14,7 @@ base class ApiEndpoints {
 
   static const String registerVerify = _Auth.registerVerify;
 
-  static const String resetPassword = _Auth.resetPassword;
+  //static const String resetPassword = _Auth.resetPassword;
 
   static const String forgetPassword = _Auth.forgetPassword;
 
@@ -111,11 +111,11 @@ class _Auth {
   static const String _authRoute = '${ApiEndpoints.baseUrl}/auth';
   static const String login = '$_authRoute/login';
   static const String signup = '$_authRoute/signup';
-  static const String forgetPassword = '$_authRoute/forget';
+  static const String forgetPassword = '$_authRoute/forgot-password';
   static const String refreshToken = '$_authRoute/refresh-token';
-  static const String verifyCode = '$_authRoute/verify-code';
+  static const String verifyCode = '$_authRoute/verify-otp';
   static const String registerVerify = '$_authRoute/register/verify';
-  static const String resetPassword = '$_authRoute/reset-password';
+  //static const String resetPassword = '$_authRoute/reset-password';
   static const String changePassword = '$_authRoute/change-password';
   static const String createNewPassword = '$_authRoute/reset-password';
 }

@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
+import 'package:flutter_ursffiver/core/common/reactive_buttons/save_button.dart';
+import 'package:flutter_ursffiver/features/auth/controller/create_new_password_controller.dart';
 import 'package:flutter_ursffiver/features/common/app_logo.dart';
+import 'package:get/get.dart';
 
 class ResetScreen extends StatefulWidget {
-  const ResetScreen({super.key});
+  final String email;
+  const ResetScreen({super.key, required this.email});
 
   @override
   State<ResetScreen> createState() => _ResetScreenState();
 }
 
 class _ResetScreenState extends State<ResetScreen> {
-  static const _brandBlue = Color(0xFF4C5CFF);
   static const _borderColor = Color(0xFFE6E6E9);
 
   final _password = TextEditingController();
   final _confirm = TextEditingController();
+
+  late final CreateNewPasswordController controller;
 
   bool _showPass = false;
   bool _showConfirm = false;
@@ -28,14 +32,16 @@ class _ResetScreenState extends State<ResetScreen> {
   bool _specialOk = false;
   bool _matchOk = false;
 
-  bool get _allOk =>
-      _lenOk && _upperOk && _lowerOk && _numOk && _specialOk && _matchOk;
+
 
   @override
   void initState() {
     super.initState();
+
+    controller = Get.put(CreateNewPasswordController(email: widget.email));
     _password.addListener(_recompute);
     _confirm.addListener(_recompute);
+
   }
 
   @override
@@ -48,16 +54,15 @@ class _ResetScreenState extends State<ResetScreen> {
   void _recompute() {
     final p = _password.text;
     setState(() {
-      _lenOk   = p.length >= 8;
+      _lenOk = p.length >= 8;
       _upperOk = RegExp(r'[A-Z]').hasMatch(p);
       _lowerOk = RegExp(r'[a-z]').hasMatch(p);
-      _numOk   = RegExp(r'\d').hasMatch(p);
+      _numOk = RegExp(r'\d').hasMatch(p);
       _specialOk = RegExp(r'[^A-Za-z0-9]').hasMatch(p);
-      
+
       _matchOk = _confirm.text.isNotEmpty && _confirm.text == p;
     });
   }
-
 
   InputDecoration _decoration(String hint) => InputDecoration(
     hintText: hint,
@@ -79,10 +84,9 @@ class _ResetScreenState extends State<ResetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final caption = Theme.of(context)
-        .textTheme
-        .bodySmall
-        ?.copyWith(color: Colors.black54, height: 1.45);
+    final caption = Theme.of(
+      context,
+    ).textTheme.bodySmall?.copyWith(color: Colors.black54, height: 1.45);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -102,7 +106,7 @@ class _ResetScreenState extends State<ResetScreen> {
                 const SizedBox(height: 4),
                 // Brand mark
                 // const _LogoMark(),
-                const AppLogo(height: 24,width: 52,),
+                const AppLogo(height: 24, width: 52),
                 const SizedBox(height: 14),
 
                 // Title + subtitle
@@ -130,11 +134,10 @@ class _ResetScreenState extends State<ResetScreen> {
                   obscureText: !_showPass,
                   decoration: _decoration('Password').copyWith(
                     suffixIcon: IconButton(
-                      icon: Icon(_showPass
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                      onPressed: () =>
-                          setState(() => _showPass = !_showPass),
+                      icon: Icon(
+                        _showPass ? Icons.visibility_off : Icons.visibility,
+                      ),
+                      onPressed: () => setState(() => _showPass = !_showPass),
                     ),
                   ),
                 ),
@@ -150,8 +153,10 @@ class _ResetScreenState extends State<ResetScreen> {
                       _Rule('At least 1 uppercase letter', ok: _upperOk),
                       _Rule('At least 1 lowercase letter', ok: _lowerOk),
                       _Rule('At least 1 number', ok: _numOk),
-                      _Rule('At least 1 special character (e.g. !@#\$%)',
-                          ok: _specialOk),
+                      _Rule(
+                        'At least 1 special character (e.g. !@#\$%)',
+                        ok: _specialOk,
+                      ),
                     ],
                   ),
                 ),
@@ -165,9 +170,9 @@ class _ResetScreenState extends State<ResetScreen> {
                   obscureText: !_showConfirm,
                   decoration: _decoration('Confirm Password').copyWith(
                     suffixIcon: IconButton(
-                      icon: Icon(_showConfirm
-                          ? Icons.visibility_off
-                          : Icons.visibility),
+                      icon: Icon(
+                        _showConfirm ? Icons.visibility_off : Icons.visibility,
+                      ),
                       onPressed: () =>
                           setState(() => _showConfirm = !_showConfirm),
                     ),
@@ -188,28 +193,14 @@ class _ResetScreenState extends State<ResetScreen> {
                 // CTA
                 SizedBox(
                   height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _brandBlue,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: _allOk
-                        ? () {
-                      // Navigate to SignInScreen after successful validation
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) => const SignInScreen(),
-                        ),
-                      );
-                    }
-                        : null, // disabled until all rules pass
-                    child: const Text(
-                      'Change Password',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
+                  child: RSaveButton(
+                    key: UniqueKey(),
+                    buttonStatusNotifier: controller.processNotifier,
+                    saveText: "Update Password",
+                    loadingText: "Updating...",
+                    doneText: "Done",
+                    onSaveTap: () {},
+                    onDone: () {},
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -222,8 +213,6 @@ class _ResetScreenState extends State<ResetScreen> {
   }
 }
 
-/* ---------- Small helpers & branded logo ---------- */
-
 class _Rule extends StatelessWidget {
   const _Rule(this.text, {required this.ok});
   final String text;
@@ -231,7 +220,7 @@ class _Rule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = ok ? const Color(0xFF10B981) : Colors.black54; // green vs neutral
+    final color = ok ? const Color(0xFF10B981) : Colors.black54;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
@@ -246,10 +235,9 @@ class _Rule extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: color, height: 1.4),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: color, height: 1.4),
             ),
           ),
         ],

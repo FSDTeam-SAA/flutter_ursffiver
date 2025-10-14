@@ -1,11 +1,12 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/auth/controller/signin_controller.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
 import 'package:get/get.dart';
 import '../../../common/app_logo.dart';
 
@@ -138,7 +139,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       const Spacer(),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, RouteNames.reset);
+                          //Navigator.pushNamed(context, RouteNames.reset);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const ForgetPasswordScreen(),
+                            ),
+                          );
                         },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -219,7 +227,14 @@ class _SignInScreenState extends State<SignInScreen> {
                             ? null
                             : () => controller.login(
                                 needVerifyAccount: () {
-                                  Get.toNamed(RouteNames.verifyScreen);
+                                  //Get.toNamed(RouteNames.verifyScreen);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          VerifyScreen(email: controller.email,),
+                                    ),
+                                  );
                                 },
                               ),
                         child: controller.isLoading.value

@@ -1,21 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ursffiver/features/auth/presentation/screens/reset_screen.dart';
+import 'package:flutter_ursffiver/core/common/reactive_buttons/save_button.dart';
+import 'package:flutter_ursffiver/core/constants/route_names.dart';
+import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
+import 'package:flutter_ursffiver/features/auth/controller/verify_account_view_controller.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/create_new_password.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:flutter_ursffiver/features/common/app_logo.dart';
 
 class VerifyScreen extends StatefulWidget {
-  const VerifyScreen({super.key});
+  final String email;
+  const VerifyScreen({super.key, required this.email});
 
   @override
   State<VerifyScreen> createState() => _VerifyScreenState();
 }
 
 class _VerifyScreenState extends State<VerifyScreen> {
+  late final VerifyForgetPasswordOtpController controller;
   static const _brandBlue = Color(0xFF4C5CFF);
-  final _nodes =
-  List.generate(6, (_) => FocusNode(debugLabel: 'otp-node'), growable: false);
-  final _controllers =
-  List.generate(6, (_) => TextEditingController(), growable: false);
+  final _nodes = List.generate(
+    6,
+    (_) => FocusNode(debugLabel: 'otp-node'),
+    growable: false,
+  );
+  final _controllers = List.generate(
+    6,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    controller = VerifyForgetPasswordOtpController(
+      email: widget.email,
+      snackbarNotifier: SnackbarNotifier(context: context),
+    );
+  }
 
   @override
   void dispose() {
@@ -33,7 +55,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
     if (value.isNotEmpty && index < _nodes.length - 1) {
       _nodes[index + 1].requestFocus();
     }
-    setState(() {});
+    //full typed otp String
+    
   }
 
   void _onBackspace(int index, RawKeyEvent e) {
@@ -47,10 +70,9 @@ class _VerifyScreenState extends State<VerifyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final caption = Theme.of(context)
-        .textTheme
-        .bodySmall
-        ?.copyWith(color: Colors.black54, height: 1.4);
+    final caption = Theme.of(
+      context,
+    ).textTheme.bodySmall?.copyWith(color: Colors.black54, height: 1.4);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -68,10 +90,10 @@ class _VerifyScreenState extends State<VerifyScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 4),
+
                 // Brand mark
                 // const _LogoMark(),
-
-                const AppLogo(height: 24,width: 52,),
+                const AppLogo(height: 24, width: 52),
 
                 const SizedBox(height: 14),
 
@@ -85,7 +107,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'We have share a code of your registered email\n'
-                      'address rob*******@example.com',
+                  'address rob*******@example.com',
                   style: caption,
                   textAlign: TextAlign.center,
                 ),
@@ -107,8 +129,9 @@ class _VerifyScreenState extends State<VerifyScreen> {
                             focusNode: _nodes[i],
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
-                            textInputAction:
-                            i == 5 ? TextInputAction.done : TextInputAction.next,
+                            textInputAction: i == 5
+                                ? TextInputAction.done
+                                : TextInputAction.next,
                             maxLength: 1,
                             obscureText: true,
                             obscuringCharacter: '*',
@@ -118,13 +141,17 @@ class _VerifyScreenState extends State<VerifyScreen> {
                               contentPadding: EdgeInsets.zero,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                const BorderSide(color: _brandBlue, width: 1.6),
+                                borderSide: const BorderSide(
+                                  color: _brandBlue,
+                                  width: 1.6,
+                                ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                const BorderSide(color: _brandBlue, width: 1.6),
+                                borderSide: const BorderSide(
+                                  color: _brandBlue,
+                                  width: 1.6,
+                                ),
                               ),
                             ),
                             onChanged: (v) => _onChanged(i, v),
@@ -161,29 +188,27 @@ class _VerifyScreenState extends State<VerifyScreen> {
 
                 const Spacer(),
 
-                // Verify button
                 SizedBox(
                   height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _brandBlue,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () {
-                      // Navigate to HomeScreen
-                      Navigator.of(context).pushReplacement(
+                  child: RSaveButton(
+                    key: UniqueKey(),
+                    width: double.infinity,
+                    height: 54,
+                    buttonStatusNotifier: controller.prcessNotifier,
+                    saveText: "Verify",
+                    loadingText: "Verifying...",
+                    doneText: "Done",
+                    onDone: () {
+                      Navigator.push(
+                        context,
                         MaterialPageRoute(
-                          builder: (_) => const ResetScreen(),
+                          builder: (context) => ForgetPasswordScreen(),
                         ),
                       );
                     },
-                    child: const Text(
-                      'Verify',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
+                    onSaveTap: () async {
+                      controller.verify();
+                    },
                   ),
                 ),
                 const SizedBox(height: 10),

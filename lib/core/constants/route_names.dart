@@ -5,8 +5,6 @@ import 'package:flutter_ursffiver/features/auth/presentation/screens/forget_pass
 import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/splash_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
-import 'package:flutter_ursffiver/features/home/presentation/screen/home_screen.dart';
-
 import '../../features/nabber_screen.dart';
 
 class RouteNames {
@@ -14,10 +12,9 @@ class RouteNames {
   static const String login = '/login';
   static const String home = '/home';
   static const String signup = '/signup';
-  static const String reset = '/reset';
+  //static const String reset = '/reset';
   static const String emailVerification = '/emailVerification';
-  static const String verifyScreen = '/VerifyScreen';
-  
+  //static const String verifyScreen = '/VerifyScreen';
   static const String splash = '/splash';
 }
 
@@ -28,9 +25,9 @@ class AppRoutes {
     RouteNames.onboarding: (context) => OnBoardingScreen(key: UniqueKey(),),
     RouteNames.login: (context) => SignInScreen(key: UniqueKey(),),
     RouteNames.signup: (context) => SignupScreen(key: UniqueKey(),),
-    RouteNames.reset: (context) => ForgetPasswordScreen(key: UniqueKey(),),
-    RouteNames.emailVerification: (context) => VerifyScreen(key: UniqueKey(),),
+    //RouteNames.reset: (context) => ForgetPasswordScreen(key: UniqueKey(),),
+    // RouteNames.emailVerification: (context) => VerifyScreen(key: UniqueKey(),),
     RouteNames.home: (context) => AppGround(key: UniqueKey(),),
-    RouteNames.verifyScreen: (context) => VerifyScreen(key: UniqueKey(),),
+    //RouteNames.verifyScreen: (context) => VerifyScreen(key: UniqueKey(),),
   };
 }
