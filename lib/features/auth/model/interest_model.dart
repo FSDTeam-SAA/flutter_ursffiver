@@ -98,13 +98,13 @@ enum InterestColor {
   Color get softColor {
     switch (this) {
       case InterestColor.red:
-        return Colors.red.shade100;
+        return const Color.fromARGB(56, 244, 67, 54);
       case InterestColor.green:
-        return Colors.green.shade100;
+        return const Color.fromARGB(52, 76, 175, 79);
       case InterestColor.blue:
-        return Colors.blue.shade100;
+        return const Color.fromARGB(138, 187, 222, 251);
       case InterestColor.yellow:
-        return Colors.yellow.shade100;
+        return const Color.fromARGB(79, 255, 249, 196);
     }
   }
 }
