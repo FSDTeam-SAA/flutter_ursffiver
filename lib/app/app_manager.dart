@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../core/constants/api_endpoints.dart';
 import '../core/constants/route_names.dart';
+import '../features/auth/controller/app_controllers.dart';
 import '../main.dart';
 
 class AppManager extends GetxController {
@@ -21,10 +22,14 @@ class AppManager extends GetxController {
 
   // listen to auth change
   void _init() {
+    Get.put<AppGlobalControllers>(AppGlobalControllers()).beforeAuthInit();
+    
     final initialAuthStatus = Get.find<AppPigeon>().currentAuth();
     _decideRoute(authStatus);
-     // Start listening to the auth status changes
-    _authStreamSubscription = Get.find<AppPigeon>().authStream.listen((newStatus) async{
+    // Start listening to the auth status changes
+    _authStreamSubscription = Get.find<AppPigeon>().authStream.listen((
+      newStatus,
+    ) async {
       _decideRoute(newStatus);
     });
   }
@@ -58,6 +63,6 @@ class AppManager extends GetxController {
 
   // initiate controllers on auth change[Authenticated]
   _initializeControllers() {
-    
+    Get.find<AppGlobalControllers>().afterAuthInit();
   }
 }

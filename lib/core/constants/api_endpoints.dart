@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _LocalHostWifi.socketUrl;
+  static const String socketUrl = _RemoteServer.socketUrl;
 
-  static const String baseUrl = _LocalHostWifi.baseUrl;
+  static const String baseUrl = _RemoteServer.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -25,16 +25,24 @@ base class ApiEndpoints {
   /// ### post
   static const String refreshToken = _Auth.refreshToken;
 
+
+  //------------interest----------------
+  /// ### get
+  static const String getInterests = _Interest.getallInterests;
+
+
+
+
+
+
+  //------------notification----------------
   /// ### get
   static const String getUserNotifications = _Notification.getUserNotifications;
-
   /// ### post
   static const String readAllNotifications = _Notification.readAllNotifications;
-
   /// ### patch
   static String markNotificationAsRead({required String notificationId}) =>
       _Notification.markNotificationAsRead(notificationId);
-
   /// ### patch
   static const String markAllAsRead = _Notification.markAllAsRead;
 
@@ -42,16 +50,12 @@ base class ApiEndpoints {
   
   /// ### get
   static String getuserbyId(String id) => _User.getuserbyId(id);
-
   /// ### get
   static const String getCurrentProfile = _User.getCurrentProfile;
-
   /// ### put
   static const String editProfile = _User.editProfile;
-
   /// ### put
   static const String uploadProfileAvatar = _User.uploadProfileAvatar;
-
   /// ### get
   static const String history = _User.history;
 
@@ -120,6 +124,11 @@ class _Auth {
   static const String resetPassword = '$_authRoute/reset-password';
 }
 
+//------------------------------ Interest -----------------------------
+class _Interest {
+  static const String _interestRoute = '${ApiEndpoints.baseUrl}/interest';
+  static const String getallInterests = '$_interestRoute/';
+}
 
 
 // ---------------------- Notification -----------------------------

@@ -6,7 +6,7 @@ import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/features/auth/controller/signup_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
-import 'package:flutter_ursffiver/features/auth/presentation/widget/sinup_widget.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/widget/interest_picker_sheet.dart';
 import '../../../common/app_logo.dart';
 import 'login_screen.dart';
 

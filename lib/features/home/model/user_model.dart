@@ -1,4 +1,4 @@
-import 'package:flutter_ursffiver/features/home/model/interest_model.dart';
+import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
 
 class UserModel {
@@ -15,11 +15,12 @@ class UserModel {
   final String role;
   final String status;
   final bool adminVerify;
-  final InterestModel interest;
+  final List<InterestModel> interests;
   final bool active;
   final UseraddressModel address;
   final String createdAt;
   final String updatedAt;
+  final String? imagePath;
 
   UserModel({
     required this.id,
@@ -35,11 +36,12 @@ class UserModel {
     required this.role,
     required this.status,
     required this.adminVerify,
-    required this.interest,
+    required this.interests,
     required this.active,
     required this.address,
     required this.createdAt,
     required this.updatedAt,
+    this.imagePath,
   });
 
   // factory UserModel.fromJson(Map<String, dynamic> json) {
