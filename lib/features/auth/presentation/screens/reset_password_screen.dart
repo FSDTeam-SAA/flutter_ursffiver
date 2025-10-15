@@ -1,32 +1,54 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
+import 'package:flutter_ursffiver/core/common/reactive_buttons/save_button.dart';
+import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
+import 'package:flutter_ursffiver/features/auth/controller/create_new_password_controller.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/common/app_logo.dart';
+import 'package:get/get.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({super.key});
+  final String email;
+  final String otp;
+  const ResetPasswordScreen({super.key, required this.email, required this.otp});
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  static const _brandBlue = Color(0xFF4C5CFF);
-  static const _brandGradient = LinearGradient(
-    colors: [Color(0xFF4C5CFF), Color(0xFF8F79FF)],
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-  );
   static const _borderColor = Color(0xFFE6E6E9);
 
-  final _email = TextEditingController();
+  final _password = TextEditingController();
+  final _confirm = TextEditingController();
+
+  late final CreateNewPasswordController controller;
+
+  bool _showPass = false;
+  bool _showConfirm = false;
+
+  
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = CreateNewPasswordController(email: widget.email, otp: widget.otp);
+    _password.addListener(controller.recompute);
+    _confirm.addListener(controller.recompute);
+
+  }
 
   @override
   void dispose() {
-    _email.dispose();
+    _password.dispose();
+    _confirm.dispose();
     super.dispose();
   }
+
+  
 
   InputDecoration _decoration(String hint) => InputDecoration(
     hintText: hint,
@@ -43,12 +65,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     ),
   );
 
+  TextStyle get _label =>
+      const TextStyle(fontSize: 13, fontWeight: FontWeight.w700);
+
   @override
   Widget build(BuildContext context) {
-    final caption = Theme.of(context)
-        .textTheme
-        .bodySmall
-        ?.copyWith(color: Colors.black54, height: 1.4);
+    final caption = Theme.of(
+      context,
+    ).textTheme.bodySmall?.copyWith(color: Colors.black54, height: 1.45);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -68,35 +92,94 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 const SizedBox(height: 4),
                 // Brand mark
                 // const _LogoMark(),
-                const AppLogo(height: 24,width: 52,),
+                const AppLogo(height: 24, width: 52),
                 const SizedBox(height: 14),
 
-                // Title + subtitle (centered)
+                // Title + subtitle
                 const Center(
                   child: Text(
-                    'Enter Your Email Address',
+                    'Reset Your Password',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'Enter your email or phone number to get code\n'
-                      'for reset your account password.',
-                  style: caption,
-                  textAlign: TextAlign.center,
+                const SizedBox(height: 6),
+                Center(
+                  child: Text(
+                    'Create a new password',
+                    style: caption,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 const SizedBox(height: 22),
 
-                // Email label + field
-                const Text(
-                  'Email Address',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                ),
+                // Create Password
+                Text('Create Password', style: _label),
                 const SizedBox(height: 8),
                 TextField(
-                  controller: _email,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: _decoration('hello@example.com'),
+                  controller: _password,
+                  obscureText: !_showPass,
+                  decoration: _decoration('Password').copyWith(
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _showPass ? Icons.visibility_off : Icons.visibility,
+                      ),
+                      onPressed: () => setState(() => _showPass = !_showPass),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    controller.newPassword = value;
+                  },
+                ),
+                const SizedBox(height: 10),
+
+                // Rules (live)
+                Padding(
+                  padding: const EdgeInsets.only(left: 6),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _Rule('Minimum 8 characters', ok: controller.lenOk),
+                      _Rule('At least 1 uppercase letter', ok: controller.upperOk),
+                      _Rule('At least 1 lowercase letter', ok: controller.lowerOk),
+                      _Rule('At least 1 number', ok: controller.numOk),
+                      _Rule(
+                        'At least 1 special character (e.g. !@#\$%)',
+                        ok: controller.specialOk,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 18),
+
+                // Confirm Password
+                Text('Confirm Password', style: _label),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _confirm,
+                  obscureText: !_showConfirm,
+                  decoration: _decoration('Confirm Password').copyWith(
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _showConfirm ? Icons.visibility_off : Icons.visibility,
+                      ),
+                      onPressed: () =>
+                          setState(() => _showConfirm = !_showConfirm),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    controller.confirmPassword = value;
+                  },
+                ),
+                const SizedBox(height: 6),
+                
+                Padding(
+                  padding: EdgeInsets.only(left: 6, top: 2),
+                  child: Obx(
+                    ()=> (controller.matchOk.value || controller.confirmPassword.isEmpty) ? Text(''): Text(
+                      'Passwords do not match',
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    )
+                  ),
                 ),
 
                 const Spacer(),
@@ -104,26 +187,25 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 // CTA
                 SizedBox(
                   height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _brandBlue,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () {
-                      // Navigate to HomeScreen
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) => const VerifyScreen(),
-                        ),
+                  child: RSaveButton(
+                    key: UniqueKey(),
+                    buttonStatusNotifier: controller.processNotifier,
+                    saveText: "Update Password",
+                    loadingText: "Updating...",
+                    doneText: "Done",
+                    onSaveTap: () async{
+                      controller.resetPassword(
+                        SnackbarNotifier(context: context)
                       );
                     },
-                    child: const Text(
-                      'Send Code',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
+                    onDone: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => const SignInScreen(),
+                        ),
+                        (route) => false,
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -136,118 +218,40 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 }
 
-/* ---------- Small branded logo used at the top ---------- */
-
-class _LogoMark extends StatelessWidget {
-  const _LogoMark();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        _GradientText('SPEET', gradient: _ResetPasswordScreenState._brandGradient, size: 18),
-        SizedBox(height: 4),
-        _LogoUnderline(),
-      ],
-    );
-  }
-}
-
-class _LogoUnderline extends StatelessWidget {
-  const _LogoUnderline();
-
-  @override
-  Widget build(BuildContext context) {
-    const grad = _ResetPasswordScreenState._brandGradient;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        _GradientMask(
-          gradient: grad,
-          child: _ArrowIcon(left: true, size: 16),
-        ),
-        SizedBox(width: 8),
-        _GradientMask(
-          gradient: grad,
-          child: _Pill(width: 34, height: 7),
-        ),
-        SizedBox(width: 8),
-        _GradientMask(
-          gradient: grad,
-          child: _ArrowIcon(left: false, size: 16),
-        ),
-      ],
-    );
-  }
-}
-
-class _Pill extends StatelessWidget {
-  const _Pill({required this.width, required this.height});
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: const BoxDecoration(
-        gradient: _ResetPasswordScreenState._brandGradient,
-        borderRadius: BorderRadius.all(Radius.circular(100)),
-      ),
-    );
-  }
-}
-
-class _ArrowIcon extends StatelessWidget {
-  const _ArrowIcon({required this.left, this.size = 20});
-  final bool left;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    final icon = Icon(Icons.play_arrow_rounded, size: size);
-    return left ? Transform.rotate(angle: math.pi, child: icon) : icon;
-  }
-}
-
-class _GradientText extends StatelessWidget {
-  const _GradientText(
-      this.text, {
-        required this.gradient,
-        this.size = 24,
-        this.weight = FontWeight.w900,
-      });
-
+class _Rule extends StatelessWidget {
+  const _Rule(this.text, {required this.ok});
   final String text;
-  final Gradient gradient;
-  final double size;
-  final FontWeight weight;
+  final RxBool ok;
 
   @override
   Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (r) => gradient.createShader(Offset.zero & r.size),
-      blendMode: BlendMode.srcIn,
-      child: Text(
-        text,
-        style: TextStyle(fontSize: size, fontWeight: weight, letterSpacing: 1.1),
-      ),
-    );
-  }
-}
-
-class _GradientMask extends StatelessWidget {
-  const _GradientMask({required this.gradient, required this.child});
-  final Gradient gradient;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (r) => gradient.createShader(Offset.zero & r.size),
-      blendMode: BlendMode.srcIn,
-      child: child,
+    
+    return Obx(
+      (){
+        final color = ok.value ? const Color(0xFF10B981) : Colors.black54;
+        return  Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                ok.value ? Icons.check_circle : Icons.radio_button_unchecked,
+                size: 16,
+                color: color,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  text,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: color, height: 1.4),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
     );
   }
 }

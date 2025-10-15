@@ -1,13 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_ursffiver/core/common/reactive_buttons/r_icon.dart';
+import 'package:flutter_ursffiver/core/constants/route_names.dart';
+import 'package:flutter_ursffiver/features/auth/controller/signup_controller.dart';
+import 'package:get/get.dart';
+import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/widget/sinup_widget.dart';
 import '../../../common/app_logo.dart';
-import 'interest_screen.dart';
-import 'login_screen.dart'; // update path/name
-
-import 'onboarding_screen.dart';
+import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -30,9 +31,7 @@ class _SignupScreen extends State<SignupScreen> {
   bool _hasUppercase(String v) => RegExp(r'[A-Z]').hasMatch(v);
   bool _hasLowercase(String v) => RegExp(r'[a-z]').hasMatch(v);
   bool _hasNumber(String v) => RegExp(r'\d').hasMatch(v);
-// raw string: no need to escape $
   bool _hasSpecial(String v) => RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(v);
-
 
   final _formKey = GlobalKey<FormState>();
 
@@ -50,6 +49,18 @@ class _SignupScreen extends State<SignupScreen> {
 
   String? _gender;
   String? _ageRange;
+
+  // interests
+  Set<String> _selectedInterests = <String>{};
+
+  late final SignUpController signupController;
+
+  @override
+  void initState() {
+    super.initState();
+    // initialize controller via GetX
+    signupController = SignUpController();
+  }
 
   @override
   void dispose() {
@@ -79,24 +90,24 @@ class _SignupScreen extends State<SignupScreen> {
     ),
   );
 
-  TextStyle get _labelStyle => const TextStyle(
-    fontSize: 13,
-    fontWeight: FontWeight.w700,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    _password.addListener(() => setState(() {}));
+  Future<Set<String>?> _openInterestPicker(BuildContext context) {
+    return showModalBottomSheet<Set<String>>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => InterestPickerSheet(
+        initialSelection: _selectedInterests,
+        brandGradient: _brandGradient,
+      ),
+    );
   }
-
 
   @override
   Widget build(BuildContext context) {
-    final caption = Theme.of(context)
-        .textTheme
-        .bodySmall
-        ?.copyWith(color: Colors.black54, height: 1.35);
+    final caption = Theme.of(
+      context,
+    ).textTheme.bodySmall?.copyWith(color: Colors.black54);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -115,24 +126,174 @@ class _SignupScreen extends State<SignupScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Brand
-                  // const _GradientText('SPEET', gradient: _brandGradient, size: 18, weight: FontWeight.w900),
-                  const AppLogo(height:100,width:50 ),
-                  // const SizedBox(height: 10),
-
-                  // Title + subtitle
+                  AppLogo(height: 110, width: 80),
+                  const SizedBox(height: 8),
                   const Text(
-                    'Create Your Account',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                    "Create your account",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 12),
                   Text(
-                    'Join the community and start connecting with\n             people around you in seconds.',
+                    "Transform digital connections into real-life meetups with nearby people who share your interests.",
+                    textAlign: TextAlign.center,
                     style: caption,
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
 
-                  // First/Last
+                  // === INTEREST PICKER ===
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.grey[200],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 15),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "What interests you ?",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Container(
+                                  width: 80,
+                                  height: 7,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: Colors.deepPurpleAccent,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 15),
+                              child: Text(
+                                "Select interests to find people who share your passions",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ),
+
+                            // === TRIGGER (tap to open bottom sheet)
+                            InkWell(
+                              borderRadius: BorderRadius.circular(4),
+                              onTap: () async {
+                                final result = await _openInterestPicker(
+                                  context,
+                                );
+                                if (result != null) {
+                                  setState(() {
+                                    _selectedInterests = result;
+                                  });
+                                }
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  color: Colors.white,
+                                ),
+                                height: 48,
+                                width: double.infinity,
+                                child: const Center(
+                                  child: Text(
+                                    "Click to select your interests",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: "Selected: ",
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: "${_selectedInterests.length}/15",
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const WidgetSpan(
+                                      child: SizedBox(width: 80),
+                                    ),
+                                    if (_selectedInterests.isEmpty)
+                                      const TextSpan(
+                                        text: "Please select at least 1",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 15),
+                              child: Text(
+                                "Your interests help us connect you with like-minded people nearby",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(4),
+                  //   onTap: () async {
+                  //     final result = await _openInterestPicker(context);
+                  //     if (result != null) {
+                  //       setState(() {
+                  //         _selectedInterests = result;
+                  //       });
+                  //     }
+                  //   },
+                  //   // child: Container(
+                  //   //   padding: const EdgeInsets.all(16),
+                  //   //   decoration: BoxDecoration(
+                  //   //     borderRadius: BorderRadius.circular(4),
+                  //   //     color: Colors.grey[200],
+                  //   //   ),
+                  //   //   child: Column(
+                  //   //     children: [
+                  //   //       const Text("What interests you?", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                  //   //       const SizedBox(height: 8),
+                  //   //       Text("${_selectedInterests.length}/15 selected",
+                  //   //           style: TextStyle(color: _selectedInterests.isEmpty ? Colors.red : Colors.black87)),
+                  //   //     ],
+                  //   //   ),
+                  //   // ),
+                  // ),
+                  const SizedBox(height: 20),
+
+                  // === INPUT FIELDS ===
                   Row(
                     children: [
                       Expanded(
@@ -140,8 +301,11 @@ class _SignupScreen extends State<SignupScreen> {
                           label: 'First Name',
                           child: TextFormField(
                             controller: _firstName,
-                            textInputAction: TextInputAction.next,
+                            onChanged: signupController.setFirstName,
                             decoration: _decoration('Name Here'),
+                            validator: (v) => (v == null || v.trim().isEmpty)
+                                ? 'Required'
+                                : null,
                           ),
                         ),
                       ),
@@ -151,8 +315,11 @@ class _SignupScreen extends State<SignupScreen> {
                           label: 'Last Name',
                           child: TextFormField(
                             controller: _lastName,
-                            textInputAction: TextInputAction.next,
+                            onChanged: signupController.setLastName,
                             decoration: _decoration('Name Here'),
+                            validator: (v) => (v == null || v.trim().isEmpty)
+                                ? 'Required'
+                                : null,
                           ),
                         ),
                       ),
@@ -164,8 +331,10 @@ class _SignupScreen extends State<SignupScreen> {
                     label: 'User Name',
                     child: TextFormField(
                       controller: _userName,
-                      textInputAction: TextInputAction.next,
+                      onChanged: signupController.setUsername,
                       decoration: _decoration('User Name Here'),
+                      validator: (v) =>
+                          (v == null || v.trim().isEmpty) ? 'Required' : null,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -174,9 +343,16 @@ class _SignupScreen extends State<SignupScreen> {
                     label: 'Email Address',
                     child: TextFormField(
                       controller: _email,
-                      textInputAction: TextInputAction.next,
+                      onChanged: signupController.setEmail,
                       keyboardType: TextInputType.emailAddress,
                       decoration: _decoration('hello@example.com'),
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) return 'Required';
+                        final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                        if (!emailRegex.hasMatch(v.trim()))
+                          return 'Invalid email';
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -186,54 +362,32 @@ class _SignupScreen extends State<SignupScreen> {
                     child: TextFormField(
                       controller: _dob,
                       readOnly: true,
-                      decoration: _decoration('DD/MM/YY').copyWith(
-                        suffixIcon: const Icon(Icons.event_outlined),
-                      ),
+                      decoration: _decoration(
+                        'DD/MM/YY',
+                      ).copyWith(suffixIcon: const Icon(Icons.event_outlined)),
                       onTap: () async {
                         final now = DateTime.now();
                         final picked = await showDatePicker(
                           context: context,
-                          initialDate: DateTime(now.year - 18, now.month, now.day),
+                          initialDate: DateTime(
+                            now.year - 18,
+                            now.month,
+                            now.day,
+                          ),
                           firstDate: DateTime(1900),
                           lastDate: now,
                         );
                         if (picked != null) {
-                          _dob.text = '${picked.day.toString().padLeft(2, '0')}/'
-                              '${picked.month.toString().padLeft(2, '0')}/'
-                              '${picked.year.toString().substring(2)}';
+                          // 1995-06-15
+                          // yyyy - mm - dd
+                          final formatted =
+                              "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                          _dob.text = formatted;
+                          signupController.setDateOfBirth(formatted);
                         }
                       },
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Privacy note card
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF2F2),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFFFFD4D4)),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 2),
-                          child: Icon(Icons.warning, color: Colors.red, size: 22),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            "Privacy Protected Information\n"
-                                "Your birth date is only required for Apple and Google app store compliance to verify you’re 18+. "
-                                "This information is never visible to other users, not used for marketing or recommendations, "
-                                "and not shared with any third parties. It remains completely private and secure.",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ),
-                      ],
+                      validator: (v) =>
+                          (v == null || v.trim().isEmpty) ? 'Required' : null,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -247,8 +401,16 @@ class _SignupScreen extends State<SignupScreen> {
                           child: _Dropdown<String>(
                             value: _gender,
                             hint: 'Select',
-                            items: const ['Male', 'Female', 'Non-binary', 'Prefer not to say'],
-                            onChanged: (v) => setState(() => _gender = v),
+                            items: const [
+                              'Male',
+                              'Female',
+                              'Non-binary',
+                              'Prefer not to say',
+                            ],
+                            onChanged: (v) {
+                              setState(() => _gender = v);
+                              signupController.setGender(v ?? '');
+                            },
                           ),
                         ),
                       ),
@@ -259,8 +421,17 @@ class _SignupScreen extends State<SignupScreen> {
                           child: _Dropdown<String>(
                             value: _ageRange,
                             hint: 'Select',
-                            items: const ['18–24', '25–34', '35–44', '45–54', '55+'],
-                            onChanged: (v) => setState(() => _ageRange = v),
+                            items: const [
+                              '18–24',
+                              '25–34',
+                              '35–44',
+                              '45–54',
+                              '55+',
+                            ],
+                            onChanged: (v) {
+                              setState(() => _ageRange = v);
+                              signupController.setAgeRange(v ?? '');
+                            },
                           ),
                         ),
                       ),
@@ -268,174 +439,165 @@ class _SignupScreen extends State<SignupScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Bio
                   _Labeled(
                     label: 'Bio (Optional)',
-                    labelTrailing: ValueListenableBuilder<TextEditingValue>(
-                      valueListenable: _bio,
-                      builder: (_, v, __) => Text(
-                        '${v.text.length}/500',
-                        style: const TextStyle(fontSize: 12, color: Colors.black54),
+                    labelTrailing: Obx(
+                      () => Text(
+                        '${signupController.bio.value.length}/500',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                        ),
                       ),
                     ),
-                    child: SizedBox(
-                      height: 150,
-                      child: _BioSection(controller: _bio), // share controller
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Your bio will be visible to nearby users as a preview of who you are.',
-                    style: caption,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Create Password
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: const Text(
-                      'Create Password',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _password,
-                    obscureText: !_showPassword,
-                    decoration: _decoration('Password').copyWith(
-                      suffixIcon: IconButton(
-                        icon: Icon(_showPassword ? Icons.visibility_off : Icons.visibility),
-                        onPressed: () => setState(() => _showPassword = !_showPassword),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  _RulesBox(
-                    checks: {
-                      'Minimum 8 characters'                     : _hasMinLength(_password.text),
-                      'At least 1 uppercase letter'              : _hasUppercase(_password.text),
-                      'At least 1 lowercase letter'              : _hasLowercase(_password.text),
-                      'At least 1 number'                        : _hasNumber(_password.text),
-                      'At least 1 special character (e.g., !@#\$%)': _hasSpecial(_password.text),
-                    },
-                  ),
-                  const SizedBox(height: 12),
-
-                  //confirm passowrd
-
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: const Text(
-                      'Confirm Password',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _confirmPassword,
-                    obscureText: !_showConfirm,
-                    decoration: _decoration('Confirm Password').copyWith(
-                      suffixIcon: IconButton(
-                        icon: Icon(_showConfirm ? Icons.visibility_off : Icons.visibility),
-                        onPressed: () => setState(() => _showConfirm = !_showConfirm),
-                      ),
+                    child: TextFormField(
+                      controller: _bio,
+                      maxLines: 4,
+                      onChanged: signupController.setBio,
+                      decoration: _decoration('Write something about yourself'),
                     ),
                   ),
                   const SizedBox(height: 20),
 
-                  // CTA
+                  _Labeled(
+                    label: 'Create Password',
+                    child: TextFormField(
+                      controller: _password,
+                      obscureText: !_showPassword,
+                      onChanged: signupController.setPassword,
+                      decoration: _decoration('Password').copyWith(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _showPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () =>
+                              setState(() => _showPassword = !_showPassword),
+                        ),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Required';
+                        if (!_hasMinLength(v)) return 'Minimum 8 characters';
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  Obx(
+                    () => RulesBox(
+                      checks: {
+                        'Minimum 8 characters': _hasMinLength(_password.text),
+                        'At least 1 uppercase letter': _hasUppercase(
+                          signupController.password.value,
+                        ),
+                        'At least 1 lowercase letter': _hasLowercase(
+                          signupController.password.value,
+                        ),
+                        'At least 1 number': _hasNumber(_password.text),
+                        'At least 1 special character': _hasSpecial(
+                          signupController.password.value,
+                        ),
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  _Labeled(
+                    label: 'Confirm Password',
+                    child: TextFormField(
+                      controller: _confirmPassword,
+                      obscureText: !_showConfirm,
+                      onChanged: signupController.setConfirmPassword,
+                      decoration: _decoration('Confirm Password').copyWith(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _showConfirm
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          onPressed: () =>
+                              setState(() => _showConfirm = !_showConfirm),
+                        ),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Required';
+                        if (v != _password.text)
+                          return 'Passwords do not match';
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Create Account CTA
                   SizedBox(
                     width: double.infinity,
                     height: 48,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4C5CFF),
-                        foregroundColor: Colors.white,
-                        shape:
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
                       onPressed: () {
-
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const InterestScreen(),
-                          ),
-                        );
-
-
+                        if (_formKey.currentState!.validate()) {
+                          signupController.signup(
+                            buttonNotifier: signupController.processNotifier,
+                            snackbarNotifier: SnackbarNotifier(
+                              context: context,
+                            ),
+                          );
+                        }
                       },
-                      child: const Text('Create Account',
-                          style: TextStyle(fontWeight: FontWeight.w700)),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-
-
-                  Center(
-                    child: Text.rich(
-                      TextSpan(
-                        text: 'Already have an account? ',
-                        style: caption,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 4,
                         children: [
-                          TextSpan(
-                            text: 'Sign in',
-                            style: const TextStyle(
-                              color: Color(0xFF4C5CFF),
+                          const Text(
+                            'Create Account',
+                            style: TextStyle(
                               fontWeight: FontWeight.w700,
-                              decoration: TextDecoration.underline,
+                              color: Colors.white,
                             ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (_) => const SignInScreen()),
-                                );
-                              },
+                          ),
+                          RIcon(
+                            key: UniqueKey(),
+                            processStatusNotifier:
+                                signupController.processNotifier,
+                            iconWidget: Container(),
+                            loadingStateWidget: FittedBox(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
-
                   const SizedBox(height: 12),
 
-                  // Terms
-                  Center(
-                    child: Text.rich(
-                      TextSpan(
-                        text: 'By continuing, you agree to SPEET’s ',
-                        style: caption,
-                        children: const [
-                          TextSpan(
-                            text: 'Terms of Service',
-                            style: TextStyle(
-                              color: Color(0xFF4C5CFF),
-                              fontWeight: FontWeight.w700,
-                              decoration: TextDecoration.underline,
-                            ),
+                  Text.rich(
+                    TextSpan(
+                      text: 'Already have an account? ',
+                      style: caption,
+                      children: [
+                        TextSpan(
+                          text: 'Sign in',
+                          style: const TextStyle(
+                            color: Color(0xFF4C5CFF),
+                            fontWeight: FontWeight.w700,
+                            decoration: TextDecoration.underline,
                           ),
-                          TextSpan(text: ' and '),
-                          TextSpan(
-                            text: 'Privacy Policy',
-                            style: TextStyle(
-                              color: Color(0xFF4C5CFF),
-                              fontWeight: FontWeight.w700,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                          TextSpan(text: '.'),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => Navigator.pushNamed(context, RouteNames.login),
+                        ),
+                      ],
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 18),
                 ],
@@ -448,9 +610,10 @@ class _SignupScreen extends State<SignupScreen> {
   }
 }
 
-// --- Bio section -------------------------------------------------------------
+/* ---------- Helpers (included so _Labeled is available) ---------- */
+
 class _BioSection extends StatefulWidget {
-  const _BioSection({this.controller});
+  const _BioSection(this.controller);
   final TextEditingController? controller;
 
   @override
@@ -459,7 +622,6 @@ class _BioSection extends StatefulWidget {
 
 class _BioSectionState extends State<_BioSection> {
   static const _maxChars = 500;
-
 
   late final TextEditingController _ctl =
       widget.controller ?? TextEditingController();
@@ -478,32 +640,8 @@ class _BioSectionState extends State<_BioSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Title + counter (top-right)
-        Row(
-          children: [
-
-
-
-            // const Spacer(),
-            // ValueListenableBuilder<TextEditingValue>(
-            //   valueListenable: _ctl,
-            //   builder: (_, v, __) {
-            //     final n = v.text.characters.length;
-            //     return Text(
-            //       '$n/$_maxChars',
-            //       style: const TextStyle(
-            //         fontFamily: 'Poppins',
-            //         fontSize: 12,
-            //         color: Color(0xFF6B7280),
-            //       ),
-            //     );
-            //   },
-            // ),
-          ],
-        ),
         const SizedBox(height: 8),
-
-
+        // This Expanded only works when parent gives bounded height (as in original usage).
         Expanded(
           child: TextField(
             controller: _ctl,
@@ -511,59 +649,57 @@ class _BioSectionState extends State<_BioSection> {
             textInputAction: TextInputAction.newline,
             maxLength: _maxChars,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            buildCounter: (_, {required int currentLength, required bool isFocused, int? maxLength}) => null,
-
-            // 👇 make the content (and hint) stick to the top-left
+            buildCounter:
+                (
+                  BuildContext _, {
+                  required int currentLength,
+                  required bool isFocused,
+                  int? maxLength,
+                }) => null,
             textAlignVertical: TextAlignVertical.top,
             expands: true,
             minLines: null,
             maxLines: null,
-
             style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               color: baseBlack,
               height: 1.4,
             ),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Write something about yourself',
-              hintStyle: const TextStyle(
+              hintStyle: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 color: Color(0xFF9CA3AF),
               ),
               isDense: true,
-              // extra top padding so text doesn’t collide with the border
-              contentPadding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
+              contentPadding: EdgeInsets.fromLTRB(12, 14, 12, 12),
               filled: true,
               fillColor: Colors.white,
-              enabledBorder: const OutlineInputBorder(
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(12)),
                 borderSide: BorderSide(color: neutral300, width: 1),
               ),
-              focusedBorder: const OutlineInputBorder(
+              focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(12)),
                 borderSide: BorderSide(width: 1.5),
               ),
             ),
           ),
         ),
-
-
         const SizedBox(height: 8),
-
-
       ],
     );
   }
 }
 
-
-/* ---------- UI helpers ---------- */
-
 class _Labeled extends StatelessWidget {
-  const _Labeled({required this.label, required this.child, this.labelTrailing});
-
+  const _Labeled({
+    required this.label,
+    required this.child,
+    this.labelTrailing,
+  });
   final String label;
   final Widget child;
   final Widget? labelTrailing;
@@ -575,9 +711,10 @@ class _Labeled extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(label,
-                style:
-                const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+            ),
             const Spacer(),
             if (labelTrailing != null) labelTrailing!,
           ],
@@ -596,7 +733,6 @@ class _Dropdown<T> extends StatelessWidget {
     required this.onChanged,
     required this.hint,
   });
-
   final T? value;
   final List<String> items;
   final ValueChanged<T?> onChanged;
@@ -615,7 +751,10 @@ class _Dropdown<T> extends StatelessWidget {
         hintText: hint,
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 12,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: _SignupScreen._borderColor),
@@ -630,79 +769,31 @@ class _Dropdown<T> extends StatelessWidget {
   }
 }
 
+// class _GradientText extends StatelessWidget {
+//   const _GradientText(
+//     this.text, {
+//     required this.gradient,
+//     this.size = 24,
+//     this.weight = FontWeight.w900,
+//   });
+//   final String text;
+//   final Gradient gradient;
+//   final double size;
+//   final FontWeight weight;
 
-
-class _RulesBox extends StatelessWidget {
-  const _RulesBox({required this.checks});
-  final Map<String, bool> checks;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE6E6E9)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: checks.entries.map((e) {
-          final text  = e.key;
-          final valid = e.value;
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 3),
-            child: Row(
-              children: [
-                Icon(
-                  valid ? Icons.check_circle : Icons.radio_button_unchecked,
-                  size: 16,
-                  color: valid ? Colors.green : Colors.black45,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    text,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: valid ? Colors.green : Colors.black87,
-                      fontWeight: valid ? FontWeight.w600 : FontWeight.normal,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
-
-
-class _GradientText extends StatelessWidget {
-  const _GradientText(
-      this.text, {
-        required this.gradient,
-        this.size = 24,
-        this.weight = FontWeight.w900,
-      });
-
-  final String text;
-  final Gradient gradient;
-  final double size;
-  final FontWeight weight;
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (rect) => gradient.createShader(rect),
-      blendMode: BlendMode.srcIn,
-      child: Text(
-        text,
-        style: TextStyle(fontSize: size, fontWeight: weight, letterSpacing: 1.1),
-      ),
-    );
-  }
-}
-
+//   @override
+//   Widget build(BuildContext context) {
+//     return ShaderMask(
+//       shaderCallback: (rect) => gradient.createShader(rect),
+//       blendMode: BlendMode.srcIn,
+//       child: Text(
+//         text,
+//         style: TextStyle(
+//           fontSize: size,
+//           fontWeight: weight,
+//           letterSpacing: 1.1,
+//         ),
+//       ),
+//     );
+//   }
+// }

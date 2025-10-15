@@ -2,7 +2,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'onboarding_screen.dart'; // make sure this path matches your file
+import 'onboarding_screen.dart';
 
 class SpeetScreen extends StatefulWidget {
   const SpeetScreen({super.key});
@@ -24,7 +24,7 @@ class _SpeetScreenState extends State<SpeetScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const OnBoardingScreen()),
+        MaterialPageRoute(builder: (_) => OnBoardingScreen()),
       );
     });
   }

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/profile_screen.dart';
 import '../core/theme/app_colors.dart';
 import 'badges/presentation/screen/badges_screen.dart';
 import 'home/presentation/screen/home_screen.dart';
 import 'inbox/presentation/screen/message_screen.dart';
 
-class BottomNavExample extends StatefulWidget {
-  const BottomNavExample({super.key});
+class AppGround extends StatefulWidget {
+  const AppGround({super.key});
 
   @override
-  State<BottomNavExample> createState() => _BottomNavExampleState();
+  State<AppGround> createState() => _AppGroundState();
 }
 
-class _BottomNavExampleState extends State<BottomNavExample> {
+class _AppGroundState extends State<AppGround> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [

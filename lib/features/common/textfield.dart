@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
 
 import '../../../../core/theme/app_colors.dart';
+
 class LabeledDropdown extends StatelessWidget {
   final String? title;
   final String hintText;
@@ -76,18 +77,22 @@ class LabeledDropdown extends StatelessWidget {
             height: height,
             child: DropdownButtonFormField<String>(
               value: value,
+              isExpanded: true,
               style: TextStyle(
                 fontSize: itemTextSize,
                 fontWeight: itemTextWeight,
                 color: itemTextColor,
               ),
+              
               decoration: InputDecoration(
                 hintText: hintText,
                 hintStyle: TextStyle(
                   fontSize: hintTextSize,
                   color: hintTextColor,
                   fontWeight: hintTextWeight,
+                  overflow: TextOverflow.ellipsis,
                 ),
+                
                 filled: true,
                 fillColor: backgroundColor,
                 contentPadding: EdgeInsets.symmetric(
@@ -107,17 +112,21 @@ class LabeledDropdown extends StatelessWidget {
                 ),
               ),
               items: items
-                  .map((e) => DropdownMenuItem(
-                        value: e,
-                        child: Text(
-                          e,
-                          style: TextStyle(
-                            fontSize: itemTextSize,
-                            fontWeight: itemTextWeight,
-                            color: itemTextColor,
-                          ),
+                  .map(
+                    (e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(
+                        e,
+                        style: TextStyle(
+                          fontSize: itemTextSize,
+                          fontWeight: itemTextWeight,
+                          color: itemTextColor,
                         ),
-                      ))
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  )
                   .toList(),
               onChanged: onChanged,
             ),
@@ -127,12 +136,6 @@ class LabeledDropdown extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
 
 class LabeledTextField extends StatefulWidget {
   final String? title;
@@ -225,7 +228,10 @@ class _LabeledTextFieldState extends State<LabeledTextField> {
             obscureText: widget.isPassword ? _obscureText : false,
             validator: widget.validator,
             onChanged: widget.onChanged,
-            style: TextStyle(fontSize: widget.textSize, color: widget.textColor),
+            style: TextStyle(
+              fontSize: widget.textSize,
+              color: widget.textColor,
+            ),
             decoration: InputDecoration(
               hintText: widget.hintText,
               hintStyle: TextStyle(
@@ -250,8 +256,10 @@ class _LabeledTextFieldState extends State<LabeledTextField> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(widget.borderRadius),
-                borderSide:
-                    BorderSide(color: widget.focusedBorderColor, width: 2),
+                borderSide: BorderSide(
+                  color: widget.focusedBorderColor,
+                  width: 2,
+                ),
               ),
 
               // 👇 Prefix Icon
@@ -270,9 +278,7 @@ class _LabeledTextFieldState extends State<LabeledTextField> {
               suffixIcon: widget.isPassword
                   ? IconButton(
                       icon: Icon(
-                        _obscureText
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                        _obscureText ? Icons.visibility_off : Icons.visibility,
                         color: Colors.grey,
                       ),
                       onPressed: () {
@@ -289,8 +295,6 @@ class _LabeledTextFieldState extends State<LabeledTextField> {
     );
   }
 }
-
-
 
 // example of uses
 

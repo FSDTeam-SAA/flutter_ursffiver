@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
-
 import '../theme/app_colors.dart';
 
 extension ButtonStyleExtensions on BuildContext {
@@ -41,7 +40,9 @@ extension ButtonStyleExtensions on BuildContext {
                 children: [
                   Text(
                     text,
-                    style: AppText.lgMedium_18_500.copyWith(color: Colors.white),
+                    style: AppText.lgMedium_18_500.copyWith(
+                      color: AppColors.white,
+                    ),
                   ),
                   if (icon != null) ...[
                     SizedBox(width: 8),

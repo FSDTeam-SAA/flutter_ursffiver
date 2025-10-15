@@ -1,5 +1,6 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
@@ -57,10 +58,11 @@ class ChatScreen extends StatelessWidget {
             ),
             onSelected: (value) {
               if (value == "extend") {
+                // TODO: handle extend
               } else if (value == "badge") {
                 showModalBottomSheet(
                   context: context,
-                  isScrollControlled: true, // allows custom height
+                  isScrollControlled: true,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(20),
@@ -68,12 +70,10 @@ class ChatScreen extends StatelessWidget {
                   ),
                   builder: (context) => SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
-                    child: AllBadgesWidget(),
+                    child: const AllBadgesWidget(),
                   ),
                 );
-                // TODO: handle award badge
               } else if (value == "location") {
-                // TODO: handle share location
               }
             },
 

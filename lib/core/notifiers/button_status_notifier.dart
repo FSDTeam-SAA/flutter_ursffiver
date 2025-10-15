@@ -32,7 +32,7 @@ class SuccessStatus extends ButtonStatus {
 
 class ProcessStatusNotifier extends ChangeNotifier{
 
-  /// By default the button status is set to DisabledStatus
+  /// By default the button status is set to DisabledStatus.
   /// If you want to set the initial button status to a different status, pass it in the constructor
   ProcessStatusNotifier({ButtonStatus? initialStatus}) {
     _status = initialStatus ?? DisabledStatus();

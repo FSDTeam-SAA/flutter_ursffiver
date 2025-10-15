@@ -1,10 +1,11 @@
 // on_boarding_screen.dart
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
 
+import '../../../../main.dart';
 import '../../../common/app_logo.dart';
 
 class OnBoardingScreen extends StatelessWidget {
@@ -48,7 +49,7 @@ class OnBoardingScreen extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 24,
-                            fontWeight: FontWeight.w600, // SemiBold
+                            fontWeight: FontWeight.w700, // SemiBold
                             height: 1.2, // 120%
                             letterSpacing: 0.0,
                             color: Color(0xFF030712), // base/black
@@ -56,12 +57,11 @@ class OnBoardingScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         // const _BrandWordWithUnderline(text: 'SPEET'),
-                        const AppLogo(height: 90, width: 50),
+                        const AppLogo(height: 120, width: 80),
                       ],
                     ),
                   ),
 
-                  const SizedBox(height: 8),
                   Text(
                     "YoUrs truly local",
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -70,8 +70,9 @@ class OnBoardingScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Spontaneously and on the go, transform digital connections into real-life meetups with nearby people who share your interests — within minutes.',
-                    style: Theme.of(context).textTheme.bodySmall,
+                    'Spontaneously and on the spot, transform digital connections into real-life meetups with nearby people who share your interests - all within minutes.',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
 
@@ -85,28 +86,28 @@ class OnBoardingScreen extends StatelessWidget {
                           subtitle:
                               'Break free from digital-only interaction and meet nearby people face-to-face who share your interests and passions.',
                         ),
-                        Divider(height: 24),
+
                         _FeatureTile(
                           icon: Icons.place_outlined,
                           title: 'Location-Based Matching',
                           subtitle:
                               'Discover people nearby, from a few feet away to a few miles around you.',
                         ),
-                        Divider(height: 24),
+
                         _FeatureTile(
                           icon: Icons.shield_outlined,
                           title: 'Verified Users',
                           subtitle:
                               'Choose to interact with unverified or verified users for enhanced safety.',
                         ),
-                        Divider(height: 24),
+
                         _FeatureTile(
                           icon: Icons.cached_outlined,
                           title: 'Dynamic Availability',
                           subtitle:
                               'Let others know when you’re on or off and set your location range.',
                         ),
-                        Divider(height: 24),
+
                         _FeatureTile(
                           icon: Icons.workspace_premium_outlined,
                           title: 'Social Badges System',
@@ -116,20 +117,21 @@ class OnBoardingScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 50),
 
-                  // Interests section
                   Text(
-                    'Find People Who Share \n     Your Interests',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    'Find People Who Share\nYour Interests',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w800,
                       height: 1.3,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 6),
                   Text(
                     "Don’t see what you’re looking for? You’ll be able to suggest custom interests after signing up!",
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
 
@@ -140,7 +142,7 @@ class OnBoardingScreen extends StatelessWidget {
 
                   // Tab content (fixed height inside scroll view)
                   SizedBox(
-                    height: 260,
+                    height: 300,
                     // width: 117,
                     child: TabBarView(
                       children: [
@@ -174,7 +176,7 @@ class OnBoardingScreen extends StatelessWidget {
                           text:
                               'Sign up as a verified user to express the app’s highest commitment to trust and safety. Your account and identity details are securely verified.',
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         _TrustTile(
                           color: Colors.red,
                           icon: Icons.gpp_bad_outlined,
@@ -200,9 +202,8 @@ class OnBoardingScreen extends StatelessWidget {
                   _SecondaryButton(
                     text: 'Create Account',
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const SignInScreen()),
-                      );
+                      //Navigator.pushNamed(context, RouteNames.signup);
+                      navigatorKey.currentState?.pushNamed(RouteNames.signup);
                     },
                   ),
                   const SizedBox(height: 8),
@@ -254,7 +255,6 @@ class _CategoriesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Build a flat list of categories with counts from the map:
     final entries = groups.entries.toList(growable: false);
 
     return _Card(
@@ -357,51 +357,6 @@ Color _accentForIndex(int i) {
     Color(0xFFEF4444), // red
   ];
   return palette[i % palette.length];
-}
-
-class _BrandWordWithUnderline extends StatelessWidget {
-  const _BrandWordWithUnderline({required this.text});
-  final String text;
-
-  static const _textStyle = TextStyle(
-    fontFamily: 'Poppins',
-    fontSize: 26, // slightly larger per comps
-    fontWeight: FontWeight.w900, // extra bold
-    letterSpacing: 1.2,
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    // Measure text so the underline matches width precisely
-    final tp = TextPainter(
-      text: const TextSpan(text: 'SPEET', style: _textStyle),
-      textDirection: TextDirection.ltr,
-    )..layout();
-
-    final w = tp.width;
-
-    return SizedBox(
-      width: w,
-      height: 40, // enough room for text + underline
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          // Gradient text
-          const Positioned.fill(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: _GradientMask(
-                gradient: OnBoardingScreen._brandGradient,
-                child: Text('SPEET', style: _textStyle),
-              ),
-            ),
-          ),
-          // Gradient underline (pill + tiny arrows)
-          Positioned(bottom: 2, child: _GradientUnderline(width: w)),
-        ],
-      ),
-    );
-  }
 }
 
 class _GradientUnderline extends StatelessWidget {
@@ -508,7 +463,7 @@ class _Card extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: const Color(0xFFE6E6E9)),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(8),
         boxShadow: const [
           BoxShadow(
             blurRadius: 10,
@@ -536,35 +491,40 @@ class _FeatureTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _GradientMask(
-          gradient: OnBoardingScreen._brandGradient,
-          child: CircleAvatar(
-            radius: 16,
-            backgroundColor: Colors.transparent,
-            child: Icon(icon, size: 22),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _GradientMask(
+            gradient: OnBoardingScreen._brandGradient,
+            child: CircleAvatar(
+              radius: 16,
+
+              backgroundColor: Colors.transparent,
+
+              child: Center(child: Icon(icon, size: 22)),
+            ),
           ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 14,
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
-            ],
+                const SizedBox(height: 4),
+                Text(subtitle, style: Theme.of(context).textTheme.bodyLarge),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -594,7 +554,7 @@ class _SegmentedTabs extends StatelessWidget {
 
         labelColor: OnBoardingScreen._brandBlue,
         unselectedLabelColor: Color(0xFF6B7280),
-        overlayColor: MaterialStateProperty.all(Colors.transparent),
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
 
         // 👇 remove the black baseline
         dividerColor: Colors.transparent,
