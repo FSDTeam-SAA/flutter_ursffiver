@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/widget/interest_picker_sheet.dart';
 import 'package:flutter_ursffiver/features/common/textfield.dart';
-import 'package:flutter_ursffiver/features/home/presentation/screen/delete.dart';
+import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
+import 'package:flutter_ursffiver/features/home/model/user_model.dart';
+import 'package:flutter_ursffiver/features/home/presentation/widget/user_profile_card.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/invitation_notification_widget.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
@@ -20,6 +24,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final Set<String> _selectedInterests = <String>{};
+  static const _brandGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [Color(0xFF4C5CFF), Color(0xFF8F79FF)],
+  );
+
   bool isAvailable = true;
   String? statusMessage;
   final TextEditingController customMessageController = TextEditingController();
@@ -456,7 +467,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 20),
 
-              /// Nearby Actors
               Row(
                 children: [
                   const Text(
@@ -493,7 +503,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  showModalBottomSheet<Set<String>>(
+                    context: context,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (_) => InterestPickerSheet(
+                      initialSelection: _selectedInterests,
+                      brandGradient: _brandGradient,
+                    ),
+                  );
+                },
                 borderRadius: BorderRadius.circular(8),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -515,21 +536,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
               Gap.h12,
 
-              /// Example user cards
               Column(
                 children: List.generate(
                   30,
                   (index) => Column(
                     children: [
                       UserProfileCard(
-                        name: 'Brooklyn Simmons',
-                        imagePath: 'assets/image/profile.png',
-                        height: '5 ft',
-                        status: 'Available',
-                        //onActivityHi: () {},
-                        //onExperience: () {},
-                        //onChat: () {},
-                        //onInfo: () {},
+                        user: UserModel(
+                          id: 'user_$index',
+                          firstName: 'Brooklyn',
+                          lastName: 'Simmons',
+                          ageRange: '20-30',
+                          bio: 'Lorem ipsum dolor sit amet',
+                          email: 'brooklyn.simmons@example.com',
+                          username: 'brooklyn_s',
+                          gender: 'Female',
+                          dateOfBirth: DateTime(1995, 5, 15),
+                          isEmailVerified: true,
+                          role: 'user',
+                          status: 'Available',
+                          adminVerify: true,
+                          active: true,
+                          address: UseraddressModel(
+                            city: 'New York',
+                            state: 'NY',
+                            country: 'USA',
+                          ),
+                          createdAt: DateTime.now().toIso8601String(),
+                          updatedAt: DateTime.now().toIso8601String(),
+                          imagePath: 'assets/image/profile.png',
+                          interests: [
+                            
+                          ]
+                        ),
                       ),
                       const SizedBox(height: 8),
                       const Divider(color: Colors.grey),
