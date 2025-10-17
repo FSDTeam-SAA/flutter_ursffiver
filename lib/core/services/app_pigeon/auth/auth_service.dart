@@ -39,18 +39,20 @@ class AuthService extends Interceptor {
   /// Attach access token to every request
   @override
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    _authDebugger.dekhao("${options.uri.toString()} ${options.method}");
+    
     final auth = await _authStorage.getCurrentAuth();
     final accessToken = auth?._accessToken;
     if (accessToken != null) {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
+    _authDebugger.dekhao("${options.uri.toString()} ${options.method} token : $accessToken");
     handler.next(options);
   }
   
   /// Catch errors like 401 and retry with new access token if access token expires.
   @override
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+    debugPrint("Error >> ${err.response}");
     // IF TIMEOUT, then possibly internet is down. Hence reject the request.
     final status = (await _authStorage.currentAuthStatus());
     if(err.type == DioExceptionType.connectionTimeout || err.type == DioExceptionType.receiveTimeout) {

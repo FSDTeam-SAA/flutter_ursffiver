@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter_ursffiver/core/common/reactive_buttons/r_icon.dart';
+import 'package:flutter_ursffiver/core/common/widget/reactive_button/r_icon.dart';
 import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/features/auth/controller/signup_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
-import 'package:flutter_ursffiver/features/auth/presentation/widget/interest_picker_sheet.dart';
+import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
 import '../../../common/app_logo.dart';
 import 'login_screen.dart';
 
@@ -96,9 +96,12 @@ class _SignupScreen extends State<SignupScreen> {
       isScrollControlled: true,
       useSafeArea: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => InterestPickerSheet(
-        initialSelection: _selectedInterests,
+      builder: (_) => InterestPickerSheet.forSignUp(
+        interestSelectionCntlr: signupController.interestSelectionCntlr,
         brandGradient: _brandGradient,
+        onConfirm: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }
@@ -768,32 +771,3 @@ class _Dropdown<T> extends StatelessWidget {
     );
   }
 }
-
-// class _GradientText extends StatelessWidget {
-//   const _GradientText(
-//     this.text, {
-//     required this.gradient,
-//     this.size = 24,
-//     this.weight = FontWeight.w900,
-//   });
-//   final String text;
-//   final Gradient gradient;
-//   final double size;
-//   final FontWeight weight;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ShaderMask(
-//       shaderCallback: (rect) => gradient.createShader(rect),
-//       blendMode: BlendMode.srcIn,
-//       child: Text(
-//         text,
-//         style: TextStyle(
-//           fontSize: size,
-//           fontWeight: weight,
-//           letterSpacing: 1.1,
-//         ),
-//       ),
-//     );
-//   }
-// }

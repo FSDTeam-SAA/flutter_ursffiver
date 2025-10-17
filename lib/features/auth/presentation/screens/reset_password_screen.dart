@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ursffiver/core/common/reactive_buttons/save_button.dart';
+import 'package:flutter_ursffiver/core/common/widget/reactive_button/save_button.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/auth/controller/create_new_password_controller.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';

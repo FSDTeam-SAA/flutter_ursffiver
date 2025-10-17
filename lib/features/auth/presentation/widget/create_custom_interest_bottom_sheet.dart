@@ -6,7 +6,7 @@ import '../../../../core/common/controller/select_interest_controller.dart';
 
 void showCreateCustomInterest(
   BuildContext context,
-  SelectInterestController controller,
+  InterestSelectionController controller,
 ) {
   final TextEditingController nameCtl = TextEditingController();
   List<InterestColor> interestColors = InterestColor.values;

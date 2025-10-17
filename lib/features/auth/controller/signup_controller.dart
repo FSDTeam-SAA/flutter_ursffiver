@@ -1,6 +1,8 @@
+import 'package:flutter_ursffiver/core/common/controller/select_interest_controller.dart';
 import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
 import 'package:flutter_ursffiver/features/auth/interface/auth_interface.dart';
+import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/auth/model/signup_model.dart';
 import 'package:flutter_ursffiver/main.dart';
 import 'package:get/get.dart';
@@ -8,10 +10,12 @@ import '../../../core/notifiers/button_status_notifier.dart';
 import '../../../core/notifiers/snackbar_notifier.dart';
 
 class SignUpController extends GetxController {
+  final InterestSelectionController interestSelectionCntlr = InterestSelectionController();
   final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(
     initialStatus: EnabledStatus(),
   );
   SnackbarNotifier? snackbarNotifier;
+  RxList<CreateCustomInterestParam> customInterests = RxList([]);
   SignUpController();
 
   void initSignUpCntlr(SnackbarNotifier? snackbarNotifier) {
@@ -79,6 +83,24 @@ class SignUpController extends GetxController {
     processNotifier.setEnabled();
   }
 
+  void addCustomInterest(String interest, InterestColor color) {
+    customInterests.add(CreateCustomInterestParam(name: interest, color: color));
+  }
+
+  void removeCustomInterestAt(int index) {
+    if(index < customInterests.length && index >= 0) {
+      customInterests.removeAt(index);
+      customInterests.refresh();
+    }
+  }
+
+  void editCustomInterestAt(int index, String? interest, InterestColor? color) {
+    if(index < customInterests.length && index >= 0) {
+      customInterests[index] = customInterests[index].copyWith(name: interest, color: color);
+      customInterests.refresh();
+    }
+  }
+
   // --- Create model ---
   SignupRequestParam get signupModel => SignupRequestParam(
     firstName: firstName.value,
@@ -91,6 +113,8 @@ class SignUpController extends GetxController {
     bio: bio.value,
     password: password.value,
     confirmPassword: confirmPassword.value,
+    interestList: interestSelectionCntlr.selectedInterests.keys.toList(),
+    customInterests: customInterests,
   );
 
   // --- Example signup method ---

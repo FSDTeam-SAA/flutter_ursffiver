@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import '../core/constants/api_endpoints.dart';
 import '../core/constants/route_names.dart';
-import '../features/auth/controller/app_controllers.dart';
+import 'controller/app_global_controllers.dart';
 import '../main.dart';
 
 class AppManager extends GetxController {
