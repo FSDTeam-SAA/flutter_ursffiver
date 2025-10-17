@@ -10,16 +10,14 @@ class UserModel {
   final String email;
   final String username;
   final String gender;
-  final DateTime dateOfBirth;
+  final DateTime? dateOfBirth;
   final bool isEmailVerified;
   final String role;
   final String status;
   final bool adminVerify;
   final List<InterestModel> interests;
   final bool active;
-  final UseraddressModel address;
-  final String createdAt;
-  final String updatedAt;
+  final List<UserAddressModel> address;
   final String? imagePath;
 
   UserModel({
@@ -39,11 +37,32 @@ class UserModel {
     required this.interests,
     required this.active,
     required this.address,
-    required this.createdAt,
-    required this.updatedAt,
     this.imagePath,
   });
 
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      ageRange: json['ageRange'] ?? '',
+      bio: json['bio'] ?? '',
+      email: json['email'] ?? '',
+      username: json['username'] ?? '',
+      gender: json['gender'] ?? '',
+      dateOfBirth: DateTime.tryParse(json['dateOfBirth'] ?? ''),
+      isEmailVerified: json['isEmailVerified'] ?? false,
+      role: json['role'] ?? '',
+      status: json['status'] ?? '',
+      adminVerify: json['adminVerify'] ?? false,
+      interests: (json['interest'] as List<dynamic>)
+          .map((e) => InterestModel.fromJson(e))
+          .toList(),
+      active: json['active'] ?? false,
+      address: [],
+      imagePath: json['imagePath'] as String?,
+    );
+  }
   // factory UserModel.fromJson(Map<String, dynamic> json) {
   //   return UserModel(
   //     id: json['id'],

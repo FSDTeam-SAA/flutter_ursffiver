@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // import 'package:flutter/material.dart';
 
 // class InterestModel {
@@ -109,6 +110,40 @@ enum InterestColor {
   }
 }
 
+class CreateCustomInterestParam {
+  final String name;
+  final InterestColor color;
+
+  CreateCustomInterestParam({
+    required this.name,
+    required this.color,
+  });
+
+  factory CreateCustomInterestParam.fromJson(Map<String, dynamic> json) {
+    return CreateCustomInterestParam(
+      name: json['name'],
+      color: InterestColor.fromString(json['color']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'color': color.name,
+    };
+  }
+
+  CreateCustomInterestParam copyWith({
+    String? name,
+    InterestColor? color,
+  }) {
+    return CreateCustomInterestParam(
+      name: name ?? this.name,
+      color: color ?? this.color,
+    );
+  }
+}
+
 class InterestCategoryModel {
   final String id;
   final String name;
@@ -127,6 +162,18 @@ class InterestCategoryModel {
       interests: json['interests'] == null ? [] : List<InterestModel>.from(
         (json['interests'] as List<dynamic>).map((x) => InterestModel.fromJson(x)),
       ),
+    );
+  }
+
+  InterestCategoryModel copyWith({
+    String? id,
+    String? name,
+    List<InterestModel>? interests,
+  }) {
+    return InterestCategoryModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      interests: interests ?? this.interests,
     );
   }
 }

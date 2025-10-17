@@ -1,10 +1,18 @@
+import 'package:flutter_ursffiver/app/controller/home_controller.dart';
 import 'package:flutter_ursffiver/core/common/controller/interest_fetch_controller.dart';
 import 'package:get/get.dart';
 
+// Why do we need this controller?
+// 
+// >>
+// We Want to have a single place to store all the essential information of the app.
+// 
+// Instead of managing controllers with [GetX] in every feature, we can manage them here.
+// This way we won't be all controllers will be in one place to inspect.
 class AppGlobalControllers extends GetxController {
   final AllInterestFetchController interestController =
       AllInterestFetchController();
-
+  final HomeController homeController = HomeController();
   void beforeAuthInit() {
     interestController.fetchInterests();
 

@@ -1,38 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/features/auth/controller/app_controllers.dart';
+import 'package:flutter_ursffiver/app/controller/app_global_controllers.dart';
 import 'package:flutter_ursffiver/core/common/controller/interest_fetch_controller.dart';
 import 'package:flutter_ursffiver/core/common/controller/select_interest_controller.dart';
-import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
 import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
-import 'create_custom_interest_bottom_sheet.dart';
-import 'select_interest_widget.dart';
+import '../../../features/auth/presentation/widget/create_custom_interest_bottom_sheet.dart';
+import '../../../features/auth/presentation/widget/select_interest_widget.dart';
 
 class InterestPickerSheet extends StatefulWidget {
-  const InterestPickerSheet({
+  const InterestPickerSheet.forSignUp({
     super.key,
-    required this.initialSelection,
+    required this.interestSelectionCntlr,
     required this.brandGradient,
+    this.forSignUp = true,
+    this.confirmButtonText = 'Save interests',
+    required this.onConfirm
   });
 
-  final Set<String> initialSelection;
+  const InterestPickerSheet.forFiltering({
+    super.key,
+    required this.interestSelectionCntlr,
+    required this.brandGradient,
+    this.forSignUp = false,
+    this.confirmButtonText = 'Find people',
+    required this.onConfirm
+  });
+
+  final bool forSignUp;
+  final InterestSelectionController interestSelectionCntlr;
   final Gradient brandGradient;
+  final String confirmButtonText;
+  final VoidCallback onConfirm;
 
   @override
   State<InterestPickerSheet> createState() => _InterestPickerSheetState();
 }
 
 class _InterestPickerSheetState extends State<InterestPickerSheet> {
-  late final AllInterestFetchController allInterestFetchController;
-  final SelectInterestController selectInterestController =
-      SelectInterestController();
+  late final InterestSelectionController selectInterestController;
+  final Debouncer _debouncer = Debouncer(delay: Duration(milliseconds: 400));
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    allInterestFetchController =
-        Get.find<AppGlobalControllers>().interestController;
+    selectInterestController = widget.interestSelectionCntlr;
   }
 
   @override
@@ -89,8 +102,10 @@ class _InterestPickerSheetState extends State<InterestPickerSheet> {
                     ),
                     const SizedBox(height: 12),
                     TextField(
-                      onChanged: (value) =>
-                          selectInterestController.searchQuery.value = value,
+                      onChanged: (value) {
+                        selectInterestController.search(value);
+                      },
+                          
                       decoration: InputDecoration(
                         hintText: "Search interests",
                         filled: true,
@@ -121,7 +136,7 @@ class _InterestPickerSheetState extends State<InterestPickerSheet> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    GestureDetector(
+                    if(widget.forSignUp) GestureDetector(
                       onTap: () => showCreateCustomInterest(
                         context,
                         selectInterestController,
@@ -146,42 +161,47 @@ class _InterestPickerSheetState extends State<InterestPickerSheet> {
                 child: ObxValue(
                   (data) => ListView.builder(
                     controller: scrollCtrl,
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
                     itemCount: data.length,
                     itemBuilder: (_, idx) {
                       final interestCategory =
                           data[idx];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 16,
-                        children: [
-                          Text(
-                            interestCategory.name,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w800),
-                          ),
-
-                          ListView.builder(
-                            itemCount: interestCategory.interests.length,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: const EdgeInsets.only(top: 8),
-                            itemBuilder: (_, idx) {
-                              final interest = interestCategory.interests[idx];
-                              return SelectInterestTile(
-                                interest: interest,
-                                isSelected: widget.initialSelection.contains(
-                                  interest.id,
-                                ),
-                                onTap: () {
-                                  selectInterestController.toggleSelectInterest(
-                                    interest,
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: 2,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text(
+                                interestCategory.name,
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.w800),
+                              ),
+                            ),
+                        
+                            ListView.builder(
+                              itemCount: interestCategory.interests.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.only(top: 8),
+                              itemBuilder: (_, idx) {
+                                final interest = interestCategory.interests[idx];
+                                return SelectInterestTile(
+                                  interest: interest,
+                                  isSelected: widget.interestSelectionCntlr.selectedInterests.containsKey(
+                                    interest.id,
+                                  ),
+                                  onTap: () {
+                                    selectInterestController.toggleSelectInterest(
+                                      interest,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -223,9 +243,10 @@ class _InterestPickerSheetState extends State<InterestPickerSheet> {
                     const SizedBox(height: 8),
                     SizedBox(
                       height: 48,
-                      child: Obx(
-                        () => ElevatedButton(
-                          onPressed: () {},
+                      child: ElevatedButton(
+                          onPressed: () {
+                            widget.onConfirm();
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF4C5CFF),
                             foregroundColor: Colors.white,
@@ -234,11 +255,10 @@ class _InterestPickerSheetState extends State<InterestPickerSheet> {
                             ),
                           ),
                           child: Text(
-                            "Save interest (${selectInterestController.selectedInterests.length}/15)",
+                            widget.confirmButtonText,
                             style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
                         ),
-                      ),
                     ),
                     Gap.h40,
                   ],

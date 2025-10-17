@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user-profile_screen.dart';
@@ -19,19 +20,21 @@ class UserProfileCard extends StatelessWidget {
       },
       child: Row(
         children: [
-          Container(
-            width: 90,
+          SmartNetworkImage(
+            imageUrl: user.imagePath,
             height: 130,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                image:
-                    (user.imagePath != null &&
-                        user.imagePath!.isNotEmpty &&
-                        user.imagePath!.startsWith('http'))
-                    ? NetworkImage(user.imagePath!) as ImageProvider
-                    : const AssetImage('assets/image/profile.png'),
-                fit: BoxFit.cover,
+            width: 90,
+            errorWidget: Container(
+              height: 130,
+              width: 90,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                Icons.person,
+                size: 50,
+                color: Colors.grey,
               ),
             ),
           ),
