@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _RemoteServer.socketUrl;
+  static const String socketUrl = _LocalHostWifi.socketUrl;
 
-  static const String baseUrl = _RemoteServer.baseUrl;
+  static const String baseUrl = _LocalHostWifi.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -37,7 +37,7 @@ base class ApiEndpoints {
 
   //------------notification----------------
   /// ### get
-  static const String getUserNotifications = _Notification.getUserNotifications;
+  static const String getAllNotifications = _Notification.getAllNotifications;
   /// ### post
   static const String readAllNotifications = _Notification.readAllNotifications;
   /// ### patch
@@ -141,13 +141,14 @@ class _Notification {
   static const String readAllNotifications =
       '$_notificationRoute/read-all';
   static const String markAllAsRead = '$_notificationRoute/mark-all-as-read';
-  static const String getUserNotifications = '$_notificationRoute/user';
+
+  static const String getAllNotifications = '$_notificationRoute/';
 }
 
 class _User {
   static const String _userRoute = '${ApiEndpoints.baseUrl}/user';
   static String getuserbyId(String id) => '$_userRoute/$id';
-  static const String getCurrentProfile = '$_userRoute/profile';
+  static const String getCurrentProfile = '$_userRoute/';
   static const String editProfile = '$_userRoute/';
   static const String uploadProfileAvatar = '$_userRoute/upload-avatar';
   static const String history = '$_userRoute/history';
