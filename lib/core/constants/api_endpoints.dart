@@ -32,9 +32,6 @@ base class ApiEndpoints {
 
 
 
-
-
-
   //------------notification----------------
   /// ### get
   static const String getAllNotifications = _Notification.getAllNotifications;
@@ -58,6 +55,8 @@ base class ApiEndpoints {
   static const String uploadProfileAvatar = _User.uploadProfileAvatar;
   /// ### get
   static const String history = _User.history;
+  /// ### get
+  static const String allUser = _User.allUser;
 
 
   // ---------------------- RIDE -----------------------------
@@ -152,6 +151,7 @@ class _User {
   static const String editProfile = '$_userRoute/';
   static const String uploadProfileAvatar = '$_userRoute/upload-avatar';
   static const String history = '$_userRoute/history';
+  static const String allUser = '$_userRoute/all-user';
 }
 
 

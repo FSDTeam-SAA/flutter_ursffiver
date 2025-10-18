@@ -1,3 +1,5 @@
+import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
+
 class SignupRequestParam {
   final String? firstName;
   final String? lastName;
@@ -9,6 +11,8 @@ class SignupRequestParam {
   final String? bio;
   final String? password;
   final String? confirmPassword;
+  final List<String> interestList;
+  final List<CreateCustomInterestParam> customInterests;
 
   SignupRequestParam({
     required this.firstName,
@@ -21,6 +25,8 @@ class SignupRequestParam {
     required this.bio,
     required this.password,
     required this.confirmPassword,
+    required this.interestList,
+    required this.customInterests,
   });
   Map<String, dynamic> toJson() => {
     'firstName': firstName,
@@ -33,5 +39,7 @@ class SignupRequestParam {
     'bio': bio,
     'password': password,
     'confirmPassword': confirmPassword,
+    'interestList': interestList,
+    'customInterests': customInterests.map((e)=> e.toJson()).toList()
   };
 }
