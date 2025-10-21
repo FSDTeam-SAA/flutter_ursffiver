@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:get/get.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import '../controller/notification_controller.dart';
 import '../model/notification_model.dart';
 import 'package:intl/intl.dart';
 
-class NotificationScreen extends StatelessWidget {
-  NotificationScreen({super.key});
+class NotificationScreen extends StatefulWidget {
+  const NotificationScreen({super.key});
 
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
   final NotificationController controller = Get.put(NotificationController());
 
   String _formatDateTime(DateTime date) {
@@ -29,7 +36,7 @@ class NotificationScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "Notifications",
           style: TextStyle(
             fontSize: 20,
@@ -42,13 +49,12 @@ class NotificationScreen extends StatelessWidget {
             padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: TextButton(
-                //onPressed: controller.readAllNotification,
+                onPressed: controller.readAllNotification,
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
                   padding: EdgeInsets.zero,
                   minimumSize: Size.zero,
                 ),
-                onPressed: () {},
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: const Text(
@@ -69,27 +75,24 @@ class NotificationScreen extends StatelessWidget {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-
         if (controller.notifications.isEmpty) {
           return const Center(child: Text("No notifications found"));
         }
-
         return ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: controller.notifications.length,
           itemBuilder: (context, index) {
-            final data = controller.notifications[index];
-            return NotificationItem(
-              data: data,
-              // onExpandToggle: () => controller.markAsRead(data),
-              // onAccept: () => controller.acceptMessageRequest(data),
-              // onReject: () => controller.rejectMessageRequest(data),
-              timeText: _formatDateTime(data.createdAt),
-              onExpandToggle: () {
-                controller.toggleExpand(index);
-                controller.markAsRead(index);
-              },
-            );
+            return Obx(() {
+              final data = controller.notifications[index];
+              return NotificationItem(
+                data: data,
+                timeText: _formatDateTime(data.createdAt),
+                onExpandToggle: () async {
+                  await controller.markAsRead(index);
+                  controller.toggleExpand(index);
+                },
+              );
+            });
           },
         );
       }),
@@ -121,7 +124,9 @@ class _NotificationItemState extends State<NotificationItem> {
   bool isExpanded = false;
 
   void _handleTap() {
-    setState(() => isExpanded = !isExpanded);
+    setState(() {
+      isExpanded = !isExpanded;
+    });
     widget.onExpandToggle();
   }
 
@@ -129,187 +134,19 @@ class _NotificationItemState extends State<NotificationItem> {
   Widget build(BuildContext context) {
     final data = widget.data;
 
-    if (data.type == "message request") {
-      return Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const CircleAvatar(
-              radius: 20,
-              backgroundImage: AssetImage("assets/images/profilepic.png"),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                  data.title,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                  //overflow: TextOverflow.ellipsis,
-                ),
-                  ],
-                ),
-                Text(
-                  data.message,
-                  style: const TextStyle(fontSize: 13, color: Colors.black54),
-                  maxLines: 2,
-                  //overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-            SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  data.title,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  data.message,
-                  style: const TextStyle(fontSize: 13, color: Colors.black54),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-
-            
-
-            const SizedBox(width: 8),
-
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  icon: const Icon(Icons.close, color: Colors.red, size: 22),
-                  onPressed: widget.onReject,
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  icon: const Icon(Icons.check, color: Colors.green, size: 22),
-                  onPressed: widget.onAccept,
-                ),
-              ],
-            ),
-          ],
-
-        ),
-      );
-
-      // return Container(
-      //   margin: const EdgeInsets.only(bottom: 12),
-      //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      //   decoration: BoxDecoration(
-      //     color: Colors.white,
-      //     borderRadius: BorderRadius.circular(12),
-      //     boxShadow: [
-      //       BoxShadow(
-      //         color: Colors.black.withOpacity(0.05),
-      //         blurRadius: 4,
-      //         offset: const Offset(0, 2),
-      //       ),
-      //     ],
-      //   ),
-      //   child: Row(
-      //     crossAxisAlignment: CrossAxisAlignment.center,
-      //     children: [
-      //       const CircleAvatar(
-      //         radius: 20,
-      //         backgroundImage: AssetImage("assets/images/profilepic.png"),
-      //       ),
-      //       const SizedBox(width: 10),
-      //       Expanded(
-      //         child: Column(
-      //           crossAxisAlignment: CrossAxisAlignment.start,
-      //           children: [
-      //             Row(
-      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //               children: [
-      //                 Expanded(
-      //                   child: Text(
-      //                     data.title,
-      //                     style: const TextStyle(
-      //                       fontWeight: FontWeight.w600,
-      //                       fontSize: 15,
-      //                       color: Colors.black,
-      //                     ),
-      //                     overflow: TextOverflow.ellipsis,
-      //                   ),
-      //                 ),
-      //                 Text(
-      //                   widget.timeText,
-      //                   style: const TextStyle(
-      //                     fontSize: 12,
-      //                     color: Colors.grey,
-      //                   ),
-      //                 ),
-      //               ],
-      //             ),
-      //             const SizedBox(height: 2),
-      //             Text(
-      //               data.message,
-      //               style: const TextStyle(fontSize: 13, color: Colors.black54),
-      //               maxLines: 2,
-      //               overflow: TextOverflow.ellipsis,
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //       const SizedBox(width: 5),
-      //       Row(
-      //         children: [
-      //           IconButton(
-      //             icon: const Icon(Icons.close, color: Colors.red, size: 22),
-      //             onPressed: widget.onReject,
-      //           ),
-      //           IconButton(
-      //             icon: const Icon(Icons.check, color: Colors.green, size: 22),
-      //             onPressed: widget.onAccept,
-      //           ),
-      //         ],
-      //       ),
-      //     ],
-      //   ),
-      // );
-    } else if (data.type == "message") {
+    if (data.type == NotificationType.messageRequest) {
       return GestureDetector(
         onTap: _handleTap,
         child: Container(
           margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: data.isRead ? Colors.white : Colors.blue.shade50,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.grey.shade300,
+              width: 1.5,
+            ),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.1),
@@ -319,57 +156,177 @@ class _NotificationItemState extends State<NotificationItem> {
             ],
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const CircleAvatar(
-                radius: 22,
-                backgroundImage: AssetImage("assets/images/profilepic.png"),
+              Container(
+                height: 45,
+                width: 45,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.grey.shade300, width: 1.5),
+                ),
+                child: ClipOval(
+                  child: SmartNetworkImage(
+                    imageUrl: data.user.imagePath,
+                    height: 45,
+                    width: 45,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
+
               const SizedBox(width: 12),
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          data.type.toUpperCase(),
+                          data.user.fullname,
+                          maxLines: 5,
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: 15,
                             fontWeight: FontWeight.w600,
+                            color: Colors.black,
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
+                        SizedBox(width: 20),
                         Text(
-                          "${data.createdAt.hour}:${data.createdAt.minute.toString().padLeft(2, '0')}",
+                          timeago.format(data.createdAt),
                           style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      data.message,
+                      data.title,
                       maxLines: isExpanded ? null : 1,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
                       overflow: isExpanded
                           ? TextOverflow.visible
                           : TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Colors.black87,
-                      ),
                     ),
                   ],
                 ),
               ),
-              IconButton(
-                icon: Icon(
-                  isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                  color: Colors.blue,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(Icons.close, color: Colors.red, size: 22),
+                    onPressed: widget.onReject,
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(
+                      Icons.check,
+                      color: Colors.green,
+                      size: 22,
+                    ),
+                    onPressed: widget.onAccept,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    } else if (data.type == NotificationType.accepted) {
+      return GestureDetector(
+        onTap: _handleTap,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: data.isRead ? Colors.white : Colors.blue.shade50,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade300, width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 45,
+                width: 45,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.grey.shade300, width: 1.5),
                 ),
-                onPressed: _handleTap,
+                child: ClipOval(
+                  child: SmartNetworkImage(
+                    imageUrl: data.user.imagePath,
+                    height: 45,
+                    width: 45,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          // data.title,
+                          data.user.fullname,
+                          maxLines: 5,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(width: 20),
+                        Text(
+                          timeago.format(data.createdAt),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      data.title,
+                      maxLines: isExpanded ? null : 1,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
+                      overflow: isExpanded
+                          ? TextOverflow.visible
+                          : TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -428,14 +385,6 @@ class _NotificationItemState extends State<NotificationItem> {
       //               ],
       //             ),
       //             const SizedBox(height: 4),
-      //             // Text(
-      //             //   data.message,
-      //             //   maxLines: isExpanded ? null : 1,
-      //             //   overflow: isExpanded
-      //             //       ? TextOverflow.visible
-      //             //       : TextOverflow.ellipsis,
-      //             //   style: const TextStyle(fontSize: 13, color: Colors.black87),
-      //             // ),
       //           ],
       //         ),
       //       ),

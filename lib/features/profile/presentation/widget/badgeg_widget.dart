@@ -109,7 +109,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/features/profile/presentation/model/badge_model.dart';
+import 'package:flutter_ursffiver/features/profile/model/badge_model.dart';
 
 // Single Badge widget
 class BadgeWidget extends StatelessWidget {

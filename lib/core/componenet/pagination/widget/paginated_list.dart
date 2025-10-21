@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../pagination.dart';
@@ -6,18 +5,25 @@ import '../pagination.dart';
 class PaginatedListWidget<T> extends StatefulWidget {
   final Rx<Pagination<T>> pagination;
   final Widget skeleton;
+
   /// How many skeletons to show, when there is no data
   final int skeletonCount;
   final VoidCallback onRefresh;
   final Widget Function(int index, T data) builder;
-  const PaginatedListWidget({super.key, required this.pagination, required this.onRefresh, required this.skeleton, required this.skeletonCount, required this.builder});
+  const PaginatedListWidget({
+    super.key,
+    required this.pagination,
+    required this.onRefresh,
+    required this.skeleton,
+    required this.skeletonCount,
+    required this.builder,
+  });
 
   @override
   State<PaginatedListWidget<T>> createState() => _PaginatedListWidgetState<T>();
 }
 
 class _PaginatedListWidgetState<T> extends State<PaginatedListWidget<T>> {
-
   @override
   void initState() {
     super.initState();
@@ -30,44 +36,42 @@ class _PaginatedListWidgetState<T> extends State<PaginatedListWidget<T>> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: () async{
+        onRefresh: () async {
           widget.onRefresh();
         },
-        child: ObxValue(
-          (data) {
-            return ListView.builder(
-              itemCount: data.value.data.length + 1,
-              itemBuilder: (context, index) {
-                debugPrint("Index: $index, length: ${data.value.data.length}, data type ${data.value.runtimeType}");
-                if(index == data.value.data.length) {
-                  if((data.value is LoadingMorePage<T> || data.value is RefreshingPage<T>)) {
-                    return Column(
-                      children: [
-                        ...List.generate(widget.skeletonCount, (_)=>
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: widget.skeleton
-                          )
-                        )
-                      ],
-                    );
-                  }else {
-                    return Container();
-                  }
-
+        child: ObxValue((data) {
+          return ListView.builder(
+            itemCount: data.value.data.length + 1,
+            itemBuilder: (context, index) {
+              debugPrint(
+                "Index: $index, length: ${data.value.data.length}, data type ${data.value.runtimeType}",
+              );
+              if (index == data.value.data.length) {
+                if ((data.value is LoadingMorePage<T> ||
+                    data.value is RefreshingPage<T>)) {
+                  return Column(
+                    children: [
+                      ...List.generate(
+                        widget.skeletonCount,
+                        (_) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: widget.skeleton,
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Container();
                 }
-                final element = data.value.data[index];
-                return widget.builder(index, element);
-              },
-            );
-          },
-          widget.pagination
-        ),
+              }
+              final element = data.value.data[index];
+              return widget.builder(index, element);
+            },
+          );
+        }, widget.pagination),
       ),
-    
     );
   }
 }

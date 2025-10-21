@@ -28,41 +28,62 @@ class NotificationController extends GetxController {
 
   Future<bool> markAsRead(int index) async {
     if (index < 0 || index >= notifications.length) return false;
-
     final old = notifications[index];
     if (old.isRead) return false;
-
-    final result = await _notificationService.singleNotificationRead(old.id);
-
-    return result.fold((error) => false, (success) {
-      notifications[index] = old.copyWith(
-        isRead: true,
-        updatedAt: DateTime.now(),
-      );
-      notifications.refresh();
-      return true;
-    });
+    final lr = await Get.find()<NotificationInterface>().sing(
+      old.id,
+    );
+    return lr.fold(
+      (error) {
+        return false;
+      },
+      (success) {
+        notifications[index] = old.copyWith(isRead: true);
+        notifications.refresh();
+        update();
+        return true;
+      },
+    );
   }
 
-  // Future<void> readAllNotification() async {
-  //   final result = await _notificationService.allNotificationRead();
+  Future<void> readAllNotification() async {
+    final lr = await Get.find<NotificationInterface>().getAllNotification();
 
-  //   result.fold(
-  //     (error) => debugPrint("Error reading all notifications: $error"),
-  //     (success) {
-  //       for (var i = 0; i < notifications.length; i++) {
-  //         final n = notifications[i];
-  //         if (!n.isRead) {
-  //           notifications[i] = n.copyWith(
-  //             isRead: true,
-  //             updatedAt: DateTime.now(),
-  //           );
-  //         }
-  //       }
-  //       notifications.refresh();
-  //     },
-  //   );
-  // }
+    lr.fold(
+      (error) {
+        debugPrint("error >> ${error.toString()}");
+      },
+      (success) {
+        for (var i = 0; i < notifications.length; i++) {
+          final n = notifications[i];
+          if (!n.isRead) {
+            notifications[i] = n.copyWith(
+              isRead: true,
+              updatedAt: DateTime.now(),
+            );
+          }
+        }
+        notifications.refresh();
+        update();
+      },
+    );
+
+    // result.fold(
+    //   (error) => debugPrint("Error reading all notifications: $error"),
+    //   (success) {
+    //     for (var i = 0; i < notifications.length; i++) {
+    //       final n = notifications[i];
+    //       if (!n.isRead) {
+    //         notifications[i] = n.copyWith(
+    //           isRead: true,
+    //           updatedAt: DateTime.now(),
+    //         );
+    //       }
+    //     }
+    //     notifications.refresh();
+    //   },
+    // );
+  }
 
   Future<void> getAllNotification() async {
     processStatusNotifier.setLoading();

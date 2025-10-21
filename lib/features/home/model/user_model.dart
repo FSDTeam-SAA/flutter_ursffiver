@@ -5,6 +5,7 @@ class UserModel {
   final String id;
   final String firstName;
   final String lastName;
+  final String fullname;
   final String ageRange;
   final String bio;
   final String email;
@@ -24,6 +25,7 @@ class UserModel {
     required this.id,
     required this.firstName,
     required this.lastName,
+    required this.fullname,
     required this.ageRange,
     required this.bio,
     required this.email,
@@ -45,44 +47,50 @@ class UserModel {
       id: json['_id'] ?? '',
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
+      fullname: json['fullname'] ?? '',
       ageRange: json['ageRange'] ?? '',
       bio: json['bio'] ?? '',
       email: json['email'] ?? '',
       username: json['username'] ?? '',
       gender: json['gender'] ?? '',
-      dateOfBirth: DateTime.tryParse(json['dateOfBirth'] ?? ''),
+      dateOfBirth: json['dateOfBirth'] == null
+          ? null
+          : DateTime.tryParse(json['dateOfBirth'] ?? ''),
       isEmailVerified: json['isEmailVerified'] ?? false,
       role: json['role'] ?? '',
       status: json['status'] ?? '',
       adminVerify: json['adminVerify'] ?? false,
-      interests: (json['interest'] as List<dynamic>)
-          .map((e) => InterestModel.fromJson(e))
-          .toList(),
+      interests: json['interest'] == null
+          ? []
+          : (json['interest'] as List<dynamic>)
+                .map((e) => InterestModel.fromJson(e))
+                .toList(),
       active: json['active'] ?? false,
       address: [],
-      imagePath: json['imagePath'] as String?,
+      imagePath: json['profileImage'] as String?,
     );
   }
-  // factory UserModel.fromJson(Map<String, dynamic> json) {
-  //   return UserModel(
-  //     id: json['id'],
-  //     firstName: json['firstName'],
-  //     lastName: json['lastName'],
-  //     ageRange: json['ageRange'],
-  //     bio: json['bio'],
-  //     email: json['email'],
-  //     username: json['username'],
-  //     gender: json['gender'],
-  //     dateOfBirth: DateTime.parse(json['dateOfBirth']),
-  //     isEmailVerified: json['isEmailVerified'],
-  //     role: json['role'],
-  //     status: json['status'],
-  //     adminVerify: json['adminVerify'],
-  //     interest: InterestModel.fromJson(json['interest']),
-  //     active: json['active'],
-  //     address: UseraddressModel.fromJson(json['address']),
-  //     createdAt: json['createdAt'],
-  //     updatedAt: json['updatedAt'],
-  //   );
-  // }
+
+  factory UserModel.fromJsonForNotification(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      fullname: json['fullName'],
+      ageRange: json['ageRange'] ?? '',
+      bio: json['bio'] ?? '',
+      email: json['email'] ?? '',
+      username: json['username'] ?? '',
+      gender: json['gender'] ?? '',
+      dateOfBirth: null,
+      isEmailVerified: json['isEmailVerified'] ?? false,
+      role: json['role'] ?? '',
+      status: json['status'] ?? '',
+      adminVerify: json['adminVerify'] ?? false,
+      interests: [],
+      active: json['active'] ?? false,
+      address: [],
+      imagePath: json['profileImage'] as String?,
+    );
+  }
 }

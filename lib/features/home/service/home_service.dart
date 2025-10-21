@@ -8,16 +8,18 @@ import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
 
 import '../model/get_user_suggestion_req_param.dart';
 
- base class HomeService extends HomeInterface{
+base class HomeService extends HomeInterface {
   HomeService({required this.appPigeon});
 
   final AppPigeon appPigeon;
 
   @override
-  FutureRequest<Success<List<UserModel>>> getSuggestions(GetUserSuggestionReqParam param) async{
+  FutureRequest<Success<List<UserModel>>> getSuggestions(
+    GetUserSuggestionReqParam param,
+  ) async {
     debugPrint("param: ${param.toMap()}");
     return await asyncTryCatch(
-      tryFunc: () async{
+      tryFunc: () async {
         final res = await appPigeon.get(
           ApiEndpoints.allUser,
           //query: param.toMap().isEmpty ? null : param.toMap(),
@@ -26,11 +28,11 @@ import '../model/get_user_suggestion_req_param.dart';
         debugPrint(res.toString());
         return Success(
           message: extractSuccessMessage(res),
-          data: (extractBodyData(res)["users"] as List<dynamic>).map<UserModel>((e) => UserModel.fromJson(e)).toList(),
+          data: (extractBodyData(res)["users"] as List<dynamic>)
+              .map<UserModel>((e) => UserModel.fromJson(e))
+              .toList(),
         );
       },
     );
   }
-
-  
 }

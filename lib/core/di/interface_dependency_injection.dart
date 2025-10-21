@@ -4,6 +4,8 @@ import 'package:flutter_ursffiver/features/auth/service/interest_interface_impl.
 import 'package:flutter_ursffiver/features/notification/interface/notification_interface.dart';
 import 'package:flutter_ursffiver/features/notification/service/notification_interface_impl.dart';
 import 'package:flutter_ursffiver/features/home/service/home_service.dart';
+import 'package:flutter_ursffiver/features/profile/interface/profile_interface.dart';
+import 'package:flutter_ursffiver/features/profile/services/profile_interface_impl.dart';
 import 'package:get/get.dart';
 import '../../features/auth/service/auth_interface_impl.dart';
 import '../../features/home/service/home_interface.dart';
@@ -14,5 +16,7 @@ void initInterfaces() {
   Get.lazyPut<InterestInterface>(()=> InterestInterfaceImpl(appPigeon: Get.find()));
   Get.lazyPut<NotificationInterface>(()=> NotificationInterfaceImpl(appPigeon: Get.find()));
   Get.lazyPut<HomeInterface>(()=> HomeService(appPigeon: Get.find()));
+  Get.lazyPut<ProfileInterface>(() => ProfileInterfaceImpl(appPigeon: Get.find()));
+
   
 }

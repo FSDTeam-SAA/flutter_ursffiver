@@ -22,8 +22,11 @@ class AppManager extends GetxController {
 
   // listen to auth change
   void _init() {
-    Get.put<AppGlobalControllers>(AppGlobalControllers()).beforeAuthInit();
-    
+    final appGlobalControllers = Get.lazyPut<AppGlobalControllers>(
+     ()=> AppGlobalControllers(),
+    );
+    Get.find<AppGlobalControllers>().beforeAuthInit();
+
     final initialAuthStatus = Get.find<AppPigeon>().currentAuth();
     _decideRoute(authStatus);
     // Start listening to the auth status changes
@@ -62,7 +65,12 @@ class AppManager extends GetxController {
   }
 
   // initiate controllers on auth change[Authenticated]
-  _initializeControllers() {
-    Get.find<AppGlobalControllers>().afterAuthInit();
+  Future<void> _initializeControllers() async {
+    if (Get.isRegistered<AppGlobalControllers>()) {
+      await Get.delete<AppGlobalControllers>();
+    }
+
+    Get.put<AppGlobalControllers>(AppGlobalControllers()).afterAuthInit();
+
   }
 }

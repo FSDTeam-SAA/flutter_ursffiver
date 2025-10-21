@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _LocalHostWifi.socketUrl;
+  static const String socketUrl = _RemoteServer.socketUrl;
 
-  static const String baseUrl = _LocalHostWifi.baseUrl;
+  static const String baseUrl = _RemoteServer.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -118,7 +118,6 @@ class _Auth {
   static const String refreshToken = '$_authRoute/refresh-token';
   static const String verifyCode = '$_authRoute/verify-otp';
   static const String registerVerify = '$_authRoute/register/verify';
-  //static const String resetPassword = '$_authRoute/reset-password';
   static const String changePassword = '$_authRoute/change-password';
   static const String resetPassword = '$_authRoute/reset-password';
 }
@@ -136,11 +135,9 @@ class _Notification {
       '${ApiEndpoints.baseUrl}/notification';
   static String markNotificationAsRead(String notificationId) =>
       '$_notificationRoute/$notificationId/read';
-
   static const String readAllNotifications =
       '$_notificationRoute/read-all';
   static const String markAllAsRead = '$_notificationRoute/mark-all-as-read';
-
   static const String getAllNotifications = '$_notificationRoute/';
 }
 

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/theme/app_colors.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
-import 'package:flutter_ursffiver/features/profile/presentation/model/badge_model.dart';
+import 'package:flutter_ursffiver/features/profile/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/widget/badgeg_widget.dart';
 import 'package:image_picker/image_picker.dart';
 

@@ -19,17 +19,11 @@ final class NotificationInterfaceImpl extends NotificationInterface {
         final response = await appPigeon.get(ApiEndpoints.getAllNotifications);
         debugPrint("response >> ${response.data}");
         //patse
-        final data = response.data["data"] as List<dynamic>;
-        final List<NotificationModel> notifications = [];
-
-        for (int i = 0; i < data.length; i++) {
-          notifications.add(NotificationModel.fromJson(data[i]));
-        }
 
         //return
         return Success(
           message: extractSuccessMessage(response),
-          data: notifications,
+          data: NotificationModel.listFromJson(extractBodyData(response) as List<dynamic>),
         );
       },
     );
