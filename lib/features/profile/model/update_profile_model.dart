@@ -37,6 +37,4 @@ class UpdateProfileModel {
       coverPic: json['coverPic'],
     );
   }
-
-
 }

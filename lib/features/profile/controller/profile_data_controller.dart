@@ -1,0 +1,29 @@
+import 'package:flutter/rendering.dart';
+import 'package:flutter_ursffiver/app/app_manager.dart';
+import 'package:flutter_ursffiver/core/helpers/auth_role.dart';
+import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
+import 'package:flutter_ursffiver/features/profile/interface/profile_interface.dart';
+import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
+import 'package:get/get.dart';
+
+class ProfileDataController extends GetxController {
+  Rx<UserProfile?> userProfile = Rx<UserProfile?>(null);
+
+  Future<void> getCurrentUserProfile() async {
+    if (Get.find<AppManager>().authStatus is Authenticated) {
+      final auth = (Get.find<AppManager>().authStatus as Authenticated).auth;
+      final userid = auth.userId;
+
+      final lr = await Get.find<ProfileInterface>().getUserProfilebyId(userid);
+
+      lr.fold(
+        (failure) {
+        },
+        (success) {
+          userProfile.value = success.data;
+          debugPrint("✅ Profile fetched: ${success.data?.email}");
+        },
+      );
+    }
+  }
+}

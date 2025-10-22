@@ -5,6 +5,7 @@ import 'package:flutter_ursffiver/core/theme/app_theme.dart';
 import 'package:flutter_ursffiver/core/di/controller_dependency_injection.dart';
 import 'package:flutter_ursffiver/core/di/external_service_di.dart';
 import 'package:flutter_ursffiver/core/di/interface_dependency_injection.dart';
+import 'package:get/get.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {
@@ -12,6 +13,7 @@ void main() {
   initControllers();
   externalServiceDI();
   initInterfaces();
+  Get.put(AppManager());
   runApp(const MyApp());
 }
 

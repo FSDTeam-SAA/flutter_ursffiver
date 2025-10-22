@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _RemoteServer.socketUrl;
+  static const String socketUrl = _LocalHostWifi.socketUrl;
 
-  static const String baseUrl = _RemoteServer.baseUrl;
+  static const String baseUrl = _LocalHostWifi.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -141,9 +141,11 @@ class _Notification {
   static const String getAllNotifications = '$_notificationRoute/';
 }
 
+
+// ---------------------- USER -----------------------------
 class _User {
   static const String _userRoute = '${ApiEndpoints.baseUrl}/user';
-  static String getuserbyId(String id) => '$_userRoute/$id';
+  static String getuserbyId(String id) => '$_userRoute/single-user/$id';
   static const String getCurrentProfile = '$_userRoute/';
   static const String editProfile = '$_userRoute/';
   static const String uploadProfileAvatar = '$_userRoute/upload-avatar';
