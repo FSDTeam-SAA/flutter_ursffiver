@@ -147,7 +147,9 @@ class _User {
   static const String _userRoute = '${ApiEndpoints.baseUrl}/user';
   static String getuserbyId(String id) => '$_userRoute/single-user/$id';
   static const String getCurrentProfile = '$_userRoute/';
-  static const String editProfile = '$_userRoute/';
+
+
+  static const String editProfile = '$_userRoute/update-profile';
   static const String uploadProfileAvatar = '$_userRoute/upload-avatar';
   static const String history = '$_userRoute/history';
   static const String allUser = '$_userRoute/all-user';

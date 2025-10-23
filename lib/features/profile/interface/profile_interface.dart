@@ -15,4 +15,6 @@ abstract base class ProfileInterface extends BaseRepository {
 
   FutureRequest<Success> uploadProfileAvatar(UploadProfileAvatarParam params);
 
+  FutureRequest<Success> deleteProfileAvatar(String userId);
+
 }

@@ -1,40 +1,58 @@
 class UpdateProfileModel {
   final String id;
-  String? firstname;
-  String? lastname;
+  String? firstName;
+  String? lastName;
+  String? fullName;
   String? username;
   String? email;
   String? gender;
   String? ageRange;
   String? bio;
-  String? profilePic;
-  String? coverPic;
+  String? profileImage;
+  String? coverImage;
 
   UpdateProfileModel({
     required this.id,
-    this.firstname,
-    this.lastname,
+    this.firstName,
+    this.lastName,
+    this.fullName,
     this.username,
     this.email,
     this.gender,
     this.ageRange,
     this.bio,
-    this.profilePic,
-    this.coverPic,
+    this.profileImage,
+    this.coverImage,
   });
 
   factory UpdateProfileModel.fromJson(Map<String, dynamic> json) {
     return UpdateProfileModel(
       id: json['_id'],
-      firstname: json['firstName'],
-      lastname: json['lastName'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      fullName: json['fullName'],
       username: json['username'],
       email: json['email'],
       gender: json['gender'],
       ageRange: json['ageRange'],
       bio: json['bio'],
-      profilePic: json['profilePic'],
-      coverPic: json['coverPic'],
+      profileImage: json['profileImage'],
+      coverImage: json['coverImage'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (firstName != null) 'firstName': firstName,
+      if (lastName != null) 'lastName': lastName,
+      if (fullName != null) 'fullName': fullName,
+      if (username != null) 'username': username,
+      if (email != null) 'email': email,
+      if (gender != null) 'gender': gender,
+      if (ageRange != null) 'ageRange': ageRange,
+      if (bio != null) 'bio': bio,
+      if (profileImage != null) 'profileImage': profileImage,
+      if (coverImage != null) 'coverImage': coverImage,
+    };
   }
 }

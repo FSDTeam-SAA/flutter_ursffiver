@@ -29,33 +29,84 @@ final class ProfileInterfaceImpl extends ProfileInterface {
 
   @override
   FutureRequest<Success<UserProfile>> getUserProfilebyId(String id) async {
+
+    debugPrint("GetUserProfilebyId Request: $id");
+    debugPrint("GetUserProfilebyId Request: $Uri");
     return await asyncTryCatch(
       tryFunc: () async {
-        //response
         final response = await appPigeon.get(ApiEndpoints.getuserbyId(id));
         debugPrint(response.data.toString());
-        //parse
         final data = response.data["data"] as Map<String, dynamic>;
         final UserProfile userProfile = UserProfile.fromJson(data);
-
         var message = response.data["message"] as String;
-
-        //return
-
         return Success(message: message, data: userProfile);
       },
     );
   }
 
   @override
-  FutureRequest<Success> updateProfile(UpdateProfileModel params) {
-    // TODO: implement updateProfile
+  FutureRequest<Success> updateProfile(UpdateProfileModel params) async {
+  return await asyncTryCatch(
+    tryFunc: () async {
+      final body = params.toJson();
+      body['userId'] = params.id;
+
+      debugPrint("UpdateProfile Request: $body");
+
+      final response = await appPigeon.patch(
+        ApiEndpoints.editProfile,
+        data: body,
+      );
+
+      final message = extractSuccessMessage(response);
+      return Success(message: message);
+    },
+  );
+}
+
+  
+  @override
+  FutureRequest<Success> deleteProfileAvatar(String userId) {
+    // TODO: implement deleteProfileAvatar
     throw UnimplementedError();
   }
-
+  
   @override
   FutureRequest<Success> uploadProfileAvatar(UploadProfileAvatarParam params) {
     // TODO: implement uploadProfileAvatar
     throw UnimplementedError();
   }
+
+  // @override
+  // FutureRequest<Success> uploadProfileAvatar(UploadProfileAvatarParam params) async {
+  //   return await asyncTryCatch(
+  //     tryFunc: () async {
+  //       final formData = await params.toFormData(); // returns FormData
+  //       // Some backends require user id in path or query — here assume endpoint includes user id
+  //       final response = await appPigeon.post(
+  //         ApiEndpoints.uploadProfileAvatar(params.userId),
+  //         data: formData,
+  //         // Ensure the appPigeon/Dio is configured to send multipart/form-data
+  //       );
+
+  //       final message = extractSuccessMessage(response);
+  //       return Success(message: message);
+  //     },
+  //   );
+  // }
+
+  // @override
+  // FutureRequest<Success> deleteProfileAvatar(String userId) async {
+  //   return await asyncTryCatch(
+  //     tryFunc: () async {
+  //       // If backend expects DELETE with path param
+  //       final response = await appPigeon.delete(
+  //         ApiEndpoints.deleteProfileAvatar(userId),
+  //       );
+
+  //       final message = extractSuccessMessage(response);
+  //       return Success(message: message);
+  //     },
+  //   );
+  // }
 }

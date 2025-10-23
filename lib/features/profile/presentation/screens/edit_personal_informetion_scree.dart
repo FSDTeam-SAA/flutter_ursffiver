@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/reactive_button/save_button.dart';
+import 'package:flutter_ursffiver/core/notifiers/button_status_notifier.dart';
+import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/profile/controller/edit_profile_info_controller.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/profile_screen.dart';
@@ -10,15 +12,35 @@ import 'package:flutter_ursffiver/core/theme/app_gap.dart';
 import 'package:flutter_ursffiver/features/profile/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/widget/badgeg_widget.dart';
 
-class MyProfileScreen extends StatelessWidget {
+class MyProfileScreen extends StatefulWidget {
   const MyProfileScreen({super.key});
 
   @override
+  State<MyProfileScreen> createState() => _MyProfileScreenState();
+}
+
+class _MyProfileScreenState extends State<MyProfileScreen> {
+  final profileDataController = Get.put(ProfileDataController());
+  final controller = Get.put(EditProfileInfoController());
+  final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(
+    initialStatus: EnabledStatus(),
+  );
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    Get.delete<EditProfileInfoController>();
+  }
+
+  @override
   Widget build(BuildContext context) {
-
-    final profileDataController = Get.put(ProfileDataController());
-    final controller = Get.put(EditProfileInfoController());
-
     profileDataController.getCurrentUserProfile().then((_) {
       controller.loadDataFromProfile();
     });
@@ -78,7 +100,7 @@ class MyProfileScreen extends StatelessWidget {
               const SizedBox(height: 20),
               _buildFormField('Last Name', controller.lastNameController),
               const SizedBox(height: 20),
-              _buildFormField('User Name', controller.usernameController),
+              _buildFormField('User Name', controller.usernameController,alwaysDisabled: true),
               const SizedBox(height: 20),
               _buildEmailField(controller, showVerified),
               const SizedBox(height: 20),
@@ -99,30 +121,34 @@ class MyProfileScreen extends StatelessWidget {
               _buildBioField(controller),
               const SizedBox(height: 20),
               if (controller.isEditing.value)
-                 SizedBox(
-                    height: 50,
-                    child: RSaveButton(
-                      key: UniqueKey(),
-                      width: double.infinity,
-                      height: 54,
-                      buttonStatusNotifier: controller.processNotifier,
-                      saveText: "Save Changes",
-                      loadingText: "Saving...",
-                      doneText: "Done",
-                      onDone: () {
-                        //Navigator.pushNamed(context, RouteNames.verifyScreen);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileScreen(),
-                          ),
-                        );
-                      },
-                      onSaveTap: () async {
-                        controller.saveProfile(buttonNotifier: null, snackbarNotifier: null);
-                      },
-                    ),
+                SizedBox(
+                  height: 50,
+                  child: RSaveButton(
+                    key: UniqueKey(),
+                    width: double.infinity,
+                    height: 54,
+                    saveText: "Save Changes",
+                    loadingText: "Saving...",
+                    doneText: "Done",
+
+                    onSaveTap: () async {
+                      controller.saveProfile(
+                        buttonNotifier: processNotifier,
+                        snackbarNotifier: SnackbarNotifier(context: context),
+                      );
+                    },
+                    onDone: () {
+                      // Navigator.pushNamed(context, RouteNames.verifyScreen);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(),
+                        ),
+                      );
+                    },
+                    buttonStatusNotifier: processNotifier,
                   ),
+                ),
               const SizedBox(height: 80),
             ],
           ),
@@ -193,133 +219,134 @@ class MyProfileScreen extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildProfilePhotoSection(EditProfileInfoController controller) {
-  final profileController = Get.find<ProfileDataController>();
+    final profileController = Get.find<ProfileDataController>();
 
-  return Obx(() {
-    final user = profileController.userProfile.value;
-    final localImage = controller.profileImage.value;
+    return Obx(() {
+      final user = profileController.userProfile.value;
+      final localImage = controller.profileImage.value;
 
-    ImageProvider imageProvider;
+      ImageProvider imageProvider;
 
-    if (localImage != null) {
-      // picked from gallery or camera
-      imageProvider = FileImage(localImage);
-    } else if (user?.image != null && user!.image!.isNotEmpty) {
-      // image from API
-      imageProvider = NetworkImage(user.image!);
-    } else {
-      // fallback image
-      imageProvider = const NetworkImage(
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-      );
-    }
+      if (localImage != null) {
+        // picked from gallery or camera
+        imageProvider = FileImage(localImage);
+      } else if (user?.image != null && user!.image!.isNotEmpty) {
+        // image from API
+        imageProvider = NetworkImage(user.image!);
+      } else {
+        // fallback image
+        imageProvider = const NetworkImage(
+          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+        );
+      }
 
-    return Center(
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 50,
-            backgroundImage: imageProvider,
-          ),
-          const SizedBox(height: 20),
-          Column(
-            children: [
-              BadgeHeader(
-                nameAndAge:
-                    '${controller.fullNameController.text}. ${controller.ageRangeController.text}',
-                username: controller.usernameController.text,
-                sectionTitle: 'Social Impact Badges',
-              ),
-              const SizedBox(height: 12),
-            ],
-          ),
-          Gap.h20,
-          BadgeList(
-            badges: [
-              BadgeModel(
-                icon: Icons.verified_user,
-                count: 5,
-                color: Colors.purpleAccent,
-              ),
-              BadgeModel(
-                icon: Icons.watch_later_outlined,
-                count: 4,
-                color: Colors.orangeAccent,
-              ),
-              BadgeModel(
-                icon: Icons.location_on_outlined,
-                count: 3,
-                color: Colors.blueAccent,
-              ),
-              BadgeModel(
-                icon: Icons.hearing_rounded,
-                count: 2,
-                color: Colors.pinkAccent,
-              ),
-              BadgeModel(
-                icon: Icons.lightbulb_outline,
-                count: 2,
-                color: Colors.lightBlueAccent,
-              ),
-              BadgeModel(icon: Icons.link, count: 2, color: Colors.cyanAccent),
-              BadgeModel(
-                icon: Icons.person_4_outlined,
-                count: 1,
-                color: Colors.greenAccent,
-              ),
-              BadgeModel(icon: Icons.star, color: Colors.orangeAccent),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(
-                child: _buildPhotoButton(
-                  Icons.upload,
-                  'Upload Photo',
-                  () => controller.pickImage(ImageSource.gallery),
+      return Center(
+        child: Column(
+          children: [
+            CircleAvatar(radius: 50, backgroundImage: imageProvider),
+            const SizedBox(height: 20),
+            Column(
+              children: [
+                BadgeHeader(
+                  nameAndAge:
+                      '${controller.fullNameController.text}. ${controller.ageRangeController.text}',
+                  username: controller.usernameController.text,
+                  sectionTitle: 'Social Impact Badges',
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildPhotoButton(
-                  Icons.camera_alt,
-                  'Take Photo',
-                  () => controller.pickImage(ImageSource.camera),
+                const SizedBox(height: 12),
+              ],
+            ),
+            Gap.h20,
+            BadgeList(
+              badges: [
+                BadgeModel(
+                  icon: Icons.verified_user,
+                  count: 5,
+                  color: Colors.purpleAccent,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: controller.isEditing.value
-                  ? controller.removePhoto
-                  : null,
-              icon: const Icon(Icons.delete, color: Colors.red, size: 18),
-              label: const Text(
-                'Remove Photo',
-                style: TextStyle(color: Colors.red),
-              ),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.red,
-                side: const BorderSide(color: Colors.red),
-                minimumSize: const Size(double.infinity, 48),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                BadgeModel(
+                  icon: Icons.watch_later_outlined,
+                  count: 4,
+                  color: Colors.orangeAccent,
+                ),
+                BadgeModel(
+                  icon: Icons.location_on_outlined,
+                  count: 3,
+                  color: Colors.blueAccent,
+                ),
+                BadgeModel(
+                  icon: Icons.hearing_rounded,
+                  count: 2,
+                  color: Colors.pinkAccent,
+                ),
+                BadgeModel(
+                  icon: Icons.lightbulb_outline,
+                  count: 2,
+                  color: Colors.lightBlueAccent,
+                ),
+                BadgeModel(
+                  icon: Icons.link,
+                  count: 2,
+                  color: Colors.cyanAccent,
+                ),
+                BadgeModel(
+                  icon: Icons.person_4_outlined,
+                  count: 1,
+                  color: Colors.greenAccent,
+                ),
+                BadgeModel(icon: Icons.star, color: Colors.orangeAccent),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildPhotoButton(
+                    Icons.upload,
+                    'Upload Photo',
+                    () => controller.pickImage(ImageSource.gallery),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildPhotoButton(
+                    Icons.camera_alt,
+                    'Take Photo',
+                    () => controller.pickImage(ImageSource.camera),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: controller.isEditing.value
+                    ? controller.removePhoto
+                    : null,
+                icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+                label: const Text(
+                  'Remove Photo',
+                  style: TextStyle(color: Colors.red),
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.red,
+                  side: const BorderSide(color: Colors.red),
+                  minimumSize: const Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
-  });
-}
-
+            const SizedBox(height: 20),
+          ],
+        ),
+      );
+    });
+  }
 
   Widget _buildPhotoButton(IconData icon, String label, VoidCallback onTap) {
     return OutlinedButton.icon(

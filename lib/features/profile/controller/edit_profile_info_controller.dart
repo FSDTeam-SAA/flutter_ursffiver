@@ -32,7 +32,10 @@ class EditProfileInfoController extends GetxController {
   final bioController = TextEditingController();
 
   var profileImage = Rx<File?>(null);
+  final beforeUserProfile = Get.find<ProfileDataController>().userProfile.value; // Store the user profile before editing>
+  
   final ImagePicker _picker = ImagePicker();
+
   String originalEmail = "";
   var isEditing = false.obs;
   var isVerified = true.obs;
@@ -44,6 +47,7 @@ class EditProfileInfoController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    loadDataFromProfile();
 
     final profileController = Get.find<ProfileDataController>();
 
@@ -99,8 +103,8 @@ class EditProfileInfoController extends GetxController {
             id: (Get.find<AppManager>().authStatus as Authenticated)
                 .auth
                 .userId,
-            firstname: firstNameController.text.trim(),
-            lastname: lastNameController.text.trim(),
+            firstName: firstNameController.text.trim(),
+            lastName: lastNameController.text.trim(),
             username: userNameController.text.trim(),
             email: emailController.text.trim(),
             gender: genderController.text.trim(),
@@ -115,6 +119,7 @@ class EditProfileInfoController extends GetxController {
             successSnackbarNotifier: snackbarNotifier,
             onSuccess: (data) async {
               if (profileImage.value != null) {
+
                 await Get.find<ProfileInterface>().uploadProfileAvatar(
                   UploadProfileAvatarParam(
                     userId: (Get.find<AppManager>().authStatus as Authenticated)
