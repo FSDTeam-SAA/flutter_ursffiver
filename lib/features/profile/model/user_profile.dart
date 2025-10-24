@@ -1,3 +1,5 @@
+import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
+
 class UserProfile {
   final String? id;
   final String? firstname;
@@ -8,6 +10,7 @@ class UserProfile {
   final String? ageRange;
   final String? bio;
   final String? image;
+  final List<UserBadgeModel>? badge;
 
   UserProfile({
     this.id,
@@ -19,6 +22,7 @@ class UserProfile {
     this.ageRange,
     this.bio,
     this.image,
+    this.badge,
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
@@ -32,6 +36,11 @@ class UserProfile {
       ageRange: json['ageRange'],
       bio: json['bio'],
       image: json['image'],
+      badge: json['badge'] == null
+          ? []
+          : List<UserBadgeModel>.from(
+              json['badge']?.map((x) => UserBadgeModel.fromJson(x)) ?? [],
+            ),
     );
   }
 }
