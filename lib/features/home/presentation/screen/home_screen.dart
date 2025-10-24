@@ -4,20 +4,21 @@ import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart'
 import 'package:flutter_ursffiver/core/componenet/pagination/widget/paginated_list.dart';
 import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/controller/filter_people_suggestion_controller.dart';
-import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
-import 'package:flutter_ursffiver/features/home/model/user_model.dart';
+import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/user_profile_card.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/invitation_notification_widget.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/widget/location_share.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../common/app_logo.dart';
 import '../../../notification/screen/notification_screen.dart';
+import '../../../profile/controller/profile_data_controller.dart';
+import '../../controller/home_interest_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,8 +28,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FilterPeopleSuggestionController _filterPeopleSuggestionController = Get.find<AppGlobalControllers>().homeController.filterPeopleSuggestionController;
-  final Set<String> _selectedInterests = <String>{};
+  final FilterPeopleSuggestionController _filterPeopleSuggestionController =
+      Get.find<AppGlobalControllers>()
+          .homeController
+          .filterPeopleSuggestionController;
+  final ProfileDataController _homeInterestController = Get.put(
+    ProfileDataController(),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _homeInterestController.getCurrentUserProfile();
+  }
+
   static const _brandGradient = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
@@ -214,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      
+
                       /// Status dropdown
                       AbsorbPointer(
                         absorbing: !isAvailable,
@@ -305,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             ),
-                      
+
                             TextButton(
                               onPressed: () {
                                 setState(() {
@@ -358,56 +371,98 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-        
+
             SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
                   const Text(
-                  "Primary Interests",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                InterestsGrid(
-                  chips: [
-                    InterestChip(
-                      label: 'Acting/Theatre',
-                      color: AppColors.interestsblue,
-                    ),
-                    InterestChip(
-                      label: 'Escape Room',
-                      color: AppColors.interestsyellow,
-                    ),
-                    InterestChip(
-                      label: 'Expedition Trail',
-                      color: AppColors.interestsgreen,
-                    ),
-                    InterestChip(
-                      label: 'Escape Room',
-                      color: AppColors.interestsyellow,
-                    ),
-                    InterestChip(
-                      label: 'Arcade Gaming',
-                      color: AppColors.interestsred,
-                    ),
-                    InterestChip(
-                      label: 'Acting/Theatre',
-                      color: AppColors.interestsblue,
-                    ),
-                    InterestChip(
-                      label: 'Expedition Trail',
-                      color: AppColors.interestsgreen,
-                    ),
-                  ],
-                ),
-                        
-                const SizedBox(height: 20),
+                    "Primary Interests",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  // Obx(() {
+                  //   final selectedInterests =
+                  //       _homeInterestController.userProfile.value?.interests;
+
+                  //   return ListView.builder(
+                  //     itemCount: selectedInterests?.length ?? 0,
+                  //     itemBuilder: (context, index) {
+                  //       final interest = selectedInterests?[index];
+                  //       return InterestsGrid(
+                  //         chips: selectedInterests!
+                  //             .map(
+                  //               (interest) => UserInterestModel(
+                  //                 color: interest.color,
+                  //                 id: interest.id,
+                  //                 name: interest.name,
+                  //               ),
+                  //             )
+                  //             .toList(),
+                  //       );
+                  //     },
+                  //   );
+                  // }),
+                  Obx(() {
+                    final selectedInterests =
+                        _homeInterestController.userProfile.value?.interest ??
+                        [];
+
+                    debugPrint(
+                      "selectedInterests: ${_homeInterestController.userProfile.value?.interest?.length ?? 0}",
+                    );
+
+                    if (selectedInterests.isEmpty) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          "No interests found.",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      );
+                    }
+
+                    return InterestsGrid(chips: selectedInterests);
+                  }),
+
+                  // InterestsGrid(
+                  // chips: [
+                  //   InterestChip(
+                  //       label: 'Acting/Theatre',
+                  //       color: AppColors.interestsblue,
+                  //     ),
+                  //     InterestChip(
+                  //       label: 'Escape Room',
+                  //       color: AppColors.interestsyellow,
+                  //     ),
+                  //     InterestChip(
+                  //       label: 'Expedition Trail',
+                  //       color: AppColors.interestsgreen,
+                  //     ),
+                  //     InterestChip(
+                  //       label: 'Escape Room',
+                  //       color: AppColors.interestsyellow,
+                  //     ),
+                  //     InterestChip(
+                  //       label: 'Arcade Gaming',
+                  //       color: AppColors.interestsred,
+                  //     ),
+                  //     InterestChip(
+                  //       label: 'Acting/Theatre',
+                  //       color: AppColors.interestsblue,
+                  //     ),
+                  //     InterestChip(
+                  //       label: 'Expedition Trail',
+                  //       color: AppColors.interestsgreen,
+                  //     ),
+                  //   ],
+                  // ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
-            
-        
+
             /// Location Range
             SliverAppBar(
               pinned: true,
@@ -491,7 +546,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const Text(
                         "People Nearby",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const Spacer(),
                       TextButton(
@@ -528,10 +586,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             useSafeArea: true,
                             backgroundColor: Colors.transparent,
                             builder: (_) => InterestPickerSheet.forFiltering(
-                              interestSelectionCntlr: _filterPeopleSuggestionController.selectInterestController,
+                              interestSelectionCntlr:
+                                  _filterPeopleSuggestionController
+                                      .selectInterestController,
                               brandGradient: _brandGradient,
                               onConfirm: () {
-                                _filterPeopleSuggestionController.findSuggestion(forceFresh: true);
+                                _filterPeopleSuggestionController
+                                    .findSuggestion(forceFresh: true);
                                 Navigator.pop(context);
                               },
                             ),
@@ -555,14 +616,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                    
                     ],
                   ),
-                
                 ],
               ),
             ),
-                
+
             SliverFillRemaining(
               child: PaginatedListWidget(
                 pagination: _filterPeopleSuggestionController.suggestionList,
@@ -571,17 +630,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 skeleton: Container(color: Colors.grey),
                 skeletonCount: 3,
                 builder: (index, data) => Column(
-                    children: [
-                      UserProfileCard(
-                        user: data
-                      ),
-                      const SizedBox(height: 8),
-                      const Divider(color: Colors.grey),
-                      const SizedBox(height: 8),
-                    ],
-                  ),
+                  children: [
+                    UserProfileCard(user: data),
+                    const SizedBox(height: 8),
+                    const Divider(color: Colors.grey),
+                    const SizedBox(height: 8),
+                  ],
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -589,38 +646,62 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class InterestChip {
-  final String label;
-  final Color color;
-
-  InterestChip({required this.label, required this.color});
-}
-
 class InterestsGrid extends StatelessWidget {
-  final List<InterestChip> chips;
+  final List<UserInterestModel> chips;
 
   const InterestsGrid({super.key, required this.chips});
 
   @override
+  // Widget build(BuildContext context) {
+  //   return Wrap(
+  //     spacing: 4,
+  //     runSpacing: 4,
+  //     children: chips
+  //         .map(
+  //           (chip) => Chip(
+  //             label: Text(
+  //               chip.name,
+  //               style: AppText.mdMedium_16_500.copyWith(
+  //                 color: chip.color.deepColor,
+  //               ),
+  //             ),
+  //             //backgroundColor: ,
+  //             shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(16),
+  //               side: const BorderSide(color: Colors.transparent, width: 1.5),
+  //             ),
+  //           ),
+  //         )
+  //         .toList(),
+  //   );
+  // }
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 4,
-      runSpacing: 4,
-      children: chips
-          .map(
-            (chip) => Chip(
-              label: Text(
-                chip.label,
-                style: AppText.mdMedium_16_500.copyWith(color: Colors.white),
-              ),
-              backgroundColor: chip.color,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: const BorderSide(color: Colors.transparent, width: 1.5),
-              ),
-            ),
-          )
-          .toList(),
-    );
-  }
+  return Wrap(
+    spacing: 8,
+    runSpacing: 8,
+    children: chips.map(
+      (chip) => Chip(
+        label: Text(
+          chip.name,
+          style: AppText.mdMedium_16_500.copyWith(
+            color: chip.color.deepColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        backgroundColor: chip.color.softColor,
+        side: BorderSide(
+          color: chip.color.deepColor,
+          width: 1.2,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        shadowColor: chip.color.deepColor,
+        elevation: 1,
+      ),
+    ).toList(),
+  );
+}
+
 }

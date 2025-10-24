@@ -1,4 +1,5 @@
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
+import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
 
 class UserProfile {
   final String? id;
@@ -11,6 +12,7 @@ class UserProfile {
   final String? bio;
   final String? image;
   final List<UserBadgeModel>? badge;
+  final List<UserInterestModel>? interest;
 
   UserProfile({
     this.id,
@@ -23,6 +25,7 @@ class UserProfile {
     this.bio,
     this.image,
     this.badge,
+    this.interest,
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
@@ -40,6 +43,12 @@ class UserProfile {
           ? []
           : List<UserBadgeModel>.from(
               json['badge']?.map((x) => UserBadgeModel.fromJson(x)) ?? [],
+            ),
+
+      interest: json['interest'] == null
+          ? []
+          : List<UserInterestModel>.from(
+              json['interest']?.map((x) => UserInterestModel.fromJson(x)) ?? [],
             ),
     );
   }

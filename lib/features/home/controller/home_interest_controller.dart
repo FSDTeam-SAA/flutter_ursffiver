@@ -7,7 +7,7 @@ import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/badges/services/badges_interface.dart';
 import 'package:get/get.dart';
 
-class AllBadgesController extends GetxController {
+class HomeInterestController extends GetxController{
   final Rxn<UserBadgesModel> userProfile = Rxn<UserBadgesModel>();
 
   final RxBool isLoading = false.obs;
@@ -15,10 +15,10 @@ class AllBadgesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadBadges();
+    loadinterest();
   }
 
-  void loadBadges() async {
+  void loadinterest() async {
     isLoading.value = true;
     final auth = (Get.find<AppManager>().authStatus as Authenticated).auth;
     final userid = auth.userId;
@@ -28,6 +28,7 @@ class AllBadgesController extends GetxController {
     handleFold(
       either: lr,
       onSuccess: (success) {
+        debugPrint("✅ Profile fetched: ${success.interests.first.name}");
         userProfile.value = success;
       },
       onError: (failure) {
@@ -36,4 +37,5 @@ class AllBadgesController extends GetxController {
     );
     isLoading.value = false;
   }
+
 }

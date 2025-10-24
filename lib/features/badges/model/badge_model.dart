@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
+import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
 
 class UserBadgeModel {
   final String id;
@@ -42,7 +44,7 @@ class UserBadgesModel {
   final String role;
   final String status;
   final bool adminVerify;
-  final List<InterestModel> interests;
+  final List<UserInterestModel> interests;
   final bool active;
   final List<UserAddressModel> address;
   final String? imagePath;
@@ -71,6 +73,7 @@ class UserBadgesModel {
   });
 
   factory UserBadgesModel.fromJson(Map<String, dynamic> json) {
+    debugPrint("user badges model json : $json['firstName']");
     return UserBadgesModel(
       id: json['_id'] ?? '',
       firstName: json['firstName'] ?? '',
@@ -90,8 +93,8 @@ class UserBadgesModel {
       adminVerify: json['adminVerify'] ?? false,
       interests: json['interest'] == null
           ? []
-          : (json['interest'] as List<dynamic>)
-                .map((e) => InterestModel.fromJson(e))
+          : (json['interest'] as List)
+                .map((e) => UserInterestModel.fromJson(e))
                 .toList(),
       active: json['active'] ?? false,
       address: [],
@@ -104,27 +107,27 @@ class UserBadgesModel {
     );
   }
 
-  factory UserBadgesModel.fromJsonForNotification(Map<String, dynamic> json) {
-    return UserBadgesModel(
-      id: json['_id'] ?? '',
-      firstName: json['firstName'] ?? '',
-      lastName: json['lastName'] ?? '',
-      fullname: json['fullName'],
-      ageRange: json['ageRange'] ?? '',
-      bio: json['bio'] ?? '',
-      email: json['email'] ?? '',
-      username: json['username'] ?? '',
-      gender: json['gender'] ?? '',
-      dateOfBirth: null,
-      isEmailVerified: json['isEmailVerified'] ?? false,
-      role: json['role'] ?? '',
-      status: json['status'] ?? '',
-      adminVerify: json['adminVerify'] ?? false,
-      interests: [],
-      active: json['active'] ?? false,
-      address: [],
-      imagePath: json['profileImage'] as String?,
-      badges: [],
-    );
-  }
+  // factory UserBadgesModel.fromJsonForNotification(Map<String, dynamic> json) {
+  //   return UserBadgesModel(
+  //     id: json['_id'] ?? '',
+  //     firstName: json['firstName'] ?? '',
+  //     lastName: json['lastName'] ?? '',
+  //     fullname: json['fullName'],
+  //     ageRange: json['ageRange'] ?? '',
+  //     bio: json['bio'] ?? '',
+  //     email: json['email'] ?? '',
+  //     username: json['username'] ?? '',
+  //     gender: json['gender'] ?? '',
+  //     dateOfBirth: null,
+  //     isEmailVerified: json['isEmailVerified'] ?? false,
+  //     role: json['role'] ?? '',
+  //     status: json['status'] ?? '',
+  //     adminVerify: json['adminVerify'] ?? false,
+  //     interests: [],
+  //     active: json['active'] ?? false,
+  //     address: [],
+  //     imagePath: json['profileImage'] as String?,
+  //     badges: [],
+  //   );
+  // }
 }

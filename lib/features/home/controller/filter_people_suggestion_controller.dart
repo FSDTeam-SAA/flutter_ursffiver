@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_ursffiver/core/common/model/coordinates.dart';
 import 'package:flutter_ursffiver/core/componenet/pagination/pagination.dart';
 import 'package:flutter_ursffiver/core/common/controller/select_interest_controller.dart';
-import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
 import 'package:get/get.dart';

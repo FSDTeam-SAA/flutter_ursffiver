@@ -3,6 +3,7 @@ import 'package:flutter_ursffiver/core/api_handler/success.dart';
 import 'package:flutter_ursffiver/core/constants/api_endpoints.dart';
 import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
+import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
 
@@ -32,6 +33,24 @@ base class HomeService extends HomeInterface {
               .map<UserModel>((e) => UserModel.fromJson(e))
               .toList(),
         );
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success<UserInterestModel>> getuserbyid(String id) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        //api call
+        final response = await appPigeon.get(ApiEndpoints.getuserbyId(id));
+
+        //patse
+        final data = response.data["data"];
+
+        var message = response.data["message"] as String;
+
+        //return
+        return Success(message: message, data: data);
       },
     );
   }
