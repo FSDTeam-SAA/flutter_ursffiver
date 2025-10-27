@@ -100,7 +100,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               const SizedBox(height: 20),
               _buildFormField('Last Name', controller.lastNameController),
               const SizedBox(height: 20),
-              _buildFormField('User Name', controller.usernameController,alwaysDisabled: true),
+              _buildFormField(
+                'User Name',
+                controller.usernameController,
+                alwaysDisabled: true,
+              ),
               const SizedBox(height: 20),
               _buildEmailField(controller, showVerified),
               const SizedBox(height: 20),
@@ -261,42 +265,42 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             Gap.h20,
             BadgeList(
               badges: [
-                BadgeModel(
+                IconBadgeModel(
                   icon: Icons.verified_user,
                   count: 5,
                   color: Colors.purpleAccent,
                 ),
-                BadgeModel(
+                IconBadgeModel(
                   icon: Icons.watch_later_outlined,
                   count: 4,
                   color: Colors.orangeAccent,
                 ),
-                BadgeModel(
+                IconBadgeModel(
                   icon: Icons.location_on_outlined,
                   count: 3,
                   color: Colors.blueAccent,
                 ),
-                BadgeModel(
+                IconBadgeModel(
                   icon: Icons.hearing_rounded,
                   count: 2,
                   color: Colors.pinkAccent,
                 ),
-                BadgeModel(
+                IconBadgeModel(
                   icon: Icons.lightbulb_outline,
                   count: 2,
                   color: Colors.lightBlueAccent,
                 ),
-                BadgeModel(
+                IconBadgeModel(
                   icon: Icons.link,
                   count: 2,
                   color: Colors.cyanAccent,
                 ),
-                BadgeModel(
+                IconBadgeModel(
                   icon: Icons.person_4_outlined,
                   count: 1,
                   color: Colors.greenAccent,
                 ),
-                BadgeModel(icon: Icons.star, color: Colors.orangeAccent),
+                IconBadgeModel(icon: Icons.star, color: Colors.orangeAccent),
               ],
             ),
             const SizedBox(height: 20),

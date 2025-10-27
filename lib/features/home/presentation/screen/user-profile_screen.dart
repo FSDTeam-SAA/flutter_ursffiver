@@ -1,39 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:flutter_ursffiver/core/theme/app_colors.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
+import 'package:flutter_ursffiver/features/home/model/user_model.dart';
+import 'package:flutter_ursffiver/features/home/presentation/screen/home_screen.dart';
+import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:flutter_ursffiver/features/profile/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/widget/badgeg_widget.dart';
+import 'package:get/get.dart';
 
-class UserProfileScreen extends StatelessWidget {
-  UserProfileScreen({super.key});
+class UserProfileScreen extends StatefulWidget {
+  final UserModel user;
+  const UserProfileScreen({super.key, required this.user});
 
+  @override
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  final ProfileDataController _homeInterestController = Get.put(
+    ProfileDataController(),
+  );
   /////////////////
 
-  final List<BadgeModel> _badges = [
-    BadgeModel(icon: Icons.verified_user, count: 5, color: Colors.purpleAccent),
-    BadgeModel(
+  final List<IconBadgeModel> _badges = [
+    IconBadgeModel(
+      icon: Icons.verified_user,
+      count: 5,
+      color: Colors.purpleAccent,
+    ),
+    IconBadgeModel(
       icon: Icons.watch_later_outlined,
       count: 4,
       color: Colors.orangeAccent,
     ),
-    BadgeModel(
+    IconBadgeModel(
       icon: Icons.location_on_outlined,
       count: 3,
       color: Colors.blueAccent,
     ),
-    BadgeModel(icon: Icons.hearing_rounded, count: 2, color: Colors.pinkAccent),
-    BadgeModel(
+    IconBadgeModel(
+      icon: Icons.hearing_rounded,
+      count: 2,
+      color: Colors.pinkAccent,
+    ),
+    IconBadgeModel(
       icon: Icons.lightbulb_outline,
       count: 2,
       color: Colors.lightBlueAccent,
     ),
-    BadgeModel(icon: Icons.link, count: 2, color: Colors.cyanAccent),
-    BadgeModel(
+    IconBadgeModel(icon: Icons.link, count: 2, color: Colors.cyanAccent),
+    IconBadgeModel(
       icon: Icons.person_4_outlined,
       count: 1,
       color: Colors.greenAccent,
     ),
-    BadgeModel(icon: Icons.star, color: Colors.orangeAccent),
+    IconBadgeModel(icon: Icons.star, color: Colors.orangeAccent),
   ];
 
   //////////////////
@@ -85,27 +107,41 @@ class UserProfileScreen extends StatelessWidget {
             Center(
               child: Column(
                 children: [
-                  Container(
-                    width: 120,
+                  SmartNetworkImage(
+                    imageUrl: widget.user.imagePath,
                     height: 120,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: const DecorationImage(
-                        image: AssetImage(
-                          'assets/image/profile.png',
-                        ),
-                        fit: BoxFit.cover,
+                    width: 90,
+                    borderRadius: BorderRadius.circular(8),
+
+                    errorWidget: Container(
+                      height: 130,
+                      width: 90,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      border: Border.all(color: Colors.grey.shade200, width: 2),
+                      child: Icon(Icons.person, size: 50, color: Colors.grey),
                     ),
                   ),
 
+                  // Container(
+                  //   width: 120,
+                  //   height: 120,
+                  //   decoration: BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //     image: const DecorationImage(
+                  //       image: AssetImage('assets/image/profile.png'),
+                  //       fit: BoxFit.cover,
+                  //     ),
+                  //     border: Border.all(color: Colors.grey.shade200, width: 2),
+                  //   ),
+                  // ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Urs Fischer',
+                      Text(
+                        '${widget.user.firstName} ${widget.user.lastName}',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -124,7 +160,7 @@ class UserProfileScreen extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      'Passionate about tech, love, and deep conversations. Here to meet new people and explore meaningful connections. Always up for a good chat and fun!',
+                      widget.user.bio,
                       textAlign: TextAlign.center,
                       style: AppText.mdRegular_16_400.copyWith(
                         color: AppColors.secondaryTextblack,
@@ -140,8 +176,8 @@ class UserProfileScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildStatItem(Icons.location_on_outlined, '1 ft away'),
-                _buildStatItem(Icons.female, 'Female'),
-                _buildStatItem(Icons.check_circle_outline, '50 - 60'),
+                _buildStatItem(Icons.female, widget.user.gender),
+                _buildStatItem(Icons.check_circle_outline, widget.user.ageRange),
               ],
             ),
 
@@ -157,23 +193,15 @@ class UserProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildInterestTag('Acting/Theatre', AppColors.interestsgreen),
-                _buildInterestTag('Escape Room', AppColors.interestsred),
-                _buildInterestTag('Arcade Game', AppColors.interestsyellow),
-                _buildInterestTag('Arcade Game', AppColors.interestsyellow),
-                _buildInterestTag('Expedition Trip', AppColors.interestsgreen),
-                _buildInterestTag('Acting/Practice', AppColors.interestsblue),
+                  InterestsGrid(chips: widget.user.interests),
               ],
             ),
 
             const SizedBox(height: 32),
 
-            // Earned Badges
             const Text(
               'Earned Badges',
               style: TextStyle(
@@ -183,7 +211,7 @@ class UserProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            BadgeList(badges: _badges),
+            Column(children: [BadgeList(badges: _badges)]),
             const SizedBox(height: 32),
 
             // Bottom Buttons

@@ -15,7 +15,7 @@ class UserProfileCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => UserProfileScreen()),
+          MaterialPageRoute(builder: (context) => UserProfileScreen(user: user)),
         );
       },
       child: Row(
@@ -24,6 +24,8 @@ class UserProfileCard extends StatelessWidget {
             imageUrl: user.imagePath,
             height: 130,
             width: 90,
+            borderRadius: BorderRadius.circular(8),
+
             errorWidget: Container(
               height: 130,
               width: 90,
@@ -58,10 +60,6 @@ class UserProfileCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.location_on, size: 20, color: Colors.grey),
                     const SizedBox(width: 4),
-                    // Text(
-                    //   user.address.city, // Assuming UseraddressModel has a city field
-                    //   style: TextStyle(fontSize: 14, color: Colors.grey),
-                    // ),
                     const SizedBox(width: 8),
                     Text(
                       user.status,

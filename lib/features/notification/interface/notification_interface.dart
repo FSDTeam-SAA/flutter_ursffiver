@@ -8,5 +8,5 @@ abstract base class NotificationInterface extends BaseRepository {
 
   FutureRequest<Success> singleNotificationRead(String id);
 
-  FutureRequest<Success> markAllAsRead();
+  FutureRequest<Success> allNotificationRead();
 }

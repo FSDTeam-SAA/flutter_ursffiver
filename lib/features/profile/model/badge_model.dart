@@ -1,10 +1,10 @@
 // Model for badges
 import 'package:flutter/material.dart';
 
-class BadgeModel {
+class IconBadgeModel {
   final IconData icon;
   final int? count;
   final Color color;
 
-  BadgeModel({required this.icon, this.count, required this.color});
+  IconBadgeModel({required this.icon, this.count, required this.color});
 }

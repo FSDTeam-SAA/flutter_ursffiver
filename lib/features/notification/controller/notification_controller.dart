@@ -30,7 +30,7 @@ class NotificationController extends GetxController {
     if (index < 0 || index >= notifications.length) return false;
     final old = notifications[index];
     if (old.isRead) return false;
-    final lr = await Get.find()<NotificationInterface>().sing(
+    final lr = await Get.find()<NotificationInterface>().singleNotificationRead(
       old.id,
     );
     return lr.fold(
@@ -47,7 +47,7 @@ class NotificationController extends GetxController {
   }
 
   Future<void> readAllNotification() async {
-    final lr = await Get.find<NotificationInterface>().getAllNotification();
+    final lr = await Get.find<NotificationInterface>().allNotificationRead();
 
     lr.fold(
       (error) {
@@ -67,22 +67,6 @@ class NotificationController extends GetxController {
         update();
       },
     );
-
-    // result.fold(
-    //   (error) => debugPrint("Error reading all notifications: $error"),
-    //   (success) {
-    //     for (var i = 0; i < notifications.length; i++) {
-    //       final n = notifications[i];
-    //       if (!n.isRead) {
-    //         notifications[i] = n.copyWith(
-    //           isRead: true,
-    //           updatedAt: DateTime.now(),
-    //         );
-    //       }
-    //     }
-    //     notifications.refresh();
-    //   },
-    // );
   }
 
   Future<void> getAllNotification() async {

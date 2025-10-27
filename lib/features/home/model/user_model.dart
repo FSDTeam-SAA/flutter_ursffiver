@@ -1,6 +1,8 @@
 import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
 
+import 'user_interest_model.dart';
+
 class UserModel {
   final String id;
   final String firstName;
@@ -16,7 +18,7 @@ class UserModel {
   final String role;
   final String status;
   final bool adminVerify;
-  final List<InterestModel> interests;
+  final List<UserInterestModel> interests;
   final bool active;
   final List<UserAddressModel> address;
   final String? imagePath;
@@ -63,7 +65,7 @@ class UserModel {
       interests: json['interest'] == null
           ? []
           : (json['interest'] as List<dynamic>)
-                .map((e) => InterestModel.fromJson(e))
+                .map((e) => UserInterestModel.fromJson(e))
                 .toList(),
       active: json['active'] ?? false,
       address: [],

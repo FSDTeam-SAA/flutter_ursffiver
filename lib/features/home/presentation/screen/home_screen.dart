@@ -298,7 +298,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   isEditing = false;
                                 });
                                 FocusScope.of(context).unfocus();
-                                // TODO: Save logic here
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -325,7 +324,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   isEditing = false;
                                 });
                                 FocusScope.of(context).unfocus();
-                                // TODO: Save logic here
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -382,28 +380,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  // Obx(() {
-                  //   final selectedInterests =
-                  //       _homeInterestController.userProfile.value?.interests;
-
-                  //   return ListView.builder(
-                  //     itemCount: selectedInterests?.length ?? 0,
-                  //     itemBuilder: (context, index) {
-                  //       final interest = selectedInterests?[index];
-                  //       return InterestsGrid(
-                  //         chips: selectedInterests!
-                  //             .map(
-                  //               (interest) => UserInterestModel(
-                  //                 color: interest.color,
-                  //                 id: interest.id,
-                  //                 name: interest.name,
-                  //               ),
-                  //             )
-                  //             .toList(),
-                  //       );
-                  //     },
-                  //   );
-                  // }),
                   Obx(() {
                     final selectedInterests =
                         _homeInterestController.userProfile.value?.interest ??
@@ -425,45 +401,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     return InterestsGrid(chips: selectedInterests);
                   }),
-
-                  // InterestsGrid(
-                  // chips: [
-                  //   InterestChip(
-                  //       label: 'Acting/Theatre',
-                  //       color: AppColors.interestsblue,
-                  //     ),
-                  //     InterestChip(
-                  //       label: 'Escape Room',
-                  //       color: AppColors.interestsyellow,
-                  //     ),
-                  //     InterestChip(
-                  //       label: 'Expedition Trail',
-                  //       color: AppColors.interestsgreen,
-                  //     ),
-                  //     InterestChip(
-                  //       label: 'Escape Room',
-                  //       color: AppColors.interestsyellow,
-                  //     ),
-                  //     InterestChip(
-                  //       label: 'Arcade Gaming',
-                  //       color: AppColors.interestsred,
-                  //     ),
-                  //     InterestChip(
-                  //       label: 'Acting/Theatre',
-                  //       color: AppColors.interestsblue,
-                  //     ),
-                  //     InterestChip(
-                  //       label: 'Expedition Trail',
-                  //       color: AppColors.interestsgreen,
-                  //     ),
-                  //   ],
-                  // ),
                   const SizedBox(height: 20),
                 ],
               ),
             ),
 
-            /// Location Range
             SliverAppBar(
               pinned: true,
               toolbarHeight: 190,
@@ -652,29 +594,6 @@ class InterestsGrid extends StatelessWidget {
   const InterestsGrid({super.key, required this.chips});
 
   @override
-  // Widget build(BuildContext context) {
-  //   return Wrap(
-  //     spacing: 4,
-  //     runSpacing: 4,
-  //     children: chips
-  //         .map(
-  //           (chip) => Chip(
-  //             label: Text(
-  //               chip.name,
-  //               style: AppText.mdMedium_16_500.copyWith(
-  //                 color: chip.color.deepColor,
-  //               ),
-  //             ),
-  //             //backgroundColor: ,
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(16),
-  //               side: const BorderSide(color: Colors.transparent, width: 1.5),
-  //             ),
-  //           ),
-  //         )
-  //         .toList(),
-  //   );
-  // }
   Widget build(BuildContext context) {
   return Wrap(
     spacing: 8,

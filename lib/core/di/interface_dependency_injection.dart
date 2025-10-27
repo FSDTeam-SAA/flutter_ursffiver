@@ -17,7 +17,7 @@ void initInterfaces() {
   Get.lazyPut<AuthInterface>(()=> AuthInterfaceImpl(Get.find()));
   Get.lazyPut<InterestInterface>(()=> InterestInterfaceImpl(appPigeon: Get.find()));
   Get.lazyPut<NotificationInterface>(()=> NotificationInterfaceImpl(appPigeon: Get.find()));
-  Get.lazyPut<HomeInterface>(()=> HomeService(appPigeon: Get.find()));
+  Get.lazyPut<HomeInterface>(()=> HomeService(appPigeon: Get.find()),fenix: true);
   Get.lazyPut<ProfileInterface>(() => ProfileInterfaceImpl(appPigeon: Get.find()));
   Get.lazyPut<BadgesInterface>(() => BadgesInterfaceImpl(appPigeon: Get.find()));
   

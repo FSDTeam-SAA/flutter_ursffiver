@@ -12,23 +12,6 @@ final class NotificationInterfaceImpl extends NotificationInterface {
 
   NotificationInterfaceImpl({required this.appPigeon});
 
-  FutureRequest<Success<List<NotificationModel>>> getAllNotifications() async {
-    return await asyncTryCatch(
-      tryFunc: () async {
-        //api call
-        final response = await appPigeon.get(ApiEndpoints.getAllNotifications);
-        debugPrint("response >> ${response.data}");
-        //patse
-
-        //return
-        return Success(
-          message: extractSuccessMessage(response),
-          data: NotificationModel.listFromJson(extractBodyData(response) as List<dynamic>),
-        );
-      },
-    );
-  }
-
   @override
   FutureRequest<Success> singleNotificationRead(String id) async {
     return await asyncTryCatch(
@@ -36,6 +19,7 @@ final class NotificationInterfaceImpl extends NotificationInterface {
         //api call
         final response = await appPigeon.put(
           ApiEndpoints.markNotificationAsRead(notificationId: id),
+          
         );
 
         //patse
@@ -46,13 +30,23 @@ final class NotificationInterfaceImpl extends NotificationInterface {
       },
     );
   }
-  
+
   @override
-  FutureRequest<Success> markAllAsRead() {
-    // TODO: implement markAllAsRead
-    throw UnimplementedError();
+  FutureRequest<Success> allNotificationRead() async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        //api call
+        final response = await appPigeon.put(
+          ApiEndpoints.readAllNotifications,
+        );
+        //patse
+        final message = response.data["message"] as String;
+        //return
+        return Success(message: message);
+      },
+    );
   }
-  
+
   @override
   FutureRequest<Success<List<NotificationModel>>> getAllNotification() async {
     return await asyncTryCatch(
@@ -78,5 +72,4 @@ final class NotificationInterfaceImpl extends NotificationInterface {
       },
     );
   }
-  
 }

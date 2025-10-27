@@ -134,9 +134,9 @@ class _Notification {
   static const String _notificationRoute =
       '${ApiEndpoints.baseUrl}/notification';
   static String markNotificationAsRead(String notificationId) =>
-      '$_notificationRoute/$notificationId/read';
+      'mark-as-read/$_notificationRoute/$notificationId';
   static const String readAllNotifications =
-      '$_notificationRoute/read-all';
+      '$_notificationRoute/mark-all-as-read';
   static const String markAllAsRead = '$_notificationRoute/mark-all-as-read';
   static const String getAllNotifications = '$_notificationRoute/';
 }

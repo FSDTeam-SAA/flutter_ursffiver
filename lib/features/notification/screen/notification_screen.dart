@@ -335,62 +335,6 @@ class _NotificationItemState extends State<NotificationItem> {
     } else {}
     return GestureDetector(
       onTap: _handleTap,
-      // child: Container(
-      //   margin: const EdgeInsets.only(bottom: 12),
-      //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      //   decoration: BoxDecoration(
-      //     color: data.isRead ? Colors.white : Colors.blue.shade50,
-      //     borderRadius: BorderRadius.circular(12),
-      //     boxShadow: [
-      //       BoxShadow(
-      //         color: Colors.grey.withOpacity(0.1),
-      //         blurRadius: 6,
-      //         offset: const Offset(0, 3),
-      //       ),
-      //     ],
-      //   ),
-      //   child: Row(
-      //     children: [
-      //       const CircleAvatar(
-      //         radius: 22,
-      //         backgroundImage: AssetImage("assets/images/profilepic.png"),
-      //       ),
-      //       const SizedBox(width: 12),
-      //       Expanded(
-      //         child: Column(
-      //           crossAxisAlignment: CrossAxisAlignment.start,
-      //           children: [
-      //             Column(
-      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //               children: [
-      //                 Text(
-      //                   data.title,
-      //                   style: const TextStyle(
-      //                     fontSize: 16,
-      //                     fontWeight: FontWeight.w600,
-      //                   ),
-      //                 ),
-      //               ],
-      //             ),
-      //             SizedBox(height: 4),
-      //             Column(
-      //               children: [
-      //                 Text(
-      //                   widget.timeText,
-      //                   style: const TextStyle(
-      //                     fontSize: 12,
-      //                     color: Colors.grey,
-      //                   ),
-      //                 ),
-      //               ],
-      //             ),
-      //             const SizedBox(height: 4),
-      //           ],
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
