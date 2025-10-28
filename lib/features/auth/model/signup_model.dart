@@ -11,7 +11,7 @@ class SignupRequestParam {
   final String? bio;
   final String? password;
   final String? confirmPassword;
-  final List<String> interestList;
+  final List<String> selectedInterests;
   final List<CreateCustomInterestParam> customInterests;
 
   SignupRequestParam({
@@ -25,7 +25,7 @@ class SignupRequestParam {
     required this.bio,
     required this.password,
     required this.confirmPassword,
-    required this.interestList,
+    required this.selectedInterests,
     required this.customInterests,
   });
   Map<String, dynamic> toJson() => {
@@ -39,7 +39,7 @@ class SignupRequestParam {
     'bio': bio,
     'password': password,
     'confirmPassword': confirmPassword,
-    'interestList': interestList,
-    'customInterests': customInterests.map((e)=> e.toJson()).toList()
+    'selectedInterests': selectedInterests,
+    'customInterests': customInterests.map((e) => e.toJson()).toList(),
   };
 }

@@ -3,10 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/helpers/auth_role.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/splash_screen.dart';
+import 'package:flutter_ursffiver/features/nabber_screen.dart';
 import 'package:get/get.dart';
 
 import '../core/constants/api_endpoints.dart';
 import '../core/constants/route_names.dart';
+import '../features/home/presentation/screen/home_screen.dart';
 import 'controller/app_global_controllers.dart';
 import '../main.dart';
 
@@ -23,7 +28,7 @@ class AppManager extends GetxController {
   // listen to auth change
   void _init() {
     final appGlobalControllers = Get.lazyPut<AppGlobalControllers>(
-     ()=> AppGlobalControllers(),
+      () => AppGlobalControllers(),
     );
     Get.find<AppGlobalControllers>().beforeAuthInit();
 
@@ -42,10 +47,11 @@ class AppManager extends GetxController {
     if (authStatus != null) {
       _authStatus = authStatus;
       if (_authStatus is UnAuthenticated) {
-        navigatorKey.currentState?.pushNamedAndRemoveUntil(
-          RouteNames.login,
-          (route) => false,
-        );
+        Get.to(() => SignInScreen());
+        // navigatorKey.currentState?.pushNamedAndRemoveUntil(
+        //   RouteNames.login,
+        //   (route) => false,
+        // );
       } else if (_authStatus is Authenticated) {
         await _initializeControllers();
         await Get.find<AppPigeon>().socketInit(
@@ -55,10 +61,11 @@ class AppManager extends GetxController {
             joinId: (_authStatus as Authenticated).auth.userId,
           ),
         );
-        navigatorKey.currentState?.pushNamedAndRemoveUntil(
-          RouteNames.home,
-          (route) => false,
-        );
+        Get.to(() => AppGround());
+        // navigatorKey.currentState?.pushNamedAndRemoveUntil(
+        //   RouteNames.home,
+        //   (route) => false,
+        // );
       }
       update();
     }
@@ -71,6 +78,5 @@ class AppManager extends GetxController {
     }
 
     Get.put<AppGlobalControllers>(AppGlobalControllers()).afterAuthInit();
-
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
 
 import 'user_interest_model.dart';

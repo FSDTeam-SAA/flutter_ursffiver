@@ -3,7 +3,6 @@ import 'package:flutter_ursffiver/features/badges/controller/all_badges_controll
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/badges/presentation/screen/badge_guide_screen.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
-import 'package:flutter_ursffiver/features/profile/model/badge_model.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';

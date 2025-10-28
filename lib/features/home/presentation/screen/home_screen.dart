@@ -18,7 +18,6 @@ import '../../../../core/theme/text_style.dart';
 import '../../../common/app_logo.dart';
 import '../../../notification/screen/notification_screen.dart';
 import '../../../profile/controller/profile_data_controller.dart';
-import '../../controller/home_interest_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -55,24 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isEditing = false;
   int selectedRange = 2;
 
-  final List<String> interests = [
-    "Acting/Theatre",
-    "Escape Room",
-    "Arcade Gaming",
-    "Expedition Travel",
-    "Meditation",
-    "Cooking",
-  ];
-
-  // final List<String> ranges = [
-  //   "Bluetooth",
-  //   "Nearby",
-  //   "Up to 1 mile",
-  //   "Up to 5 miles",
-  //   "Up to 10 miles",
-  // ];
-
-  // Define ranges
   final List<String> ranges = [
     "Bluetooth",
     "Nearby",
@@ -407,6 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             SliverAppBar(
+              automaticallyImplyLeading: false,
               pinned: true,
               toolbarHeight: 190,
               flexibleSpace: Column(

@@ -143,7 +143,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     },
                     onDone: () {
                       // Navigator.pushNamed(context, RouteNames.verifyScreen);
-                      Navigator.push(
+                      Navigator.pop(
                         context,
                         MaterialPageRoute(
                           builder: (context) => ProfileScreen(),

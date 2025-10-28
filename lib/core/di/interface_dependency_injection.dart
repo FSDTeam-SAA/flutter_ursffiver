@@ -14,11 +14,21 @@ import '../../features/home/service/home_interface.dart';
 
 void initInterfaces() {
   // Initialize other interfaces here
-  Get.lazyPut<AuthInterface>(()=> AuthInterfaceImpl(Get.find()));
-  Get.lazyPut<InterestInterface>(()=> InterestInterfaceImpl(appPigeon: Get.find()));
-  Get.lazyPut<NotificationInterface>(()=> NotificationInterfaceImpl(appPigeon: Get.find()));
-  Get.lazyPut<HomeInterface>(()=> HomeService(appPigeon: Get.find()),fenix: true);
-  Get.lazyPut<ProfileInterface>(() => ProfileInterfaceImpl(appPigeon: Get.find()));
-  Get.lazyPut<BadgesInterface>(() => BadgesInterfaceImpl(appPigeon: Get.find()));
-  
+  Get.lazyPut<AuthInterface>(() => AuthInterfaceImpl(Get.find()));
+  Get.lazyPut<InterestInterface>(
+    () => InterestInterfaceImpl(appPigeon: Get.find()),
+  );
+  Get.lazyPut<NotificationInterface>(
+    () => NotificationInterfaceImpl(appPigeon: Get.find()),
+  );
+  Get.lazyPut<HomeInterface>(
+    () => HomeService(appPigeon: Get.find()),
+    fenix: true,
+  );
+  Get.lazyPut<ProfileInterface>(
+    () => ProfileInterfaceImpl(appPigeon: Get.find()),
+  );
+  Get.lazyPut<BadgesInterface>(
+    () => BadgesInterfaceImpl(appPigeon: Get.find()),
+  );
 }

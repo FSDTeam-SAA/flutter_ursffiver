@@ -12,7 +12,7 @@ base class ApiEndpoints {
 
   static const String verifyCode = _Auth.verifyCode;
 
-  static const String registerVerify = _Auth.registerVerify;
+  //static const String registerVerify = _Auth.registerVerify;
 
   //static const String resetPassword = _Auth.resetPassword;
 
@@ -90,6 +90,10 @@ base class ApiEndpoints {
   /// ### Delete
   static String deleteMessage(String messageId) => _Message.deleteMessage(messageId);
 
+  ////////////
+  ///
+  static String getUselAllChat(String chatId) => _Message.getUselallChat(chatId);
+
 }
 
 //arrow360degree@gmail.com
@@ -117,7 +121,7 @@ class _Auth {
   static const String forgetPassword = '$_authRoute/forgot-password';
   static const String refreshToken = '$_authRoute/refresh-token';
   static const String verifyCode = '$_authRoute/verify-otp';
-  static const String registerVerify = '$_authRoute/register/verify';
+  //static const String registerVerify = '$_authRoute/verify-otp';
   static const String changePassword = '$_authRoute/change-password';
   static const String resetPassword = '$_authRoute/reset-password';
 }
@@ -178,7 +182,7 @@ class _Booking {
 
 // ---------------------- MESSAGE -----------------------------
 class _Message {
-  static const String _messageRoute = '${ApiEndpoints.baseUrl}/message';
+  static const String _messageRoute = '${ApiEndpoints.baseUrl}/chat';
   
   static const String getAllChat = "$_messageRoute/rooms";
   /// Get
@@ -191,5 +195,10 @@ class _Message {
   static String editMessage(String messageId) => "$_messageRoute/$messageId";
   /// Delete
   static String deleteMessage(String messageId) => "$_messageRoute/$messageId";
+
+
+
+  static String getUselallChat(String chatId) => "$_messageRoute/get-chat";
+
 }
 

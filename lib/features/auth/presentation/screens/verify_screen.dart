@@ -4,13 +4,19 @@ import 'package:flutter_ursffiver/core/common/widget/reactive_button/save_button
 import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/auth/controller/verify_account_view_controller.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:flutter_ursffiver/features/common/app_logo.dart';
 
 class VerifyScreen extends StatefulWidget {
   final String email;
-  const VerifyScreen({super.key, required this.email});
+  final bool isFromRegisterScreen;
+  const VerifyScreen({
+    super.key,
+    required this.email,
+    required this.isFromRegisterScreen,
+  });
 
   @override
   State<VerifyScreen> createState() => _VerifyScreenState();
@@ -18,6 +24,7 @@ class VerifyScreen extends StatefulWidget {
 
 class _VerifyScreenState extends State<VerifyScreen> {
   late final VerifyForgetPasswordOtpController controller;
+  late final VerifyAccountViewController verifyAccountCntlr;
   static const _brandBlue = Color(0xFF4C5CFF);
   final _nodes = List.generate(
     6,
@@ -33,6 +40,12 @@ class _VerifyScreenState extends State<VerifyScreen> {
   @override
   void initState() {
     super.initState();
+
+    verifyAccountCntlr = VerifyAccountViewController(
+      snackbarNotifier: SnackbarNotifier(context: context),
+      email: widget.email,
+    );
+
     controller = VerifyForgetPasswordOtpController(
       email: widget.email,
       snackbarNotifier: SnackbarNotifier(context: context),
@@ -59,7 +72,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
     final String otp = _controllers.map((e) => e.text).join();
 
     controller.otp = otp;
-    
+    verifyAccountCntlr.otp = otp;
   }
 
   void _onBackspace(int index, RawKeyEvent e) {
@@ -202,18 +215,82 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     loadingText: "Verifying...",
                     doneText: "Done",
                     onDone: () {
-                      
+                      if (widget.isFromRegisterScreen) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SignInScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ResetPasswordScreen(
+                              email: controller.email,
+                              otp: controller.otp,
+                            ),
+                          ),
+                        );
+                      }
                     },
                     onSaveTap: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ResetPasswordScreen(email: controller.email, otp: controller.otp),
-                        ),
-                      );
+                      if (widget.isFromRegisterScreen) {
+                        verifyAccountCntlr.verify();
+                      } else {
+                        controller.verify();
+                      }
+
                     },
                   ),
                 ),
+                // SizedBox(
+                //   height: 50,
+                //   child: RSaveButton(
+                //     key: UniqueKey(),
+                //     width: double.infinity,
+                //     height: 54,
+                //     buttonStatusNotifier: controller.prcessNotifier,
+                //     saveText: "Verify",
+                //     loadingText: "Verifying...",
+                //     doneText: "Done",
+
+                //     // When verification process is done
+                //     onDone: () {
+                //       if (widget.isFromRegisterScreen) {
+                //         // After account verification during signup
+                //         Navigator.of(context).pushAndRemoveUntil(
+                //           MaterialPageRoute(
+                //             builder: (context) => const SignInScreen(),
+                //           ),
+                //           (route) => false, // remove all previous routes
+                //         );
+                //       } else {
+                //         // After verifying OTP for password reset
+                //         Navigator.of(context).pushReplacement(
+                //           MaterialPageRoute(
+                //             builder: (context) => ResetPasswordScreen(
+                //               email: controller.email,
+                //               otp: controller.otp,
+                //             ),
+                //           ),
+                //         );
+                //       }
+                //     },
+
+                //     // When "Verify" button is pressed
+                //     onSaveTap: () async {
+                //       FocusScope.of(context).unfocus(); // hide keyboard
+                //       if (widget.isFromRegisterScreen) {
+                //         verifyAccountCntlr.verify();
+                //       } else {
+                //         controller.verify();
+                //       }
+                //     },
+                //   ),
+                // ),
+
                 const SizedBox(height: 10),
               ],
             ),

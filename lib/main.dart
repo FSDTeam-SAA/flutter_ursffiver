@@ -5,6 +5,7 @@ import 'package:flutter_ursffiver/core/theme/app_theme.dart';
 import 'package:flutter_ursffiver/core/di/controller_dependency_injection.dart';
 import 'package:flutter_ursffiver/core/di/external_service_di.dart';
 import 'package:flutter_ursffiver/core/di/interface_dependency_injection.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/splash_screen.dart';
 import 'package:get/get.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -36,15 +37,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: navigatorKey,
+    return GetMaterialApp(
+      // navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       themeMode: ThemeMode.light,
       title: 'Flutter Demo',
-      //home: HomeScreen(),
-      initialRoute: RouteNames.splash,
-      routes: AppRoutes.routes,
+      home: SplashScreen(),
+      // initialRoute: RouteNames.splash,
+      // routes: AppRoutes.routes,
     );
   }
 }

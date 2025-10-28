@@ -69,13 +69,13 @@ final class AuthInterfaceImpl extends AuthInterface {
   }
 
   @override
-  FutureRequest<Success> verifyAccount(VerifyAccountParam param) async {
-    debugPrint(param.toMap().toString());
+  FutureRequest<Success> verifyAccount(VerifyOtpParam param) async {
+    debugPrint(param.toJson().toString());
     return await asyncTryCatch(
       tryFunc: () async {
         final response = await appPigeon.post(
-          ApiEndpoints.registerVerify,
-          data: param.toMap(),
+          ApiEndpoints.verifyCode,
+          data: param.toJson(),
         );
         return Success(message: extractSuccessMessage(response));
       },
