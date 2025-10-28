@@ -140,7 +140,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => VerifyScreen(email: emailController.text,),
+                            builder: (context) => VerifyScreen(email: emailController.text, isFromRegisterScreen: false,),
                           ),
                         );
                       },

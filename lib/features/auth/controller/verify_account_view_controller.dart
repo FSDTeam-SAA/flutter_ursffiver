@@ -35,17 +35,19 @@ abstract class VerifyOtpController extends ChangeNotifier {
   void verify();
 }
 
-
-class VerifyAccountViewController extends VerifyOtpController{
-  VerifyAccountViewController({required super.email, required super.snackbarNotifier});
+class VerifyAccountViewController extends VerifyOtpController {
+  VerifyAccountViewController({
+    required super.email,
+    required super.snackbarNotifier,
+  });
 
   @override
-  void verify() async{
+  void verify() async {
     if (prcessNotifier.status is LoadingStatus) return;
     debugPrint("verifying...");
     prcessNotifier.setLoading();
     await authInterface
-        .verifyAccount(VerifyAccountParam(email: email, code: otp))
+        .verifyAccount(VerifyOtpParam(email: email, otp: otp))
         .then((lr) {
           handleFold(
             either: lr,
@@ -56,23 +58,26 @@ class VerifyAccountViewController extends VerifyOtpController{
   }
 }
 
-class VerifyForgetPasswordOtpController extends VerifyOtpController{
-  VerifyForgetPasswordOtpController({required super.email, required super.snackbarNotifier});
+class VerifyForgetPasswordOtpController extends VerifyOtpController {
+  VerifyForgetPasswordOtpController({
+    required super.email,
+    required super.snackbarNotifier,
+  });
 
   @override
-  void verify() async{
+  void verify() async {
     if (prcessNotifier.status is LoadingStatus) return;
     debugPrint("verifying...");
     prcessNotifier.setLoading();
-    await authInterface
-        .verifyCode(VerifyOtpParam(email: email, otp: otp))
-        .then((lr) {
-          handleFold(
-            either: lr,
-            processStatusNotifier: prcessNotifier,
-            successSnackbarNotifier: snackbarNotifier,
-            errorSnackbarNotifier: snackbarNotifier,
-          );
-        });
+    await authInterface.verifyCode(VerifyOtpParam(email: email, otp: otp)).then(
+      (lr) {
+        handleFold(
+          either: lr,
+          processStatusNotifier: prcessNotifier,
+          successSnackbarNotifier: snackbarNotifier,
+          errorSnackbarNotifier: snackbarNotifier,
+        );
+      },
+    );
   }
 }

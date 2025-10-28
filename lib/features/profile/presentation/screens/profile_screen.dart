@@ -63,12 +63,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       );
                     }),
-                    _buildMenuItem(Icons.interests_outlined, 'Interests', () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => InterestsPage()),
-                      );
-                    }),
+                    // _buildMenuItem(Icons.interests_outlined, 'Interests', () {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(builder: (_) => InterestsPage()),
+                    //   );
+                    // }),
                     _buildMenuItem(
                       Icons.settings_outlined,
                       'Privacy Settings',

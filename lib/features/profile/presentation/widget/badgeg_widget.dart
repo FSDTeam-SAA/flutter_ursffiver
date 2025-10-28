@@ -106,14 +106,12 @@
 //   }
 // }
 
-
-
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/features/profile/presentation/model/badge_model.dart';
+import 'package:flutter_ursffiver/features/profile/model/badge_model.dart';
 
 // Single Badge widget
 class BadgeWidget extends StatelessWidget {
-  final BadgeModel badge;
+  final IconBadgeModel badge;
 
   const BadgeWidget({super.key, required this.badge});
 
@@ -173,10 +171,7 @@ class BadgeHeader extends StatelessWidget {
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
-        Text(
-          username,
-          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-        ),
+        Text(username, style: TextStyle(fontSize: 16, color: Colors.grey[700])),
         const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -196,7 +191,7 @@ class BadgeHeader extends StatelessWidget {
 
 // Badge List
 class BadgeList extends StatelessWidget {
-  final List<BadgeModel> badges;
+  final List<IconBadgeModel> badges;
 
   const BadgeList({super.key, required this.badges});
 
@@ -218,7 +213,7 @@ class BadgeSection extends StatelessWidget {
   final String sectionTitle;
   final IconData sectionIcon;
   final Color sectionIconColor;
-  final List<BadgeModel> badges;
+  final List<IconBadgeModel> badges;
 
   const BadgeSection({
     super.key,

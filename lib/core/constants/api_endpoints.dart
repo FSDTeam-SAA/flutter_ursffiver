@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _RemoteServer.socketUrl;
+  static const String socketUrl = _LocalHostWifi.socketUrl;
 
-  static const String baseUrl = _RemoteServer.baseUrl;
+  static const String baseUrl = _LocalHostWifi.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -12,7 +12,7 @@ base class ApiEndpoints {
 
   static const String verifyCode = _Auth.verifyCode;
 
-  static const String registerVerify = _Auth.registerVerify;
+  //static const String registerVerify = _Auth.registerVerify;
 
   //static const String resetPassword = _Auth.resetPassword;
 
@@ -34,7 +34,7 @@ base class ApiEndpoints {
 
   //------------notification----------------
   /// ### get
-  static const String getUserNotifications = _Notification.getUserNotifications;
+  static const String getAllNotifications = _Notification.getAllNotifications;
   /// ### post
   static const String readAllNotifications = _Notification.readAllNotifications;
   /// ### patch
@@ -90,6 +90,10 @@ base class ApiEndpoints {
   /// ### Delete
   static String deleteMessage(String messageId) => _Message.deleteMessage(messageId);
 
+  ////////////
+  ///
+  static String getUselAllChat(String chatId) => _Message.getUselallChat(chatId);
+
 }
 
 //arrow360degree@gmail.com
@@ -117,8 +121,7 @@ class _Auth {
   static const String forgetPassword = '$_authRoute/forgot-password';
   static const String refreshToken = '$_authRoute/refresh-token';
   static const String verifyCode = '$_authRoute/verify-otp';
-  static const String registerVerify = '$_authRoute/register/verify';
-  //static const String resetPassword = '$_authRoute/reset-password';
+  //static const String registerVerify = '$_authRoute/verify-otp';
   static const String changePassword = '$_authRoute/change-password';
   static const String resetPassword = '$_authRoute/reset-password';
 }
@@ -135,19 +138,22 @@ class _Notification {
   static const String _notificationRoute =
       '${ApiEndpoints.baseUrl}/notification';
   static String markNotificationAsRead(String notificationId) =>
-      '$_notificationRoute/$notificationId/read';
-
+      'mark-as-read/$_notificationRoute/$notificationId';
   static const String readAllNotifications =
-      '$_notificationRoute/read-all';
+      '$_notificationRoute/mark-all-as-read';
   static const String markAllAsRead = '$_notificationRoute/mark-all-as-read';
-  static const String getUserNotifications = '$_notificationRoute/user';
+  static const String getAllNotifications = '$_notificationRoute/';
 }
 
+
+// ---------------------- USER -----------------------------
 class _User {
   static const String _userRoute = '${ApiEndpoints.baseUrl}/user';
-  static String getuserbyId(String id) => '$_userRoute/$id';
-  static const String getCurrentProfile = '$_userRoute/profile';
-  static const String editProfile = '$_userRoute/';
+  static String getuserbyId(String id) => '$_userRoute/single-user/$id';
+  static const String getCurrentProfile = '$_userRoute/';
+
+
+  static const String editProfile = '$_userRoute/update-profile';
   static const String uploadProfileAvatar = '$_userRoute/upload-avatar';
   static const String history = '$_userRoute/history';
   static const String allUser = '$_userRoute/all-user';
@@ -176,7 +182,7 @@ class _Booking {
 
 // ---------------------- MESSAGE -----------------------------
 class _Message {
-  static const String _messageRoute = '${ApiEndpoints.baseUrl}/message';
+  static const String _messageRoute = '${ApiEndpoints.baseUrl}/chat';
   
   static const String getAllChat = "$_messageRoute/rooms";
   /// Get
@@ -189,5 +195,10 @@ class _Message {
   static String editMessage(String messageId) => "$_messageRoute/$messageId";
   /// Delete
   static String deleteMessage(String messageId) => "$_messageRoute/$messageId";
+
+
+
+  static String getUselallChat(String chatId) => "$_messageRoute/get-chat";
+
 }
 

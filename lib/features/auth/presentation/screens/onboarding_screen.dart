@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
+import 'package:get/get.dart';
 
 import '../../../../main.dart';
 import '../../../common/app_logo.dart';
@@ -203,7 +204,8 @@ class OnBoardingScreen extends StatelessWidget {
                     text: 'Create Account',
                     onPressed: () {
                       //Navigator.pushNamed(context, RouteNames.signup);
-                      navigatorKey.currentState?.pushNamed(RouteNames.signup);
+                      // navigatorKey.currentState?.pushNamed(RouteNames.signup);
+                      Get.to(() => const SignupScreen());
                     },
                   ),
                   const SizedBox(height: 8),

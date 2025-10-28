@@ -232,7 +232,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          VerifyScreen(email: controller.email,),
+                                          VerifyScreen(email: controller.email, isFromRegisterScreen: true,),
                                     ),
                                   );
                                 },
@@ -265,10 +265,12 @@ class _SignInScreenState extends State<SignInScreen> {
                               decoration: TextDecoration.underline,
                             ),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => Navigator.pushNamed(
-                                    context,
-                                    RouteNames.signup
-                              ),
+                              ..onTap = () => Get.to(() => const SignupScreen()),
+                              
+                              // Navigator.pushNamed(
+                              //       context,
+                              //       RouteNames.signup
+                              // ),
                           ),
                         ],
                       ),

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/app/controller/app_global_controllers.dart';
-import 'package:flutter_ursffiver/core/common/controller/interest_fetch_controller.dart';
 import 'package:flutter_ursffiver/core/common/controller/select_interest_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
-import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
 import '../../../features/auth/presentation/widget/create_custom_interest_bottom_sheet.dart';
 import '../../../features/auth/presentation/widget/select_interest_widget.dart';
@@ -40,7 +37,6 @@ class InterestPickerSheet extends StatefulWidget {
 
 class _InterestPickerSheetState extends State<InterestPickerSheet> {
   late final InterestSelectionController selectInterestController;
-  final Debouncer _debouncer = Debouncer(delay: Duration(milliseconds: 400));
   @override
   void initState() {
     // TODO: implement initState

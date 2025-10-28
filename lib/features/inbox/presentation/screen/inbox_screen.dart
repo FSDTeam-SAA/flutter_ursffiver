@@ -58,7 +58,6 @@ class ChatScreen extends StatelessWidget {
             ),
             onSelected: (value) {
               if (value == "extend") {
-                // TODO: handle extend
               } else if (value == "badge") {
                 showModalBottomSheet(
                   context: context,

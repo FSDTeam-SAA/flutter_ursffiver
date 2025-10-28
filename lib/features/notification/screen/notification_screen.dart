@@ -1,167 +1,340 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/features/notification/controller/notification_controller.dart';
-import 'package:flutter_ursffiver/features/notification/model/notification_model.dart';
+import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:get/get.dart';
-import 'package:flutter_ursffiver/core/theme/app_colors.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/screen/inbox_screen.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import '../controller/notification_controller.dart';
+import '../model/notification_model.dart';
+import 'package:intl/intl.dart';
 
-
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final NotificationController controller = Get.put(NotificationController());
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
 
+class _NotificationScreenState extends State<NotificationScreen> {
+  final NotificationController controller = Get.put(NotificationController());
+
+  String _formatDateTime(DateTime date) {
+    final now = DateTime.now();
+    if (date.day == now.day &&
+        date.month == now.month &&
+        date.year == now.year) {
+      return DateFormat('hh:mm a').format(date);
+    } else {
+      return DateFormat('MMM dd, hh:mm a').format(date);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        centerTitle: false,
-        title: const Text(
-          'Notification',
+        centerTitle: true,
+        title: Text(
+          "Notifications",
           style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
+            fontSize: 20,
             fontWeight: FontWeight.w600,
+            color: Colors.black,
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: controller.markAllAsRead,
-            child: const Text(
-              'Read all',
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(
+              child: TextButton(
+                onPressed: controller.readAllNotification,
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Text(
+                    "Read all",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
         ],
       ),
       body: Obx(() {
-        return ListView.separated(
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (controller.notifications.isEmpty) {
+          return const Center(child: Text("No notifications found"));
+        }
+        return ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: controller.notifications.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 8),
           itemBuilder: (context, index) {
-            final notif = controller.notifications[index];
-            return _buildNotificationCard(notif, controller, context);
+            return Obx(() {
+              final data = controller.notifications[index];
+              return NotificationItem(
+                data: data,
+                timeText: _formatDateTime(data.createdAt),
+                onExpandToggle: () async {
+                  await controller.markAsRead(index);
+                  controller.toggleExpand(index);
+                },
+              );
+            });
           },
         );
       }),
     );
   }
+}
 
-  Widget _buildNotificationCard(
-      NotificationModel notif, NotificationController controller, BuildContext context) {
-    return GestureDetector(
-      onTap: () => controller.markAsRead(notif),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: notif.isRead ? AppColors.white : AppColors.appber,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
+class NotificationItem extends StatefulWidget {
+  final NotificationModel data;
+  final VoidCallback onExpandToggle;
+  final VoidCallback? onAccept;
+  final VoidCallback? onReject;
+  final String timeText;
+
+  const NotificationItem({
+    super.key,
+    required this.data,
+    required this.onExpandToggle,
+    this.onAccept,
+    this.onReject,
+    required this.timeText,
+  });
+
+  @override
+  State<NotificationItem> createState() => _NotificationItemState();
+}
+
+class _NotificationItemState extends State<NotificationItem> {
+  bool isExpanded = false;
+
+  void _handleTap() {
+    setState(() {
+      isExpanded = !isExpanded;
+    });
+    widget.onExpandToggle();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final data = widget.data;
+
+    if (data.type == NotificationType.messageRequest) {
+      return GestureDetector(
+        onTap: _handleTap,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: data.isRead ? Colors.white : Colors.blue.shade50,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.grey.shade300,
+              width: 1.5,
             ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (notif.hasAvatar)
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.orange[300],
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.person, color: Colors.white, size: 20),
-              )
-            else if (!notif.isRead)
-              Container(
-                width: 16,
-                height: 16,
-                margin: const EdgeInsets.only(top: 6),
-                decoration: const BoxDecoration(
-                  color: AppColors.primarybutton,
-                  shape: BoxShape.circle,
-                ),
-              )
-            else
-              const SizedBox(width: 20),
-
-            const SizedBox(width: 12),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        notif.title,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: notif.isRead ? Colors.black87 : Colors.black,
-                        ),
-                      ),
-                      Text(
-                        notif.time,
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    notif.subtitle,
-                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                  ),
-                ],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 6,
+                offset: const Offset(0, 3),
               ),
-            ),
-
-            if (notif.hasActions) ...[
-              const SizedBox(width: 12),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => controller.removeNotification(notif),
-                    child: const Icon(Icons.close, color: Colors.red, size: 20),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 45,
+                width: 45,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.grey.shade300, width: 1.5),
+                ),
+                child: ClipOval(
+                  child: SmartNetworkImage(
+                    imageUrl: data.user.imagePath,
+                    height: 45,
+                    width: 45,
+                    fit: BoxFit.cover,
                   ),
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () {
-                      controller.markAsRead(notif);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ChatScreen(
-                            contactName: 'Ursusus',
-                            avatarUrl:
-                                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
+                ),
+              ),
+
+              const SizedBox(width: 12),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          data.user.fullname,
+                          maxLines: 5,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(width: 20),
+                        Text(
+                          timeago.format(data.createdAt),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
                           ),
                         ),
-                      );
-                    },
-                    child:
-                        const Icon(Icons.check, color: Colors.green, size: 20),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      data.title,
+                      maxLines: isExpanded ? null : 1,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
+                      overflow: isExpanded
+                          ? TextOverflow.visible
+                          : TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(Icons.close, color: Colors.red, size: 22),
+                    onPressed: widget.onReject,
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(
+                      Icons.check,
+                      color: Colors.green,
+                      size: 22,
+                    ),
+                    onPressed: widget.onAccept,
                   ),
                 ],
               ),
             ],
-          ],
+          ),
         ),
-      ),
+      );
+    } else if (data.type == NotificationType.accepted) {
+      return GestureDetector(
+        onTap: _handleTap,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: data.isRead ? Colors.white : Colors.blue.shade50,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade300, width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 45,
+                width: 45,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.grey.shade300, width: 1.5),
+                ),
+                child: ClipOval(
+                  child: SmartNetworkImage(
+                    imageUrl: data.user.imagePath,
+                    height: 45,
+                    width: 45,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          // data.title,
+                          data.user.fullname,
+                          maxLines: 5,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(width: 20),
+                        Text(
+                          timeago.format(data.createdAt),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      data.title,
+                      maxLines: isExpanded ? null : 1,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
+                      overflow: isExpanded
+                          ? TextOverflow.visible
+                          : TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {}
+    return GestureDetector(
+      onTap: _handleTap,
     );
   }
 }
