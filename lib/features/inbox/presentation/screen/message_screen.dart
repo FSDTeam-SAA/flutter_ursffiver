@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/screen/inbox_screen.dart';
+import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_style.dart';
 
-class MessagesScreen extends StatelessWidget {
+class MessagesScreen extends StatefulWidget {
   const MessagesScreen({super.key});
+
+  @override
+  State<MessagesScreen> createState() => _MessagesScreenState();
+}
+
+class _MessagesScreenState extends State<MessagesScreen> {
+  final ChatController chatController = ChatController();
+
+  @override
+  void initState() {
+    super.initState();
+    chatController.initSocket();
+  }
 
   final List<MessageItem> messages = const [
     MessageItem(
@@ -185,4 +200,3 @@ class MessageItem {
     required this.avatarUrl,
   });
 }
-

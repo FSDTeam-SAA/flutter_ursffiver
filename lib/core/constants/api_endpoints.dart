@@ -32,6 +32,13 @@ base class ApiEndpoints {
 
 
 
+  //---------------report----------------
+
+  /// ### post
+  static const String sendReport = _Report.sendReport;
+
+
+
   //------------notification----------------
   /// ### get
   static const String getAllNotifications = _Notification.getAllNotifications;
@@ -130,6 +137,13 @@ class _Auth {
 class _Interest {
   static const String _interestRoute = '${ApiEndpoints.baseUrl}/interest';
   static const String getallInterests = '$_interestRoute/';
+}
+
+
+// ---------------------- Report -----------------------------
+class _Report {
+  static const String _reportRoute = '${ApiEndpoints.baseUrl}/reports';
+  static const String sendReport = '$_reportRoute/';
 }
 
 

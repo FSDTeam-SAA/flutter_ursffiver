@@ -5,6 +5,7 @@ import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/profile/interface/profile_interface.dart';
 import 'package:flutter_ursffiver/features/profile/model/change_password_model.dart';
+import 'package:flutter_ursffiver/features/profile/model/report_model.dart';
 import 'package:flutter_ursffiver/features/profile/model/update_profile_avatar_param.dart';
 import 'package:flutter_ursffiver/features/profile/model/update_profile_model.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
@@ -29,7 +30,6 @@ final class ProfileInterfaceImpl extends ProfileInterface {
 
   @override
   FutureRequest<Success<UserProfile>> getUserProfilebyId(String id) async {
-
     debugPrint("GetUserProfilebyId Request: $id");
     debugPrint("GetUserProfilebyId Request: $Uri");
     return await asyncTryCatch(
@@ -46,31 +46,71 @@ final class ProfileInterfaceImpl extends ProfileInterface {
 
   @override
   FutureRequest<Success> updateProfile(UpdateProfileModel params) async {
-  return await asyncTryCatch(
-    tryFunc: () async {
-      final body = params.toJson();
-      body['userId'] = params.id;
+    return await asyncTryCatch(
+      tryFunc: () async {
+        final body = params.toJson();
+        body['userId'] = params.id;
 
-      debugPrint("UpdateProfile Request: $body");
+        debugPrint("UpdateProfile Request: $body");
 
-      final response = await appPigeon.patch(
-        ApiEndpoints.editProfile,
-        data: body,
-      );
+        final response = await appPigeon.patch(
+          ApiEndpoints.editProfile,
+          data: body,
+        );
 
-      final message = extractSuccessMessage(response);
-      return Success(message: message);
-    },
-  );
-}
+        final message = extractSuccessMessage(response);
+        return Success(message: message);
+      },
+    );
+  }
 
-  
+  // @override
+  // FutureRequest<Success> reportandProblem(ReportModel params) async {
+  //   return await asyncTryCatch(
+  //     tryFunc: () async {
+  //       //call api here
+  //       debugPrint(params.toFormData().toString());
+  //       final response = await appPigeon.post(
+  //         ApiEndpoints.sendReport,
+  //         data: params.toFormData(),
+  //       );
+
+  //       //parse
+
+  //       //return
+  //       return Success(message: extractSuccessMessage(response));
+  //     },
+  //   );
+  // }
+  @override
+  FutureRequest<Success> reportandProblem(ReportModel params) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        // ⬇️ Make sure you await formData
+        final formData = await params.toFormData();
+
+        debugPrint(formData.fields.toString());
+        debugPrint(formData.files.toString());
+        debugPrint(" Report Request: ${ApiEndpoints.sendReport}");
+
+        final response = await appPigeon.post(
+          ApiEndpoints.sendReport,
+          data: formData,
+        );
+
+        debugPrint("Report Response: ${response.data}");
+
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
+
   @override
   FutureRequest<Success> deleteProfileAvatar(String userId) {
     // TODO: implement deleteProfileAvatar
     throw UnimplementedError();
   }
-  
+
   @override
   FutureRequest<Success> uploadProfileAvatar(UploadProfileAvatarParam params) {
     // TODO: implement uploadProfileAvatar
