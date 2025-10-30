@@ -32,7 +32,7 @@ class EditProfileInfoController extends GetxController {
   final bioController = TextEditingController();
 
   var profileImage = Rx<File?>(null);
-  final beforeUserProfile = Get.find<ProfileDataController>().userProfile.value; // Store the user profile before editing>
+  final beforeUserProfile = Get.find<ProfileDataProvider>().userProfile.value; // Store the user profile before editing>
   
   final ImagePicker _picker = ImagePicker();
 
@@ -49,7 +49,7 @@ class EditProfileInfoController extends GetxController {
     super.onInit();
     loadDataFromProfile();
 
-    final profileController = Get.find<ProfileDataController>();
+    final profileController = Get.find<ProfileDataProvider>();
 
     // If profile data already exists, load it immediately
     if (profileController.userProfile.value != null) {
@@ -63,7 +63,7 @@ class EditProfileInfoController extends GetxController {
   }
 
   void loadDataFromProfile() {
-    final user = Get.find<ProfileDataController>().userProfile.value;
+    final user = Get.find<ProfileDataProvider>().userProfile.value;
     if (user == null) return;
 
     firstNameController.text = user.firstname ?? "";
@@ -132,7 +132,7 @@ class EditProfileInfoController extends GetxController {
               } else {
                 debugPrint("No image selected");
               }
-              Get.find<ProfileDataController>().getCurrentUserProfile();
+              Get.find<ProfileDataProvider>().getCurrentUserProfile();
             },
           );
         });

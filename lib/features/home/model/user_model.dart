@@ -1,6 +1,5 @@
+import 'package:flutter_ursffiver/core/common/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
-
-import 'user_interest_model.dart';
 
 class UserModel {
   final String id;
@@ -17,7 +16,7 @@ class UserModel {
   final String role;
   final String status;
   final bool adminVerify;
-  final List<UserInterestModel> interests;
+  final List<InterestModel> interests;
   final bool active;
   final List<UserAddressModel> address;
   final String? imagePath;
@@ -64,7 +63,7 @@ class UserModel {
       interests: json['interest'] == null
           ? []
           : (json['interest'] as List<dynamic>)
-                .map((e) => UserInterestModel.fromJson(e))
+                .map((e) => InterestModel.fromJson(e))
                 .toList(),
       active: json['active'] ?? false,
       address: [],
@@ -93,5 +92,29 @@ class UserModel {
       address: [],
       imagePath: json['profileImage'] as String?,
     );
+  }
+
+  // tojson
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'fullname': fullname,
+      'ageRange': ageRange,
+      'bio': bio,
+      'email': email,
+      'username': username,
+      'gender': gender,
+      'dateOfBirth': dateOfBirth?.toIso8601String(),
+      'isEmailVerified': isEmailVerified,
+      'role': role,
+      'status': status,
+      'adminVerify': adminVerify,
+      'interest': interests.map((e) => e.toJson()).toList(),
+      'active': active,
+      'address': address.map((e) => e.toJson()).toList(),
+      'profileImage': imagePath,
+    };
   }
 }

@@ -510,7 +510,7 @@ class AllBadgesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProfileDataController());
+    final controller = Get.put(ProfileDataProvider());
 
     return Padding(
       padding: const EdgeInsets.all(16),

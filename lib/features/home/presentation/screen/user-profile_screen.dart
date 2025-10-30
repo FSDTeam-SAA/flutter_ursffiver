@@ -9,6 +9,8 @@ import 'package:flutter_ursffiver/features/profile/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/widget/badgeg_widget.dart';
 import 'package:get/get.dart';
 
+import '../widget/interest_grid.dart';
+
 class UserProfileScreen extends StatefulWidget {
   final UserModel user;
   const UserProfileScreen({super.key, required this.user});
@@ -18,8 +20,8 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  final ProfileDataController _homeInterestController = Get.put(
-    ProfileDataController(),
+  final ProfileDataProvider _homeInterestController = Get.put(
+    ProfileDataProvider(),
   );
   /////////////////
 

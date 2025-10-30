@@ -1,10 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/app/controller/app_global_controllers.dart';
+import 'package:flutter_ursffiver/core/common/model/interest_model.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
 import 'package:flutter_ursffiver/core/componenet/pagination/widget/paginated_list.dart';
 import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/controller/filter_people_suggestion_controller.dart';
-import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/user_profile_card.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/invitation_notification_widget.dart';
@@ -18,6 +19,7 @@ import '../../../../core/theme/text_style.dart';
 import '../../../common/app_logo.dart';
 import '../../../notification/screen/notification_screen.dart';
 import '../../../profile/controller/profile_data_controller.dart';
+import '../widget/interest_grid.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,14 +33,12 @@ class _HomeScreenState extends State<HomeScreen> {
       Get.find<AppGlobalControllers>()
           .homeController
           .filterPeopleSuggestionController;
-  final ProfileDataController _homeInterestController = Get.put(
-    ProfileDataController(),
-  );
+  final ProfileDataProvider _profieDataController = Get.find<ProfileDataProvider>();
 
   @override
   void initState() {
     super.initState();
-    _homeInterestController.getCurrentUserProfile();
+    _profieDataController.getCurrentUserProfile();
   }
 
   static const _brandGradient = LinearGradient(
@@ -363,11 +363,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 8),
                   Obx(() {
                     final selectedInterests =
-                        _homeInterestController.userProfile.value?.interest ??
+                        _profieDataController.userProfile.value?.interest ??
                         [];
 
                     debugPrint(
-                      "selectedInterests: ${_homeInterestController.userProfile.value?.interest?.length ?? 0}",
+                      "selectedInterests: ${_profieDataController.userProfile.value?.interest?.length ?? 0}",
                     );
 
                     if (selectedInterests.isEmpty) {
@@ -570,39 +570,39 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class InterestsGrid extends StatelessWidget {
-  final List<UserInterestModel> chips;
+// class InterestsGrid extends StatelessWidget {
+//   final List<InterestModel> chips;
 
-  const InterestsGrid({super.key, required this.chips});
+//   const InterestsGrid({super.key, required this.chips});
 
-  @override
-  Widget build(BuildContext context) {
-  return Wrap(
-    spacing: 8,
-    runSpacing: 8,
-    children: chips.map(
-      (chip) => Chip(
-        label: Text(
-          chip.name,
-          style: AppText.mdMedium_16_500.copyWith(
-            color: chip.color.deepColor,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        backgroundColor: chip.color.softColor,
-        side: BorderSide(
-          color: chip.color.deepColor,
-          width: 1.2,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        shadowColor: chip.color.deepColor,
-        elevation: 1,
-      ),
-    ).toList(),
-  );
-}
+//   @override
+//   Widget build(BuildContext context) {
+//   return Wrap(
+//     spacing: 8,
+//     runSpacing: 8,
+//     children: chips.map(
+//       (chip) => Chip(
+//         label: Text(
+//           chip.name,
+//           style: AppText.mdMedium_16_500.copyWith(
+//             color: chip.color.deepColor,
+//             fontWeight: FontWeight.w600,
+//           ),
+//         ),
+//         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+//         backgroundColor: chip.color.softColor,
+//         side: BorderSide(
+//           color: chip.color.deepColor,
+//           width: 1.2,
+//         ),
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(16),
+//         ),
+//         shadowColor: chip.color.deepColor,
+//         elevation: 1,
+//       ),
+//     ).toList(),
+//   );
+// }
 
-}
+// }

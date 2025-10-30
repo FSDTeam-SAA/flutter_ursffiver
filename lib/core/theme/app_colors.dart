@@ -4,7 +4,7 @@ class AppColors {
   /// [Primary Background color]
   static const Color background = Color(0xFFFFFFFF);
   static const Color secondarybackground = Color(0xFF2B2B2B);
-  static const Color primarybutton = Color(0xFF1269C7);
+  static const Color primarybutton = Color(0xFF4C5CFF);
   static const Color imagebackgrount = Color(0xFF1C2A3A);
 
   /// [Primary App Colors]
@@ -17,19 +17,19 @@ class AppColors {
   static const Color textFieldBorder = Color(0xFFB0B0B0);
   static const Color progressBg = Color(0xFFE7E8EA);
 
-  static const Color textLink = Color(0xFF3B82F6);
+  static const Color textLink = Color(0xFF4C5CFF);
 
   static const Color primaryText = Color(0xFFFFFFFF);
   static const Color primaryTextblack = Color(0xFF25272D);
   static const Color secondaryTextblack = Color(0xFF7E8492);
   static const Color messageBoxbackground = Color(0xFFE5E5E5);
   static const Color buttonTextColor = Colors.black;
-  static const Color buttonInactiveTextColor = Color.fromARGB(255, 9, 81, 158);
+  static const Color buttonInactiveTextColor = Color.fromARGB(182, 76, 91, 255);
   static const Color secondaryText = Color(0xFF7E8492);
   static const Color buttontext = Color(0xFF000000);
 
 
-  static const Color tabselect = Color(0xFF6447CE);
+  static const Color tabselect = Color(0xFF4C5CFF);
   static const Color interestsblue = Color(0xFF3F42EE);
   static const Color interestsyellow = Color(0xFFFFBF0F);
   static const Color interestsgreen = Color(0xFF27BE69);
