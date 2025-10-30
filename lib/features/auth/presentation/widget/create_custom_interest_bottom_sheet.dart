@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/auth/model/create_custom_interest_req_param.dart';
-import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
-
 import '../../../../core/common/controller/select_interest_controller.dart';
+import '../../../../core/common/enum/interest_color.dart';
 
 void showCreateCustomInterest(
   BuildContext context,

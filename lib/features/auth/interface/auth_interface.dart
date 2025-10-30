@@ -1,5 +1,5 @@
 import 'package:flutter_ursffiver/core/api_handler/success.dart';
-import 'package:flutter_ursffiver/core/api_handler/trycatch.dart';
+import 'package:flutter_ursffiver/core/api_handler/base_repository.dart';
 import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/features/auth/model/create_new_password_model.dart';
 import 'package:flutter_ursffiver/features/auth/model/forget_password_model.dart';

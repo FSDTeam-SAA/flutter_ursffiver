@@ -1,5 +1,6 @@
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
-import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
+
+import '../../../core/common/model/interest_model.dart';
 
 class UserProfile {
   final String? id;
@@ -12,7 +13,7 @@ class UserProfile {
   final String? bio;
   final String? image;
   final List<UserBadgeModel>? badge;
-  final List<UserInterestModel>? interest;
+  final List<InterestModel>? interest;
 
   UserProfile({
     this.id,
@@ -47,8 +48,8 @@ class UserProfile {
 
       interest: json['interest'] == null
           ? []
-          : List<UserInterestModel>.from(
-              json['interest']?.map((x) => UserInterestModel.fromJson(x)) ?? [],
+          : List<InterestModel>.from(
+              json['interest']?.map((x) => InterestModel.fromJson(x)) ?? [],
             ),
     );
   }

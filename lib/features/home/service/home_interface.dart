@@ -1,5 +1,5 @@
 import 'package:flutter_ursffiver/core/api_handler/success.dart';
-import 'package:flutter_ursffiver/core/api_handler/trycatch.dart';
+import 'package:flutter_ursffiver/core/api_handler/base_repository.dart';
 
 import '../../../core/helpers/typedefs.dart';
 import '../model/get_user_suggestion_req_param.dart';

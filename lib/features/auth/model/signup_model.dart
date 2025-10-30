@@ -1,4 +1,5 @@
-import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
+
+import '../../../core/common/model/create_custom_interest_param.dart';
 
 class SignupRequestParam {
   final String? firstName;

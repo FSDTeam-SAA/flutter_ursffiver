@@ -28,15 +28,13 @@ class SocketConnetParamX {
 }
 
 class AppPigeon {
-  final Dio _dio;
+  final Dio _dio = Dio();
   final SocketService _socketService = SocketService();
   late final AuthService _authService;
-  final FlutterSecureStorage _secureStorage;
+  final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
   final RefreshTokenManagerInterface refreshTokenManager;
   final String baseUrl;
   AppPigeon(
-    this._dio,
-    this._secureStorage,
     this.refreshTokenManager, {
     required this.baseUrl,
   }) {

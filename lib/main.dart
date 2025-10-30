@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/app/app_manager.dart';
-import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/core/theme/app_theme.dart';
-import 'package:flutter_ursffiver/core/di/controller_dependency_injection.dart';
 import 'package:flutter_ursffiver/core/di/external_service_di.dart';
-import 'package:flutter_ursffiver/core/di/interface_dependency_injection.dart';
+import 'package:flutter_ursffiver/core/di/internal_service_di.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/splash_screen.dart';
 import 'package:get/get.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  initControllers();
   externalServiceDI();
-  initInterfaces();
-  Get.put(AppManager());
+  initServices();
+  
   runApp(const MyApp());
 }
 
@@ -32,7 +29,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appManager = AppManager();
+    appManager = Get.put(AppManager());
+
   }
 
   @override

@@ -3,10 +3,10 @@ import 'package:flutter_ursffiver/core/api_handler/success.dart';
 import 'package:flutter_ursffiver/core/constants/api_endpoints.dart';
 import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
-import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
 
+import '../../../core/common/model/interest_model.dart';
 import '../model/get_user_suggestion_req_param.dart';
 
 base class HomeService extends HomeInterface {
@@ -38,7 +38,7 @@ base class HomeService extends HomeInterface {
   }
 
   @override
-  FutureRequest<Success<UserInterestModel>> getuserbyid(String id) async {
+  FutureRequest<Success<InterestModel>> getuserbyid(String id) async {
     return await asyncTryCatch(
       tryFunc: () async {
         //api call

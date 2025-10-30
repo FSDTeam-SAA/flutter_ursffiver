@@ -135,7 +135,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
-import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
+
+import '../../../core/common/model/interest_model.dart';
 
 class UserBadgeModel {
   final String id;
@@ -210,7 +211,7 @@ class UserBadgesModel {
   final String role;
   final String status;
   final bool adminVerify;
-  final List<UserInterestModel> interests;
+  final List<InterestModel> interests;
   final bool active;
   final List<UserAddressModel> address;
   final String? imagePath;
@@ -261,7 +262,7 @@ class UserBadgesModel {
       interests: json['interest'] == null
           ? []
           : (json['interest'] as List)
-              .map((e) => UserInterestModel.fromJson(e))
+              .map((e) => InterestModel.fromJson(e))
               .toList(),
       active: json['active'] ?? false,
       address: [],

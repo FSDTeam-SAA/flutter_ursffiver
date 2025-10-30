@@ -4,16 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/helpers/auth_role.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
-import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
-import 'package:flutter_ursffiver/features/auth/presentation/screens/splash_screen.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:flutter_ursffiver/features/nabber_screen.dart';
+import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:get/get.dart';
 
 import '../core/constants/api_endpoints.dart';
-import '../core/constants/route_names.dart';
-import '../features/home/presentation/screen/home_screen.dart';
 import 'controller/app_global_controllers.dart';
-import '../main.dart';
 
 class AppManager extends GetxController {
   StreamSubscription? _authStreamSubscription;
@@ -76,7 +73,18 @@ class AppManager extends GetxController {
     if (Get.isRegistered<AppGlobalControllers>()) {
       await Get.delete<AppGlobalControllers>();
     }
+    if(Get.isRegistered<ProfileDataProvider>()) {
+      await Get.delete<ProfileDataProvider>();
+    }
+
+    if(Get.isRegistered<InboxChatDataProvider>()) {
+      await Get.delete<InboxChatDataProvider>();
+    }
 
     Get.put<AppGlobalControllers>(AppGlobalControllers()).afterAuthInit();
+    Get.put<ProfileDataProvider>(ProfileDataProvider()).getCurrentUserProfile();
+    Get.put<InboxChatDataProvider>(InboxChatDataProvider());
+
   }
+  
 }

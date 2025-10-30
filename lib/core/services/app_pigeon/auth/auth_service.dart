@@ -48,6 +48,12 @@ class AuthService extends Interceptor {
     _authDebugger.dekhao("${options.uri.toString()} ${options.method} token : $accessToken");
     handler.next(options);
   }
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    _authDebugger.dekhao("Response for ${response.requestOptions.uri.toString()} : ${response.statusCode}, data: ${response.data}");
+    super.onResponse(response, handler);
+  }
   
   /// Catch errors like 401 and retry with new access token if access token expires.
   @override
