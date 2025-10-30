@@ -115,7 +115,6 @@ class _RemoteServer {
 
 class _LocalHostWifi {
   static const String socketUrl = 'http://10.10.5.46:5001';
-
   static const String baseUrl = 'http://10.10.5.46:5001/api/v1';
 }
 
@@ -152,7 +151,7 @@ class _Notification {
   static const String _notificationRoute =
       '${ApiEndpoints.baseUrl}/notification';
   static String markNotificationAsRead(String notificationId) =>
-      'mark-as-read/$_notificationRoute/$notificationId';
+      '$_notificationRoute/mark-as-read/$notificationId';
   static const String readAllNotifications =
       '$_notificationRoute/mark-all-as-read';
   static const String markAllAsRead = '$_notificationRoute/mark-all-as-read';

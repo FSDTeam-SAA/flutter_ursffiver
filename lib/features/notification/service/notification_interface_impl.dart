@@ -17,9 +17,12 @@ final class NotificationInterfaceImpl extends NotificationInterface {
     return await asyncTryCatch(
       tryFunc: () async {
         //api call
-        final response = await appPigeon.put(
+        debugPrint(
+          " ReadAllNotifications Request: ${ApiEndpoints.markNotificationAsRead(notificationId: id)}",
+        );
+
+        final response = await appPigeon.patch(
           ApiEndpoints.markNotificationAsRead(notificationId: id),
-          
         );
 
         //patse
@@ -36,11 +39,16 @@ final class NotificationInterfaceImpl extends NotificationInterface {
     return await asyncTryCatch(
       tryFunc: () async {
         //api call
-        final response = await appPigeon.put(
+        final response = await appPigeon.patch(
           ApiEndpoints.readAllNotifications,
+        );
+        //print Api endpoint
+        debugPrint(
+          " ReadAllNotifications Request: ${ApiEndpoints.readAllNotifications}",
         );
         //patse
         final message = response.data["message"] as String;
+        debugPrint(message);
         //return
         return Success(message: message);
       },

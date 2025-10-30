@@ -185,7 +185,7 @@ class _NotificationItemState extends State<NotificationItem> {
                     Row(
                       children: [
                         Text(
-                          data.user.fullname,
+                          data.title,
                           maxLines: 5,
                           style: const TextStyle(
                             fontSize: 15,
@@ -207,7 +207,7 @@ class _NotificationItemState extends State<NotificationItem> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      data.title,
+                      data.message,
                       maxLines: isExpanded ? null : 1,
                       style: const TextStyle(
                         fontSize: 14,
@@ -293,7 +293,7 @@ class _NotificationItemState extends State<NotificationItem> {
                       children: [
                         Text(
                           // data.title,
-                          data.user.fullname,
+                          data.title,
                           maxLines: 5,
                           style: const TextStyle(
                             fontSize: 15,
@@ -315,7 +315,7 @@ class _NotificationItemState extends State<NotificationItem> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      data.title,
+                      data.message,
                       maxLines: isExpanded ? null : 1,
                       style: const TextStyle(
                         fontSize: 14,
