@@ -3,7 +3,7 @@ import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 
 class Message {
   final String? text;
-  final UserProfile? user;
+  final usermodelformessage? user;
   final String? date;
   final bool? read;
   final String? id;
@@ -19,7 +19,7 @@ class Message {
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
       text: json['text'],
-      user: json['user'] != null ? UserProfile.fromJson(json['user']) : null,
+      user: json['user'] != null ? usermodelformessage.fromJson(json['user']) : null,
       date: json['date'],
       read: json['read'],
       id: json['_id'],
@@ -36,4 +36,21 @@ class Message {
     };
   }
 
+}
+
+
+class usermodelformessage {
+  final String? id;
+  final String? role;
+  usermodelformessage({
+    this.id,
+    this.role
+  });
+
+  factory usermodelformessage.fromJson(Map<String, dynamic> json) {
+    return usermodelformessage(
+      id: json['_id'],
+      role: json['role'],
+    );
+  }
 }

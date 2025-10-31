@@ -5,6 +5,8 @@ import 'package:flutter_ursffiver/core/api_handler/success.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/inbox/interface/chat_interface.dart';
 import 'package:flutter_ursffiver/features/inbox/model/chat_data.dart';
+import 'package:flutter_ursffiver/features/inbox/model/create_chat_request_model.dart';
+import 'package:flutter_ursffiver/features/inbox/model/create_chat_response_model.dart';
 
 final class ChatInterfaceImpl extends ChatInterface {
   final AppPigeon appPigeon;
@@ -20,14 +22,17 @@ final class ChatInterfaceImpl extends ChatInterface {
       return Right(result);
     } catch (e, s) {
       debugPrint("❌ Chat API Error: $e\n$s");
-      return Left(DataCRUDFailure(
-        failure: Failure.unknownFailure,
-        uiMessage: e.toString(),
-        fullError: e.toString(),
-      ));
+      return Left(
+        DataCRUDFailure(
+          failure: Failure.unknownFailure,
+          uiMessage: e.toString(),
+          fullError: e.toString(),
+        ),
+      );
     }
   }
 
+  ///-----------------------------------Get All Chats-----------------------------------
   @override
   Future<Either<DataCRUDFailure, Success<List<ChatData>>>> getAllChat() async {
     return await asyncTryCatch(
@@ -52,4 +57,31 @@ final class ChatInterfaceImpl extends ChatInterface {
       },
     );
   }
+
+  @override
+  Future<Either<DataCRUDFailure, Success<CreateChatResponseModel>>> inviteChat({required CreateChatRequestModel param}) {
+    // TODO: implement inviteChat
+    throw UnimplementedError();
+  }
+
+  ////-----------------------------------Invite Chat-----------------------------------
+  // @override
+  // Future<Either<DataCRUDFailure, Success<ChatData>>> inviteChat({required CreateChatRequestModel param;}) async {
+    
+  //   return asyncTryCatch(
+  //     tryFunc: () async {
+  //       final response = await appPigeon.post(
+  //         '/chat/create-chat',
+  //         data: param.toJson(),
+  //       );
+  //       debugPrint("Invite chat response: ${response.data}");
+  //       return Success(
+  //         message: "Chat Invited",
+  //         data: ChatData.fromJson(response.data),
+  //       );
+  //     },
+  //   );
+  // }
+
 }
+

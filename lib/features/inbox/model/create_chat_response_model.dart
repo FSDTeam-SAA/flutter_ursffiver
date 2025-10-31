@@ -1,42 +1,41 @@
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
-import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 
-class ChatData {
+class CreateChatResponseModel {
   final String id;
-  final String? name;
+  final String name;
   final String requestBy;
-  final String? user;
+  final String user;
   final String ststus;
-  final String? time;
-  List<Message> messages = [];
-  final String? createdAt;
-  final String? updatedAt;
-  final int? v;
+  final String time;
+  final List<Message> messages;
+  final String createdAt;
+  final String updatedAt;
+  final int v;
 
-  ChatData({
+  CreateChatResponseModel({
     required this.id,
-    this.name,
+    required this.name,
     required this.requestBy,
+    required this.user,
     required this.ststus,
-    this.time,
-    this.user,
-    List<Message>? chatMessages,
-    this.createdAt,
-    this.updatedAt,
-    this.v,
-  }) : messages = chatMessages ?? [];
+    required this.time,
+    required this.messages,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.v,
+  });
 
-  factory ChatData.fromJson(Map<String, dynamic> json) {
-    return ChatData(
+  factory CreateChatResponseModel.fromJson(Map<String, dynamic> json) {
+    return CreateChatResponseModel(
       id: json['_id'],
       name: json['name'],
       requestBy: json['requestBy'],
-      ststus: json['status'],
-      time: json['time'],
       user: json['user'],
-      chatMessages: json['messages'] != null
-          ? List<Message>.from(json['messages'].map((x) => Message.fromJson(x)))
-          : [],
+      ststus: json['ststus'],
+      time: json['time'],
+      messages: List<Message>.from(
+        json['messages'].map((x) => Message.fromJson(x)),
+      ),
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
       v: json['__v'],

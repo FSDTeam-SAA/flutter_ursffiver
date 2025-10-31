@@ -3,6 +3,8 @@ import 'package:flutter_ursffiver/features/auth/interface/interest_interface.dar
 import 'package:flutter_ursffiver/features/auth/service/interest_interface_impl.dart';
 import 'package:flutter_ursffiver/features/badges/services/badges_interface.dart';
 import 'package:flutter_ursffiver/features/badges/services/badges_interface_impl.dart';
+import 'package:flutter_ursffiver/features/inbox/interface/chat_interface.dart';
+import 'package:flutter_ursffiver/features/inbox/service/chat_interface_impl.dart';
 import 'package:flutter_ursffiver/features/notification/interface/notification_interface.dart';
 import 'package:flutter_ursffiver/features/notification/service/notification_interface_impl.dart';
 import 'package:flutter_ursffiver/features/home/service/home_service.dart';
@@ -30,5 +32,9 @@ void initInterfaces() {
   );
   Get.lazyPut<BadgesInterface>(
     () => BadgesInterfaceImpl(appPigeon: Get.find()),
+  );
+  Get.lazyPut<ChatInterface>(
+    () => ChatInterfaceImpl(appPigeon: Get.find()),
+    fenix: true,
   );
 }
