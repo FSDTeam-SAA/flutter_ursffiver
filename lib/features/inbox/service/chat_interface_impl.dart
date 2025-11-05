@@ -59,29 +59,25 @@ final class ChatInterfaceImpl extends ChatInterface {
   }
 
   @override
-  Future<Either<DataCRUDFailure, Success<CreateChatResponseModel>>> inviteChat({required CreateChatRequestModel param}) {
-    // TODO: implement inviteChat
-    throw UnimplementedError();
+  Future<Either<DataCRUDFailure, Success<CreateChatResponseModel>>> inviteChat({
+    required CreateChatRequestModel param,
+  }) async {
+    return asyncTryCatch(
+      tryFunc: () async {
+        final response = await appPigeon.post(
+          '/chat/create-chat',
+          data: param.toJson(),
+        );
+
+        final dataMap = (response.data is Map<String, dynamic>)
+            ? response.data
+            : Map<String, dynamic>.from(response.data);
+
+        final model = CreateChatResponseModel.fromJson(dataMap);
+
+        return Success(message: "Chat Created", data: model);
+      },
+    );
   }
-
-  ////-----------------------------------Invite Chat-----------------------------------
-  // @override
-  // Future<Either<DataCRUDFailure, Success<ChatData>>> inviteChat({required CreateChatRequestModel param;}) async {
-    
-  //   return asyncTryCatch(
-  //     tryFunc: () async {
-  //       final response = await appPigeon.post(
-  //         '/chat/create-chat',
-  //         data: param.toJson(),
-  //       );
-  //       debugPrint("Invite chat response: ${response.data}");
-  //       return Success(
-  //         message: "Chat Invited",
-  //         data: ChatData.fromJson(response.data),
-  //       );
-  //     },
-  //   );
-  // }
-
 }
 

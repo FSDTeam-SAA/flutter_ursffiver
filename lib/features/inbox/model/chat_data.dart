@@ -1,5 +1,4 @@
-import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
-import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
+import 'message_model.dart';
 
 class ChatData {
   final String id;
@@ -8,7 +7,7 @@ class ChatData {
   final String? user;
   final String ststus;
   final String? time;
-  List<Message> messages = [];
+  final List<Message> messages;
   final String? createdAt;
   final String? updatedAt;
   final int? v;
@@ -27,16 +26,21 @@ class ChatData {
   }) : messages = chatMessages ?? [];
 
   factory ChatData.fromJson(Map<String, dynamic> json) {
+    var messageList = <Message>[];
+    if (json['messages'] != null) {
+      messageList = List<Message>.from(
+        json['messages'].map((x) => Message.fromJson(x)),
+      );
+    }
+
     return ChatData(
-      id: json['_id'],
+      id: json['_id'] ?? '',
       name: json['name'],
-      requestBy: json['requestBy'],
-      ststus: json['status'],
+      requestBy: json['requestBy'] ?? '',
+      ststus: json['status'] ?? '',
       time: json['time'],
       user: json['user'],
-      chatMessages: json['messages'] != null
-          ? List<Message>.from(json['messages'].map((x) => Message.fromJson(x)))
-          : [],
+      chatMessages: messageList,
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
       v: json['__v'],

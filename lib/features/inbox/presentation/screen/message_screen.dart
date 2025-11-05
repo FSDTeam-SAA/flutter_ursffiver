@@ -26,6 +26,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   Future<void> getAllChat() async {
     chatController.getAllChat();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,15 +85,21 @@ class MessageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String lastMessageText = message.messages.isNotEmpty
+        ? (message.messages.last.text ?? 'No text')
+        : 'No messages';
+
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                ChatScreen(contactName: message.name!, avatarUrl: ''),
-          ),
-        );
+        if (message.name != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  ChatScreen(contactName: message.name!, avatarUrl: ''),
+            ),
+          );
+        }
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -101,8 +108,11 @@ class MessageTile extends StatelessWidget {
             // Avatar
             CircleAvatar(
               radius: 25,
-              backgroundImage: NetworkImage(''),
               backgroundColor: Colors.grey[300],
+              child: Text(
+                message.name?[0].toUpperCase() ?? '?',
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
             const SizedBox(width: 12),
 
@@ -115,7 +125,7 @@ class MessageTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        message.name!,
+                        message.name ?? 'Unknown User',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -123,14 +133,14 @@ class MessageTile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        message.time!,
+                        message.time ?? '',
                         style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    message.messages[0].text!,
+                    lastMessageText,
                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

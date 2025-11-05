@@ -11,7 +11,6 @@ class NotificationController extends GetxController {
   final isLoading = false.obs;
   final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier();
 
-  late final NotificationInterface _notificationService;
 
   NotificationController() {
     getAllNotification();

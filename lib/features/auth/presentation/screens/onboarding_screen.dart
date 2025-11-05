@@ -1,12 +1,9 @@
 // on_boarding_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
 import 'package:get/get.dart';
-
-import '../../../../main.dart';
 import '../../../common/app_logo.dart';
 
 class OnBoardingScreen extends StatelessWidget {
@@ -361,6 +358,7 @@ Color _accentForIndex(int i) {
   return palette[i % palette.length];
 }
 
+// ignore: unused_element
 class _GradientUnderline extends StatelessWidget {
   const _GradientUnderline({required this.width});
   final double width;

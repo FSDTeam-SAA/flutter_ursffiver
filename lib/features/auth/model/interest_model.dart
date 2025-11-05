@@ -79,7 +79,6 @@ enum InterestColor {
         return InterestColor.yellow;
       default:
         return InterestColor.red;
-        throw Exception('Invalid color: $color');
     }
   }
 

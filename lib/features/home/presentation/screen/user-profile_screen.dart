@@ -4,10 +4,8 @@ import 'package:flutter_ursffiver/core/theme/app_colors.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/home_screen.dart';
-import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:flutter_ursffiver/features/profile/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/widget/badgeg_widget.dart';
-import 'package:get/get.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final UserModel user;
@@ -18,9 +16,6 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  final ProfileDataController _homeInterestController = Get.put(
-    ProfileDataController(),
-  );
   /////////////////
 
   final List<IconBadgeModel> _badges = [
@@ -276,21 +271,4 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  Widget _buildInterestTag(String text, Color color) {
-    return Container(
-      constraints: const BoxConstraints(minHeight: 30, minWidth: 60),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        text,
-        style: AppText.smMedium_14_600.copyWith(color: Colors.white),
-        textAlign: TextAlign.center,
-        overflow: TextOverflow.visible,
-        softWrap: true,
-      ),
-    );
-  }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 
 enum NotificationType {
@@ -97,7 +96,7 @@ class NotificationModel {
       title: title ?? this.title,
       message: message ?? this.message,
       type: type ?? this.type,
-      user: user ?? this.user,
+      user: user,
       chatId: chatId ?? this.chatId,
       badgeId: badgeId ?? this.badgeId,
       isRead: isRead ?? this.isRead,

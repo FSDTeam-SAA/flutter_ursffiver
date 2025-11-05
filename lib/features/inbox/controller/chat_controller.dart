@@ -68,22 +68,20 @@ class ChatController extends GetxController {
   }
 
   //-----------------------------invite chat---------------------
-  // Future<ChatData?> inviteChat({
-  //   required String name,
-  //   required String sellerId,
-  //   required String userId,
-  // }) async {
-  //   final result = await chatInterface.inviteChat(
-  //     param: CreateChatRequestModel(userId: sellerId),
-  //   );
-  //   return result.fold(
-  //         (failure) {
-  //       debugPrint("❌ CreateChat Error: $failure");
-  //       return null;
-  //     },
-  //         (success) => success.data?.data,
-  //   );
-  // }
+  Future<ChatData?> inviteChat({
+    required String userId,
+  }) async {
+    final result = await chatInterface.inviteChat(
+      param: CreateChatRequestModel(userId: userId),
+    );
+    return result.fold(
+          (failure) {
+        debugPrint("❌ CreateChat Error: $failure");
+        return null;
+      },
+          (success) => success.data?.data,
+    );
+  }
 
   // //-------------------------Invite chat-----------------
   // Future<void> inviteChat({required String userId}) async {

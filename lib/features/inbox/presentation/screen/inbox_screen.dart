@@ -41,7 +41,7 @@ class ChatScreen extends StatelessWidget {
                   ),
                 ),
                 const Text(
-                  "Time left to chat 14:45",
+                  "Time left tooo chat 14:45",
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],

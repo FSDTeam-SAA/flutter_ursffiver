@@ -39,7 +39,6 @@ class AppGlobalControllers extends GetxController {
 
   void beforeAuthInit() {
     interestController.fetchInterests();
-    // Add more controller initialization if needed
   }
 
   void afterAuthInit() {

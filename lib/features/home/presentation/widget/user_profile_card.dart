@@ -3,11 +3,20 @@ import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.d
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user-profile_screen.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/widget/logout_widget.dart';
 
-class UserProfileCard extends StatelessWidget {
+class UserProfileCard extends StatefulWidget {
   final UserModel user;
 
   const UserProfileCard({super.key, required this.user});
+
+  @override
+  State<UserProfileCard> createState() => _UserProfileCardState();
+}
+
+class _UserProfileCardState extends State<UserProfileCard> {
+  final ChatController chatController = ChatController();
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +24,13 @@ class UserProfileCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => UserProfileScreen(user: user)),
+          MaterialPageRoute(builder: (context) => UserProfileScreen(user: widget.user)),
         );
       },
       child: Row(
         children: [
           SmartNetworkImage(
-            imageUrl: user.imagePath,
+            imageUrl: widget.user.imagePath,
             height: 130,
             width: 90,
             borderRadius: BorderRadius.circular(8),
@@ -47,7 +56,7 @@ class UserProfileCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${user.firstName} ${user.lastName}',
+                  '${widget.user.firstName} ${widget.user.lastName}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -62,10 +71,10 @@ class UserProfileCard extends StatelessWidget {
                     const SizedBox(width: 4),
                     const SizedBox(width: 8),
                     Text(
-                      user.status,
+                      widget.user.status,
                       style: TextStyle(
                         fontSize: 16,
-                        color: user.status == 'Available'
+                        color: widget.user.status == 'Available'
                             ? Colors.green
                             : Colors.grey,
                         fontWeight: FontWeight.w500,
@@ -79,7 +88,7 @@ class UserProfileCard extends StatelessWidget {
                   children: [
                     Row(
                       children: _buildInterestTags(
-                        user.interests.map((e) => e.name).toList(),
+                        widget.user.interests.map((e) => e.name).toList(),
                         0,
                         2,
                       ),
@@ -87,7 +96,7 @@ class UserProfileCard extends StatelessWidget {
                     Gap.h4,
                     Row(
                       children: _buildInterestTags(
-                        user.interests.map((e) => e.name).toList(),
+                        widget.user.interests.map((e) => e.name).toList(),
                         2,
                         4,
                       ),
@@ -103,9 +112,31 @@ class UserProfileCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // IconButton(
+                  //   color: Colors.blue.shade600,
+                  //   onPressed: () {
+                  //     chatController.inviteChat(
+                  //       userId: widget.user.id,
+                  //     );
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => ChatScreen(contactName: '', avatarUrl: '',),
+                  //       ),
+                  //     );
+                  //   },
+                  //   icon: Icon(Icons.message, size: 28),
+                  // ),
                   IconButton(
                     color: Colors.blue.shade600,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SendMessageDialog(),
+                        ),
+                      );
+                    },
                     icon: Icon(Icons.message, size: 28),
                   ),
                   IconButton(

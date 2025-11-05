@@ -1,5 +1,4 @@
 
-import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 
 class Message {
   final String? text;
