@@ -63,8 +63,6 @@
 //   }
 // }
 
-
-
 import 'package:flutter_ursffiver/features/inbox/model/chat_data.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
 
@@ -75,10 +73,10 @@ class CreateChatResponseModel {
   final String user;
   final String status;
   final String time;
-  final List<Message> messages;
+  final List<MessageModel> messages;
   final String createdAt;
   final String updatedAt;
-  final ChatData? data;
+  final ChatModel? data;
   final int v;
 
   CreateChatResponseModel({
@@ -104,13 +102,13 @@ class CreateChatResponseModel {
       status: json['status'] ?? '',
       time: json['time'] ?? '',
       messages: (json['messages'] != null)
-          ? List<Message>.from(
-              json['messages'].map((x) => Message.fromJson(x)),
+          ? List<MessageModel>.from(
+              json['messages'].map((x) => MessageModel.fromJson(x)),
             )
           : [],
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
-      data: json['data'] != null ? ChatData.fromJson(json['data']) : null,
+      data: json['data'] != null ? ChatModel.fromJson(json['data']) : null,
       v: json['__v'] ?? 0,
     );
   }

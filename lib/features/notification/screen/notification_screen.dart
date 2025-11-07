@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
-import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/chat_controllerx.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:get/get.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../controller/notification_controller.dart';
@@ -140,11 +141,9 @@ class _NotificationItemState extends State<NotificationItem> {
       return AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         height: !minimized ? 130 : 0,
-        // width: !minimized ? null : 0,
 
-        constraints: BoxConstraints(
-          maxHeight: !minimized ? 100 : 0,
-        ),
+        // width: !minimized ? null : 0,
+        constraints: BoxConstraints(maxHeight: !minimized ? 100 : 0),
         child: GestureDetector(
           onTap: _handleTap,
           child: Container(
@@ -181,9 +180,9 @@ class _NotificationItemState extends State<NotificationItem> {
                     ),
                   ),
                 ),
-        
+
                 const SizedBox(width: 12),
-        
+
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +208,7 @@ class _NotificationItemState extends State<NotificationItem> {
                               timeago.format(data.createdAt),
                               style: const TextStyle(
                                 fontSize: 10,
-                                fontWeight: FontWeight.w400, 
+                                fontWeight: FontWeight.w400,
                                 color: Colors.black,
                               ),
                             ),
@@ -238,7 +237,7 @@ class _NotificationItemState extends State<NotificationItem> {
                                 ),
                                 Flexible(
                                   child: SizedBox(
-                                   // width: ,
+                                    // width: ,
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -249,18 +248,32 @@ class _NotificationItemState extends State<NotificationItem> {
                                             minHeight: 0,
                                           ),
                                           style: ButtonStyle(
-                                            minimumSize: WidgetStatePropertyAll(Size.zero),
+                                            minimumSize: WidgetStatePropertyAll(
+                                              Size.zero,
+                                            ),
                                           ),
-                                          icon: const Icon(Icons.close, color: Colors.red, size: 22),
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.red,
+                                            size: 22,
+                                          ),
                                           onPressed: () async {
-                                            await ChatController.instance.rejectChat(
-                                              data.chatId ?? "",
-                                            ).then((value) {
-                                              setState(() {
-                                                minimized = true;
-                                              });
-                                            });
-                                            Get.snackbar("Success", "Chat request rejected!");
+                                            debugPrint(
+                                              "Reject chat...${data.chatId}",
+                                            );
+                                            await Get.find<
+                                                  InboxChatDataProvider
+                                                >()
+                                                .rejectChat(data.chatId ?? "")
+                                                .then((value) {
+                                                  setState(() {
+                                                    minimized = true;
+                                                  });
+                                                });
+                                            Get.snackbar(
+                                              "Success",
+                                              "Chat request rejected!",
+                                            );
                                           },
                                         ),
                                         IconButton(
@@ -270,7 +283,9 @@ class _NotificationItemState extends State<NotificationItem> {
                                             minHeight: 0,
                                           ),
                                           style: ButtonStyle(
-                                            minimumSize: WidgetStatePropertyAll(Size.zero),
+                                            minimumSize: WidgetStatePropertyAll(
+                                              Size.zero,
+                                            ),
                                           ),
                                           icon: const Icon(
                                             Icons.check,
@@ -278,30 +293,36 @@ class _NotificationItemState extends State<NotificationItem> {
                                             size: 22,
                                           ),
                                           onPressed: () async {
-                                            await ChatController.instance.acceptChat(
-                                              data.chatId ?? "",
-                                            ).then((value) {
-                                              setState(() {
-                                                minimized = true;
-                                              });
-                                            });
-                                            Get.snackbar("Success", "Chat request accepted!");
+                                            debugPrint(
+                                              "Accepting chat...${data.chatId}",
+                                            );
+                                            await Get.find<
+                                                  InboxChatDataProvider
+                                                >()
+                                                .acceptChat(data.chatId ?? "")
+                                                .then((value) {
+                                                  setState(() {
+                                                    minimized = true;
+                                                  });
+                                                });
+                                            Get.snackbar(
+                                              "Success",
+                                              "Chat request accepted!",
+                                            );
                                           },
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                                          
                               ],
                             );
-                          }
+                          },
                         ),
                       ),
                     ],
                   ),
                 ),
-                
               ],
             ),
           ),

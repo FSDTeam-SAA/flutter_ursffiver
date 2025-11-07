@@ -20,7 +20,8 @@ class AllBadgesController extends GetxController {
 
   void loadBadges() async {
     isLoading.value = true;
-    final auth = (Get.find<AppManager>().authStatus as Authenticated).auth;
+    final auth =
+        (Get.find<AppManager>().currentAuthStatus as Authenticated).auth;
     final userid = auth.userId;
 
     final lr = await Get.find<BadgesInterface>().getuserbyid(userid);

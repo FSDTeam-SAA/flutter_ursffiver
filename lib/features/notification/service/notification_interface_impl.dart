@@ -80,4 +80,11 @@ final class NotificationInterfaceImpl extends NotificationInterface {
       },
     );
   }
+
+  @override
+  Stream<NotificationModel> notificationStream() {
+    return appPigeon
+        .listen("notificationUpdate")
+        .map((event) => NotificationModel.fromJson(event));
+  }
 }

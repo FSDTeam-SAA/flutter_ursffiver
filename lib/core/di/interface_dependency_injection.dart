@@ -34,7 +34,7 @@ void initInterfaces() {
   Get.lazyPut<BadgesInterface>(
     () => BadgesInterfaceImpl(appPigeon: Get.find()),
   );
-  Get.lazyPut<ChatInterface>(
+  Get.lazyPut<InboxInterface>(
     () => ChatInterfaceImpl(appPigeon: Get.find()),
     fenix: true,
   );

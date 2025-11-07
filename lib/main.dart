@@ -13,7 +13,7 @@ void main() {
   initControllers();
   externalServiceDI();
   initInterfaces();
-  Get.put(AppManager());
+  
   runApp(const MyApp());
 }
 
@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appManager = AppManager();
+    appManager = Get.put<AppManager>(AppManager());
   }
 
   @override

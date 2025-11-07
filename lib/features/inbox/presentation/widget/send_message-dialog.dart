@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
-import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/chat_controllerx.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/screen/inbox_screen.dart';
+import 'package:get/get.dart';
 
-class SendMessageDialog extends StatefulWidget {
+class SendChatRequestDialog extends StatefulWidget {
   final UserModel user;
-  const SendMessageDialog({super.key, required this.user});
+  const SendChatRequestDialog({super.key, required this.user});
 
   @override
-  State<SendMessageDialog> createState() => _SendMessageDialogState();
+  State<SendChatRequestDialog> createState() => _SendChatRequestDialogState();
 }
 
-class _SendMessageDialogState extends State<SendMessageDialog> {
-  final ChatController chatController = ChatController();
+class _SendChatRequestDialogState extends State<SendChatRequestDialog> {
+  final InboxChatDataProvider inboxchatdatacontroller = Get.find<InboxChatDataProvider>();
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -78,14 +80,13 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () {
-                      chatController.inviteChat(
-                        userId: widget.user.id,
-                      );
+                      inboxchatdatacontroller.inviteChat(userId: widget.user.id);
                       Navigator.pop(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatScreen(contactName: '', avatarUrl: '',),
-                        ),
+                        // MaterialPageRoute(
+                        //   builder: (context) =>
+                        //       ChatScreen(contactName: '', avatarUrl: '', chatController: ,),
+                        // ),
                       );
                     },
                     child: Text(
@@ -97,20 +98,20 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                   ),
                 ),
                 // IconButton(
-                  //   color: Colors.blue.shade600,
-                  //   onPressed: () {
-                  //     chatController.inviteChat(
-                  //       userId: widget.user.id,
-                  //     );
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => ChatScreen(contactName: '', avatarUrl: '',),
-                  //       ),
-                  //     );
-                  //   },
-                  //   icon: Icon(Icons.message, size: 28),
-                  // ),
+                //   color: Colors.blue.shade600,
+                //   onPressed: () {
+                //     chatController.inviteChat(
+                //       userId: widget.user.id,
+                //     );
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => ChatScreen(contactName: '', avatarUrl: '',),
+                //       ),
+                //     );
+                //   },
+                //   icon: Icon(Icons.message, size: 28),
+                // ),
               ],
             ),
           ],

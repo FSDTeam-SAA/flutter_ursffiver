@@ -4,7 +4,7 @@ class SendMessageResponseModel {
   final int? statusCode;
   final bool? success;
   final String? message;
-  final ChatData? data;
+  final ChatModel? data;
 
   SendMessageResponseModel({
     this.statusCode,

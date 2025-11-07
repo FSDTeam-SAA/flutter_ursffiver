@@ -7,7 +7,7 @@ import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/badges/services/badges_interface.dart';
 import 'package:get/get.dart';
 
-class HomeInterestController extends GetxController{
+class HomeInterestController extends GetxController {
   final Rxn<UserBadgesModel> userProfile = Rxn<UserBadgesModel>();
 
   final RxBool isLoading = false.obs;
@@ -20,7 +20,8 @@ class HomeInterestController extends GetxController{
 
   void loadinterest() async {
     isLoading.value = true;
-    final auth = (Get.find<AppManager>().authStatus as Authenticated).auth;
+    final auth =
+        (Get.find<AppManager>().currentAuthStatus as Authenticated).auth;
     final userid = auth.userId;
 
     final lr = await Get.find<BadgesInterface>().getuserbyid(userid);
@@ -37,5 +38,4 @@ class HomeInterestController extends GetxController{
     );
     isLoading.value = false;
   }
-
 }

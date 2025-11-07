@@ -10,20 +10,17 @@ class ProfileDataController extends GetxController {
   Rx<UserProfile?> userProfile = Rx<UserProfile?>(null);
 
   Future<void> getCurrentUserProfile() async {
-    if (Get.find<AppManager>().authStatus is Authenticated) {
-      final auth = (Get.find<AppManager>().authStatus as Authenticated).auth;
+    if (Get.find<AppManager>().currentAuthStatus is Authenticated) {
+      final auth =
+          (Get.find<AppManager>().currentAuthStatus as Authenticated).auth;
       final userid = auth.userId;
 
       final lr = await Get.find<ProfileInterface>().getUserProfilebyId(userid);
 
-      lr.fold(
-        (failure) {
-        },
-        (success) {
-          userProfile.value = success.data;
-          debugPrint("✅ Profile fetched: ${success.data?.email}");
-        },
-      );
+      lr.fold((failure) {}, (success) {
+        userProfile.value = success.data;
+        debugPrint("✅ Profile fetched: ${success.data?.email}");
+      });
     }
   }
 }

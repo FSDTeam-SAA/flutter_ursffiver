@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/chat_controllerx.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/screen/inbox_screen.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../model/chat_data.dart';
 
-class MessagesScreen extends StatefulWidget {
-  const MessagesScreen({super.key});
+class AllChatScreeen extends StatefulWidget {
+  const AllChatScreeen({super.key});
 
   @override
-  State<MessagesScreen> createState() => _MessagesScreenState();
+  State<AllChatScreeen> createState() => _AllChatScreeenState();
 }
 
-class _MessagesScreenState extends State<MessagesScreen> {
-  final ChatController chatController = ChatController();
+class _AllChatScreeenState extends State<AllChatScreeen> {
+  final InboxChatDataProvider chatController = Get.find<InboxChatDataProvider>();
 
   @override
   void initState() {
     super.initState();
-    chatController.initSocket();
-    getAllChat();
-  }
-
-  Future<void> getAllChat() async {
-    chatController.getAllChat();
   }
 
   @override
@@ -48,15 +44,13 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
             // Messages List
             Expanded(
-              child: Obx(
-                () => chatController.isLoading.value
-                    ? const Center(child: CircularProgressIndicator())
-                    : chatController.chatList.value.isNotEmpty
+              child: GetBuilder<InboxChatDataProvider>(
+                builder: (controller) => chatController.chats.isNotEmpty
                     ? ListView.builder(
-                        itemCount: chatController.chatList.value.length,
+                        itemCount: chatController.chats.length,
                         itemBuilder: (context, index) {
-                          final message = chatController.chatList.value[index];
-                          return MessageTile(message: message);
+                          final message = chatController.chats[index];
+                          return MessageTile(chatController: message);
                         },
                       )
                     : const Center(
@@ -79,9 +73,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
 }
 
 class MessageTile extends StatelessWidget {
-  final ChatData message;
+  final ChatController chatController;
 
-  const MessageTile({super.key, required this.message});
+  const MessageTile({super.key, required this.chatController});
 
   @override
   Widget build(BuildContext context) {
@@ -91,12 +85,12 @@ class MessageTile extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        if (message.name != null) {
+        if (chatController.chatTitle != null) {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  ChatScreen(contactName: message.name!, avatarUrl: ''),
+                  ChatScreen(contactName: chatController.chatTitle!, avatarUrl: '', chatController: chatController,),
             ),
           );
         }
@@ -110,7 +104,7 @@ class MessageTile extends StatelessWidget {
               radius: 25,
               backgroundColor: Colors.grey[300],
               child: Text(
-                message.name?[0].toUpperCase() ?? '?',
+                chatController.chatTitle?[0].toUpperCase() ?? '?',
                 style: const TextStyle(color: Colors.white),
               ),
             ),
@@ -125,7 +119,7 @@ class MessageTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        message.name ?? 'Unknown User',
+                        chatController.chatTitle ?? 'Unknown User',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -133,14 +127,14 @@ class MessageTile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        message.lastMessage?.date ?? '',
+                        chatController.lastMessage ?? '',
                         style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    message.lastMessage?.text ?? 'No messages',
+                    chatController.lastMessage ?? 'No messages',
                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

@@ -1,12 +1,12 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user-profile_screen.dart';
-import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/widget/send_message-dialog.dart';
+import 'package:get/get.dart';
 
 class UserProfileCard extends StatefulWidget {
   final UserModel user;
@@ -18,7 +18,8 @@ class UserProfileCard extends StatefulWidget {
 }
 
 class _UserProfileCardState extends State<UserProfileCard> {
-  final ChatController chatController = ChatController();
+  final InboxChatDataProvider inboxDataProvider =
+      Get.find<InboxChatDataProvider>();
 
   @override
   Widget build(BuildContext context) {
@@ -133,15 +134,14 @@ class _UserProfileCardState extends State<UserProfileCard> {
                       showDialog(
                         context: context,
                         barrierDismissible: true,
-                        barrierColor:
-                            Colors.transparent,
+                        barrierColor: Colors.transparent,
                         builder: (context) {
                           return BackdropFilter(
                             filter: ImageFilter.blur(
                               sigmaX: 5,
                               sigmaY: 5,
                             ), // blur background
-                            child: SendMessageDialog(user: widget.user),
+                            child: SendChatRequestDialog(user: widget.user),
                           );
                         },
                       );

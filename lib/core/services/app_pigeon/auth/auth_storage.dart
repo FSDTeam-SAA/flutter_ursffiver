@@ -16,17 +16,17 @@ base class _AuthStorage {
     return "current_auth";
   }
 
-  dispose() {
+  void dispose() {
     _authStreamController.close();
     _secureStorage.unregisterAllListeners();
   }
   
   /// Initializes auth storage listening, updates auth stream on change in secure storage
-  init() async{
+  Future<void> init() async{
     _authStreamController.add(AuthLoading());
     // Initial auth status
     final authStatus = await currentAuthStatus();
-    _authStreamController.add(authStatus);
+    //_authStreamController.add(authStatus);
     // register-function for listening to changes in current auth
     void onCurrentAuthChange(String? encodedAuth) async{
       final authStatus = await currentAuthStatus();

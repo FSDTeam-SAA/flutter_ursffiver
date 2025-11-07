@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
+import 'package:flutter_ursffiver/features/inbox/model/chat_data.dart';
+import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
+import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import '../../../../app/controller/app_global_controllers.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../badges/presentation/screen/badges_screen.dart';
+import '../../controller/messaging_controller.dart';
 
 class ChatScreen extends StatefulWidget {
   final String contactName;
   final String avatarUrl;
+  final ChatController chatController;
 
   const ChatScreen({
     super.key,
     required this.contactName,
     required this.avatarUrl,
+    required this.chatController,
   });
 
   @override
@@ -19,48 +29,27 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final TextEditingController messageController = TextEditingController();
+  late final MessagingController messagingController;
   final ScrollController scrollController = ScrollController();
 
-  List<Map<String, dynamic>> messages = [
-    {
-      "text": "Hi",
-      "time": "11:25:44 pm",
-      "date": "03/08/2025",
-      "isMe": true,
-    },
-    {
-      "text": "Hello",
-      "time": "11:25:44 pm",
-      "date": "03/08/2025",
-      "isMe": false,
-    },
-  ];
-
   void sendMessage() {
-    final msg = messageController.text.trim();
-    if (msg.isEmpty) return;
+    messagingController.sendMessage();
+    // Future.delayed(const Duration(milliseconds: 100), () {
+    //   scrollController.animateTo(
+    //     scrollController.position.maxScrollExtent,
+    //     duration: const Duration(milliseconds: 300),
+    //     curve: Curves.easeOut,
+    //   );
+    // });
+  }
 
-    final now = DateTime.now();
-
-    setState(() {
-      messages.add({
-        "text": msg,
-        "time": "${now.hour}:${now.minute}:${now.second}",
-        "date": "${now.day}/${now.month}/${now.year}",
-        "isMe": true,
-      });
-    });
-
-    messageController.clear();
-
-    Future.delayed(const Duration(milliseconds: 100), () {
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    });
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    messagingController = MessagingController(
+      chatId: widget.chatController.chatId,
+    );
   }
 
   @override
@@ -76,7 +65,10 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         title: Row(
           children: [
-            CircleAvatar(backgroundImage: NetworkImage(widget.avatarUrl), radius: 18),
+            CircleAvatar(
+              backgroundImage: NetworkImage(widget.avatarUrl),
+              radius: 18,
+            ),
             const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +101,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   context: context,
                   isScrollControlled: true,
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
                   ),
                   builder: (context) => SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
@@ -155,30 +149,38 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
 
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              controller: scrollController,
-              padding: const EdgeInsets.all(12),
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final msg = messages[index];
-                return Column(
-                  children: [
-                    msg["isMe"]
-                        ? _buildSentMessage(context, msg["text"], msg["time"], msg["date"])
-                        : _buildReceivedMessage(context, msg["text"], msg["time"], msg["date"]),
-                    Gap.h16,
-                  ],
-                );
-              },
-            ),
-          ),
-
-          _buildMessageInput(),
-          Gap.bottomAppBarGap,
-        ],
+      body: ObxValue(
+        (messages) {
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  controller: scrollController,
+                  padding: const EdgeInsets.all(12),
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final msg = messages[index];
+                    bool isMe = msg.isMe(
+                      Get.find<ProfileDataController>().userProfile.value?.id ?? "",
+                    );
+                    return Column(
+                      children: [
+                        isMe
+                            ? _buildSentMessage(context, msg)
+                            : _buildReceivedMessage(context, msg),
+                        Gap.h16,
+                      ],
+                    );
+                  },
+                ),
+              ),
+          
+              _buildMessageInput(),
+              Gap.bottomAppBarGap,
+            ],
+          );
+        },
+        widget.chatController.messages
       ),
     );
   }
@@ -191,13 +193,16 @@ class _ChatScreenState extends State<ChatScreen> {
         border: Border(top: BorderSide(color: Colors.grey.shade300)),
       ),
       child: TextField(
-        controller: messageController,
+        controller: messagingController.textInputController,
         decoration: InputDecoration(
           hintText: 'Message...',
           hintStyle: const TextStyle(color: AppColors.secondaryText),
           filled: true,
           fillColor: Colors.grey.shade200,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 24,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide.none,
@@ -218,7 +223,9 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _buildSentMessage(BuildContext context, String text, String time, String date) {
+  Widget _buildSentMessage(BuildContext context, MessageModel message) {
+    final time = DateFormat.Hm().format(message.date);
+    final date = DateFormat.yMd().format(message.date);
     return Align(
       alignment: Alignment.centerRight,
       child: Column(
@@ -235,16 +242,24 @@ class _ChatScreenState extends State<ChatScreen> {
                 color: const Color(0xFF4C4CFF),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Text(text, style: const TextStyle(color: Colors.white)),
+              child: Text(
+                message.text ?? "",
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ),
-          Text("$time   $date", style: const TextStyle(fontSize: 10, color: Colors.grey)),
+          Text(
+            "$time   $date",
+            style: const TextStyle(fontSize: 10, color: Colors.grey),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildReceivedMessage(BuildContext context, String text, String time, String date) {
+  Widget _buildReceivedMessage(BuildContext context, MessageModel message) {
+    final time = DateFormat.Hm().format(message.date);
+    final date = DateFormat.yMd().format(message.date);
     return Align(
       alignment: Alignment.centerLeft,
       child: Column(
@@ -252,7 +267,9 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           IntrinsicWidth(
             child: Container(
-              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.75,
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               margin: const EdgeInsets.only(bottom: 4),
               decoration: BoxDecoration(
@@ -260,12 +277,17 @@ class _ChatScreenState extends State<ChatScreen> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                text,
-                style: AppText.mdRegular_16_400.copyWith(color: AppColors.primaryTextblack),
+                message.text ?? "",
+                style: AppText.mdRegular_16_400.copyWith(
+                  color: AppColors.primaryTextblack,
+                ),
               ),
             ),
           ),
-          Text("$time   $date", style: const TextStyle(fontSize: 10, color: Colors.grey)),
+          Text(
+            "$time   $date",
+            style: const TextStyle(fontSize: 10, color: Colors.grey),
+          ),
         ],
       ),
     );

@@ -29,6 +29,7 @@
 
 import 'package:flutter_ursffiver/app/controller/home_controller.dart';
 import 'package:flutter_ursffiver/core/common/controller/interest_fetch_controller.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:get/get.dart';
 
 class AppGlobalControllers extends GetxController {
@@ -36,6 +37,7 @@ class AppGlobalControllers extends GetxController {
       AllInterestFetchController();
 
   late final HomeController homeController;
+  late final InboxChatDataProvider inboxChatDataProvider;
 
   void beforeAuthInit() {
     interestController.fetchInterests();
@@ -49,11 +51,20 @@ class AppGlobalControllers extends GetxController {
     } else {
       homeController = Get.find<HomeController>();
     }
+    if(!Get.isRegistered<InboxChatDataProvider>()){
+      Get.put<InboxChatDataProvider>(InboxChatDataProvider());
+    } else {
+      inboxChatDataProvider = Get.find<InboxChatDataProvider>();
+    }
   }
 
   void clearControllers() {
     if (Get.isRegistered<HomeController>()) {
       Get.delete<HomeController>();
+    }
+
+    if (Get.isRegistered<InboxChatDataProvider>()) {
+      Get.delete<InboxChatDataProvider>();
     }
   }
 }

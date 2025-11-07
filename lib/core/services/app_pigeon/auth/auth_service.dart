@@ -50,11 +50,17 @@ class AuthService extends Interceptor {
 
     handler.next(options);
   }
+
+  @override
+  Future<void> onResponse(Response response, ResponseInterceptorHandler handler) async {
+    debugPrint("Response << Method: ${response.requestOptions.method} API: ${response.requestOptions.uri} << ${response.data}");
+    handler.next(response);
+  }
   
   /// Catch errors like 401 and retry with new access token if access token expires.
   @override
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
-    debugPrint("Error >> ${err.response}");
+    debugPrint("Error >> Method: ${err.requestOptions.method} API: ${err.requestOptions.uri} >> ${err.response}");
     // IF TIMEOUT, then possibly internet is down. Hence reject the request.
     final status = (await _authStorage.currentAuthStatus());
     if(err.type == DioExceptionType.connectionTimeout || err.type == DioExceptionType.receiveTimeout) {

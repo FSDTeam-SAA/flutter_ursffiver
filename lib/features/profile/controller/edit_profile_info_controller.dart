@@ -32,8 +32,10 @@ class EditProfileInfoController extends GetxController {
   final bioController = TextEditingController();
 
   var profileImage = Rx<File?>(null);
-  final beforeUserProfile = Get.find<ProfileDataController>().userProfile.value; // Store the user profile before editing>
-  
+  final beforeUserProfile = Get.find<ProfileDataController>()
+      .userProfile
+      .value; // Store the user profile before editing>
+
   final ImagePicker _picker = ImagePicker();
 
   String originalEmail = "";
@@ -100,7 +102,7 @@ class EditProfileInfoController extends GetxController {
     return await Get.find<ProfileInterface>()
         .updateProfile(
           UpdateProfileModel(
-            id: (Get.find<AppManager>().authStatus as Authenticated)
+            id: (Get.find<AppManager>().currentAuthStatus as Authenticated)
                 .auth
                 .userId,
             firstName: firstNameController.text.trim(),
@@ -119,12 +121,13 @@ class EditProfileInfoController extends GetxController {
             successSnackbarNotifier: snackbarNotifier,
             onSuccess: (data) async {
               if (profileImage.value != null) {
-
                 await Get.find<ProfileInterface>().uploadProfileAvatar(
                   UploadProfileAvatarParam(
-                    userId: (Get.find<AppManager>().authStatus as Authenticated)
-                        .auth
-                        .userId,
+                    userId:
+                        (Get.find<AppManager>().currentAuthStatus
+                                as Authenticated)
+                            .auth
+                            .userId,
                     bytes: await profileImage.value!.readAsBytes(),
                     fileName: profileImage.value?.path ?? "",
                   ),

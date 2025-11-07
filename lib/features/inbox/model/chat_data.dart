@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'message_model.dart';
 
-class ChatData {
+class ChatModel {
   final String id;
   final String? name;
   final UserModel requestBy;
@@ -10,11 +10,11 @@ class ChatData {
   final String status;
   final String? avatarUrl;
   final DateTime? time;
-  final Message? lastMessage;
+  final MessageModel? lastMessage;
   final String? createdAt;
   final String? updatedAt;
 
-  ChatData({
+  ChatModel({
     required this.id,
     this.name,
     required this.requestBy,
@@ -27,14 +27,14 @@ class ChatData {
     this.updatedAt,
   });
 
-  factory ChatData.fromJson(Map<String, dynamic> json) {
+  factory ChatModel.fromJson(Map<String, dynamic> json) {
     try {
       debugPrint("requestBy parse: ${json['requestBy']},");
       //debugPrint("requestBy parsed: ${UserModel.fromJson(json['requestBy'] as Map<String, dynamic>)}");
     } catch (e) {
       debugPrint("Error parsing requestBy: $e");
     }
-    return ChatData(
+    return ChatModel(
       id: json['_id'] ?? '',
       name: json['name'],
       requestBy: UserModel.fromJson(json['requestBy'] as Map<String, dynamic>),
@@ -45,7 +45,7 @@ class ChatData {
           ? UserModel.fromJson(json['user'] as Map<String, dynamic>)
           : null,
       lastMessage: json['lastMessage'] != null
-          ? Message.fromJson(json['lastMessage'] as Map<String, dynamic>)
+          ? MessageModel.fromJson(json['lastMessage'] as Map<String, dynamic>)
           : null,
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],

@@ -9,4 +9,6 @@ abstract base class NotificationInterface extends BaseRepository {
   FutureRequest<Success> singleNotificationRead(String id);
 
   FutureRequest<Success> allNotificationRead();
+
+  Stream<NotificationModel> notificationStream();
 }

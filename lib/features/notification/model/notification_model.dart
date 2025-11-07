@@ -3,14 +3,17 @@ import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 enum NotificationType {
   general,
   messageRequest,
-  accepted;
+  accepted,
+  rejected;
 
   factory NotificationType.fromString(String name) {
     switch (name) {
-      case "ride":
+      case "general":
         return NotificationType.general;
       case "accepted":
         return NotificationType.accepted;
+      case "rejected":
+        return NotificationType.rejected;
       case "message request":
         return NotificationType.messageRequest;
       default:

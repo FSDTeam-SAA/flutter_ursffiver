@@ -54,8 +54,6 @@
 //   }
 // }
 
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_ursffiver/core/common/model/coordinates.dart';
 import 'package:flutter_ursffiver/core/componenet/pagination/pagination.dart';
@@ -92,39 +90,41 @@ class FilterPeopleSuggestionController extends GetxController {
       suggestionList.value = LoadingMorePage(suggestionList.value.data);
     }
 
-    await Get.find<HomeInterface>().getSuggestions(
-      GetUserSuggestionReqParam(
-        interests: selectInterestController.selectedInterests.keys.toList(),
-        location: currentLocation,
-        locationRange: selectedLocationRange.value,
-      ),
-    ).then((lr) {
-      handleFold(
-        either: lr,
-        onSuccess: (success) {
-          // Get current logged-in user ID
-          final authStatus = Get.find<AppManager>().authStatus;
-          String? currentUserId;
-          if (authStatus is Authenticated) {
-            currentUserId = authStatus.auth.userId;
-          }
+    await Get.find<HomeInterface>()
+        .getSuggestions(
+          GetUserSuggestionReqParam(
+            interests: selectInterestController.selectedInterests.keys.toList(),
+            location: currentLocation,
+            locationRange: selectedLocationRange.value,
+          ),
+        )
+        .then((lr) {
+          handleFold(
+            either: lr,
+            onSuccess: (success) {
+              // Get current logged-in user ID
+              final authStatus = Get.find<AppManager>().currentAuthStatus;
+              String? currentUserId;
+              if (authStatus is Authenticated) {
+                currentUserId = authStatus.auth.userId;
+              }
 
-          // Filter out the logged-in user from suggestions
-          final filteredList = success
-              .where((user) => user.id != currentUserId)
-              .toList();
+              // Filter out the logged-in user from suggestions
+              final filteredList = success
+                  .where((user) => user.id != currentUserId)
+                  .toList();
 
-          // Merge and update pagination list
-          final allData = suggestionList.value.data + filteredList;
-          suggestionList.value = filteredList.isEmpty
-              ? AllLoaded(allData)
-              : Loaded(allData);
-        },
-        onError: (failure) {
-          debugPrint(failure.fullError);
-          suggestionList.value = Loaded(suggestionList.value.data);
-        },
-      );
-    });
+              // Merge and update pagination list
+              final allData = suggestionList.value.data + filteredList;
+              suggestionList.value = filteredList.isEmpty
+                  ? AllLoaded(allData)
+                  : Loaded(allData);
+            },
+            onError: (failure) {
+              debugPrint(failure.fullError);
+              suggestionList.value = Loaded(suggestionList.value.data);
+            },
+          );
+        });
   }
 }

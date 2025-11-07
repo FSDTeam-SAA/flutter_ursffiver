@@ -229,7 +229,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               sigmaX: 5,
                               sigmaY: 5,
                             ), // blur background
-                            child: SendMessageDialog(user: widget.user),
+                            child: SendChatRequestDialog(user: widget.user),
                           );
                         },
                       );
