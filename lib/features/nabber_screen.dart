@@ -3,7 +3,7 @@ import 'package:flutter_ursffiver/features/profile/presentation/screens/profile_
 import '../core/theme/app_colors.dart';
 import 'badges/presentation/screen/badges_screen.dart';
 import 'home/presentation/screen/home_screen.dart';
-import 'inbox/presentation/screen/message_screen.dart';
+import 'inbox/presentation/screen/get_all_chat.dart';
 
 class AppGround extends StatefulWidget {
   const AppGround({super.key});

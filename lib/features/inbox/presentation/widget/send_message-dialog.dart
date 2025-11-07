@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
+import 'package:flutter_ursffiver/features/home/model/user_model.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/screen/inbox_screen.dart';
 
-class SendMessageDialog extends StatelessWidget {
+class SendMessageDialog extends StatefulWidget {
+  final UserModel user;
+  const SendMessageDialog({super.key, required this.user});
 
-  const SendMessageDialog({super.key,});
+  @override
+  State<SendMessageDialog> createState() => _SendMessageDialogState();
+}
 
+class _SendMessageDialogState extends State<SendMessageDialog> {
+  final ChatController chatController = ChatController();
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -20,7 +29,7 @@ class SendMessageDialog extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Are you sure to Log Out?",
+                "Send Chat Notification?",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
@@ -29,8 +38,8 @@ class SendMessageDialog extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Do you want to save or discard changes?",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                "Would you like to send a chat request to this user? They’ll be notified instantly.",
+                style: TextStyle(fontSize: 14, color: Colors.black87),
               ),
             ),
 
@@ -62,23 +71,46 @@ class SendMessageDialog extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: Color(0xFf3F42EE),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () {
-                      
+                      chatController.inviteChat(
+                        userId: widget.user.id,
+                      );
+                      Navigator.pop(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChatScreen(contactName: '', avatarUrl: '',),
+                        ),
+                      );
                     },
                     child: Text(
-                      "Log Out",
+                      "Send Request",
                       style: AppText.mdMedium_16_500.copyWith(
                         color: Colors.white,
                       ),
                     ),
                   ),
                 ),
+                // IconButton(
+                  //   color: Colors.blue.shade600,
+                  //   onPressed: () {
+                  //     chatController.inviteChat(
+                  //       userId: widget.user.id,
+                  //     );
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => ChatScreen(contactName: '', avatarUrl: '',),
+                  //       ),
+                  //     );
+                  //   },
+                  //   icon: Icon(Icons.message, size: 28),
+                  // ),
               ],
             ),
           ],

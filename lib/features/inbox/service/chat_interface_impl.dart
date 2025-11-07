@@ -6,31 +6,16 @@ import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/inbox/interface/chat_interface.dart';
 import 'package:flutter_ursffiver/features/inbox/model/chat_data.dart';
 import 'package:flutter_ursffiver/features/inbox/model/create_chat_request_model.dart';
-import 'package:flutter_ursffiver/features/inbox/model/create_chat_response_model.dart';
+import 'package:flutter_ursffiver/features/inbox/model/send_message_request_model.dart';
+import 'package:flutter_ursffiver/features/inbox/model/send_message_response_model.dart';
+import 'package:get/get.dart';
+
+import '../model/accept_reject_chat_req_param.dart';
 
 final class ChatInterfaceImpl extends ChatInterface {
   final AppPigeon appPigeon;
 
   ChatInterfaceImpl({required this.appPigeon});
-
-  /// Helper function like AuthInterfaceImpl
-  Future<Either<DataCRUDFailure, Success<T>>> asyncTryCatch<T>({
-    required Future<Success<T>> Function() tryFunc,
-  }) async {
-    try {
-      final result = await tryFunc();
-      return Right(result);
-    } catch (e, s) {
-      debugPrint("❌ Chat API Error: $e\n$s");
-      return Left(
-        DataCRUDFailure(
-          failure: Failure.unknownFailure,
-          uiMessage: e.toString(),
-          fullError: e.toString(),
-        ),
-      );
-    }
-  }
 
   ///-----------------------------------Get All Chats-----------------------------------
   @override
@@ -59,7 +44,7 @@ final class ChatInterfaceImpl extends ChatInterface {
   }
 
   @override
-  Future<Either<DataCRUDFailure, Success<CreateChatResponseModel>>> inviteChat({
+  Future<Either<DataCRUDFailure, Success<ChatData>>> inviteChat({
     required CreateChatRequestModel param,
   }) async {
     return asyncTryCatch(
@@ -72,12 +57,58 @@ final class ChatInterfaceImpl extends ChatInterface {
         final dataMap = (response.data is Map<String, dynamic>)
             ? response.data
             : Map<String, dynamic>.from(response.data);
-
-        final model = CreateChatResponseModel.fromJson(dataMap);
+        debugPrint("Create chat response: $dataMap");
+        final model = ChatData.fromJson(dataMap['data']);
 
         return Success(message: "Chat Created", data: model);
       },
     );
   }
-}
 
+  @override
+  Future<Either<DataCRUDFailure, Success<ChatData>>> acceptRejectChat({
+    required AcceptRejectChatReqParam param,
+  }) async {
+    return asyncTryCatch(
+      tryFunc: () async {
+        final response = await appPigeon.patch(
+          '/chat/accept/${param.chatId}',
+          data: param.toJson(),
+        );
+        debugPrint("Accept chat response: $response");
+        debugPrint("Accept chat response: ${response.data}");
+
+        final dataMap = (response.data is Map<String, dynamic>)
+            ? response.data
+            : Map<String, dynamic>.from(response.data);
+
+        debugPrint("Accept chat response: $dataMap");
+
+        final model = ChatData.fromJson(dataMap['data']);
+
+        return Success(message: "Chat Accepted", data: model);
+      },
+    );
+  }
+
+  @override
+  Future<Either<DataCRUDFailure, Success<SendMessageResponseModel>>> 
+  sendMessage({required SendMessageRequestModel param}) async {
+    return asyncTryCatch(
+      tryFunc: () async {
+        final response = await appPigeon.post(
+          '/chat/send-message',
+          data: param.toJson(),
+        );
+
+        final dataMap = (response.data is Map<String, dynamic>)
+            ? response.data
+            : Map<String, dynamic>.from(response.data);
+        debugPrint("Send message response: $dataMap");
+        final model = SendMessageResponseModel.fromJson(dataMap['data']);
+
+        return Success(message: "Message Sent", data: model);
+      },
+    );
+  }
+}

@@ -76,8 +76,9 @@ base class BaseRepository {
             ),
           );
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       debugPrint(e.toString());
+      debugPrint(stackTrace.toString());
       //debugger?.dekhao(e);
       return Left(
         DataCRUDFailure(

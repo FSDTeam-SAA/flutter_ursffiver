@@ -94,4 +94,18 @@ class UserModel {
       imagePath: json['profileImage'] as String?,
     );
   }
+
+  //tojson
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'fullname': fullname,
+      'ageRange': ageRange,
+      'bio': bio,
+      'email': email,
+      'username': username
+    };
+  }
 }

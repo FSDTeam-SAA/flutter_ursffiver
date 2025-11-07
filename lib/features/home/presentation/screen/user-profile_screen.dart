@@ -1,9 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:flutter_ursffiver/core/theme/app_colors.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/home_screen.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/widget/send_message-dialog.dart';
 import 'package:flutter_ursffiver/features/profile/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/widget/badgeg_widget.dart';
 
@@ -172,7 +175,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               children: [
                 _buildStatItem(Icons.location_on_outlined, '1 ft away'),
                 _buildStatItem(Icons.female, widget.user.gender),
-                _buildStatItem(Icons.check_circle_outline, widget.user.ageRange),
+                _buildStatItem(
+                  Icons.check_circle_outline,
+                  widget.user.ageRange,
+                ),
               ],
             ),
 
@@ -190,9 +196,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             const SizedBox(height: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                  InterestsGrid(chips: widget.user.interests),
-              ],
+              children: [InterestsGrid(chips: widget.user.interests)],
             ),
 
             const SizedBox(height: 32),
@@ -215,9 +219,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Scaffold()),
+                      showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        barrierColor: Colors.transparent,
+                        builder: (context) {
+                          return BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: 5,
+                              sigmaY: 5,
+                            ), // blur background
+                            child: SendMessageDialog(user: widget.user),
+                          );
+                        },
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -229,13 +243,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.chat_bubble_outline,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 8),
-                        const Text(
+                      children: const [
+                        Icon(Icons.chat_bubble_outline, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
                           'Invite to Chat',
                           style: TextStyle(
                             color: Colors.white,
@@ -270,5 +281,4 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ],
     );
   }
-
 }

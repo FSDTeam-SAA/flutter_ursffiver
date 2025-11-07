@@ -16,7 +16,8 @@ import '../../features/home/service/home_interface.dart';
 
 void initInterfaces() {
   // Initialize other interfaces here
-  Get.lazyPut<AuthInterface>(() => AuthInterfaceImpl(Get.find()));
+  Get.put<AuthInterface>(AuthInterfaceImpl(Get.find()));
+
   Get.lazyPut<InterestInterface>(
     () => InterestInterfaceImpl(appPigeon: Get.find()),
   );

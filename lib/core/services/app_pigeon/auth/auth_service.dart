@@ -45,7 +45,9 @@ class AuthService extends Interceptor {
     if (accessToken != null) {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
-    _authDebugger.dekhao("${options.uri.toString()} ${options.method} token : $accessToken");
+    _authDebugger.dekhao("${options.uri.toString()} ${options.method}");    
+    _authDebugger.dekhao("${options.data.toString()} ");
+
     handler.next(options);
   }
   

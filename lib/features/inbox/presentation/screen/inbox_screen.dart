@@ -4,7 +4,7 @@ import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../badges/presentation/screen/badges_screen.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   final String contactName;
   final String avatarUrl;
 
@@ -13,6 +13,55 @@ class ChatScreen extends StatelessWidget {
     required this.contactName,
     required this.avatarUrl,
   });
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  final TextEditingController messageController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+
+  List<Map<String, dynamic>> messages = [
+    {
+      "text": "Hi",
+      "time": "11:25:44 pm",
+      "date": "03/08/2025",
+      "isMe": true,
+    },
+    {
+      "text": "Hello",
+      "time": "11:25:44 pm",
+      "date": "03/08/2025",
+      "isMe": false,
+    },
+  ];
+
+  void sendMessage() {
+    final msg = messageController.text.trim();
+    if (msg.isEmpty) return;
+
+    final now = DateTime.now();
+
+    setState(() {
+      messages.add({
+        "text": msg,
+        "time": "${now.hour}:${now.minute}:${now.second}",
+        "date": "${now.day}/${now.month}/${now.year}",
+        "isMe": true,
+      });
+    });
+
+    messageController.clear();
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +76,13 @@ class ChatScreen extends StatelessWidget {
         ),
         title: Row(
           children: [
-            CircleAvatar(backgroundImage: NetworkImage(avatarUrl), radius: 18),
+            CircleAvatar(backgroundImage: NetworkImage(widget.avatarUrl), radius: 18),
             const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  contactName,
+                  widget.contactName,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -55,26 +104,21 @@ class ChatScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             onSelected: (value) {
-              if (value == "extend") {
-              } else if (value == "badge") {
+              if (value == "badge") {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                   ),
                   builder: (context) => SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
                     child: const AllBadgesWidget(),
                   ),
                 );
-              } else if (value == "location") {
               }
             },
-
-            itemBuilder: (BuildContext context) => [
+            itemBuilder: (_) => [
               const PopupMenuItem(
                 value: "extend",
                 child: Row(
@@ -110,30 +154,28 @@ class ChatScreen extends StatelessWidget {
           const SizedBox(width: 8),
         ],
       ),
+
       body: Column(
         children: [
           Expanded(
-            child: ListView(
+            child: ListView.builder(
+              controller: scrollController,
               padding: const EdgeInsets.all(12),
-              children: [
-                _buildSentMessage(context, "Hi", "11:25:44 pm", "03/08/2025"),
-                Gap.h16,
-                _buildReceivedMessage(
-                  context,
-                  "Hello",
-                  "11:25:44 pm",
-                  "03/08/2025",
-                ),
-                Gap.h16,
-                _buildSentMessage(
-                  context,
-                  "Meaow Meaow Meaow Meaow Meaow Meaow Meaow Meaow",
-                  "11:25:44 pm",
-                  "03/08/2025",
-                ),
-              ],
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                final msg = messages[index];
+                return Column(
+                  children: [
+                    msg["isMe"]
+                        ? _buildSentMessage(context, msg["text"], msg["time"], msg["date"])
+                        : _buildReceivedMessage(context, msg["text"], msg["time"], msg["date"]),
+                    Gap.h16,
+                  ],
+                );
+              },
             ),
           ),
+
           _buildMessageInput(),
           Gap.bottomAppBarGap,
         ],
@@ -149,15 +191,13 @@ class ChatScreen extends StatelessWidget {
         border: Border(top: BorderSide(color: Colors.grey.shade300)),
       ),
       child: TextField(
+        controller: messageController,
         decoration: InputDecoration(
           hintText: 'Message...',
           hintStyle: const TextStyle(color: AppColors.secondaryText),
           filled: true,
           fillColor: Colors.grey.shade200,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 24,
-          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide.none,
@@ -165,14 +205,12 @@ class ChatScreen extends StatelessWidget {
           suffixIcon: Container(
             margin: const EdgeInsets.only(right: 4),
             decoration: BoxDecoration(
-              color: Color(0xFF4C4CFF),
-              borderRadius: BorderRadius.circular(8), // Rounded corners
+              color: const Color(0xFF4C4CFF),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: IconButton(
               icon: const Icon(Icons.send, color: Colors.white),
-              onPressed: () {
-                // TODO: send message action
-              },
+              onPressed: sendMessage,
             ),
           ),
         ),
@@ -180,12 +218,7 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSentMessage(
-    BuildContext context,
-    String text,
-    String time,
-    String date,
-  ) {
+  Widget _buildSentMessage(BuildContext context, String text, String time, String date) {
     return Align(
       alignment: Alignment.centerRight,
       child: Column(
@@ -202,28 +235,16 @@ class ChatScreen extends StatelessWidget {
                 color: const Color(0xFF4C4CFF),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Text(
-                text,
-                style: const TextStyle(color: Colors.white),
-                softWrap: true,
-              ),
+              child: Text(text, style: const TextStyle(color: Colors.white)),
             ),
           ),
-          Text(
-            "$time   $date",
-            style: const TextStyle(fontSize: 10, color: Colors.grey),
-          ),
+          Text("$time   $date", style: const TextStyle(fontSize: 10, color: Colors.grey)),
         ],
       ),
     );
   }
 
-  Widget _buildReceivedMessage(
-    BuildContext context,
-    String text,
-    String time,
-    String date,
-  ) {
+  Widget _buildReceivedMessage(BuildContext context, String text, String time, String date) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Column(
@@ -231,9 +252,7 @@ class ChatScreen extends StatelessWidget {
         children: [
           IntrinsicWidth(
             child: Container(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.75,
-              ),
+              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               margin: const EdgeInsets.only(bottom: 4),
               decoration: BoxDecoration(
@@ -242,17 +261,11 @@ class ChatScreen extends StatelessWidget {
               ),
               child: Text(
                 text,
-                style: AppText.mdRegular_16_400.copyWith(
-                  color: AppColors.primaryTextblack,
-                ),
-                softWrap: true,
+                style: AppText.mdRegular_16_400.copyWith(color: AppColors.primaryTextblack),
               ),
             ),
           ),
-          Text(
-            "$time   $date",
-            style: const TextStyle(fontSize: 10, color: Colors.grey),
-          ),
+          Text("$time   $date", style: const TextStyle(fontSize: 10, color: Colors.grey)),
         ],
       ),
     );

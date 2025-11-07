@@ -577,32 +577,27 @@ class InterestsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  return Wrap(
-    spacing: 8,
-    runSpacing: 8,
-    children: chips.map(
-      (chip) => Chip(
-        label: Text(
-          chip.name,
-          style: AppText.mdMedium_16_500.copyWith(
-            color: chip.color.deepColor,
-            fontWeight: FontWeight.w600,
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: chips.map((chip) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+          decoration: BoxDecoration(
+            color: chip.color.deepColor, // solid background
+            borderRadius: BorderRadius.circular(8),
           ),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        backgroundColor: chip.color.softColor,
-        side: BorderSide(
-          color: chip.color.deepColor,
-          width: 1.2,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        shadowColor: chip.color.deepColor,
-        elevation: 1,
-      ),
-    ).toList(),
-  );
+          child: Text(
+            chip.name.length > 14 ? chip.name.substring(0, 14) + "..." : chip.name,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.black,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
 }
 
-}

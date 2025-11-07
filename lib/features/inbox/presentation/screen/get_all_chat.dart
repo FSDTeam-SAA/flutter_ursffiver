@@ -85,9 +85,9 @@ class MessageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String lastMessageText = message.messages.isNotEmpty
-        ? (message.messages.last.text ?? 'No text')
-        : 'No messages';
+    // final String lastMessageText = message.lastMessage != null
+    //     ? (message.messages.last.text ?? 'No text')
+    //     : 'No messages';
 
     return GestureDetector(
       onTap: () {
@@ -133,14 +133,14 @@ class MessageTile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        message.time ?? '',
+                        message.lastMessage?.date ?? '',
                         style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    lastMessageText,
+                    message.lastMessage?.text ?? 'No messages',
                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
