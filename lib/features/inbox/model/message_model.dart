@@ -27,7 +27,7 @@ class MessageModel {
       user: json['user'] != null
           ? Usermodelformessage.fromJson(json['user'])
           : null,
-      date: DateTime.parse(json['date']),
+      date: DateTime.parse(json['date']).toLocal(),
       read: json['read'],
       id: json['_id'],
     );

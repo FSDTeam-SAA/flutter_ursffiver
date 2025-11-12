@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
-import 'package:flutter_ursffiver/features/inbox/controller/chat_controllerx.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/screen/inbox_screen.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_style.dart';
-import '../../model/chat_data.dart';
 
 class AllChatScreeen extends StatefulWidget {
   const AllChatScreeen({super.key});
@@ -16,7 +14,8 @@ class AllChatScreeen extends StatefulWidget {
 }
 
 class _AllChatScreeenState extends State<AllChatScreeen> {
-  final InboxChatDataProvider chatController = Get.find<InboxChatDataProvider>();
+  final InboxChatDataProvider chatController =
+      Get.find<InboxChatDataProvider>();
 
   @override
   void initState() {
@@ -85,15 +84,16 @@ class MessageTile extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        if (chatController.chatTitle != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  ChatScreen(contactName: chatController.chatTitle!, avatarUrl: '', chatController: chatController,),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChatScreen(
+              contactName: chatController.chatTitle,
+              avatarUrl: '',
+              chatController: chatController,
             ),
-          );
-        }
+          ),
+        );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -119,7 +119,7 @@ class MessageTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        chatController.chatTitle ?? 'Unknown User',
+                        chatController.chatModel?.name ?? 'Unknown',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -127,7 +127,7 @@ class MessageTile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        chatController.lastMessage ?? '',
+                        chatController.lastMessageTime ?? '',
                         style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                       ),
                     ],

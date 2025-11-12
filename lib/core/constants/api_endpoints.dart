@@ -29,6 +29,10 @@ base class ApiEndpoints {
   /// ### get
   static const String getInterests = _Interest.getallInterests;
 
+  //----------------verification----------------
+  /// ### post
+  static const String verification = _Verification.verification;
+
   //---------------report----------------
 
   /// ### post
@@ -145,6 +149,13 @@ class _Auth {
 class _Interest {
   static const String _interestRoute = '${ApiEndpoints.baseUrl}/interest';
   static const String getallInterests = '$_interestRoute/';
+}
+
+// ---------------------- Verification -----------------------------
+class _Verification {
+  static const String _verificationRoute =
+      '${ApiEndpoints.baseUrl}/verification';
+  static const String verification = '$_verificationRoute/create';
 }
 
 // ---------------------- Report -----------------------------

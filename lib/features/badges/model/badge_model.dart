@@ -7,7 +7,7 @@ class UserBadgeModel {
   final String name;
   final String tag;
   final String info;
-  final String color; // color as string from API (e.g., "#FF0000" or "red")
+  final String color;
 
   UserBadgeModel({
     required this.id,
@@ -17,18 +17,9 @@ class UserBadgeModel {
     required this.color,
   });
 
-  /// Convert color string to Flutter [Color]
   Color get badgeColor {
-    // If color is a hex value like "#RRGGBB"
-    if (color.startsWith('#')) {
-      try {
-        return Color(int.parse(color.substring(1), radix: 16) + 0xFF000000);
-      } catch (_) {
-        return Colors.grey; // fallback
-      }
-    }
+    if (color.isEmpty) return Colors.grey;
 
-    // If color is a named color (e.g., "red", "blue", etc.)
     switch (color.toLowerCase()) {
       case 'red':
         return Colors.red;
@@ -44,8 +35,47 @@ class UserBadgeModel {
         return Colors.orange;
       case 'pink':
         return Colors.pink;
-      default:
+      case 'black':
+        return Colors.black;
+      case 'white':
+        return Colors.white;
+      case 'grey':
+      case 'gray':
         return Colors.grey;
+    }
+
+    try {
+      String hex = color.replaceAll("#", "");
+      if (hex.length == 6) hex = "FF$hex";
+      return Color(int.parse(hex, radix: 16));
+    } catch (_) {
+      debugPrint("Invalid color format: $color");
+      return Colors.grey;
+    }
+  }
+
+  IconData get badgeIcon {
+    switch (name.toLowerCase()) {
+      case 'goodspeaker':
+      return Icons.record_voice_over;
+      case 'good speaker':
+        return Icons.record_voice_over;
+      case 'fast responder':
+        return Icons.flash_on;
+      case 'team player':
+        return Icons.groups;
+      case 'top seller':
+        return Icons.workspace_premium;
+      case 'verified':
+        return Icons.verified;
+      case 'trusted':
+        return Icons.shield;
+      case 'creative':
+        return Icons.lightbulb;
+      case 'helpful':
+        return Icons.favorite;
+      default:
+        return Icons.star;
     }
   }
 
@@ -55,7 +85,7 @@ class UserBadgeModel {
       name: json['name'] ?? '',
       tag: json['tag'] ?? '',
       info: json['info'] ?? '',
-      color: json['color'] ?? '#9E9E9E', // fallback gray
+      color: json['color'] ?? '#000000',
     );
   }
 }

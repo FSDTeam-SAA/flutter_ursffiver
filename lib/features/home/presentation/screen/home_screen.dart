@@ -5,6 +5,7 @@ import 'package:flutter_ursffiver/core/componenet/pagination/widget/paginated_li
 import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/controller/filter_people_suggestion_controller.dart';
 import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
+import 'package:flutter_ursffiver/features/home/presentation/screen/user_verification_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/user_profile_card.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/invitation_notification_widget.dart';
@@ -34,6 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final ProfileDataController _homeInterestController = Get.put(
     ProfileDataController(),
   );
+  final ProfileDataController _userProfilecontroller = Get.put(
+    ProfileDataController(),
+  ); // userProfilecontroller
 
   @override
   void initState() {
@@ -87,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               showDialog(
                 context: context,
-                barrierDismissible: false, // prevent closing by tapping outside
+                barrierDismissible: false,
                 builder: (context) => Center(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -122,18 +126,35 @@ class _HomeScreenState extends State<HomeScreen> {
               FixedNotificationBanner.show(context);
             },
           ),
-
-          //////////////////
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UnVerificationScreen()),
-              );
-            },
-            icon: Icon(Icons.verified_user_outlined),
-            iconSize: 28,
-            color: AppColors.textFieldTextiHint,
+          Obx(
+            () => IconButton(
+              onPressed: () {
+                final user = _userProfilecontroller.userProfile.value;
+                if (user != null) {
+                  if (user.adminVerify == false) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UnVerificationScreen(),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VerificationScreen(),
+                      ),
+                    );
+                  }
+                }
+              },
+              icon: const Icon(Icons.verified_user_outlined),
+              iconSize: 28,
+              color:
+                  _userProfilecontroller.userProfile.value?.adminVerify == true
+                  ? Colors.green
+                  : Colors.red[400],
+            ),
           ),
           IconButton(
             icon: Icon(Icons.notifications_none, color: Colors.black),
@@ -588,7 +609,9 @@ class InterestsGrid extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            chip.name.length > 14 ? chip.name.substring(0, 14) + "..." : chip.name,
+            chip.name.length > 14
+                ? chip.name.substring(0, 14) + "..."
+                : chip.name,
             style: const TextStyle(
               fontSize: 16,
               color: Colors.black,
@@ -600,4 +623,3 @@ class InterestsGrid extends StatelessWidget {
     );
   }
 }
-

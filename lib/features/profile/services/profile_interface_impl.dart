@@ -63,25 +63,6 @@ final class ProfileInterfaceImpl extends ProfileInterface {
       },
     );
   }
-
-  // @override
-  // FutureRequest<Success> reportandProblem(ReportModel params) async {
-  //   return await asyncTryCatch(
-  //     tryFunc: () async {
-  //       //call api here
-  //       debugPrint(params.toFormData().toString());
-  //       final response = await appPigeon.post(
-  //         ApiEndpoints.sendReport,
-  //         data: params.toFormData(),
-  //       );
-
-  //       //parse
-
-  //       //return
-  //       return Success(message: extractSuccessMessage(response));
-  //     },
-  //   );
-  // }
   @override
   FutureRequest<Success> reportandProblem(ReportModel params) async {
     return await asyncTryCatch(

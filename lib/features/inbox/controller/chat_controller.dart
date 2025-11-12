@@ -37,6 +37,7 @@ class ChatController extends GetxController {
     required this.chatId,
     required ChatModel chatModel,
   }) {
+    this.chatModel = chatModel;
     getMessages();
   }
 

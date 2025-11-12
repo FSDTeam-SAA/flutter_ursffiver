@@ -11,6 +11,7 @@ class UserProfile {
   final String? ageRange;
   final String? bio;
   final String? image;
+  final bool? adminVerify;
   final List<UserBadgeModel>? badge;
   final List<UserInterestModel>? interest;
 
@@ -24,6 +25,7 @@ class UserProfile {
     this.ageRange,
     this.bio,
     this.image,
+    this.adminVerify,
     this.badge,
     this.interest,
   });
@@ -39,6 +41,7 @@ class UserProfile {
       ageRange: json['ageRange'],
       bio: json['bio'],
       image: json['image'],
+      adminVerify: json['adminVerify'],
       badge: json['badge'] == null
           ? []
           : List<UserBadgeModel>.from(

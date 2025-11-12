@@ -28,6 +28,7 @@ class ChatModel {
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) {
+    debugPrint("re             questBy parse: ${json['name']},");
     try {
       debugPrint("requestBy parse: ${json['requestBy']},");
       //debugPrint("requestBy parsed: ${UserModel.fromJson(json['requestBy'] as Map<String, dynamic>)}");
@@ -40,7 +41,7 @@ class ChatModel {
       requestBy: UserModel.fromJson(json['requestBy'] as Map<String, dynamic>),
       status: json['status'] ?? '',
       avatarUrl: json['avatarUrl'],
-      time: DateTime.tryParse(json['time'] ?? ''),
+      time: DateTime.tryParse(json['time'] ?? '')?.toLocal(),
       user: json['user'] != null
           ? UserModel.fromJson(json['user'] as Map<String, dynamic>)
           : null,

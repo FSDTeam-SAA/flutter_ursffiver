@@ -5,7 +5,9 @@ import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
+import 'package:flutter_ursffiver/features/home/model/verification_model.dart';
 import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
+import 'package:get/get_connect/http/src/multipart/form_data.dart';
 
 import '../model/get_user_suggestion_req_param.dart';
 
@@ -53,5 +55,23 @@ base class HomeService extends HomeInterface {
         return Success(message: message, data: data);
       },
     );
+  }
+
+  @override
+  FutureRequest<Success> verification(Attachment param) async {
+    return await asyncTryCatch(tryFunc: () async {
+      final formData = await param.toFormData();
+
+      debugPrint(formData.fields.toString());
+      debugPrint(formData.files.toString());
+      debugPrint(" Verification Request: ${ApiEndpoints.verification}");
+
+      final response = await appPigeon.post(
+        ApiEndpoints.verification,
+        data: formData,
+      );
+      debugPrint(response.data);
+      return Success(message: extractSuccessMessage(response));
+    });
   }
 }

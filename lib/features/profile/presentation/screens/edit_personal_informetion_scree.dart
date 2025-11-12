@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/reactive_button/save_button.dart';
 import 'package:flutter_ursffiver/core/notifiers/button_status_notifier.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
+import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
 import 'package:flutter_ursffiver/features/profile/controller/edit_profile_info_controller.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/profile_screen.dart';
@@ -25,6 +26,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(
     initialStatus: EnabledStatus(),
   );
+
+  final ProfileDataController profileController =
+      Get.find<ProfileDataController>();
 
   @override
   void initState() {
@@ -86,7 +90,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildVerificationCard(controller, showVerified),
+              Obx(() {
+                if (profileController.userProfile.value?.adminVerify == true) {
+                  return _buildVerificationCard(controller, showVerified);
+                } else {
+                  return _buildUnVerificationCard(controller);
+                }
+              }),
               const SizedBox(height: 24),
               _buildProfilePhotoSection(controller),
               const SizedBox(height: 32),
@@ -176,14 +186,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: showVerified ? Colors.green : Colors.red,
+              color: Colors.green,
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              showVerified ? Icons.check : Icons.close,
-              color: Colors.white,
-              size: 16,
-            ),
+            child: Icon(Icons.check, color: Colors.white, size: 16),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -196,9 +202,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     children: [
                       const TextSpan(text: 'User Verification Status: '),
                       TextSpan(
-                        text: showVerified ? 'Verified' : 'Unverified',
+                        text: 'Verified',
                         style: TextStyle(
-                          color: showVerified ? Colors.green : Colors.red,
+                          color: Colors.green,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -224,12 +230,88 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     );
   }
 
+  Widget _buildUnVerificationCard(EditProfileInfoController controller) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFB3D9FF)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              color: Colors.red,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.close, color: Colors.white, size: 16),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min, // minimizes vertical space
+              children: [
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black, fontSize: 14),
+                    children: [
+                      TextSpan(text: 'User Verification Status: '),
+                      TextSpan(
+                        text: 'Unverified',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero, // remove extra padding
+                    minimumSize: const Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UnVerificationScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Verify Now",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildProfilePhotoSection(EditProfileInfoController controller) {
     final profileController = Get.find<ProfileDataController>();
 
     return Obx(() {
       final user = profileController.userProfile.value;
       final localImage = controller.profileImage.value;
+
+      /////
+      // ///
+      // final UserBadgeModel badge =
+      //                   controller.userProfile.value!.badge![index];
+      //               // final Color badgeColor = _parseColor(badge.color);
+      //               final Color badgeColor = badge.badgeColor;
+
+      //               final Color bgColor = badgeColor.withOpacity(0.1);
+      // ///
 
       ImageProvider imageProvider;
 
@@ -263,6 +345,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               ],
             ),
             Gap.h20,
+
+            //////////////////////////////////////////////////////
+            ///
+            ///
             BadgeList(
               badges: [
                 IconBadgeModel(
@@ -275,34 +361,62 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   count: 4,
                   color: Colors.orangeAccent,
                 ),
-                IconBadgeModel(
-                  icon: Icons.location_on_outlined,
-                  count: 3,
-                  color: Colors.blueAccent,
-                ),
-                IconBadgeModel(
-                  icon: Icons.hearing_rounded,
-                  count: 2,
-                  color: Colors.pinkAccent,
-                ),
-                IconBadgeModel(
-                  icon: Icons.lightbulb_outline,
-                  count: 2,
-                  color: Colors.lightBlueAccent,
-                ),
-                IconBadgeModel(
-                  icon: Icons.link,
-                  count: 2,
-                  color: Colors.cyanAccent,
-                ),
-                IconBadgeModel(
-                  icon: Icons.person_4_outlined,
-                  count: 1,
-                  color: Colors.greenAccent,
-                ),
-                IconBadgeModel(icon: Icons.star, color: Colors.orangeAccent),
+                // ...
               ],
             ),
+
+            // Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               Row(
+            //                 children: [
+            //                   Expanded(
+            //                     child: Text(
+            //                       badge.name,
+            //                       style: const TextStyle(
+            //                         fontSize: 16,
+            //                         fontWeight: FontWeight.w600,
+            //                       ),
+            //                     ),
+            //                   ),
+            //                   Container(
+            //                     padding: const EdgeInsets.symmetric(
+            //                       horizontal: 8,
+            //                       vertical: 4,
+            //                     ),
+            //                     decoration: BoxDecoration(
+            //                       color: bgColor,
+            //                       borderRadius: BorderRadius.circular(8),
+            //                     ),
+            //                     child: Text(
+            //                       badge.tag,
+            //                       style: TextStyle(
+            //                         fontSize: 12,
+            //                         color: badgeColor,
+            //                         fontWeight: FontWeight.w600,
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ],
+            //               ),
+
+            //               //print badges color
+            //               const SizedBox(height: 8),
+            //               Text(
+            //                 badge.info,
+            //                 style: TextStyle(
+            //                   fontSize: 14,
+            //                   color: Colors.grey[700],
+            //                   height: 1.4,
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+
+            ////////////////////////////////////////////////////////
+            ///
+            ///
+
             const SizedBox(height: 20),
             Row(
               children: [
@@ -441,17 +555,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               ),
             ),
             const Spacer(),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              child: Text(
-                showVerified ? 'Verified' : 'Unverified',
+            Obx(() {
+              final isVerified =
+                  profileController.userProfile.value?.adminVerify ?? false;
+
+              return Text(
+                isVerified ? 'Verified' : 'Unverified',
                 style: TextStyle(
-                  color: showVerified ? AppColors.interestsgreen : Colors.red,
+                  color: isVerified ? AppColors.interestsgreen : Colors.red,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
-              ),
-            ),
+              );
+            }),
           ],
         ),
         const SizedBox(height: 8),
