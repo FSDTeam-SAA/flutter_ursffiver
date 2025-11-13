@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/reactive_button/save_button.dart';
 import 'package:flutter_ursffiver/core/notifiers/button_status_notifier.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
+import 'package:flutter_ursffiver/features/badges/presentation/widget/badge_record_widget.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
 import 'package:flutter_ursffiver/features/profile/controller/edit_profile_info_controller.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
@@ -9,8 +10,6 @@ import 'package:flutter_ursffiver/features/profile/presentation/screens/profile_
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_ursffiver/core/theme/app_colors.dart';
-import 'package:flutter_ursffiver/core/theme/app_gap.dart';
-import 'package:flutter_ursffiver/features/profile/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/widget/badgeg_widget.dart';
 
 class MyProfileScreen extends StatefulWidget {
@@ -99,13 +98,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               }),
               const SizedBox(height: 24),
               _buildProfilePhotoSection(controller),
-              const SizedBox(height: 32),
+              const SizedBox(height: 20),
               // _buildFormField(
               //   'Full Name',
               //   controller.fullNameController,
               //   alwaysDisabled: true,
               // ),
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
               _buildFormField('First Name', controller.firstNameController),
               const SizedBox(height: 20),
               _buildFormField('Last Name', controller.lastNameController),
@@ -295,7 +294,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       ),
     );
   }
-
   Widget _buildProfilePhotoSection(EditProfileInfoController controller) {
     final profileController = Get.find<ProfileDataController>();
 
@@ -303,119 +301,73 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       final user = profileController.userProfile.value;
       final localImage = controller.profileImage.value;
 
-      /////
-      // ///
-      // final UserBadgeModel badge =
-      //                   controller.userProfile.value!.badge![index];
-      //               // final Color badgeColor = _parseColor(badge.color);
-      //               final Color badgeColor = badge.badgeColor;
-
-      //               final Color bgColor = badgeColor.withOpacity(0.1);
-      // ///
-
       ImageProvider imageProvider;
 
       if (localImage != null) {
-        // picked from gallery or camera
         imageProvider = FileImage(localImage);
       } else if (user?.image != null && user!.image!.isNotEmpty) {
-        // image from API
         imageProvider = NetworkImage(user.image!);
       } else {
-        // fallback image
         imageProvider = const NetworkImage(
           'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
         );
       }
+
+      final badges = user?.badge ?? [];
 
       return Center(
         child: Column(
           children: [
             CircleAvatar(radius: 50, backgroundImage: imageProvider),
             const SizedBox(height: 20),
-            Column(
-              children: [
-                BadgeHeader(
-                  nameAndAge:
-                      '${controller.fullNameController.text}. ${controller.ageRangeController.text}',
-                  username: controller.usernameController.text,
-                  sectionTitle: 'Social Impact Badges',
-                ),
-                const SizedBox(height: 12),
-              ],
+            BadgeHeader(
+              nameAndAge:
+                  '${controller.fullNameController.text}. ${controller.ageRangeController.text}',
+              username: controller.usernameController.text,
+              sectionTitle: 'Social Impact Badges',
             ),
-            Gap.h20,
+            const SizedBox(height: 12),
 
-            //////////////////////////////////////////////////////
-            ///
-            ///
-            BadgeList(
-              badges: [
-                IconBadgeModel(
-                  icon: Icons.verified_user,
-                  count: 5,
-                  color: Colors.purpleAccent,
-                ),
-                IconBadgeModel(
-                  icon: Icons.watch_later_outlined,
-                  count: 4,
-                  color: Colors.orangeAccent,
-                ),
-                // ...
-              ],
-            ),
+            // Display all badges dynamically
+            // Display all badges dynamically
+            // Display all badges dynamically
+            // Display all badges dynamically
+            if (badges.isNotEmpty)
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: badges.map((badge) {
+                  final badgeColor = badge.badgeColor;
+                  final bgColor = badgeColor.withOpacity(0.1);
 
-            // Column(
-            //             crossAxisAlignment: CrossAxisAlignment.start,
-            //             children: [
-            //               Row(
-            //                 children: [
-            //                   Expanded(
-            //                     child: Text(
-            //                       badge.name,
-            //                       style: const TextStyle(
-            //                         fontSize: 16,
-            //                         fontWeight: FontWeight.w600,
-            //                       ),
-            //                     ),
-            //                   ),
-            //                   Container(
-            //                     padding: const EdgeInsets.symmetric(
-            //                       horizontal: 8,
-            //                       vertical: 4,
-            //                     ),
-            //                     decoration: BoxDecoration(
-            //                       color: bgColor,
-            //                       borderRadius: BorderRadius.circular(8),
-            //                     ),
-            //                     child: Text(
-            //                       badge.tag,
-            //                       style: TextStyle(
-            //                         fontSize: 12,
-            //                         color: badgeColor,
-            //                         fontWeight: FontWeight.w600,
-            //                       ),
-            //                     ),
-            //                   ),
-            //                 ],
-            //               ),
-
-            //               //print badges color
-            //               const SizedBox(height: 8),
-            //               Text(
-            //                 badge.info,
-            //                 style: TextStyle(
-            //                   fontSize: 14,
-            //                   color: Colors.grey[700],
-            //                   height: 1.4,
-            //                 ),
-            //               ),
-            //             ],
-            //           ),
-
-            ////////////////////////////////////////////////////////
-            ///
-            ///
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: bgColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(badge.badgeIcon, color: badgeColor, size: 16),
+                        // const SizedBox(width: 4),
+                        // Text(
+                        //   badge.name,
+                        //   style: TextStyle(
+                        //     fontSize: 12,
+                        //     fontWeight: FontWeight.w600,
+                        //     color: badgeColor,
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            if (badges.isEmpty) const Text('No badges found'),
 
             const SizedBox(height: 20),
             Row(

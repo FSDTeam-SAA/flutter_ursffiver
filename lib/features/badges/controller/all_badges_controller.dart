@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/app/app_manager.dart';
-import 'package:flutter_ursffiver/core/helpers/auth_role.dart';
 import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
-import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
-import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
+import 'package:flutter_ursffiver/features/badges/model/badge_record.dart';
+import 'package:flutter_ursffiver/features/badges/model/get_my_badges_request_param.dart';
 import 'package:flutter_ursffiver/features/badges/services/badges_interface.dart';
 import 'package:get/get.dart';
 
 class AllBadgesController extends GetxController {
-  final Rxn<UserBadgesModel> userProfile = Rxn<UserBadgesModel>();
+  final RxList<BadgeRecord> receivedBadges = <BadgeRecord>[].obs;
+
+  final RxList<BadgeRecord> awardedBadges = <BadgeRecord>[].obs;
 
   final RxBool isLoading = false.obs;
 
@@ -20,16 +20,14 @@ class AllBadgesController extends GetxController {
 
   void loadBadges() async {
     isLoading.value = true;
-    final auth =
-        (Get.find<AppManager>().currentAuthStatus as Authenticated).auth;
-    final userid = auth.userId;
-
-    final lr = await Get.find<BadgesInterface>().getuserbyid(userid);
-
+    final lr = await Get.find<BadgesInterface>().getMyBadges(
+      param: GetmyBadgesRequestParam(),
+    );
     handleFold(
       either: lr,
       onSuccess: (success) {
-        userProfile.value = success;
+        receivedBadges.value = success.received;
+        awardedBadges.value = success.given;
       },
       onError: (failure) {
         debugPrint(failure.fullError);

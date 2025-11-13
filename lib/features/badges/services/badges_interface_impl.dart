@@ -2,7 +2,9 @@ import 'package:flutter_ursffiver/core/api_handler/success.dart';
 import 'package:flutter_ursffiver/core/constants/api_endpoints.dart';
 import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
-import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
+import 'package:flutter_ursffiver/features/badges/model/award_badges_to_user.dart';
+import 'package:flutter_ursffiver/features/badges/model/get_my_badges_request_param.dart';
+import 'package:flutter_ursffiver/features/badges/model/get_my_badges_response_model.dart';
 import 'package:flutter_ursffiver/features/badges/services/badges_interface.dart';
 
 final class BadgesInterfaceImpl extends BadgesInterface {
@@ -10,19 +12,27 @@ final class BadgesInterfaceImpl extends BadgesInterface {
   final AppPigeon appPigeon;
 
   @override
-  FutureRequest<Success<UserBadgesModel>> getuserbyid(String id) async {
+  FutureRequest<Success> awardBadgestoUser({required AwardBadgesToUser param}) async {
+    throw UnimplementedError();
+    // return await asyncTryCatch(tryFunc: () {
+
+    // }) 
+  }
+
+  @override
+  FutureRequest<Success<GetMyBadgesResponseModel>> getMyBadges({
+    required GetmyBadgesRequestParam param,
+  }) async {
     return await asyncTryCatch(
       tryFunc: () async {
-        //api call
-        final response = await appPigeon.get(ApiEndpoints.getuserbyId(id));
+        final response = await appPigeon.get(ApiEndpoints.getMyBadges);
 
-        //patse
         final data = response.data["data"];
-
         var message = response.data["message"] as String;
-
-        //return
-        return Success(message: message, data: data);
+        GetMyBadgesResponseModel parsedata = GetMyBadgesResponseModel.fromJson(
+          data,
+        );
+        return Success(message: message, data: parsedata);
       },
     );
   }

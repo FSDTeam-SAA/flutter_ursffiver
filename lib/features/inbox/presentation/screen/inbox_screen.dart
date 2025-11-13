@@ -410,7 +410,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   builder: (context) => SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
-                    child: const AllBadgesWidget(),
+                    // child: const AllBadgesWidget(),
                   ),
                 );
               }

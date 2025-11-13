@@ -5,10 +5,11 @@ import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/badges/services/badges_interface.dart';
+import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 import 'package:get/get.dart';
 
 class HomeInterestController extends GetxController {
-  final Rxn<UserBadgesModel> userProfile = Rxn<UserBadgesModel>();
+  final Rxn<UserProfile> userProfile = Rxn<UserProfile>();
 
   final RxBool isLoading = false.obs;
 
@@ -19,23 +20,23 @@ class HomeInterestController extends GetxController {
   }
 
   void loadinterest() async {
-    isLoading.value = true;
-    final auth =
-        (Get.find<AppManager>().currentAuthStatus as Authenticated).auth;
-    final userid = auth.userId;
+    // isLoading.value = true;
+    // final auth =
+    //     (Get.find<AppManager>().currentAuthStatus as Authenticated).auth;
+    // final userid = auth.userId;
 
-    final lr = await Get.find<BadgesInterface>().getuserbyid(userid);
+    // final lr = await Get.find<BadgesInterface>().getMyBadges;
 
-    handleFold(
-      either: lr,
-      onSuccess: (success) {
-        debugPrint("✅ Profile fetched: ${success.interests.first.name}");
-        userProfile.value = success;
-      },
-      onError: (failure) {
-        debugPrint(failure.fullError);
-      },
-    );
-    isLoading.value = false;
+    // handleFold(
+    //   either: lr,
+    //   onSuccess: (success) {
+    //     debugPrint("✅ Profile fetched: ${success.interests.first.name}");
+    //     userProfile.value = success;
+    //   },
+    //   onError: (failure) {
+    //     debugPrint(failure.fullError);
+    //   },
+    // );
+    // isLoading.value = false;
   }
 }

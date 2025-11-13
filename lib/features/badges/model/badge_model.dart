@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
 import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
 
-class UserBadgeModel {
+class BadgeModel {
   final String id;
   final String name;
   final String tag;
   final String info;
   final String color;
 
-  UserBadgeModel({
+  BadgeModel({
     required this.id,
     required this.name,
     required this.tag,
@@ -57,7 +57,7 @@ class UserBadgeModel {
   IconData get badgeIcon {
     switch (name.toLowerCase()) {
       case 'goodspeaker':
-      return Icons.record_voice_over;
+        return Icons.record_voice_over;
       case 'good speaker':
         return Icons.record_voice_over;
       case 'fast responder':
@@ -79,8 +79,8 @@ class UserBadgeModel {
     }
   }
 
-  factory UserBadgeModel.fromJson(Map<String, dynamic> json) {
-    return UserBadgeModel(
+  factory BadgeModel.fromJson(Map<String, dynamic> json) {
+    return BadgeModel(
       id: json['_id'] ?? '',
       name: json['name'] ?? '',
       tag: json['tag'] ?? '',
@@ -90,82 +90,82 @@ class UserBadgeModel {
   }
 }
 
-class UserBadgesModel {
-  final String id;
-  final String firstName;
-  final String lastName;
-  final String fullname;
-  final String ageRange;
-  final String bio;
-  final String email;
-  final String username;
-  final String gender;
-  final DateTime? dateOfBirth;
-  final bool isEmailVerified;
-  final String role;
-  final String status;
-  final bool adminVerify;
-  final List<UserInterestModel> interests;
-  final bool active;
-  final List<UserAddressModel> address;
-  final String? imagePath;
-  final List<UserBadgeModel> badges;
+// class UserBadgesModel {
+//   final String id;
+//   final String firstName;
+//   final String lastName;
+//   final String fullname;
+//   final String ageRange;
+//   final String bio;
+//   final String email;
+//   final String username;
+//   final String gender;
+//   final DateTime? dateOfBirth;
+//   final bool isEmailVerified;
+//   final String role;
+//   final String status;
+//   final bool adminVerify;
+//   final List<UserInterestModel> interests;
+//   final bool active;
+//   final List<UserAddressModel> address;
+//   final String? imagePath;
+//   final List<UserBadgeModel> badges;
 
-  UserBadgesModel({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.fullname,
-    required this.ageRange,
-    required this.bio,
-    required this.email,
-    required this.username,
-    required this.gender,
-    required this.dateOfBirth,
-    required this.isEmailVerified,
-    required this.role,
-    required this.status,
-    required this.adminVerify,
-    required this.interests,
-    required this.active,
-    required this.address,
-    this.imagePath,
-    required this.badges,
-  });
+//   UserBadgesModel({
+//     required this.id,
+//     required this.firstName,
+//     required this.lastName,
+//     required this.fullname,
+//     required this.ageRange,
+//     required this.bio,
+//     required this.email,
+//     required this.username,
+//     required this.gender,
+//     required this.dateOfBirth,
+//     required this.isEmailVerified,
+//     required this.role,
+//     required this.status,
+//     required this.adminVerify,
+//     required this.interests,
+//     required this.active,
+//     required this.address,
+//     this.imagePath,
+//     required this.badges,
+//   });
 
-  factory UserBadgesModel.fromJson(Map<String, dynamic> json) {
-    debugPrint("user badges model json : ${json['firstName']}");
+//   factory UserBadgesModel.fromJson(Map<String, dynamic> json) {
+//     debugPrint("user badges model json : ${json['firstName']}");
 
-    return UserBadgesModel(
-      id: json['_id'] ?? '',
-      firstName: json['firstName'] ?? '',
-      lastName: json['lastName'] ?? '',
-      fullname: json['fullname'] ?? '',
-      ageRange: json['ageRange'] ?? '',
-      bio: json['bio'] ?? '',
-      email: json['email'] ?? '',
-      username: json['username'] ?? '',
-      gender: json['gender'] ?? '',
-      dateOfBirth: json['dateOfBirth'] == null
-          ? null
-          : DateTime.tryParse(json['dateOfBirth'] ?? ''),
-      isEmailVerified: json['isEmailVerified'] ?? false,
-      role: json['role'] ?? '',
-      status: json['status'] ?? '',
-      adminVerify: json['adminVerify'] ?? false,
-      interests: json['interest'] == null
-          ? []
-          : (json['interest'] as List)
-              .map((e) => UserInterestModel.fromJson(e))
-              .toList(),
-      active: json['active'] ?? false,
-      address: [],
-      imagePath: json['profileImage'] as String?,
-      badges: json['badge'] == null
-          ? []
-          : (json['badge'] as List)
-              .map((e) => UserBadgeModel.fromJson(e))
-              .toList(),
-    );
-  }
-}
+//     return UserBadgesModel(
+//       id: json['_id'] ?? '',
+//       firstName: json['firstName'] ?? '',
+//       lastName: json['lastName'] ?? '',
+//       fullname: json['fullname'] ?? '',
+//       ageRange: json['ageRange'] ?? '',
+//       bio: json['bio'] ?? '',
+//       email: json['email'] ?? '',
+//       username: json['username'] ?? '',
+//       gender: json['gender'] ?? '',
+//       dateOfBirth: json['dateOfBirth'] == null
+//           ? null
+//           : DateTime.tryParse(json['dateOfBirth'] ?? ''),
+//       isEmailVerified: json['isEmailVerified'] ?? false,
+//       role: json['role'] ?? '',
+//       status: json['status'] ?? '',
+//       adminVerify: json['adminVerify'] ?? false,
+//       interests: json['interest'] == null
+//           ? []
+//           : (json['interest'] as List)
+//               .map((e) => UserInterestModel.fromJson(e))
+//               .toList(),
+//       active: json['active'] ?? false,
+//       address: [],
+//       imagePath: json['profileImage'] as String?,
+//       badges: json['badge'] == null
+//           ? []
+//           : (json['badge'] as List)
+//               .map((e) => UserBadgeModel.fromJson(e))
+//               .toList(),
+//     );
+//   }
+// }

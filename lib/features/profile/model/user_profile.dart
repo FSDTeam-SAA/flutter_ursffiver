@@ -12,7 +12,7 @@ class UserProfile {
   final String? bio;
   final String? image;
   final bool? adminVerify;
-  final List<UserBadgeModel>? badge;
+  final List<BadgeModel>? badge;
   final List<UserInterestModel>? interest;
 
   UserProfile({
@@ -44,8 +44,8 @@ class UserProfile {
       adminVerify: json['adminVerify'],
       badge: json['badge'] == null
           ? []
-          : List<UserBadgeModel>.from(
-              json['badge']?.map((x) => UserBadgeModel.fromJson(x)) ?? [],
+          : List<BadgeModel>.from(
+              json['badge']?.map((x) => BadgeModel.fromJson(x)) ?? [],
             ),
 
       interest: json['interest'] == null
