@@ -173,7 +173,7 @@ class _NotificationItemState extends State<NotificationItem> {
                   ),
                   child: ClipOval(
                     child: SmartNetworkImage(
-                      imageUrl: data.user.imagePath,
+                      imageUrl: data.user.image,
                       height: 45,
                       width: 45,
                       fit: BoxFit.cover,
@@ -358,7 +358,7 @@ class _NotificationItemState extends State<NotificationItem> {
                 ),
                 child: ClipOval(
                   child: SmartNetworkImage(
-                    imageUrl: data.user.imagePath,
+                    imageUrl: data.user.image,
                     height: 45,
                     width: 45,
                     fit: BoxFit.cover,

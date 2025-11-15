@@ -25,19 +25,19 @@ class BadgeRecordWidget extends StatelessWidget {
           Row(
             children: [
               /// Badge Icon
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  badgeData.badgeIcon,
-                  color: badgeColor,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 8),
+              // Container(
+              //   padding: const EdgeInsets.all(6),
+              //   decoration: BoxDecoration(
+              //     color: bgColor,
+              //     shape: BoxShape.circle,
+              //   ),
+              //   child: Icon(
+              //     badgeData.badgeIcon,
+              //     color: badgeColor,
+              //     size: 20,
+              //   ),
+              // ),
+              // const SizedBox(width: 8),
 
               /// Badge Name
               Expanded(
@@ -63,7 +63,7 @@ class BadgeRecordWidget extends StatelessWidget {
                   badgeData.tag,
                   style: TextStyle(
                     color: badgeColor,
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

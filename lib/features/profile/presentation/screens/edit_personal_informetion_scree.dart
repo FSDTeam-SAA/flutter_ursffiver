@@ -302,6 +302,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       ),
     );
   }
+
   Widget _buildProfilePhotoSection(EditProfileInfoController controller) {
     final profileController = Get.find<ProfileDataController>();
 
@@ -321,7 +322,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         );
       }
 
-      final badges = user?.badge ?? [];
+      final badges = user?.badges ?? [];
       final grouped = groupBadges(badges);
 
       return Center(
@@ -339,10 +340,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             ),
 
             const SizedBox(height: 12),
-
-            /// ------------------------------
-            /// Badge Chips (Grouped)
-            /// ------------------------------
             if (badges.isNotEmpty) ...[
               Wrap(
                 spacing: 8,

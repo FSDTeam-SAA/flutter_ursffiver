@@ -4,7 +4,7 @@ import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart'
 import 'package:flutter_ursffiver/core/componenet/pagination/widget/paginated_list.dart';
 import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/controller/filter_people_suggestion_controller.dart';
-import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
+import 'package:flutter_ursffiver/features/home/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_verification_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/user_profile_card.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
@@ -384,16 +384,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 8),
                   Obx(() {
                     final selectedInterests =
-                        _homeInterestController.userProfile.value?.interest ??
+                        _homeInterestController.userProfile.value?.interests ??
                         [];
 
                     debugPrint(
-                      "selectedInterests: ${_homeInterestController.userProfile.value?.interest?.length ?? 0}",
+                      "selectedInterests: ${_homeInterestController.userProfile.value?.interests?.length ?? 0}",
                     );
 
                     if (selectedInterests.isEmpty) {
                       return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 0,
+                        ),
                         child: Text(
                           "No interests found.",
                           style: TextStyle(color: Colors.grey),
@@ -592,21 +595,21 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class InterestsGrid extends StatelessWidget {
-  final List<UserInterestModel> chips;
+  final List<InterestModel> chips;
 
   const InterestsGrid({super.key, required this.chips});
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 4,
-      runSpacing: 4,
+      spacing: 6,
+      runSpacing: 6,
       children: chips.map((chip) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           decoration: BoxDecoration(
             color: chip.color.deepColor, // solid background
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(5),
           ),
           child: Text(
             chip.name.length > 14

@@ -68,13 +68,13 @@ class EditProfileInfoController extends GetxController {
     final user = Get.find<ProfileDataController>().userProfile.value;
     if (user == null) return;
 
-    firstNameController.text = user.firstname ?? "";
-    lastNameController.text = user.lastname ?? "";
-    userNameController.text = user.username ?? "";
-    fullNameController.text = "${user.firstname ?? ''} ${user.lastname ?? ''}"
+    firstNameController.text = user.firstName ?? "";
+    lastNameController.text = user.lastName ?? "";
+    userNameController.text = user.userName ?? "";
+    fullNameController.text = "${user.firstName ?? ''} ${user.lastName ?? ''}"
         .trim();
     emailController.text = user.email ?? "";
-    usernameController.text = user.username ?? "";
+    usernameController.text = user.userName ?? "";
     genderController.text = user.gender ?? "";
     ageRangeController.text = user.ageRange ?? "";
     bioController.text = user.bio ?? "";

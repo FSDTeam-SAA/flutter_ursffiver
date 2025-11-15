@@ -61,6 +61,7 @@ import 'package:flutter_ursffiver/core/common/controller/select_interest_control
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
+import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 import 'package:get/get.dart';
 
 import '../../../app/app_manager.dart';
@@ -76,7 +77,7 @@ class FilterPeopleSuggestionController extends GetxController {
   RxMap<String, bool> get interests =>
       selectInterestController.selectedInterests;
 
-  Rx<Pagination<UserModel>> suggestionList = Rx<Pagination<UserModel>>(
+  Rx<Pagination<UserProfile>> suggestionList = Rx<Pagination<UserProfile>>(
     NotInitialized([]),
   );
 

@@ -87,17 +87,26 @@ class BadgeModel {
     );
   }
 
+  //toJson
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'name': name,
+      'tag': tag,
+      'info': info,
+      'color': color,
+    };
+  }
 
   @override
-bool operator ==(Object other) =>
-    identical(this, other) ||
-    other is BadgeModel &&
-        badgeIcon == other.badgeIcon &&
-        badgeColor == other.badgeColor;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BadgeModel &&
+          badgeIcon == other.badgeIcon &&
+          badgeColor == other.badgeColor;
 
-@override
-int get hashCode => badgeIcon.hashCode ^ badgeColor.hashCode;
-
+  @override
+  int get hashCode => badgeIcon.hashCode ^ badgeColor.hashCode;
 }
 
 // class UserBadgesModel {

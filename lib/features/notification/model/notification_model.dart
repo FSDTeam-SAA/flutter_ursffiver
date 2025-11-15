@@ -1,4 +1,5 @@
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
+import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 
 enum NotificationType {
   general,
@@ -27,7 +28,7 @@ class NotificationModel {
   final String title;
   final String message;
   final NotificationType type;
-  final UserModel user;
+  final UserProfile user;
   final String? chatId;
   final String? badgeId;
   final bool isRead;
@@ -57,7 +58,7 @@ class NotificationModel {
       title: json['title'] ?? '',
       message: json['message'] ?? '',
       type: NotificationType.fromString(json['type']),
-      user: UserModel.fromJsonForNotification(json['user']),
+      user: UserProfile.fromJsonForNotification(json['user']),
       chatId: json['chat'],
       badgeId: json['badgeId'],
       isRead: json['isRead'] ?? false,
