@@ -393,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     if (selectedInterests.isEmpty) {
                       return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
                         child: Text(
                           "No interests found.",
                           style: TextStyle(color: Colors.grey),
@@ -599,14 +599,14 @@ class InterestsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+      spacing: 4,
+      runSpacing: 4,
       children: chips.map((chip) {
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           decoration: BoxDecoration(
             color: chip.color.deepColor, // solid background
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
             chip.name.length > 14
@@ -614,7 +614,7 @@ class InterestsGrid extends StatelessWidget {
                 : chip.name,
             style: const TextStyle(
               fontSize: 16,
-              color: Colors.black,
+              color: Colors.white,
               fontWeight: FontWeight.w600,
             ),
           ),

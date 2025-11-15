@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/reactive_button/save_button.dart';
 import 'package:flutter_ursffiver/core/notifiers/button_status_notifier.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
+import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/badges/presentation/widget/badge_record_widget.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
 import 'package:flutter_ursffiver/features/profile/controller/edit_profile_info_controller.dart';
@@ -25,6 +26,16 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(
     initialStatus: EnabledStatus(),
   );
+
+  Map<BadgeModel, int> groupBadges(List<BadgeModel> badges) {
+    final Map<BadgeModel, int> grouped = {};
+
+    for (var badge in badges) {
+      grouped.update(badge, (v) => v + 1, ifAbsent: () => 1);
+    }
+
+    return grouped;
+  }
 
   final ProfileDataController profileController =
       Get.find<ProfileDataController>();
@@ -294,6 +305,129 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       ),
     );
   }
+  // Widget _buildProfilePhotoSection(EditProfileInfoController controller) {
+  //   final profileController = Get.find<ProfileDataController>();
+
+  //   return Obx(() {
+  //     final user = profileController.userProfile.value;
+  //     final localImage = controller.profileImage.value;
+
+  //     ImageProvider imageProvider;
+
+  //     if (localImage != null) {
+  //       imageProvider = FileImage(localImage);
+  //     } else if (user?.image != null && user!.image!.isNotEmpty) {
+  //       imageProvider = NetworkImage(user.image!);
+  //     } else {
+  //       imageProvider = const NetworkImage(
+  //         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+  //       );
+  //     }
+
+  //     final badges = user?.badge ?? [];
+
+  //     return Center(
+  //       child: Column(
+  //         children: [
+  //           CircleAvatar(radius: 50, backgroundImage: imageProvider),
+  //           const SizedBox(height: 20),
+  //           BadgeHeader(
+  //             nameAndAge:
+  //                 '${controller.fullNameController.text}. ${controller.ageRangeController.text}',
+  //             username: controller.usernameController.text,
+  //             sectionTitle: 'Social Impact Badges',
+  //           ),
+  //           const SizedBox(height: 12),
+
+  //           // Display all badges dynamically
+  //           // Display all badges dynamically
+  //           // Display all badges dynamically
+  //           // Display all badges dynamically
+  //           if (badges.isNotEmpty)
+  //             Wrap(
+  //               spacing: 8,
+  //               runSpacing: 8,
+  //               children: badges.map((badge) {
+  //                 final badgeColor = badge.badgeColor;
+  //                 final bgColor = badgeColor.withOpacity(0.1);
+
+  //                 return Container(
+  //                   padding: const EdgeInsets.symmetric(
+  //                     horizontal: 8,
+  //                     vertical: 4,
+  //                   ),
+  //                   decoration: BoxDecoration(
+  //                     color: bgColor,
+  //                     borderRadius: BorderRadius.circular(8),
+  //                   ),
+  //                   child: Row(
+  //                     mainAxisSize: MainAxisSize.min,
+  //                     children: [
+  //                       Icon(badge.badgeIcon, color: badgeColor, size: 16),
+  //                       const SizedBox(width: 4),
+  //                       // Text(
+  //                       //   badge.name,
+  //                       //   style: TextStyle(
+  //                       //     fontSize: 12,
+  //                       //     fontWeight: FontWeight.w600,
+  //                       //     color: badgeColor,
+  //                       //   ),
+  //                       // ),
+  //                     ],
+  //                   ),
+  //                 );
+  //               }).toList(),
+  //             ),
+  //           if (badges.isEmpty) const Text('No badges found'),
+
+  //           const SizedBox(height: 20),
+  //           Row(
+  //             children: [
+  //               Expanded(
+  //                 child: _buildPhotoButton(
+  //                   Icons.upload,
+  //                   'Upload Photo',
+  //                   () => controller.pickImage(ImageSource.gallery),
+  //                 ),
+  //               ),
+  //               const SizedBox(width: 12),
+  //               Expanded(
+  //                 child: _buildPhotoButton(
+  //                   Icons.camera_alt,
+  //                   'Take Photo',
+  //                   () => controller.pickImage(ImageSource.camera),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //           const SizedBox(height: 12),
+  //           SizedBox(
+  //             width: double.infinity,
+  //             child: OutlinedButton.icon(
+  //               onPressed: controller.isEditing.value
+  //                   ? controller.removePhoto
+  //                   : null,
+  //               icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+  //               label: const Text(
+  //                 'Remove Photo',
+  //                 style: TextStyle(color: Colors.red),
+  //               ),
+  //               style: OutlinedButton.styleFrom(
+  //                 foregroundColor: Colors.red,
+  //                 side: const BorderSide(color: Colors.red),
+  //                 minimumSize: const Size(double.infinity, 48),
+  //                 shape: RoundedRectangleBorder(
+  //                   borderRadius: BorderRadius.circular(8),
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           const SizedBox(height: 20),
+  //         ],
+  //       ),
+  //     );
+  //   });
+  // }
   Widget _buildProfilePhotoSection(EditProfileInfoController controller) {
     final profileController = Get.find<ProfileDataController>();
 
@@ -314,62 +448,73 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       }
 
       final badges = user?.badge ?? [];
+      final grouped = groupBadges(badges);
 
       return Center(
         child: Column(
           children: [
             CircleAvatar(radius: 50, backgroundImage: imageProvider),
             const SizedBox(height: 20),
+
+            /// Header (Name + Age + Username)
             BadgeHeader(
               nameAndAge:
                   '${controller.fullNameController.text}. ${controller.ageRangeController.text}',
               username: controller.usernameController.text,
               sectionTitle: 'Social Impact Badges',
             ),
+
             const SizedBox(height: 12),
 
-            // Display all badges dynamically
-            // Display all badges dynamically
-            // Display all badges dynamically
-            // Display all badges dynamically
-            if (badges.isNotEmpty)
+            /// ------------------------------
+            /// Badge Chips (Grouped)
+            /// ------------------------------
+            if (badges.isNotEmpty) ...[
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: badges.map((badge) {
+                children: grouped.entries.map((entry) {
+                  final badge = entry.key;
+                  final count = entry.value;
+
                   final badgeColor = badge.badgeColor;
                   final bgColor = badgeColor.withOpacity(0.1);
 
                   return Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
+                      horizontal: 10,
+                      vertical: 6,
                     ),
                     decoration: BoxDecoration(
+                      border: Border.all(color: badgeColor),
                       color: bgColor,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(40),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(badge.badgeIcon, color: badgeColor, size: 16),
-                        // const SizedBox(width: 4),
-                        // Text(
-                        //   badge.name,
-                        //   style: TextStyle(
-                        //     fontSize: 12,
-                        //     fontWeight: FontWeight.w600,
-                        //     color: badgeColor,
-                        //   ),
-                        // ),
+                        const SizedBox(width: 4),
+                        Text(
+                          "x$count",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: badgeColor,
+                          ),
+                        ),
                       ],
                     ),
                   );
                 }).toList(),
               ),
-            if (badges.isEmpty) const Text('No badges found'),
+            ] else ...[
+              const Text('No badges found'),
+            ],
 
             const SizedBox(height: 20),
+
+            /// Upload + Take Photo buttons
             Row(
               children: [
                 Expanded(
@@ -389,7 +534,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 ),
               ],
             ),
+
             const SizedBox(height: 12),
+
+            /// Remove Photo
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
@@ -411,6 +559,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 ),
               ),
             ),
+
             const SizedBox(height: 20),
           ],
         ),

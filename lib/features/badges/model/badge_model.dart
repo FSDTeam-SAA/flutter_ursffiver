@@ -62,7 +62,7 @@ class BadgeModel {
         return Icons.record_voice_over;
       case 'fast responder':
         return Icons.flash_on;
-      case 'team player':
+      case 'great lisaner':
         return Icons.groups;
       case 'top seller':
         return Icons.workspace_premium;
@@ -88,6 +88,18 @@ class BadgeModel {
       color: json['color'] ?? '#000000',
     );
   }
+
+
+  @override
+bool operator ==(Object other) =>
+    identical(this, other) ||
+    other is BadgeModel &&
+        badgeIcon == other.badgeIcon &&
+        badgeColor == other.badgeColor;
+
+@override
+int get hashCode => badgeIcon.hashCode ^ badgeColor.hashCode;
+
 }
 
 // class UserBadgesModel {

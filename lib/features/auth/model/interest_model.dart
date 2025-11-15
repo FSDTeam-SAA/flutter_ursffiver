@@ -85,13 +85,13 @@ enum InterestColor {
   Color get deepColor {
     switch (this) {
       case InterestColor.red:
-        return Colors.red;
+        return Color(0xFFF2415A);
       case InterestColor.green:
-        return Colors.green;
+        return Color(0xFF27BE69);
       case InterestColor.blue:
-        return Colors.blue;
+        return Color(0xFF3F42EE);
       case InterestColor.yellow:
-        return Colors.yellow;
+        return Color(0xFFFFBF0F);
     }
   }
 
