@@ -1,4 +1,3 @@
-import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/badges/model/badge_record.dart';
 
 class GetMyBadgesResponseModel {

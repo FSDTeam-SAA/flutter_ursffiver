@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/screen/inbox_screen.dart';
 
 class FixedNotificationBanner {
   static void show(BuildContext context) {

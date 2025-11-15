@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
-import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
 
 class BadgeModel {
   final String id;

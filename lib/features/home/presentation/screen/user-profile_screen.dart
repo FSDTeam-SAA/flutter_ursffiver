@@ -121,19 +121,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       child: Icon(Icons.person, size: 50, color: Colors.grey),
                     ),
                   ),
-
-                  // Container(
-                  //   width: 120,
-                  //   height: 120,
-                  //   decoration: BoxDecoration(
-                  //     shape: BoxShape.circle,
-                  //     image: const DecorationImage(
-                  //       image: AssetImage('assets/image/profile.png'),
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //     border: Border.all(color: Colors.grey.shade200, width: 2),
-                  //   ),
-                  // ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
