@@ -17,17 +17,15 @@ class BadgesPage extends StatefulWidget {
 class _BadgesPageState extends State<BadgesPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late AllBadgesController badgeController;
 
   @override
   void initState() {
     super.initState();
-    getUserBadges();
+    // Initialize controller
+    badgeController = Get.put(AllBadgesController());
+    // Tab controller
     _tabController = TabController(length: 2, vsync: this);
-  }
-
-  void getUserBadges() {
-    final badgeController = Get.put(AllBadgesController());
-    badgeController.loadBadges();
   }
 
   @override
@@ -43,54 +41,43 @@ class _BadgesPageState extends State<BadgesPage>
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-
         title: Row(
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.workspace_premium_outlined,
-                  size: 32,
-                  color: AppColors.primarybutton,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  'Badge Management',
-                  style: AppText.xlSemiBold_20_700.copyWith(
-                    color: AppColors.primaryTextblack,
-                  ),
-                ),
-              ],
+            Icon(
+              Icons.workspace_premium_outlined,
+              size: 32,
+              color: AppColors.primarybutton,
             ),
-            Spacer(),
-            Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BadgeGuideScreen(),
-                      ),
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.contact_support_outlined,
-                        color: AppColors.primarybutton,
-                      ),
-                      SizedBox(width: 6),
-                      Text(
-                        "Badge Guide",
-                        style: AppText.smMedium_14_600.copyWith(
-                          color: AppColors.primarybutton,
-                        ),
-                      ),
-                    ],
+            const SizedBox(width: 4),
+            Text(
+              'Badge Management',
+              style: AppText.xlSemiBold_20_700.copyWith(
+                color: AppColors.primaryTextblack,
+              ),
+            ),
+            const Spacer(),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => BadgeGuideScreen()),
+                );
+              },
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.contact_support_outlined,
+                    color: AppColors.primarybutton,
                   ),
-                ),
-              ],
+                  const SizedBox(width: 6),
+                  Text(
+                    "Badge Guide",
+                    style: AppText.smMedium_14_600.copyWith(
+                      color: AppColors.primarybutton,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -112,7 +99,10 @@ class _BadgesPageState extends State<BadgesPage>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const [ReceivedBadgesWidget(), AwardedBadgesWidget()],
+        children: const [
+          ReceivedBadgesWidget(),
+          AwardedBadgesWidget(),
+        ],
       ),
     );
   }
@@ -123,7 +113,7 @@ class ReceivedBadgesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> badges = [];
+    final controller = Get.find<AllBadgesController>();
 
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -137,7 +127,6 @@ class ReceivedBadgesWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
             const Text(
               "Your Received Badges",
               style: TextStyle(
@@ -148,53 +137,53 @@ class ReceivedBadgesWidget extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             const Text(
-              "Recognition you've given to other users",
+              "Recognition you've received from other users",
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             Gap.h20,
-            ObxValue(
-              (badges) => badges.isEmpty
-                  ? Expanded(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 180,
-                              height: 180,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Icon(
-                                Icons.card_giftcard,
-                                size: 160,
-                                color: Colors.grey[400],
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              "You haven't awarded any badges yet",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
+            Obx(() {
+              if (controller.receivedBadges.isEmpty) {
+                return Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 180,
+                          height: 180,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Icon(
+                            Icons.card_giftcard,
+                            size: 160,
+                            color: Colors.grey[400],
+                          ),
                         ),
-                      ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: badges.length,
-                        itemBuilder: (context, index) {
-                          final badge = badges[index];
-                          return BadgeRecordWidget(badge: badge);
-                        },
-                      ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "You haven't received any badges yet",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
                     ),
-              Get.find<AllBadgesController>().receivedBadges,
-            ),
+                  ),
+                );
+              }
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: controller.receivedBadges.length,
+                  itemBuilder: (context, index) {
+                    final badge = controller.receivedBadges[index];
+                    return BadgeRecordWidget(badge: badge);
+                  },
+                ),
+              );
+            }),
           ],
         ),
       ),
@@ -207,7 +196,7 @@ class AwardedBadgesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> badges = [];
+    final controller = Get.find<AllBadgesController>();
 
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -221,8 +210,7 @@ class AwardedBadgesWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
-            Text(
+            const Text(
               "Badges You've Awarded",
               style: TextStyle(
                 fontSize: 18,
@@ -236,119 +224,49 @@ class AwardedBadgesWidget extends StatelessWidget {
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             Gap.h20,
-
-            ObxValue(
-              (badges) => badges.isEmpty
-                  ? Expanded(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 180,
-                              height: 180,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Icon(
-                                Icons.card_giftcard,
-                                size: 160,
-                                color: Colors.grey[400],
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              "You haven't awarded any badges yet",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
+            Obx(() {
+              if (controller.awardedBadges.isEmpty) {
+                return Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 180,
+                          height: 180,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Icon(
+                            Icons.card_giftcard,
+                            size: 160,
+                            color: Colors.grey[400],
+                          ),
                         ),
-                      ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: badges.length,
-                        itemBuilder: (context, index) {
-                          final badge = badges[index];
-                          return BadgeRecordWidget(badge: badge);
-                        },
-                      ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "You haven't awarded any badges yet",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
                     ),
-              Get.find<AllBadgesController>().receivedBadges,
-            ),
-
-            // badges.isEmpty
-            //     ? Expanded(
-            //         child: Center(
-            //           child: Column(
-            //             mainAxisAlignment: MainAxisAlignment.center,
-            //             children: [
-            //               Container(
-            //                 width: 180,
-            //                 height: 180,
-            //                 decoration: BoxDecoration(
-            //                   color: Colors.grey[100],
-            //                   borderRadius: BorderRadius.circular(16),
-            //                 ),
-            //                 child: Icon(
-            //                   Icons.card_giftcard,
-            //                   size: 160,
-            //                   color: Colors.grey[400],
-            //                 ),
-            //               ),
-            //               const SizedBox(height: 16),
-            //               Text(
-            //                 "You haven't awarded any badges yet",
-            //                 style: TextStyle(
-            //                   fontSize: 15,
-            //                   color: Colors.grey[600],
-            //                 ),
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //       )
-            //     : Expanded(
-            //         child: ListView.builder(
-            //           itemCount: badges.length,
-            //           itemBuilder: (context, index) {
-            //             final badge = badges[index];
-            //             return Container(
-            //               margin: const EdgeInsets.only(bottom: 12),
-            //               padding: const EdgeInsets.all(12),
-            //               decoration: BoxDecoration(
-            //                 color: Colors.grey[50],
-            //                 borderRadius: BorderRadius.circular(12),
-            //                 border: Border.all(color: Colors.grey.shade300),
-            //               ),
-            //               child: Column(
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   Text(
-            //                     badge['title'] ?? "",
-            //                     style: const TextStyle(
-            //                       fontSize: 16,
-            //                       fontWeight: FontWeight.w600,
-            //                     ),
-            //                   ),
-            //                   const SizedBox(height: 8),
-            //                   Text(
-            //                     badge['description'] ?? "",
-            //                     style: TextStyle(
-            //                       fontSize: 14,
-            //                       color: Colors.grey[600],
-            //                     ),
-            //                   ),
-            //                 ],
-            //               ),
-            //             );
-            //           },
-            //         ),
-            //       ),
+                  ),
+                );
+              }
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: controller.awardedBadges.length,
+                  itemBuilder: (context, index) {
+                    final badge = controller.awardedBadges[index];
+                    return BadgeRecordWidget(badge: badge);
+                  },
+                ),
+              );
+            }),
           ],
         ),
       ),

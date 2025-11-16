@@ -36,6 +36,7 @@ base class ApiEndpoints {
 
   //-----------------badges----------------
   static const String getMyBadges = _Badges.getMyBadges;
+  static const String allBadges = _Badges.allBadges;
 
   //---------------report----------------
 
@@ -166,6 +167,7 @@ class _Verification {
 class _Badges {
   static const String _badgesRoute = '${ApiEndpoints.baseUrl}/badges';
   static const String getMyBadges = '$_badgesRoute/all-badges';
+  static const String allBadges = '$_badgesRoute/';
 }
 
 // ---------------------- Report -----------------------------

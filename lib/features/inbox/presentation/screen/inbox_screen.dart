@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
+import 'package:flutter_ursffiver/features/badges/presentation/screen/get_all_badges_screen.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
@@ -98,61 +99,130 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         actions: [
+          // PopupMenuButton<String>(
+          //   icon: const Icon(Icons.more_vert, color: Colors.black),
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(12),
+          //   ),
+          //   onSelected: (value) {
+          //     if (value == "badge") {
+          //       showModalBottomSheet(
+          //         context: context,
+          //         isScrollControlled: true,
+          //         shape: const RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.vertical(
+          //             top: Radius.circular(20),
+          //           ),
+          //         ),
+          //         builder: (context) => SizedBox(
+          //           height: MediaQuery.of(context).size.height * 0.9,
+          //           // child: const AllBadgesWidget(),
+          //         ),
+          //       );
+          //     }
+          //   },
+          //   itemBuilder: (_) => [
+          //     const PopupMenuItem(
+          //       value: "extend",
+          //       child: Row(
+          //         children: [
+          //           Icon(Icons.access_time_outlined, color: Colors.black),
+          //           SizedBox(width: 10),
+          //           Text("Extend Time"),
+          //         ],
+          //       ),
+          //     ),
+          //     const PopupMenuItem(
+          //       value: "badge",
+          //       child: Row(
+          //         children: [
+          //           Icon(Icons.badge, color: Colors.black),
+          //           SizedBox(width: 10),
+          //           Text("Award Badge User"),
+          //         ],
+          //       ),
+          //     ),
+          //     const PopupMenuItem(
+          //       value: "location",
+          //       child: Row(
+          //         children: [
+          //           Icon(Icons.location_on_outlined, color: Colors.black),
+          //           SizedBox(width: 10),
+          //           Text("Share Location"),
+          //         ],
+          //       ),
+          //     ),
+          //   ],
+          // ),
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: Colors.black),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            onSelected: (value) {
-              if (value == "badge") {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  builder: (context) => SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    // child: const AllBadgesWidget(),
-                  ),
-                );
-              }
-            },
-            itemBuilder: (_) => [
-              const PopupMenuItem(
-                value: "extend",
-                child: Row(
-                  children: [
-                    Icon(Icons.access_time_outlined, color: Colors.black),
-                    SizedBox(width: 10),
-                    Text("Extend Time"),
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: "badge",
-                child: Row(
-                  children: [
-                    Icon(Icons.badge, color: Colors.black),
-                    SizedBox(width: 10),
-                    Text("Award Badge User"),
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: "location",
-                child: Row(
-                  children: [
-                    Icon(Icons.location_on_outlined, color: Colors.black),
-                    SizedBox(width: 10),
-                    Text("Share Location"),
-                  ],
-                ),
-              ),
-            ],
+  icon: const Icon(Icons.more_vert, color: Colors.black),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+  onSelected: (value) {
+    if (value == "badge") {
+      // OPEN BOTTOM SHEET
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
           ),
+        ),
+        builder: (context) => SizedBox(
+          height: MediaQuery.of(context).size.height * 0.9,
+          child: GetAllBadgesScreen(),
+        ),
+      );
+    } else if (value == "extend") {
+      // GO TO NEW SCREEN
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => Scaffold()),
+      );
+    } else if (value == "location") {
+      // GO TO LOCATION SCREEN
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => Scaffold()),
+      );
+    }
+  },
+  itemBuilder: (_) => [
+    const PopupMenuItem(
+      value: "extend",
+      child: Row(
+        children: [
+          Icon(Icons.access_time_outlined, color: Colors.black),
+          SizedBox(width: 10),
+          Text("Extend Time"),
+        ],
+      ),
+    ),
+    const PopupMenuItem(
+      value: "badge",
+      child: Row(
+        children: [
+          Icon(Icons.badge, color: Colors.black),
+          SizedBox(width: 10),
+          Text("Award Badge User"),
+        ],
+      ),
+    ),
+    const PopupMenuItem(
+      value: "location",
+      child: Row(
+        children: [
+          Icon(Icons.location_on_outlined, color: Colors.black),
+          SizedBox(width: 10),
+          Text("Share Location"),
+        ],
+      ),
+    ),
+  ],
+),
+
           const SizedBox(width: 8),
         ],
       ),
