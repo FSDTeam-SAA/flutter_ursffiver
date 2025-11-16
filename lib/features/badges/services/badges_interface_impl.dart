@@ -41,13 +41,14 @@ final class BadgesInterfaceImpl extends BadgesInterface {
     );
   }
 
-  // features/badges/services/badges_interface_impl.dart
   @override
   FutureRequest<Success<List<BadgeModel>>> getAllBadges() async {
     return await asyncTryCatch(
       tryFunc: () async {
         final response = await appPigeon.get(ApiEndpoints.allBadges);
-        final List<dynamic> raw = response.data["data"] as List<dynamic>;
+        final List<dynamic> raw =
+            (response.data["data"]["badges"] ?? []) as List<dynamic>;
+
         final message = response.data["message"] as String;
 
         debugPrint(raw.toString());
