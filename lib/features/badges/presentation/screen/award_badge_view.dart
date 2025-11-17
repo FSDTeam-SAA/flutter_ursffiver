@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/core/common/widget/reactive_button/save_button.dart';
+import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/badges/controller/all_badges_controller.dart';
-import 'package:flutter_ursffiver/features/badges/presentation/widget/all_badges_record_widget.dart';
+import 'package:flutter_ursffiver/features/badges/controller/award_badge_controller.dart';
+import 'package:flutter_ursffiver/features/badges/presentation/widget/award_badge_select_widget.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
 
-class GetAllBadgesScreen extends StatefulWidget {
-  const GetAllBadgesScreen({super.key});
+class AwardBadgeView extends StatefulWidget {
+  final String toUserId;
+  const AwardBadgeView({super.key, required this.toUserId});
 
   @override
-  State<GetAllBadgesScreen> createState() => _GetAllBadgesScreenState();
+  State<AwardBadgeView> createState() => _AwardBadgeViewState();
 }
 
-class _GetAllBadgesScreenState extends State<GetAllBadgesScreen> {
+class _AwardBadgeViewState extends State<AwardBadgeView> {
   late AllBadgesController badgeController;
+  late final AwardBadgeController awardBadgeController;
   String? selectedBadgeId;
 
   @override
   void initState() {
     super.initState();
     badgeController = Get.put(AllBadgesController());
+    awardBadgeController = AwardBadgeController(toUserId: widget.toUserId);
   }
 
   @override
@@ -111,51 +117,43 @@ class _GetAllBadgesScreenState extends State<GetAllBadgesScreen> {
                   }
 
                   return ListView.builder(
-                    itemCount: badges.length,
-                    itemBuilder: (context, index) {
-                      final badge = badges[index];
-                      final isSelected = badge.id == selectedBadgeId;
-
-                      return AllBadgesRecordWidget(
-                        badge: badge,
-                        isSelected: isSelected,
-                        onTap: () {
-                          setState(() {
-                            selectedBadgeId = isSelected ? null : badge.id;
-                          });
-                        },
-                      );
-                    },
-                  );
+                      itemCount: badges.length,
+                      itemBuilder: (context, index) {
+                        final badge = badges[index];
+                        final isSelected = badge.id == selectedBadgeId;
+                    
+                        return AwardBadgeSelectWidget(
+                          badge: badge,
+                          isSelected: isSelected,
+                          onTap: () {
+                            awardBadgeController.toggleSelection(badge);
+                          },
+                        );
+                      },
+                    );
                 }),
               ),
 
               SizedBox(
                 width: double.infinity,
                 height: 52,
-                child: ElevatedButton(
-                  onPressed: selectedBadgeId != null
-                      ? () {
-                          final selectedBadge = badgeController.allBadges
-                              .firstWhere((b) => b.id == selectedBadgeId);
-                          print("Selected Badge: ${selectedBadge.name}");
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primarybutton,
-                    foregroundColor: Colors.black,
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    "Send Badge",
-                    style: AppText.mdMedium_16_500.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+                child: RSaveButton(
+                  key: UniqueKey(),
+                  borderRadius: BorderRadius.circular(8),
+                  buttonStatusNotifier: awardBadgeController.processNotifier,
+                  saveText: "Send",
+                  loadingText: "Sending...",
+                  doneText: "Done",
+                  onSaveTap: () {
+                    awardBadgeController.awardBadges(
+                      errorSnackbarNotifier: SnackbarNotifier(context: context),
+                      successSnackbarNotifier: SnackbarNotifier(context: context)
+                    );
+                  },
+                  onDone: () {
+                    Navigator.pop(context);
+                  },
+                )
               ),
             ],
           ),

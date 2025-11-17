@@ -17,7 +17,7 @@ class AppManager extends GetxController {
   StreamSubscription? _authStreamSubscription;
   AuthStatus _authStatus = AuthLoading();
   AuthStatus get currentAuthStatus => _authStatus;
-  Debouncer authDebouncer = Debouncer(delay: const Duration(milliseconds: 100));
+  Debouncer authDebouncer = Debouncer(delay: const Duration(milliseconds: 10));
 
   /// Initializes the stream to listen to auth status
   AppManager(){

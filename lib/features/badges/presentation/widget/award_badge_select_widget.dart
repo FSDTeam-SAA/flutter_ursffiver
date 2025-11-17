@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 
-class AllBadgesRecordWidget extends StatelessWidget {
+class AwardBadgeSelectWidget extends StatefulWidget {
   final BadgeModel badge;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const AllBadgesRecordWidget({
+  const AwardBadgeSelectWidget({
     super.key,
     required this.badge,
     required this.isSelected,
@@ -14,12 +14,30 @@ class AllBadgesRecordWidget extends StatelessWidget {
   });
 
   @override
+  State<AwardBadgeSelectWidget> createState() => _AwardBadgeSelectWidgetState();
+}
+
+class _AwardBadgeSelectWidgetState extends State<AwardBadgeSelectWidget> {
+  bool _isSelected = false;
+
+  @override
+  initState() {
+    super.initState();
+    _isSelected = widget.isSelected;
+  }
+  @override
   Widget build(BuildContext context) {
-    final badgeColor = badge.badgeColor;
-    final bgColor = isSelected ? badgeColor.withOpacity(0.2) : Colors.grey[50];
+    final badgeColor = widget.badge.badgeColor;
+    final bgColor = _isSelected ? badgeColor.withAlpha(51) : Colors.grey[50];
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        setState(() {
+          _isSelected = !_isSelected;
+          widget.onTap();
+        });
+        
+      },
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(12),
@@ -27,8 +45,8 @@ class AllBadgesRecordWidget extends StatelessWidget {
           color: bgColor,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? badgeColor : Colors.grey.shade300,
-            width: isSelected ? 2 : 1,
+            color: _isSelected ? badgeColor : Colors.grey.shade300,
+            width: _isSelected ? 2 : 1,
           ),
         ),
         child: Column(
@@ -40,16 +58,16 @@ class AllBadgesRecordWidget extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: badgeColor.withOpacity(0.1),
+                    color: badgeColor.withAlpha(26),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(badge.badgeIcon, color: badgeColor, size: 20),
+                  child: Icon(widget.badge.badgeIcon, color: badgeColor, size: 20),
                 ),
                 const SizedBox(width: 8),
                 // Badge Name
                 Expanded(
                   child: Text(
-                    badge.name,
+                    widget.badge.name,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -67,7 +85,7 @@ class AllBadgesRecordWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    badge.tag,
+                    widget.badge.tag,
                     style: TextStyle(
                       color: badgeColor,
                       fontSize: 14,
@@ -79,7 +97,7 @@ class AllBadgesRecordWidget extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              badge.info,
+              widget.badge.info,
               style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),
           ],

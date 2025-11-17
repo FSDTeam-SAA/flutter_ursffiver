@@ -5,4 +5,11 @@ class AwardBadgesToUser {
     required this.userId,
     required this.badgeIds,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      "userId": userId,
+      "badgeIds": badgeIds,
+    };
+  }
 }

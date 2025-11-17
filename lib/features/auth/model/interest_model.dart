@@ -11,7 +11,7 @@ class InterestModel {
     return InterestModel(
       id: json['_id'],
       name: json['name'],
-      color: InterestColor.fromString(json['color']),
+      color: InterestColor.fromString(json['color'] ?? "yellow"),
     );
   }
 

@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
+import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 
 enum ChatStatus {
   active,
@@ -30,8 +31,8 @@ enum ChatStatus {
 
 class ChatModel {
   final String id;
-  final UserModel requestedBy;
-  final UserModel user;
+  final UserProfile requestedBy;
+  final UserProfile user;
   final String title;
   final ChatStatus status;
   final String? avatarUrl;
@@ -52,8 +53,8 @@ class ChatModel {
 
   ChatModel copyWith({
     String? id,
-    UserModel? requestedBy,
-    UserModel? user,
+    UserProfile? requestedBy,
+    UserProfile? user,
     String? title,
     ChatStatus? status,
     String? avatarUrl,
@@ -82,7 +83,7 @@ class ChatModel {
       'title': title,
       'status': status.name,
       'avatarUrl': avatarUrl,
-      'lastMessage': lastMessage?.toMap(),
+      'lastMessage': lastMessage?.toJson(),
       'participants': participants,
       'createdAt': createdAt.millisecondsSinceEpoch,
     };
@@ -91,12 +92,12 @@ class ChatModel {
   factory ChatModel.fromMap(Map<String, dynamic> map) {
     return ChatModel(
       id: map['id'] as String,
-      requestedBy: UserModel.fromJson(map['requestedBy'] as Map<String,dynamic>),
-      user: UserModel.fromJson(map['user'] as Map<String,dynamic>),
+      requestedBy: UserProfile.fromJson(map['requestedBy'] as Map<String,dynamic>),
+      user: UserProfile.fromJson(map['user'] as Map<String,dynamic>),
       title: map['title'] as String,
       status: ChatStatus.fromString(map['status'] as String),
       avatarUrl: map['avatarUrl'] != null ? map['avatarUrl'] as String : null,
-      lastMessage: map['lastMessage'] != null ? MessageModel.fromMap(map['lastMessage'] as Map<String,dynamic>) : null,
+      lastMessage: map['lastMessage'] != null ? MessageModel.fromJson(map['lastMessage'] as Map<String,dynamic>) : null,
       participants: List<String>.from((map['participants'] as List<String>)),
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
-import 'package:flutter_ursffiver/features/badges/presentation/screen/get_all_badges_screen.dart';
+import 'package:flutter_ursffiver/features/badges/presentation/screen/award_badge_view.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
@@ -172,7 +172,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         builder: (context) => SizedBox(
           height: MediaQuery.of(context).size.height * 0.9,
-          child: GetAllBadgesScreen(),
+          child: AwardBadgeView(toUserId: widget.chatController.otherUserId,),
         ),
       );
     } else if (value == "extend") {
@@ -238,7 +238,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemBuilder: (context, index) {
                     final msg = messages[index];
                     bool isMe = msg.isMe(
-                      Get.find<ProfileDataController>().userProfile.value?.id ?? "",
+                      Get.find<ProfileDataProvider>().userProfile.value?.id ?? "",
                     );
                     return Column(
                       children: [

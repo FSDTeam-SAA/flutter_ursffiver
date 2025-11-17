@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../core/common/model/interest_model.dart';
 import '../../../../core/theme/text_style.dart';
+import '../../../auth/model/interest_model.dart';
 
 class InterestsGrid extends StatelessWidget {
   final List<InterestModel> chips;

@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_ursffiver/app/controller/app_global_controllers.dart';
 import 'package:flutter_ursffiver/features/auth/model/create_custom_interest_req_param.dart';
-import 'package:flutter_ursffiver/core/common/model/interest_model.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
+import '../../../features/auth/model/interest_model.dart';
 import '../interface/interest_interface.dart';
 import '../../helpers/handle_fold.dart' show handleFold;
-import '../enum/interest_color.dart';
+// import '../enum/interest_color.dart';
 
 // Filter people suggestion with interest
 class InterestSelectionController extends GetxController {

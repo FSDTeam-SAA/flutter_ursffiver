@@ -36,8 +36,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     return grouped;
   }
 
-  final ProfileDataController profileController =
-      Get.find<ProfileDataController>();
+  final ProfileDataProvider profileController =
+      Get.find<ProfileDataProvider>();
 
   @override
   void initState() {

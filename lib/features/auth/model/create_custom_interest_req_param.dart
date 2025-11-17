@@ -1,6 +1,4 @@
-import 'package:flutter_ursffiver/core/common/model/interest_model.dart';
-
-import '../../../core/common/enum/interest_color.dart';
+import 'interest_model.dart';
 
 class CreateCustomInterestReqParam {
   final String name;

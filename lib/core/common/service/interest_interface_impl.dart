@@ -6,7 +6,8 @@ import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/core/utils/helpers/format_response_data.dart';
 import 'package:flutter_ursffiver/core/common/interface/interest_interface.dart';
 import 'package:flutter_ursffiver/features/auth/model/create_custom_interest_req_param.dart';
-import 'package:flutter_ursffiver/core/common/model/interest_model.dart';
+
+import '../../../features/auth/model/interest_model.dart';
 
 final class InterestInterfaceImpl extends InterestInterface {
   final AppPigeon appPigeon;

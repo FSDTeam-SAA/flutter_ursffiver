@@ -4,6 +4,7 @@ import 'package:flutter_ursffiver/features/inbox/interface/chat_interface.dart';
 import 'package:flutter_ursffiver/features/inbox/model/chat_data.dart';
 import 'package:flutter_ursffiver/features/inbox/model/get_messages_param.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
+import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:get/get.dart';
 
 class ChatController extends GetxController {
@@ -24,6 +25,13 @@ class ChatController extends GetxController {
   String get chatTitle => chatModel?.name ?? "Unknown";
 
   RxList<MessageModel> messages = RxList<MessageModel>([]);
+  
+  /// other user id
+  /// This property is exposed for user to award badges to other user
+  String get otherUserId {
+    final currentUser = Get.find<ProfileDataProvider>().userProfile.value?.id ?? "";
+    return chatModel?.requestBy.id == currentUser ? chatModel?.user?.id ?? "" : chatModel?.requestBy.id ?? "";
+  }
 
   ChatController({required this.chatId}) {
     if (chatModel == null) {

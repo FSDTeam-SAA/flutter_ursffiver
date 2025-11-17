@@ -29,7 +29,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appManager = Get.put<AppManager>(AppManager());
+    appManager = Get.put(AppManager());
+
   }
 
   @override
