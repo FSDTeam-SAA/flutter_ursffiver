@@ -23,7 +23,7 @@ class SignUpController extends GetxController {
 
   // NEW – live count of selected interests
   RxInt get selectedCount =>
-      interestSelectionCntlr.selectedInterests.length.obs;
+      interestSelectionCntlr.selectedIndexCnt;
 
   // -----------------------------------------------------------------
   final firstName = ''.obs;

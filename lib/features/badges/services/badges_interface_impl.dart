@@ -7,6 +7,7 @@ import 'package:flutter_ursffiver/features/badges/model/award_badges_to_user.dar
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/badges/model/get_my_badges_request_param.dart';
 import 'package:flutter_ursffiver/features/badges/model/get_my_badges_response_model.dart';
+import 'package:flutter_ursffiver/features/badges/model/give_badge.dart';
 import 'package:flutter_ursffiver/features/badges/services/badges_interface.dart';
 
 final class BadgesInterfaceImpl extends BadgesInterface {
@@ -14,13 +15,9 @@ final class BadgesInterfaceImpl extends BadgesInterface {
   final AppPigeon appPigeon;
 
   @override
-  FutureRequest<Success> awardBadgestoUser({
-    required AwardBadgesToUser param,
-  }) async {
+  FutureRequest<Success> awardBadgestoUser({required AwardBadgesToUser param}) {
+    // TODO: implement awardBadgestoUser
     throw UnimplementedError();
-    // return await asyncTryCatch(tryFunc: () {
-
-    // })
   }
 
   @override
@@ -59,6 +56,19 @@ final class BadgesInterfaceImpl extends BadgesInterface {
             .toList();
 
         return Success(message: message, data: badges);
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success<BadgeModel>> giveBadge() async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        final response = await appPigeon.post(
+          ApiEndpoints.giveBadges,
+          
+        );
+        return Success(message: extractSuccessMessage(response));
       },
     );
   }

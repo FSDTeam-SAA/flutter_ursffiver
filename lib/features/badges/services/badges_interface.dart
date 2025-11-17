@@ -15,5 +15,8 @@ abstract base class BadgesInterface extends BaseRepository {
     required AwardBadgesToUser param,
   });
 
+  FutureRequest<Success<BadgeModel>> giveBadge();
+
   FutureRequest<Success<List<BadgeModel>>> getAllBadges();
+
 }

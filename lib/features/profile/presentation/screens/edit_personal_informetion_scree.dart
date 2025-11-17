@@ -408,29 +408,28 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
             const SizedBox(height: 12),
 
-            /// Remove Photo
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: controller.isEditing.value
-                    ? controller.removePhoto
-                    : null,
-                icon: const Icon(Icons.delete, color: Colors.red, size: 18),
-                label: const Text(
-                  'Remove Photo',
-                  style: TextStyle(color: Colors.red),
-                ),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.red,
-                  side: const BorderSide(color: Colors.red),
-                  minimumSize: const Size(double.infinity, 48),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-
+            // /// Remove Photo
+            // SizedBox(
+            //   width: double.infinity,
+            //   child: OutlinedButton.icon(
+            //     onPressed: controller.isEditing.value
+            //         ? controller.removePhoto
+            //         : null,
+            //     icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+            //     label: const Text(
+            //       'Remove Photo',
+            //       style: TextStyle(color: Colors.red),
+            //     ),
+            //     style: OutlinedButton.styleFrom(
+            //       foregroundColor: Colors.red,
+            //       side: const BorderSide(color: Colors.red),
+            //       minimumSize: const Size(double.infinity, 48),
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(8),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             const SizedBox(height: 20),
           ],
         ),
@@ -443,11 +442,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       onPressed: Get.find<EditProfileInfoController>().isEditing.value
           ? onTap
           : null,
-      icon: Icon(icon, size: 18),
-      label: Text(label),
+      icon: Icon(icon, size: 18, color: Colors.black87),
+      label: Text(label, style: const TextStyle(color: Colors.black87)),
       style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.black,
-        side: BorderSide(color: Colors.grey[300]!),
+        side: BorderSide(color: Colors.grey[500]!),
         minimumSize: const Size(double.infinity, 48),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/badges/controller/all_badges_controller.dart';
-import 'package:flutter_ursffiver/features/badges/presentation/widget/all_badges_recorn_widget.dart';
+import 'package:flutter_ursffiver/features/badges/presentation/widget/all_badges_record_widget.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
@@ -116,13 +116,12 @@ class _GetAllBadgesScreenState extends State<GetAllBadgesScreen> {
                       final badge = badges[index];
                       final isSelected = badge.id == selectedBadgeId;
 
-                      return AllBadgesRecornWidget(
+                      return AllBadgesRecordWidget(
                         badge: badge,
                         isSelected: isSelected,
                         onTap: () {
                           setState(() {
-                            selectedBadgeId =
-                                isSelected ? null : badge.id; // toggle selection
+                            selectedBadgeId = isSelected ? null : badge.id;
                           });
                         },
                       );

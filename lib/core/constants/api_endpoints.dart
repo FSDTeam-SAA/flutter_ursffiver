@@ -37,6 +37,7 @@ base class ApiEndpoints {
   //-----------------badges----------------
   static const String getMyBadges = _Badges.getMyBadges;
   static const String allBadges = _Badges.allBadges;
+  static const String giveBadges = _Badges.giveBadges;
 
   //---------------report----------------
 
@@ -168,6 +169,7 @@ class _Badges {
   static const String _badgesRoute = '${ApiEndpoints.baseUrl}/badges';
   static const String getMyBadges = '$_badgesRoute/all-badges';
   static const String allBadges = '$_badgesRoute/';
+  static const String giveBadges = '$_badgesRoute/give';
 }
 
 // ---------------------- Report -----------------------------

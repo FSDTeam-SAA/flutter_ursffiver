@@ -22,6 +22,14 @@ class _SelectInterestTileState extends State<SelectInterestTile> {
   bool isSelected = false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isSelected = widget.isSelected;
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {

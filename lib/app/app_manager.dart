@@ -16,7 +16,7 @@ class AppManager extends GetxController {
   StreamSubscription? _authStreamSubscription;
   AuthStatus _authStatus = AuthLoading();
   AuthStatus get currentAuthStatus => _authStatus;
-  Debouncer authDebouncer = Debouncer(delay: const Duration(seconds: 20));
+  Debouncer authDebouncer = Debouncer(delay: const Duration(milliseconds: 100));
 
   /// Initializes the stream to listen to auth status
   AppManager(){
@@ -46,16 +46,14 @@ class AppManager extends GetxController {
   }
 
   void _decideRoute(AuthStatus? authStatus) async {
-    if (authStatus != null && authStatus != _authStatus) {
-      debugPrint("(In Appmanager)Auth status: $authStatus");
-
-      if (authStatus is UnAuthenticated) {
+    if (authStatus is UnAuthenticated) {
+       _authStatus = authStatus;
         Get.to(() => SignInScreen());
         // navigatorKey.currentState?.pushNamedAndRemoveUntil(
         //   RouteNames.login,
         //   (route) => false,
         // );
-      } else if (authStatus != _authStatus && authStatus is Authenticated) {
+      } else if (authStatus is Authenticated) {
         debugPrint(
           "currentAuthStatus: $_authStatus, beforeAuthStatus: $authStatus",
         );
@@ -71,7 +69,11 @@ class AppManager extends GetxController {
         // );
       }
       update();
-    }
+    // if (authStatus != null && authStatus != _authStatus) {
+    //   debugPrint("(In Appmanager)Auth status: $authStatus");
+
+      
+    // }
   }
 
   // initiate controllers on auth change[Authenticated]

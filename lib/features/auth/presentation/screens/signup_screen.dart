@@ -7,6 +7,7 @@ import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_scre
 import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import '../../../common/app_logo.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -157,6 +158,8 @@ class _SignupScreen extends State<SignupScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const SizedBox(height: 15),
                             Row(
@@ -222,34 +225,39 @@ class _SignupScreen extends State<SignupScreen> {
                             ),
 
                             // LIVE COUNTER – uses controller's selectedCount
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 15),
-                              child: Obx(() {
-                                final cnt =
-                                    signupController.selectedCount.value;
-                                return RichText(
-                                  text: TextSpan(
-                                    text: "Selected: ",
-                                    style: const TextStyle(
-                                        color: Colors.black, fontSize: 16),
-                                    children: [
-                                      TextSpan(
-                                        text: "$cnt/15",
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                      ),
-                                      const WidgetSpan(
-                                          child: SizedBox(width: 80)),
-                                      if (cnt == 0)
-                                        const TextSpan(
-                                          text: "Please select at least 1",
-                                          style: TextStyle(color: Colors.red),
+                            Flexible(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                child: Obx(() {
+                                  final cnt =
+                                      signupController.selectedCount.value;
+                                  return RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                      text: "Selected: ",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
+                                      children: [
+                                        TextSpan(
+                                          text: "$cnt/15",
+                                          style: const TextStyle(
+                                              color: Colors.black),
                                         ),
-                                    ],
-                                  ),
-                                );
-                              }),
+                                        if (cnt == 0) ...[
+                                            const WidgetSpan(
+                                                child: SizedBox(width: 80)),
+                                            const TextSpan(
+                                              text: "Please select at least 1",
+                                              style: TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                          
+                                      ],
+                                    ),
+                                  );
+                                }),
+                              ),
                             ),
 
                             const Padding(

@@ -185,9 +185,7 @@ class _InterestPickerSheetState extends State<InterestPickerSheet> {
                                 final interest = interestCategory.interests[idx];
                                 return SelectInterestTile(
                                   interest: interest,
-                                  isSelected: widget.interestSelectionCntlr.selectedInterests.containsKey(
-                                    interest.id,
-                                  ),
+                                  isSelected: selectInterestController.isSelected(interest.id),
                                   onTap: () {
                                     selectInterestController.toggleSelectInterest(
                                       interest,

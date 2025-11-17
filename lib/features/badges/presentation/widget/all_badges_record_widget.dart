@@ -1,13 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 
-class AllBadgesRecornWidget extends StatelessWidget {
+class AllBadgesRecordWidget extends StatelessWidget {
   final BadgeModel badge;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const AllBadgesRecornWidget({
+  const AllBadgesRecordWidget({
     super.key,
     required this.badge,
     required this.isSelected,
@@ -44,11 +43,7 @@ class AllBadgesRecornWidget extends StatelessWidget {
                     color: badgeColor.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    badge.badgeIcon,
-                    color: badgeColor,
-                    size: 20,
-                  ),
+                  child: Icon(badge.badgeIcon, color: badgeColor, size: 20),
                 ),
                 const SizedBox(width: 8),
                 // Badge Name
@@ -63,8 +58,10 @@ class AllBadgesRecornWidget extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: badgeColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
@@ -83,10 +80,7 @@ class AllBadgesRecornWidget extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               badge.info,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),
           ],
         ),

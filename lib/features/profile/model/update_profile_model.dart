@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 class UpdateProfileModel {
   final String id;
   String? firstName;
@@ -8,8 +12,7 @@ class UpdateProfileModel {
   String? gender;
   String? ageRange;
   String? bio;
-  String? profileImage;
-  String? coverImage;
+  File? profileImage;
 
   UpdateProfileModel({
     required this.id,
@@ -22,7 +25,6 @@ class UpdateProfileModel {
     this.ageRange,
     this.bio,
     this.profileImage,
-    this.coverImage,
   });
 
   factory UpdateProfileModel.fromJson(Map<String, dynamic> json) {
@@ -37,7 +39,6 @@ class UpdateProfileModel {
       ageRange: json['ageRange'],
       bio: json['bio'],
       profileImage: json['profileImage'],
-      coverImage: json['coverImage'],
     );
   }
 
@@ -52,7 +53,18 @@ class UpdateProfileModel {
       if (ageRange != null) 'ageRange': ageRange,
       if (bio != null) 'bio': bio,
       if (profileImage != null) 'profileImage': profileImage,
-      if (coverImage != null) 'coverImage': coverImage,
+      'userId': id
     };
+  }
+
+  Future<FormData> toFormData() async {
+    final formData = FormData.fromMap(toJson());
+    formData.files.add(
+      MapEntry(
+        'profileImage',
+        await MultipartFile.fromFile(profileImage!.path),
+      ),
+    );
+    return formData;
   }
 }

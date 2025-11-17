@@ -48,8 +48,7 @@ final class ProfileInterfaceImpl extends ProfileInterface {
   FutureRequest<Success> updateProfile(UpdateProfileModel params) async {
     return await asyncTryCatch(
       tryFunc: () async {
-        final body = params.toJson();
-        body['userId'] = params.id;
+        final body = await params.toFormData();
 
         debugPrint("UpdateProfile Request: $body");
 
@@ -67,7 +66,6 @@ final class ProfileInterfaceImpl extends ProfileInterface {
   FutureRequest<Success> reportandProblem(ReportModel params) async {
     return await asyncTryCatch(
       tryFunc: () async {
-        // ⬇️ Make sure you await formData
         final formData = await params.toFormData();
 
         debugPrint(formData.fields.toString());
@@ -86,17 +84,17 @@ final class ProfileInterfaceImpl extends ProfileInterface {
     );
   }
 
-  @override
-  FutureRequest<Success> deleteProfileAvatar(String userId) {
-    // TODO: implement deleteProfileAvatar
-    throw UnimplementedError();
-  }
+  // @override
+  // FutureRequest<Success> deleteProfileAvatar(String userId) {
+  //   // TODO: implement deleteProfileAvatar
+  //   throw UnimplementedError();
+  // }
 
-  @override
-  FutureRequest<Success> uploadProfileAvatar(UploadProfileAvatarParam params) {
-    // TODO: implement uploadProfileAvatar
-    throw UnimplementedError();
-  }
+  // @override
+  // FutureRequest<Success> uploadProfileAvatar(UploadProfileAvatarParam params) {
+  //   // TODO: implement uploadProfileAvatar
+  //   throw UnimplementedError();
+  // }
 
   // @override
   // FutureRequest<Success> uploadProfileAvatar(UploadProfileAvatarParam params) async {

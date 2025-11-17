@@ -28,6 +28,8 @@ class InterestSelectionController extends GetxController {
   @protected
   RxInt selectedIndexCnt = RxInt(0);
 
+  bool isSelected(String id) => (selectedInterests.containsKey(id) && selectedInterests[id] == true);
+
   static Future<List<InterestCategoryModel>> _isolateSearch(
   Map<String, dynamic> message,
 ) async {
