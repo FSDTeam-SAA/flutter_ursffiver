@@ -1,5 +1,5 @@
 
-import '../enum/interest_color.dart';
+import '../../../features/auth/model/interest_model.dart';
 
 class CreateCustomInterestParam {
   final String name;

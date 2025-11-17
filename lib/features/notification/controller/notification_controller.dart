@@ -11,7 +11,6 @@ class NotificationController extends GetxController {
   final isLoading = false.obs;
   final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier();
 
-  late final NotificationInterface _notificationService;
 
   NotificationController() {
     getAllNotification();
@@ -28,19 +27,23 @@ class NotificationController extends GetxController {
 
   Future<bool> markAsRead(int index) async {
     if (index < 0 || index >= notifications.length) return false;
+
     final old = notifications[index];
     if (old.isRead) return false;
-    final lr = await Get.find()<NotificationInterface>().singleNotificationRead(
-      old.id,
+
+    final lr = await Get.find<NotificationInterface>().singleNotificationRead(
+      old.id
     );
     return lr.fold(
       (error) {
         return false;
       },
       (success) {
-        notifications[index] = old.copyWith(isRead: true);
+        notifications[index] = old.copyWith(
+          isRead: true,
+          updatedAt: DateTime.now(),
+        );
         notifications.refresh();
-        update();
         return true;
       },
     );

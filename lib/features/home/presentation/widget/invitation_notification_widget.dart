@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/screen/inbox_screen.dart';
 
 class FixedNotificationBanner {
   static void show(BuildContext context) {
@@ -71,16 +70,16 @@ class FixedNotificationBanner {
                   Navigator.of(context, rootNavigator: true).pop();
 
                   // Navigate to InboxScreen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChatScreen(
-                        contactName: 'Ursusus',
-                        avatarUrl:
-                            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
-                      ),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => ChatScreen(
+                  //       contactName: 'Ursusus',
+                  //       avatarUrl:
+                  //           'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
+                  //     ),
+                  //   ),
+                  // );
                 },
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: Colors.purple, width: 1.5),

@@ -3,10 +3,11 @@ import 'package:flutter_ursffiver/core/api_handler/success.dart';
 import 'package:flutter_ursffiver/core/constants/api_endpoints.dart';
 import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
-import 'package:flutter_ursffiver/features/home/model/user_model.dart';
+import 'package:flutter_ursffiver/features/home/model/verification_model.dart';
 import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
+import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 
-import '../../../core/common/model/interest_model.dart';
+import '../../auth/model/interest_model.dart';
 import '../model/get_user_suggestion_req_param.dart';
 
 base class HomeService extends HomeInterface {
@@ -15,7 +16,7 @@ base class HomeService extends HomeInterface {
   final AppPigeon appPigeon;
 
   @override
-  FutureRequest<Success<List<UserModel>>> getSuggestions(
+  FutureRequest<Success<List<UserProfile>>> getSuggestions(
     GetUserSuggestionReqParam param,
   ) async {
     debugPrint("param: ${param.toMap()}");
@@ -30,7 +31,7 @@ base class HomeService extends HomeInterface {
         return Success(
           message: extractSuccessMessage(res),
           data: (extractBodyData(res)["users"] as List<dynamic>)
-              .map<UserModel>((e) => UserModel.fromJson(e))
+              .map<UserProfile>((e) => UserProfile.fromJson(e))
               .toList(),
         );
       },
@@ -51,6 +52,26 @@ base class HomeService extends HomeInterface {
 
         //return
         return Success(message: message, data: data);
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success> verification(Attachment param) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        final formData = await param.toFormData();
+
+        debugPrint(formData.fields.toString());
+        debugPrint(formData.files.toString());
+        debugPrint(" Verification Request: ${ApiEndpoints.verification}");
+
+        final response = await appPigeon.post(
+          ApiEndpoints.verification,
+          data: formData,
+        );
+        debugPrint(response.data);
+        return Success(message: extractSuccessMessage(response));
       },
     );
   }

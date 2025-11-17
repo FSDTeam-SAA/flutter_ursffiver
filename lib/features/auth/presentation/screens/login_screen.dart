@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ursffiver/core/constants/route_names.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/auth/controller/signin_controller.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/forget_password_screen.dart';
@@ -231,8 +230,10 @@ class _SignInScreenState extends State<SignInScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          VerifyScreen(email: controller.email, isFromRegisterScreen: true,),
+                                      builder: (context) => VerifyScreen(
+                                        email: controller.email,
+                                        isFromRegisterScreen: true,
+                                      ),
                                     ),
                                   );
                                 },
@@ -265,12 +266,13 @@ class _SignInScreenState extends State<SignInScreen> {
                               decoration: TextDecoration.underline,
                             ),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => Get.to(() => const SignupScreen()),
-                              
-                              // Navigator.pushNamed(
-                              //       context,
-                              //       RouteNames.signup
-                              // ),
+                              ..onTap = () =>
+                                  Get.to(() => const SignupScreen()),
+
+                            // Navigator.pushNamed(
+                            //       context,
+                            //       RouteNames.signup
+                            // ),
                           ),
                         ],
                       ),

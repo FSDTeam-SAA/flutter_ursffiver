@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/profile_screen.dart';
 import '../core/theme/app_colors.dart';
 import 'badges/presentation/screen/badges_screen.dart';
 import 'home/presentation/screen/home_screen.dart';
-import 'inbox/presentation/screen/message_screen.dart';
+import 'inbox/presentation/screen/get_all_chat_screen.dart';
 
 class AppGround extends StatefulWidget {
   const AppGround({super.key});
@@ -18,7 +17,7 @@ class _AppGroundState extends State<AppGround> {
 
   final List<Widget> _pages = [
     const HomeScreen(),
-    const MessagesScreen(),
+    const AllChatScreeen(),
     const BadgesPage(),
     const ProfileScreen(),
   ];

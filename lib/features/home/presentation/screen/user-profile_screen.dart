@@ -1,18 +1,16 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:flutter_ursffiver/core/theme/app_colors.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
-import 'package:flutter_ursffiver/features/home/model/user_model.dart';
-import 'package:flutter_ursffiver/features/home/presentation/screen/home_screen.dart';
-import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
-import 'package:flutter_ursffiver/features/profile/model/badge_model.dart';
-import 'package:flutter_ursffiver/features/profile/presentation/widget/badgeg_widget.dart';
-import 'package:get/get.dart';
+import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/widget/send_message-dialog.dart';
+import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 
-import '../widget/interest_grid.dart';
+import '../../../auth/model/interest_model.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  final UserModel user;
+  final UserProfile user;
   const UserProfileScreen({super.key, required this.user});
 
   @override
@@ -20,48 +18,6 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  final ProfileDataProvider _homeInterestController = Get.put(
-    ProfileDataProvider(),
-  );
-  /////////////////
-
-  final List<IconBadgeModel> _badges = [
-    IconBadgeModel(
-      icon: Icons.verified_user,
-      count: 5,
-      color: Colors.purpleAccent,
-    ),
-    IconBadgeModel(
-      icon: Icons.watch_later_outlined,
-      count: 4,
-      color: Colors.orangeAccent,
-    ),
-    IconBadgeModel(
-      icon: Icons.location_on_outlined,
-      count: 3,
-      color: Colors.blueAccent,
-    ),
-    IconBadgeModel(
-      icon: Icons.hearing_rounded,
-      count: 2,
-      color: Colors.pinkAccent,
-    ),
-    IconBadgeModel(
-      icon: Icons.lightbulb_outline,
-      count: 2,
-      color: Colors.lightBlueAccent,
-    ),
-    IconBadgeModel(icon: Icons.link, count: 2, color: Colors.cyanAccent),
-    IconBadgeModel(
-      icon: Icons.person_4_outlined,
-      count: 1,
-      color: Colors.greenAccent,
-    ),
-    IconBadgeModel(icon: Icons.star, color: Colors.orangeAccent),
-  ];
-
-  //////////////////
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,9 +25,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       appBar: AppBar(
         title: Text(
           'User Profile',
-          style: AppText.lgMedium_18_500.copyWith(
-            color: AppColors.primaryTextblack,
-          ),
+          style: AppText.lgMedium_18_500.copyWith(color: AppColors.primaryTextblack),
         ),
         centerTitle: false,
         actions: [
@@ -83,17 +37,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Container(
                   width: 8,
                   height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
-                  ),
+                  decoration: BoxDecoration(color: widget.user.active ? Colors.green : Colors.grey, shape: BoxShape.circle),
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  'Active Now',
-                  style: AppText.mdMedium_16_500.copyWith(
-                    color: AppColors.secondaryTextblack,
-                  ),
+                  widget.user.active ? 'Active Now' : 'Offline',
+                  style: AppText.mdMedium_16_500.copyWith(color: AppColors.secondaryTextblack),
                 ),
               ],
             ),
@@ -105,70 +54,44 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Profile Section
             Center(
               child: Column(
                 children: [
                   SmartNetworkImage(
-                    imageUrl: widget.user.imagePath,
+                    imageUrl: widget.user.image,
                     height: 120,
-                    width: 90,
+                    width: 120,
                     borderRadius: BorderRadius.circular(8),
-
                     errorWidget: Container(
-                      height: 130,
-                      width: 90,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(Icons.person, size: 50, color: Colors.grey),
+                      height: 120,
+                      width: 120,
+                      decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(8)),
+                      child: const Icon(Icons.person, size: 50, color: Colors.grey),
                     ),
                   ),
-
-                  // Container(
-                  //   width: 120,
-                  //   height: 120,
-                  //   decoration: BoxDecoration(
-                  //     shape: BoxShape.circle,
-                  //     image: const DecorationImage(
-                  //       image: AssetImage('assets/image/profile.png'),
-                  //       fit: BoxFit.cover,
-                  //     ),
-                  //     border: Border.all(color: Colors.grey.shade200, width: 2),
-                  //   ),
-                  // ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '${widget.user.firstName} ${widget.user.lastName}',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                        '${widget.user.firstName ?? ''} ${widget.user.lastName ?? ''}',
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                       const SizedBox(width: 6),
-                      Icon(
-                        Icons.verified_user_outlined,
-                        color: AppColors.interestsgreen,
-                        size: 24,
-                      ),
+                      if (widget.user.adminVerify == true)
+                        const Icon(Icons.verified_user_outlined, color: Colors.green, size: 24),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      widget.user.bio,
-                      textAlign: TextAlign.center,
-                      style: AppText.mdRegular_16_400.copyWith(
-                        color: AppColors.secondaryTextblack,
+                  if (widget.user.bio != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        widget.user.bio!,
+                        textAlign: TextAlign.center,
+                        style: AppText.mdRegular_16_400.copyWith(color: AppColors.secondaryTextblack),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -178,42 +101,29 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildStatItem(Icons.location_on_outlined, '1 ft away'),
-                _buildStatItem(Icons.female, widget.user.gender),
-                _buildStatItem(Icons.check_circle_outline, widget.user.ageRange),
+                _buildStatItem(Icons.female, widget.user.gender ?? ''),
+                _buildStatItem(Icons.check_circle_outline, widget.user.ageRange ?? ''),
               ],
             ),
 
             const SizedBox(height: 32),
 
-            // Primary Interests
             const Text(
               'Primary Interests',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
             ),
             const SizedBox(height: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                  InterestsGrid(chips: widget.user.interests),
-              ],
-            ),
+            InterestsGrid(chips: widget.user.interests + widget.user.customInterests),
 
             const SizedBox(height: 32),
 
             const Text(
               'Earned Badges',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
             ),
             const SizedBox(height: 16),
-            Column(children: [BadgeList(badges: _badges)]),
+            BadgeList(badges: widget.user.badges),
+
             const SizedBox(height: 32),
 
             // Bottom Buttons
@@ -222,32 +132,31 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Scaffold()),
+                      showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        barrierColor: Colors.transparent,
+                        builder: (context) {
+                          return BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                            child: SendChatRequestDialog(user: widget.user),
+                          );
+                        },
                       );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primarybutton,
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.chat_bubble_outline,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 8),
-                        const Text(
+                      children: const [
+                        Icon(Icons.chat_bubble_outline, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
                           'Invite to Chat',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
@@ -255,7 +164,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ],
             ),
-
             const SizedBox(height: 20),
           ],
         ),
@@ -268,31 +176,101 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       children: [
         Icon(icon, color: AppColors.primarybutton, size: 20),
         const SizedBox(width: 4),
-        Text(
-          text,
-          style: AppText.smMedium_14_600.copyWith(
-            color: AppColors.secondaryTextblack,
-          ),
-        ),
+        Text(text, style: AppText.smMedium_14_600.copyWith(color: AppColors.secondaryTextblack)),
       ],
     );
   }
+}
 
-  Widget _buildInterestTag(String text, Color color) {
+class BadgeList extends StatelessWidget {
+  final List<BadgeModel> badges;
+
+  const BadgeList({super.key, required this.badges});
+
+  @override
+  Widget build(BuildContext context) {
+    final Map<String, int> badgeCount = {};
+    for (var badge in badges) {
+      badgeCount[badge.name] = (badgeCount[badge.name] ?? 0) + 1;
+    }
+    final uniqueBadges = badges.toSet().toList();
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: uniqueBadges.map((badge) {
+        final count = badgeCount[badge.name] ?? 1;
+        return BadgeIconWithCount(badge: badge, count: count);
+      }).toList(),
+    );
+  }
+}
+
+class BadgeIconWithCount extends StatelessWidget {
+  final BadgeModel badge;
+  final int count;
+
+  const BadgeIconWithCount({super.key, required this.badge, required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    final badgeColor = badge.badgeColor;
+    final bgColor = badgeColor.withOpacity(0.1);
+
     return Container(
-      constraints: const BoxConstraints(minHeight: 30, minWidth: 60),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(8),
+        color: bgColor,
+        border: Border.all(color: badgeColor),
+        borderRadius: BorderRadius.circular(40),
       ),
-      child: Text(
-        text,
-        style: AppText.smMedium_14_600.copyWith(color: Colors.white),
-        textAlign: TextAlign.center,
-        overflow: TextOverflow.visible,
-        softWrap: true,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            badge.badgeIcon,
+            color: badgeColor,
+            size: 16,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            "x$count",
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: badgeColor,
+            ),
+          ),
+        ],
       ),
+    );
+  }
+}
+
+class InterestsGrid extends StatelessWidget {
+  final List<InterestModel> chips;
+
+  const InterestsGrid({super.key, required this.chips});
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: chips.map((interest) {
+        final name = interest.name.length > 12 ? '${interest.name.substring(0, 10)}...' : interest.name;
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
+            color: interest.color.softColor,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            name,
+            style: TextStyle(color: interest.color.deepColor, fontWeight: FontWeight.w500),
+          ),
+        );
+      }).toList(),
     );
   }
 }

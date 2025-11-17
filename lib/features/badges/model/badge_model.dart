@@ -1,151 +1,13 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
-// import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
-// import 'package:flutter_ursffiver/features/home/model/user_interest_model.dart';
-
-// class UserBadgeModel {
-//   final String id;
-//   final String name;
-//   final String tag;
-//   final String info;
-//   final String color;
-
-//   UserBadgeModel({
-//     required this.id,
-//     required this.name,
-//     required this.tag,
-//     required this.info,
-//     required this.color,
-//   });
-
-//   factory UserBadgeModel.fromJson(Map<String, dynamic> json) {
-//     return UserBadgeModel(
-//       id: json['_id'],
-//       name: json['name'],
-//       tag: json['tag'],
-//       info: json['info'],
-//       color: json['color'],
-//     );
-//   }
-// }
-
-// class UserBadgesModel {
-//   final String id;
-//   final String firstName;
-//   final String lastName;
-//   final String fullname;
-//   final String ageRange;
-//   final String bio;
-//   final String email;
-//   final String username;
-//   final String gender;
-//   final DateTime? dateOfBirth;
-//   final bool isEmailVerified;
-//   final String role;
-//   final String status;
-//   final bool adminVerify;
-//   final List<UserInterestModel> interests;
-//   final bool active;
-//   final List<UserAddressModel> address;
-//   final String? imagePath;
-//   final List<UserBadgeModel> badges;
-
-//   UserBadgesModel({
-//     required this.id,
-//     required this.firstName,
-//     required this.lastName,
-//     required this.fullname,
-//     required this.ageRange,
-//     required this.bio,
-//     required this.email,
-//     required this.username,
-//     required this.gender,
-//     required this.dateOfBirth,
-//     required this.isEmailVerified,
-//     required this.role,
-//     required this.status,
-//     required this.adminVerify,
-//     required this.interests,
-//     required this.active,
-//     required this.address,
-//     this.imagePath,
-//     required this.badges,
-//   });
-
-//   factory UserBadgesModel.fromJson(Map<String, dynamic> json) {
-//     debugPrint("user badges model json : $json['firstName']");
-//     return UserBadgesModel(
-//       id: json['_id'] ?? '',
-//       firstName: json['firstName'] ?? '',
-//       lastName: json['lastName'] ?? '',
-//       fullname: json['fullname'] ?? '',
-//       ageRange: json['ageRange'] ?? '',
-//       bio: json['bio'] ?? '',
-//       email: json['email'] ?? '',
-//       username: json['username'] ?? '',
-//       gender: json['gender'] ?? '',
-//       dateOfBirth: json['dateOfBirth'] == null
-//           ? null
-//           : DateTime.tryParse(json['dateOfBirth'] ?? ''),
-//       isEmailVerified: json['isEmailVerified'] ?? false,
-//       role: json['role'] ?? '',
-//       status: json['status'] ?? '',
-//       adminVerify: json['adminVerify'] ?? false,
-//       interests: json['interest'] == null
-//           ? []
-//           : (json['interest'] as List)
-//                 .map((e) => UserInterestModel.fromJson(e))
-//                 .toList(),
-//       active: json['active'] ?? false,
-//       address: [],
-//       imagePath: json['profileImage'] as String?,
-//       badges: json['badge'] == null
-//           ? []
-//           : (json['badge'] as List<dynamic>)
-//                 .map((e) => UserBadgeModel.fromJson(e))
-//                 .toList(),
-//     );
-//   }
-
-//   // factory UserBadgesModel.fromJsonForNotification(Map<String, dynamic> json) {
-//   //   return UserBadgesModel(
-//   //     id: json['_id'] ?? '',
-//   //     firstName: json['firstName'] ?? '',
-//   //     lastName: json['lastName'] ?? '',
-//   //     fullname: json['fullName'],
-//   //     ageRange: json['ageRange'] ?? '',
-//   //     bio: json['bio'] ?? '',
-//   //     email: json['email'] ?? '',
-//   //     username: json['username'] ?? '',
-//   //     gender: json['gender'] ?? '',
-//   //     dateOfBirth: null,
-//   //     isEmailVerified: json['isEmailVerified'] ?? false,
-//   //     role: json['role'] ?? '',
-//   //     status: json['status'] ?? '',
-//   //     adminVerify: json['adminVerify'] ?? false,
-//   //     interests: [],
-//   //     active: json['active'] ?? false,
-//   //     address: [],
-//   //     imagePath: json['profileImage'] as String?,
-//   //     badges: [],
-//   //   );
-//   // }
-// }
-
-
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/features/home/model/user-address_model.dart';
 
-import '../../../core/common/model/interest_model.dart';
-
-class UserBadgeModel {
+class BadgeModel {
   final String id;
   final String name;
   final String tag;
   final String info;
-  final String color; // color as string from API (e.g., "#FF0000" or "red")
+  final String color;
 
-  UserBadgeModel({
+  BadgeModel({
     required this.id,
     required this.name,
     required this.tag,
@@ -153,18 +15,9 @@ class UserBadgeModel {
     required this.color,
   });
 
-  /// Convert color string to Flutter [Color]
   Color get badgeColor {
-    // If color is a hex value like "#RRGGBB"
-    if (color.startsWith('#')) {
-      try {
-        return Color(int.parse(color.substring(1), radix: 16) + 0xFF000000);
-      } catch (_) {
-        return Colors.grey; // fallback
-      }
-    }
+    if (color.isEmpty) return Colors.grey;
 
-    // If color is a named color (e.g., "red", "blue", etc.)
     switch (color.toLowerCase()) {
       case 'red':
         return Colors.red;
@@ -180,98 +33,97 @@ class UserBadgeModel {
         return Colors.orange;
       case 'pink':
         return Colors.pink;
-      default:
+      case 'black':
+        return Colors.black;
+      case 'white':
+        return Colors.white;
+      case 'grey':
+      case 'gray':
         return Colors.grey;
+    }
+
+    try {
+      String hex = color.replaceAll("#", "");
+      if (hex.length == 6) hex = "FF$hex";
+      return Color(int.parse(hex, radix: 16));
+    } catch (_) {
+      debugPrint("Invalid color format: $color");
+      return Colors.grey;
     }
   }
 
-  factory UserBadgeModel.fromJson(Map<String, dynamic> json) {
-    return UserBadgeModel(
+  IconData get badgeIcon {
+    if (name == 'goodspeaker' ||
+        name == 'GoodSpeaker' ||
+        name == 'Good Speaker' ||
+        name == 'good speaker') {
+      return Icons.record_voice_over;
+    } else if (name == 'Great Lisaner' ||
+        name == 'great lisaner' ||
+        name == 'GreatLisaner' ||
+        name == 'greatlisaner') {
+      return Icons.hearing;
+    } else if (name == 'Thoughtful Question' ||
+        name == 'thoughtful question' ||
+        name == 'thoughtfulQuestion' ||
+        name == 'ThoughtfulQuestion') {
+      return Icons.question_answer;
+    } else if (name == 'Knowledge Share' ||
+        name == 'knowledge share' ||
+        name == 'knowledgeShare' ||
+        name == 'KnowledgeShare') {
+      return Icons.lightbulb_outline_rounded;
+    } else if (name == 'Local Expert' ||
+        name == 'local expert' ||
+        name == 'localExpert' ||
+        name == 'LocalExpert') {
+      return Icons.location_on;
+    } else if (name == 'Rellable' || name == 'rellable') {
+      return Icons.check_circle_outline;
+    } else if (name == 'trusted' || name == 'Trusted') {
+      return Icons.person_2_outlined;
+    } else if (name == 'creative' || name == 'Creative') {
+      return Icons.light_sharp;
+    } else if (name == 'helpful' || name == 'Helpful') {
+      return Icons.help_outline_outlined;
+    } else if (name == 'Respectful' || name == 'respectful') {
+      return Icons.shield_outlined;
+    } else if (name == 'Community Builder' ||
+        name == 'community builder' ||
+        name == 'communityBuilder' ||
+        name == 'CommunityBuilder') {
+      return Icons.lightbulb;
+    } else if (name == 'Connector' || name == 'connector') {
+      return Icons.link;
+    } else {
+      return Icons.star;
+    }
+  }
+
+  factory BadgeModel.fromJson(Map<String, dynamic> json) {
+    return BadgeModel(
       id: json['_id'] ?? '',
       name: json['name'] ?? '',
       tag: json['tag'] ?? '',
       info: json['info'] ?? '',
-      color: json['color'] ?? '#9E9E9E', // fallback gray
+      color: json['color'] ?? '#000000',
     );
   }
-}
 
-class UserBadgesModel {
-  final String id;
-  final String firstName;
-  final String lastName;
-  final String fullname;
-  final String ageRange;
-  final String bio;
-  final String email;
-  final String username;
-  final String gender;
-  final DateTime? dateOfBirth;
-  final bool isEmailVerified;
-  final String role;
-  final String status;
-  final bool adminVerify;
-  final List<InterestModel> interests;
-  final bool active;
-  final List<UserAddressModel> address;
-  final String? imagePath;
-  final List<UserBadgeModel> badges;
+  //toJson
+  Map<String, dynamic> toJson() {
+    return {'_id': id, 'name': name, 'tag': tag, 'info': info, 'color': color};
+  }
 
-  UserBadgesModel({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.fullname,
-    required this.ageRange,
-    required this.bio,
-    required this.email,
-    required this.username,
-    required this.gender,
-    required this.dateOfBirth,
-    required this.isEmailVerified,
-    required this.role,
-    required this.status,
-    required this.adminVerify,
-    required this.interests,
-    required this.active,
-    required this.address,
-    this.imagePath,
-    required this.badges,
-  });
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-  factory UserBadgesModel.fromJson(Map<String, dynamic> json) {
-    debugPrint("user badges model json : ${json['firstName']}");
-
-    return UserBadgesModel(
-      id: json['_id'] ?? '',
-      firstName: json['firstName'] ?? '',
-      lastName: json['lastName'] ?? '',
-      fullname: json['fullname'] ?? '',
-      ageRange: json['ageRange'] ?? '',
-      bio: json['bio'] ?? '',
-      email: json['email'] ?? '',
-      username: json['username'] ?? '',
-      gender: json['gender'] ?? '',
-      dateOfBirth: json['dateOfBirth'] == null
-          ? null
-          : DateTime.tryParse(json['dateOfBirth'] ?? ''),
-      isEmailVerified: json['isEmailVerified'] ?? false,
-      role: json['role'] ?? '',
-      status: json['status'] ?? '',
-      adminVerify: json['adminVerify'] ?? false,
-      interests: json['interest'] == null
-          ? []
-          : (json['interest'] as List)
-              .map((e) => InterestModel.fromJson(e))
-              .toList(),
-      active: json['active'] ?? false,
-      address: [],
-      imagePath: json['profileImage'] as String?,
-      badges: json['badge'] == null
-          ? []
-          : (json['badge'] as List)
-              .map((e) => UserBadgeModel.fromJson(e))
-              .toList(),
-    );
+    return other is BadgeModel &&
+        other.id == id &&
+        other.name == name &&
+        other.tag == tag &&
+        other.info == info &&
+        other.color == color;
   }
 }

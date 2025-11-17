@@ -1,20 +1,19 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/core/common/controller/interest_fetch_controller.dart';
 import 'package:flutter_ursffiver/app/controller/app_global_controllers.dart';
 import 'package:flutter_ursffiver/features/auth/model/create_custom_interest_req_param.dart';
-import 'package:flutter_ursffiver/core/common/model/interest_model.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
+import '../../../features/auth/model/interest_model.dart';
 import '../interface/interest_interface.dart';
 import '../../helpers/handle_fold.dart' show handleFold;
-import '../enum/interest_color.dart';
+// import '../enum/interest_color.dart';
 
 // Filter people suggestion with interest
 class InterestSelectionController extends GetxController {
 
   InterestSelectionController() {
+    // ignore: invalid_use_of_protected_member
     interestList.value = _interestList.value;
     search('');
   }
@@ -29,9 +28,10 @@ class InterestSelectionController extends GetxController {
       Get.find<AppGlobalControllers>().interestController.interestList;
 
   RxList<InterestCategoryModel> interestList = RxList<InterestCategoryModel>([]);
-  RxString _searchQuery = ''.obs;
   @protected
   RxInt selectedIndexCnt = RxInt(0);
+
+  bool isSelected(String id) => (selectedInterests.containsKey(id) && selectedInterests[id] == true);
 
   static Future<List<InterestCategoryModel>> _isolateSearch(
   Map<String, dynamic> message,
@@ -65,6 +65,7 @@ void search(String query) async {
       _isolateSearch,
       {
         'query': query,
+        // ignore: invalid_use_of_protected_member
         'interestList': _interestList.value,
       },
     );

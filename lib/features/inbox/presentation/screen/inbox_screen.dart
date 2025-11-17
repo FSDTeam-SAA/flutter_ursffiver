@@ -1,20 +1,64 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
+import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
+import 'package:flutter_ursffiver/features/badges/presentation/screen/award_badge_view.dart';
+import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
+import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
+import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
-import '../../../badges/presentation/screen/badges_screen.dart';
+import '../../controller/messaging_controller.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   final String contactName;
   final String avatarUrl;
+  final ChatController chatController;
 
   const ChatScreen({
     super.key,
     required this.contactName,
     required this.avatarUrl,
+    required this.chatController,
   });
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  late final MessagingController messagingController;
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    messagingController = MessagingController(
+      chatId: widget.chatController.chatId,
+    );
+
+    // Scroll to bottom after a short delay to ensure messages are loaded
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollToBottom();
+    });
+  }
+
+  void sendMessage() {
+    messagingController.sendMessage();
+    // Auto scroll to bottom after sending message
+    Future.delayed(const Duration(milliseconds: 100), scrollToBottom);
+  }
+
+  void scrollToBottom() {
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +73,17 @@ class ChatScreen extends StatelessWidget {
         ),
         title: Row(
           children: [
-            CircleAvatar(backgroundImage: NetworkImage(avatarUrl), radius: 18),
+            SmartNetworkImage.circle(
+              imageUrl: widget.avatarUrl,
+              diameter: 32,
+              errorWidget: Icon(Icons.image, size: 32),
+            ),
             const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  contactName,
+                  widget.contactName,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -43,7 +91,7 @@ class ChatScreen extends StatelessWidget {
                   ),
                 ),
                 const Text(
-                  "Time left to chat 14:45",
+                  "Time left tooo chat 14:45",
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
@@ -51,94 +99,164 @@ class ChatScreen extends StatelessWidget {
           ],
         ),
         actions: [
+          // PopupMenuButton<String>(
+          //   icon: const Icon(Icons.more_vert, color: Colors.black),
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(12),
+          //   ),
+          //   onSelected: (value) {
+          //     if (value == "badge") {
+          //       showModalBottomSheet(
+          //         context: context,
+          //         isScrollControlled: true,
+          //         shape: const RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.vertical(
+          //             top: Radius.circular(20),
+          //           ),
+          //         ),
+          //         builder: (context) => SizedBox(
+          //           height: MediaQuery.of(context).size.height * 0.9,
+          //           // child: const AllBadgesWidget(),
+          //         ),
+          //       );
+          //     }
+          //   },
+          //   itemBuilder: (_) => [
+          //     const PopupMenuItem(
+          //       value: "extend",
+          //       child: Row(
+          //         children: [
+          //           Icon(Icons.access_time_outlined, color: Colors.black),
+          //           SizedBox(width: 10),
+          //           Text("Extend Time"),
+          //         ],
+          //       ),
+          //     ),
+          //     const PopupMenuItem(
+          //       value: "badge",
+          //       child: Row(
+          //         children: [
+          //           Icon(Icons.badge, color: Colors.black),
+          //           SizedBox(width: 10),
+          //           Text("Award Badge User"),
+          //         ],
+          //       ),
+          //     ),
+          //     const PopupMenuItem(
+          //       value: "location",
+          //       child: Row(
+          //         children: [
+          //           Icon(Icons.location_on_outlined, color: Colors.black),
+          //           SizedBox(width: 10),
+          //           Text("Share Location"),
+          //         ],
+          //       ),
+          //     ),
+          //   ],
+          // ),
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: Colors.black),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            onSelected: (value) {
-              if (value == "extend") {
-              } else if (value == "badge") {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  builder: (context) => SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    child: const AllBadgesWidget(),
-                  ),
-                );
-              } else if (value == "location") {
-              }
-            },
-
-            itemBuilder: (BuildContext context) => [
-              const PopupMenuItem(
-                value: "extend",
-                child: Row(
-                  children: [
-                    Icon(Icons.access_time_outlined, color: Colors.black),
-                    SizedBox(width: 10),
-                    Text("Extend Time"),
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: "badge",
-                child: Row(
-                  children: [
-                    Icon(Icons.badge, color: Colors.black),
-                    SizedBox(width: 10),
-                    Text("Award Badge User"),
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: "location",
-                child: Row(
-                  children: [
-                    Icon(Icons.location_on_outlined, color: Colors.black),
-                    SizedBox(width: 10),
-                    Text("Share Location"),
-                  ],
-                ),
-              ),
-            ],
+  icon: const Icon(Icons.more_vert, color: Colors.black),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+  onSelected: (value) {
+    if (value == "badge") {
+      // OPEN BOTTOM SHEET
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
           ),
+        ),
+        builder: (context) => SizedBox(
+          height: MediaQuery.of(context).size.height * 0.9,
+          child: AwardBadgeView(toUserId: widget.chatController.otherUserId,),
+        ),
+      );
+    } else if (value == "extend") {
+      // GO TO NEW SCREEN
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => Scaffold()),
+      );
+    } else if (value == "location") {
+      // GO TO LOCATION SCREEN
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => Scaffold()),
+      );
+    }
+  },
+  itemBuilder: (_) => [
+    const PopupMenuItem(
+      value: "extend",
+      child: Row(
+        children: [
+          Icon(Icons.access_time_outlined, color: Colors.black),
+          SizedBox(width: 10),
+          Text("Extend Time"),
+        ],
+      ),
+    ),
+    const PopupMenuItem(
+      value: "badge",
+      child: Row(
+        children: [
+          Icon(Icons.badge, color: Colors.black),
+          SizedBox(width: 10),
+          Text("Award Badge User"),
+        ],
+      ),
+    ),
+    const PopupMenuItem(
+      value: "location",
+      child: Row(
+        children: [
+          Icon(Icons.location_on_outlined, color: Colors.black),
+          SizedBox(width: 10),
+          Text("Share Location"),
+        ],
+      ),
+    ),
+  ],
+),
+
           const SizedBox(width: 8),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(12),
-              children: [
-                _buildSentMessage(context, "Hi", "11:25:44 pm", "03/08/2025"),
-                Gap.h16,
-                _buildReceivedMessage(
-                  context,
-                  "Hello",
-                  "11:25:44 pm",
-                  "03/08/2025",
+      body: ObxValue(
+        (messages) {
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  controller: scrollController,
+                  padding: const EdgeInsets.all(12),
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final msg = messages[index];
+                    bool isMe = msg.isMe(
+                      Get.find<ProfileDataProvider>().userProfile.value?.id ?? "",
+                    );
+                    return Column(
+                      children: [
+                        isMe
+                            ? _buildSentMessage(context, msg)
+                            : _buildReceivedMessage(context, msg),
+                        Gap.h16,
+                      ],
+                    );
+                  },
                 ),
-                Gap.h16,
-                _buildSentMessage(
-                  context,
-                  "Meaow Meaow Meaow Meaow Meaow Meaow Meaow Meaow",
-                  "11:25:44 pm",
-                  "03/08/2025",
-                ),
-              ],
-            ),
-          ),
-          _buildMessageInput(),
-          Gap.bottomAppBarGap,
-        ],
+              ),
+              _buildMessageInput(),
+              Gap.bottomAppBarGap,
+            ],
+          );
+        },
+        widget.chatController.messages,
       ),
     );
   }
@@ -151,6 +269,7 @@ class ChatScreen extends StatelessWidget {
         border: Border(top: BorderSide(color: Colors.grey.shade300)),
       ),
       child: TextField(
+        controller: messagingController.textInputController,
         decoration: InputDecoration(
           hintText: 'Message...',
           hintStyle: const TextStyle(color: AppColors.secondaryText),
@@ -167,14 +286,12 @@ class ChatScreen extends StatelessWidget {
           suffixIcon: Container(
             margin: const EdgeInsets.only(right: 4),
             decoration: BoxDecoration(
-              color: Color(0xFF4C4CFF),
-              borderRadius: BorderRadius.circular(8), // Rounded corners
+              color: const Color(0xFF4C4CFF),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: IconButton(
               icon: const Icon(Icons.send, color: Colors.white),
-              onPressed: () {
-                // TODO: send message action
-              },
+              onPressed: sendMessage,
             ),
           ),
         ),
@@ -182,12 +299,9 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSentMessage(
-    BuildContext context,
-    String text,
-    String time,
-    String date,
-  ) {
+  Widget _buildSentMessage(BuildContext context, MessageModel message) {
+    final time = DateFormat.Hm().format(message.date);
+    final date = DateFormat.yMd().format(message.date);
     return Align(
       alignment: Alignment.centerRight,
       child: Column(
@@ -205,9 +319,8 @@ class ChatScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                text,
+                message.text ?? "",
                 style: const TextStyle(color: Colors.white),
-                softWrap: true,
               ),
             ),
           ),
@@ -220,12 +333,9 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildReceivedMessage(
-    BuildContext context,
-    String text,
-    String time,
-    String date,
-  ) {
+  Widget _buildReceivedMessage(BuildContext context, MessageModel message) {
+    final time = DateFormat.Hm().format(message.date);
+    final date = DateFormat.yMd().format(message.date);
     return Align(
       alignment: Alignment.centerLeft,
       child: Column(
@@ -243,11 +353,10 @@ class ChatScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                text,
+                message.text ?? "",
                 style: AppText.mdRegular_16_400.copyWith(
                   color: AppColors.primaryTextblack,
                 ),
-                softWrap: true,
               ),
             ),
           ),

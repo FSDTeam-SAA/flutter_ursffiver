@@ -8,9 +8,8 @@ class SocketConnectParam {
   SocketConnectParam({
     required String token,
     required String joinId,
-    required this.url
-  }) : 
-       _token = token,
+    required this.url,
+  }) : _token = token,
        _joinId = joinId;
 }
 
@@ -32,6 +31,8 @@ class SocketService {
   final Debugger _debugger = AuthDebugger();
 
   SocketService();
+  int _attempts = 0;
+
   /// Socket connect param
   /// Pass this param to the `init()` method to initialize the socket
   SocketConnectParam? _param;
@@ -39,6 +40,8 @@ class SocketService {
   bool get isConnected => _socket?.connected ?? false;
 
   void init(SocketConnectParam socketConnectParam) {
+    _attempts++;
+    debugPrint("Socket init attempt: $_attempts");
     _param = socketConnectParam;
     // Dispose previous socket, if exists
     _disposeSocket();
@@ -50,36 +53,37 @@ class SocketService {
       debugPrint("Socket already initialized. Not initializing again.");
       return;
     }
-    if(_param == null) {
+    if (_param == null) {
       return;
     }
-    final token = _param!._token; 
+    final token = _param!._token;
     _socket = io.io(
       _param!.url,
-      io.OptionBuilder()
-          .setTransports(['websocket'])
-          .setExtraHeaders({'Authorization': 'Bearer $token'})
-          .build(),
+      io.OptionBuilder().setTransports(['websocket']).setExtraHeaders({
+        'Authorization': 'Bearer $token',
+      }).build(),
     );
     _socket?.connect();
     _socket?.onConnect((data) {
-      debugPrint("Socket connected ${"\n\n"}");
+      debugPrint("Socket connected with data: $data${"\n\n"}");
     });
   }
 
   void emit(String eventName, dynamic data) {
     _init().then((_) {
+      debugPrint("Emitting event: $eventName, data: $data");
+      debugPrint("Socket instance: ${_socket?.connected}");
       _socket?.emit(eventName, data);
     });
   }
 
-  Stream<dynamic> listen(String eventName,) {
+  Stream<dynamic> listen(String eventName) {
     debugPrint("Listening to $eventName");
     if (_events.containsKey(eventName)) {
       debugPrint("Already listening to $eventName");
       return _events[eventName]!.stream;
     }
-    
+
     final controller = StreamController<dynamic>.broadcast();
     _events[eventName] = controller;
 
@@ -110,4 +114,3 @@ class SocketService {
     _socket = null;
   }
 }
-

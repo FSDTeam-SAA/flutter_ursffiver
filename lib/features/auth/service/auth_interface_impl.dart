@@ -9,7 +9,6 @@ import 'package:flutter_ursffiver/features/auth/model/create_new_password_model.
 import 'package:flutter_ursffiver/features/auth/model/forget_password_model.dart';
 import 'package:flutter_ursffiver/features/auth/model/signin_model.dart';
 import 'package:flutter_ursffiver/features/auth/model/signup_model.dart';
-import 'package:flutter_ursffiver/features/auth/model/verify_account_param.dart';
 import 'package:flutter_ursffiver/features/auth/model/verify_otp_param.dart';
 
 final class AuthInterfaceImpl extends AuthInterface {

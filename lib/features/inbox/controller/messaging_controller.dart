@@ -1,54 +1,56 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/features/inbox/model/send_message_param.dart';
 import 'package:get/get.dart';
 
 import '../../../core/helpers/handle_fold.dart';
-import '../service/inbox_interface.dart';
+import '../interface/chat_interface.dart';
+import '../model/send_message_request_param.dart';
 
-class MessagingController extends GetxController{
+class MessagingController extends GetxController {
   final String chatId;
-  final TextEditingController messageController = TextEditingController();
+  final TextEditingController textInputController = TextEditingController();
   final List<File> attachedFiles = [];
 
   MessagingController({required this.chatId});
 
-  void attachFile(File file){
+  void attachFile(File file) {
     attachedFiles.add(file);
     update();
   }
 
-  void removeAttachedFileAt(int index){
+  void removeAttachedFileAt(int index) {
     attachedFiles.removeAt(index);
     update();
   }
 
-  void clearMessage(){
-    messageController.clear();
+  void clearMessage() {
+    textInputController.clear();
     attachedFiles.clear();
     update();
   }
 
   Future<void> sendMessage() async {
-    final messageText = messageController.text.trim();
-    if(messageText.isEmpty && attachedFiles.isEmpty){
+    final messageText = textInputController.text.trim();
+    if (messageText.isEmpty && attachedFiles.isEmpty) {
       return;
     }
 
     final result = await Get.find<InboxInterface>().sendMessage(
-      SendMessageParam(chatId: chatId, content: messageText, attachments: attachedFiles)
+      SendMessageReqParam(
+        chatId: chatId,
+        content: messageText,
+        attachments: attachedFiles,
+      ),
     );
 
     handleFold(
       either: result,
-      onError: (failure) {
+      onError: (failure) {},
+      onSuccess: (success) {
         
       },
-      onSuccess: (success) {
-        clearMessage();
-      },
     );
+    clearMessage();
   }
-
 }

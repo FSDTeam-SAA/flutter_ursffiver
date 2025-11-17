@@ -8,17 +8,9 @@ import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:flutter_ursffiver/features/profile/interface/profile_interface.dart';
-import 'package:flutter_ursffiver/features/profile/model/update_profile_avatar_param.dart';
 import 'package:flutter_ursffiver/features/profile/model/update_profile_model.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
-class Either<L, R> {
-  final L? left;
-  final R? right;
-
-  Either({this.left, this.right});
-}
 
 class EditProfileInfoController extends GetxController {
   final firstNameController = TextEditingController();
@@ -31,9 +23,9 @@ class EditProfileInfoController extends GetxController {
   final ageRangeController = TextEditingController();
   final bioController = TextEditingController();
 
-  var profileImage = Rx<File?>(null);
-  final beforeUserProfile = Get.find<ProfileDataProvider>().userProfile.value; // Store the user profile before editing>
-  
+  // PROFILE IMAGE
+  Rx<File?> profileImage = Rx<File?>(null);
+
   final ImagePicker _picker = ImagePicker();
 
   String originalEmail = "";
@@ -44,6 +36,7 @@ class EditProfileInfoController extends GetxController {
   final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(
     initialStatus: EnabledStatus(),
   );
+
   @override
   void onInit() {
     super.onInit();
@@ -51,11 +44,9 @@ class EditProfileInfoController extends GetxController {
 
     final profileController = Get.find<ProfileDataProvider>();
 
-    // If profile data already exists, load it immediately
     if (profileController.userProfile.value != null) {
       loadDataFromProfile();
     } else {
-      // Otherwise, fetch and then load it
       profileController.getCurrentUserProfile().then((_) {
         loadDataFromProfile();
       });
@@ -66,24 +57,31 @@ class EditProfileInfoController extends GetxController {
     final user = Get.find<ProfileDataProvider>().userProfile.value;
     if (user == null) return;
 
-    firstNameController.text = user.firstname ?? "";
-    lastNameController.text = user.lastname ?? "";
-    userNameController.text = user.username ?? "";
-    fullNameController.text = "${user.firstname ?? ''} ${user.lastname ?? ''}"
+    firstNameController.text = user.firstName ?? "";
+    lastNameController.text = user.lastName ?? "";
+    userNameController.text = user.userName ?? "";
+    fullNameController.text = "${user.firstName ?? ''} ${user.lastName ?? ''}"
         .trim();
     emailController.text = user.email ?? "";
-    usernameController.text = user.username ?? "";
+    usernameController.text = user.userName ?? "";
     genderController.text = user.gender ?? "";
     ageRangeController.text = user.ageRange ?? "";
     bioController.text = user.bio ?? "";
+
     originalEmail = user.email ?? "";
   }
 
+  // ✅ FIXED pickImage() (now uses passed source)
   Future<void> pickImage(ImageSource source) async {
-    if (!isEditing.value) return;
-    final picked = await _picker.pickImage(source: ImageSource.gallery);
-    if (picked != null) {
-      profileImage.value = File(picked.path);
+    try {
+      final XFile? picked = await _picker.pickImage(source: source);
+
+      if (picked != null) {
+        profileImage.value = File(picked.path);
+        update();
+      }
+    } catch (e) {
+      debugPrint("Image pick error: $e");
     }
   }
 
@@ -92,50 +90,35 @@ class EditProfileInfoController extends GetxController {
     profileImage.value = null;
   }
 
+  // SAVE PROFILE
   Future<void> saveProfile({
     required ProcessStatusNotifier? buttonNotifier,
     required SnackbarNotifier? snackbarNotifier,
   }) async {
     buttonNotifier?.setLoading();
-    return await Get.find<ProfileInterface>()
-        .updateProfile(
-          UpdateProfileModel(
-            id: (Get.find<AppManager>().authStatus as Authenticated)
-                .auth
-                .userId,
-            firstName: firstNameController.text.trim(),
-            lastName: lastNameController.text.trim(),
-            username: userNameController.text.trim(),
-            email: emailController.text.trim(),
-            gender: genderController.text.trim(),
-            ageRange: ageRangeController.text.trim(),
-            bio: bioController.text.trim(),
-          ),
-        )
-        .then((lr) {
-          handleFold(
-            either: lr,
-            processStatusNotifier: buttonNotifier,
-            successSnackbarNotifier: snackbarNotifier,
-            onSuccess: (data) async {
-              if (profileImage.value != null) {
 
-                await Get.find<ProfileInterface>().uploadProfileAvatar(
-                  UploadProfileAvatarParam(
-                    userId: (Get.find<AppManager>().authStatus as Authenticated)
-                        .auth
-                        .userId,
-                    bytes: await profileImage.value!.readAsBytes(),
-                    fileName: profileImage.value?.path ?? "",
-                  ),
-                );
-              } else {
-                debugPrint("No image selected");
-              }
-              Get.find<ProfileDataProvider>().getCurrentUserProfile();
-            },
-          );
-        });
+    final lr = await Get.find<ProfileInterface>().updateProfile(
+      UpdateProfileModel(
+        id: (Get.find<AppManager>().currentAuthStatus as Authenticated)
+            .auth
+            .userId,
+        firstName: firstNameController.text.trim(),
+        lastName: lastNameController.text.trim(),
+        username: userNameController.text.trim(),
+        email: emailController.text.trim(),
+        gender: genderController.text.trim(),
+        ageRange: ageRangeController.text.trim(),
+        bio: bioController.text.trim(),
+        profileImage: profileImage.value,
+      ),
+    );
+
+    handleFold(
+      either: lr,
+      processStatusNotifier: buttonNotifier,
+      successSnackbarNotifier: snackbarNotifier,
+      errorSnackbarNotifier: snackbarNotifier,
+    );
   }
 
   void verifyEmail() {

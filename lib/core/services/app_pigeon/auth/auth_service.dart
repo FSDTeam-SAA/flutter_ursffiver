@@ -45,20 +45,22 @@ class AuthService extends Interceptor {
     if (accessToken != null) {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
-    _authDebugger.dekhao("${options.uri.toString()} ${options.method} token : $accessToken");
+    _authDebugger.dekhao("${options.uri.toString()} ${options.method}");    
+    _authDebugger.dekhao("${options.data.toString()} ");
+
     handler.next(options);
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    _authDebugger.dekhao("Response for ${response.requestOptions.uri.toString()} : ${response.statusCode}, data: ${response.data}");
-    super.onResponse(response, handler);
+  Future<void> onResponse(Response response, ResponseInterceptorHandler handler) async {
+    debugPrint("Response << Method: ${response.requestOptions.method} API: ${response.requestOptions.uri} << ${response.data}");
+    handler.next(response);
   }
   
   /// Catch errors like 401 and retry with new access token if access token expires.
   @override
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
-    debugPrint("Error >> ${err.response}");
+    debugPrint("Error >> Method: ${err.requestOptions.method} API: ${err.requestOptions.uri} >> ${err.response}");
     // IF TIMEOUT, then possibly internet is down. Hence reject the request.
     final status = (await _authStorage.currentAuthStatus());
     if(err.type == DioExceptionType.connectionTimeout || err.type == DioExceptionType.receiveTimeout) {

@@ -3,7 +3,6 @@ import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
 import 'package:flutter_ursffiver/core/notifiers/button_status_notifier.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/auth/interface/auth_interface.dart';
-import 'package:flutter_ursffiver/features/auth/model/verify_account_param.dart';
 import 'package:flutter_ursffiver/features/auth/model/verify_otp_param.dart';
 import 'package:get/get.dart';
 

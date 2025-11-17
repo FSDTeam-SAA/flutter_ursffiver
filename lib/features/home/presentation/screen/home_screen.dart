@@ -1,11 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/app/controller/app_global_controllers.dart';
-import 'package:flutter_ursffiver/core/common/model/interest_model.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
 import 'package:flutter_ursffiver/core/componenet/pagination/widget/paginated_list.dart';
 import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/controller/filter_people_suggestion_controller.dart';
+import 'package:flutter_ursffiver/features/home/presentation/screen/user_verification_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/user_profile_card.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/invitation_notification_widget.dart';
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               showDialog(
                 context: context,
-                barrierDismissible: false, // prevent closing by tapping outside
+                barrierDismissible: false,
                 builder: (context) => Center(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -122,18 +122,35 @@ class _HomeScreenState extends State<HomeScreen> {
               FixedNotificationBanner.show(context);
             },
           ),
-
-          //////////////////
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UnVerificationScreen()),
-              );
-            },
-            icon: Icon(Icons.verified_user_outlined),
-            iconSize: 28,
-            color: AppColors.textFieldTextiHint,
+          Obx(
+            () => IconButton(
+              onPressed: () {
+                final user = _profieDataController.userProfile.value;
+                if (user != null) {
+                  if (user.adminVerify == false) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UnVerificationScreen(),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VerificationScreen(),
+                      ),
+                    );
+                  }
+                }
+              },
+              icon: const Icon(Icons.verified_user_outlined),
+              iconSize: 28,
+              color:
+                  _profieDataController.userProfile.value?.adminVerify == true
+                  ? Colors.green
+                  : Colors.red[400],
+            ),
           ),
           IconButton(
             icon: Icon(Icons.notifications_none, color: Colors.black),
@@ -363,16 +380,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 8),
                   Obx(() {
                     final selectedInterests =
-                        _profieDataController.userProfile.value?.interest ??
+                        _profieDataController.userProfile.value?.interests ??
                         [];
 
                     debugPrint(
-                      "selectedInterests: ${_profieDataController.userProfile.value?.interest?.length ?? 0}",
+                      "selectedInterests: ${_profieDataController.userProfile.value?.interests?.length ?? 0}",
                     );
 
                     if (selectedInterests.isEmpty) {
                       return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 0,
+                        ),
                         child: Text(
                           "No interests found.",
                           style: TextStyle(color: Colors.grey),

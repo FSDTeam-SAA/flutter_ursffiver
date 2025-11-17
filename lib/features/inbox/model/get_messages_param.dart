@@ -1,20 +1,21 @@
-class GetMessagesParam {
+class GetMessagesReqParam {
   final String chatId;
+  final int? page;
   final int limit;
   final String? beforeMessageId;
 
-  GetMessagesParam({
+  GetMessagesReqParam({
     required this.chatId,
+    this.page,
     required this.limit,
     this.beforeMessageId,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'chatId': chatId,
+      'page': page,
       'limit': limit,
       'beforeMessageId': beforeMessageId,
     };
   }
-
 }

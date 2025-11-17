@@ -4,7 +4,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-import '../helpers/dekhao.dart';
 import '../services/debug/debug_service.dart';
 import 'exceptions.dart';
 import 'failure.dart';
@@ -77,8 +76,9 @@ base class BaseRepository {
             ),
           );
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       debugPrint(e.toString());
+      debugPrint(stackTrace.toString());
       //debugger?.dekhao(e);
       return Left(
         DataCRUDFailure(
