@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
-import 'package:flutter_ursffiver/features/inbox/controller/chat_controllerx.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:get/get.dart';
 import 'package:timeago/timeago.dart' as timeago;

@@ -104,7 +104,7 @@ class MessageTile extends StatelessWidget {
               radius: 25,
               backgroundColor: Colors.grey[300],
               child: Text(
-                chatController.chatTitle?[0].toUpperCase() ?? '?',
+                chatController.chatTitle[0].toUpperCase(),
                 style: const TextStyle(color: Colors.white),
               ),
             ),
@@ -127,14 +127,14 @@ class MessageTile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        chatController.lastMessageTime ?? '',
+                        chatController.lastMessageTime,
                         style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    chatController.lastMessage ?? 'No messages',
+                    chatController.lastMessage,
                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

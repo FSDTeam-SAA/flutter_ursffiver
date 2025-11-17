@@ -53,27 +53,50 @@ class BadgeModel {
   }
 
   IconData get badgeIcon {
-    switch (name.toLowerCase()) {
-      case 'goodspeaker':
-        return Icons.record_voice_over;
-      case 'good speaker':
-        return Icons.record_voice_over;
-      case 'fast responder':
-        return Icons.flash_on;
-      case 'great lisaner':
-        return Icons.groups;
-      case 'top seller':
-        return Icons.workspace_premium;
-      case 'verified':
-        return Icons.verified;
-      case 'trusted':
-        return Icons.shield;
-      case 'creative':
-        return Icons.lightbulb;
-      case 'helpful':
-        return Icons.favorite;
-      default:
-        return Icons.star;
+    if (name == 'goodspeaker' ||
+        name == 'GoodSpeaker' ||
+        name == 'Good Speaker' ||
+        name == 'good speaker') {
+      return Icons.record_voice_over;
+    } else if (name == 'Great Lisaner' ||
+        name == 'great lisaner' ||
+        name == 'GreatLisaner' ||
+        name == 'greatlisaner') {
+      return Icons.hearing;
+    } else if (name == 'Thoughtful Question' ||
+        name == 'thoughtful question' ||
+        name == 'thoughtfulQuestion' ||
+        name == 'ThoughtfulQuestion') {
+      return Icons.question_answer;
+    } else if (name == 'Knowledge Share' ||
+        name == 'knowledge share' ||
+        name == 'knowledgeShare' ||
+        name == 'KnowledgeShare') {
+      return Icons.lightbulb_outline_rounded;
+    } else if (name == 'Local Expert' ||
+        name == 'local expert' ||
+        name == 'localExpert' ||
+        name == 'LocalExpert') {
+      return Icons.location_on;
+    } else if (name == 'Rellable' || name == 'rellable') {
+      return Icons.check_circle_outline;
+    } else if (name == 'trusted' || name == 'Trusted') {
+      return Icons.person_2_outlined;
+    } else if (name == 'creative' || name == 'Creative') {
+      return Icons.light_sharp;
+    } else if (name == 'helpful' || name == 'Helpful') {
+      return Icons.help_outline_outlined;
+    } else if (name == 'Respectful' || name == 'respectful') {
+      return Icons.shield_outlined;
+    } else if (name == 'Community Builder' ||
+        name == 'community builder' ||
+        name == 'communityBuilder' ||
+        name == 'CommunityBuilder') {
+      return Icons.lightbulb;
+    } else if (name == 'Connector' || name == 'connector') {
+      return Icons.link;
+    } else {
+      return Icons.star;
     }
   }
 
@@ -89,13 +112,7 @@ class BadgeModel {
 
   //toJson
   Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'name': name,
-      'tag': tag,
-      'info': info,
-      'color': color,
-    };
+    return {'_id': id, 'name': name, 'tag': tag, 'info': info, 'color': color};
   }
 
   @override

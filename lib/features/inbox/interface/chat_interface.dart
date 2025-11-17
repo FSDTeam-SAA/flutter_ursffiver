@@ -7,7 +7,6 @@ import 'package:flutter_ursffiver/features/inbox/model/create_chat_request_model
 import 'package:flutter_ursffiver/features/inbox/model/get_messages_param.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
 import 'package:flutter_ursffiver/features/inbox/model/send_message_request_param.dart';
-import 'package:flutter_ursffiver/features/inbox/model/send_message_response_model.dart';
 
 import '../../../core/api_handler/trycatch.dart';
 import '../model/accept_reject_chat_req_param.dart';

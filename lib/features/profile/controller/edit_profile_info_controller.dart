@@ -34,7 +34,7 @@ class EditProfileInfoController extends GetxController {
   var profileImage = Rx<File?>(null);
   final beforeUserProfile = Get.find<ProfileDataController>()
       .userProfile
-      .value; // Store the user profile before editing>
+      .value;
 
   final ImagePicker _picker = ImagePicker();
 

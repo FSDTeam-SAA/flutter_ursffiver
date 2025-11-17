@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
-import 'package:flutter_ursffiver/features/home/model/user_model.dart';
-import 'package:flutter_ursffiver/features/inbox/controller/chat_controllerx.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/screen/inbox_screen.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 import 'package:get/get.dart';
 

@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_ursffiver/features/home/model/user_model.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 import 'message_model.dart';
 

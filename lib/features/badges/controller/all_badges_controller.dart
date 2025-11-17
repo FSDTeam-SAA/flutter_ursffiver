@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
@@ -50,25 +49,24 @@ class AllBadgesController extends GetxController {
       isLoading.value = false;
     }
   }
+
   void allloadBadges() async {
     try {
       isLoading.value = true;
 
-      final lr = await Get.find<BadgesInterface>().getAllBadges(
-      );
+      final lr = await Get.find<BadgesInterface>().getAllBadges();
 
       handleFold(
-  either: lr,
-  onSuccess: (success) {
-    allBadges.value = success;
-    debugPrint("Total badges loaded: ${allBadges.length}");
-  },
-  onError: (failure) {
-    debugPrint("Failed to load all badges: ${failure.fullError}");
-    allBadges.value = [];
-  },
-);
-
+        either: lr,
+        onSuccess: (success) {
+          allBadges.value = success;
+          debugPrint("Total badges loaded: ${allBadges.length}");
+        },
+        onError: (failure) {
+          debugPrint("Failed to load all badges: ${failure.fullError}");
+          allBadges.value = [];
+        },
+      );
     } catch (e, st) {
       debugPrint("Exception in loadAllBadges: $e");
       debugPrint("$st");

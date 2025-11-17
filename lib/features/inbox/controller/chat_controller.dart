@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 class ChatController extends GetxController {
   final String chatId;
   ChatModel? chatModel;
-  String _chatTitle = "unknown";
   MessageModel? _lastMessage;
 
   String get lastMessage => _lastMessage?.text ?? "";
@@ -50,7 +49,6 @@ class ChatController extends GetxController {
       onError: (failure) {},
       onSuccess: (success) {
         chatModel = success;
-        _chatTitle = chatModel?.name ?? "";
         _lastMessage = chatModel?.lastMessage;
         update();
       },

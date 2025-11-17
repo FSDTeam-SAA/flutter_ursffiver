@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
 import 'package:flutter_ursffiver/features/auth/interface/interest_interface.dart';
-import 'package:flutter_ursffiver/features/auth/model/create_custom_interest_req_param.dart';
 import 'package:get/get.dart';
 
 import '../../../features/auth/model/interest_model.dart';
