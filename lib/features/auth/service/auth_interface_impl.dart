@@ -52,6 +52,7 @@ final class AuthInterfaceImpl extends AuthInterface {
         );
         // parse
         final body = extractBodyData(response);
+        debugPrint('Login Response Body: $body');
         final loginResponse = LoginResponse.fromMap(body);
         await appPigeon.saveNewAuth(
           saveAuthParams: SaveNewAuthParams(

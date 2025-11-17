@@ -3,11 +3,11 @@ import 'package:flutter_ursffiver/core/api_handler/success.dart';
 import 'package:flutter_ursffiver/core/constants/api_endpoints.dart';
 import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
-import 'package:flutter_ursffiver/features/home/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/model/verification_model.dart';
 import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 
+import '../../auth/model/interest_model.dart';
 import '../model/get_user_suggestion_req_param.dart';
 
 base class HomeService extends HomeInterface {

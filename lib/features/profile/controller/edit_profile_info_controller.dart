@@ -42,7 +42,7 @@ class EditProfileInfoController extends GetxController {
     super.onInit();
     loadDataFromProfile();
 
-    final profileController = Get.find<ProfileDataController>();
+    final profileController = Get.find<ProfileDataProvider>();
 
     if (profileController.userProfile.value != null) {
       loadDataFromProfile();
@@ -54,7 +54,7 @@ class EditProfileInfoController extends GetxController {
   }
 
   void loadDataFromProfile() {
-    final user = Get.find<ProfileDataController>().userProfile.value;
+    final user = Get.find<ProfileDataProvider>().userProfile.value;
     if (user == null) return;
 
     firstNameController.text = user.firstName ?? "";

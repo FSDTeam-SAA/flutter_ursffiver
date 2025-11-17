@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+
+import '../enum/interest_color.dart';
 
 class InterestModel {
   final String id;
@@ -36,54 +37,7 @@ class InterestModel {
   int get hashCode => Object.hashAll([id, name, color]);
 }
 
-enum InterestColor {
-  red,
-  green,
-  blue,
-  yellow;
 
-  static InterestColor fromString(String color) {
-    color = color.toLowerCase();
-    switch (color) {
-      case 'red':
-        return InterestColor.red;
-      case 'green':
-        return InterestColor.green;
-      case 'blue':
-        return InterestColor.blue;
-      case 'yellow':
-        return InterestColor.yellow;
-      default:
-        return InterestColor.red;
-    }
-  }
-
-  Color get deepColor {
-    switch (this) {
-      case InterestColor.red:
-        return Color(0xFFF2415A);
-      case InterestColor.green:
-        return Color(0xFF27BE69);
-      case InterestColor.blue:
-        return Color(0xFF3F42EE);
-      case InterestColor.yellow:
-        return Color(0xFFFFBF0F);
-    }
-  }
-
-  Color get softColor {
-    switch (this) {
-      case InterestColor.red:
-        return const Color(0xFFFEECEE);
-      case InterestColor.green:
-        return const Color(0xFFE6FAEE);
-      case InterestColor.blue:
-        return const Color(0xFFECEDFD);
-      case InterestColor.yellow:
-        return const Color(0xFFFFF8E5);
-    }
-  }
-}
 
 class InterestCategoryModel {
   final String id;

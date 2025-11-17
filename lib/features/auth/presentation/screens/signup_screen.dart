@@ -95,7 +95,7 @@ class _SignupScreen extends State<SignupScreen> {
       isScrollControlled: true,
       useSafeArea: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => InterestPickerSheet.forSignUp(
+      builder: (_) => InterestPickerSheet.forSignU(
         interestSelectionCntlr: signupController.interestSelectionCntlr,
         brandGradient: _brandGradient,
         onConfirm: () => Navigator.pop(context),
@@ -544,7 +544,7 @@ class _SignupScreen extends State<SignupScreen> {
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: 4,
+                        spacing: 8,
                         children: [
                           const Text(
                             'Create Account',
@@ -563,8 +563,12 @@ class _SignupScreen extends State<SignupScreen> {
                                 signupController.processNotifier,
                             iconWidget: Container(),
                             loadingStateWidget: const FittedBox(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -588,7 +592,7 @@ class _SignupScreen extends State<SignupScreen> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => Navigator.push(
-                                context, MaterialPageRoute(builder: (_) => const SignupScreen())),
+                                context, MaterialPageRoute(builder: (_) => const SignInScreen())),
                         ),
                       ],
                     ),

@@ -20,7 +20,7 @@ class MyProfileScreen extends StatefulWidget {
 }
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
-  final profileDataController = Get.put(ProfileDataController());
+  final profileDataController = Get.put(ProfileDataProvider());
   final controller = Get.put(EditProfileInfoController());
   final ProcessStatusNotifier processNotifier = ProcessStatusNotifier(
     initialStatus: EnabledStatus(),
@@ -304,7 +304,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   }
 
   Widget _buildProfilePhotoSection(EditProfileInfoController controller) {
-    final profileController = Get.find<ProfileDataController>();
+    final profileController = Get.find<ProfileDataProvider>();
 
     return Obx(() {
       final user = profileController.userProfile.value;
