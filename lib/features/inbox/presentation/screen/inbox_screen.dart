@@ -3,6 +3,7 @@ import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.d
 import 'package:flutter_ursffiver/features/badges/presentation/screen/get_all_badges_screen.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/widget/time_extend-dialog_widget.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +16,7 @@ class ChatScreen extends StatefulWidget {
   final String contactName;
   final String avatarUrl;
   final String userId;
+  final String chatId;
   final ChatController chatController;
 
   const ChatScreen({
@@ -22,6 +24,7 @@ class ChatScreen extends StatefulWidget {
     required this.contactName,
     required this.avatarUrl,
     required this.userId,
+    required this.chatId,
     required this.chatController,
   });
 
@@ -88,9 +91,17 @@ class _ChatScreenState extends State<ChatScreen> {
                     fontSize: 16,
                   ),
                 ),
-                const Text(
-                  "Time left tooo chat 14:45",
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                Row(
+                  children: [
+                    const Text(
+                      "Time left tooo chat",
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    // Text(
+                    //   " ${widget.chatController.chatModel?.createdAt}",
+                    //   style: TextStyle(fontSize: 12, color: Colors.grey),
+                    // ),
+                  ],
                 ),
               ],
             ),
@@ -118,17 +129,26 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 );
               } else if (value == "extend") {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => Scaffold()),
+                showExtendTimeDialog(
+                  context: context,
+                  chatId: widget.chatController.chatId,
                 );
               } else if (value == "location") {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => Scaffold()),
+                  MaterialPageRoute(
+                    builder: (_) => Scaffold(
+                      appBar: AppBar(title: const Text("Share Location")),
+                      body: const Center(
+                        child: Text("Location sharing UI goes here"),
+                      ),
+                    ),
+                    fullscreenDialog: true,
+                  ),
                 );
               }
             },
+
             itemBuilder: (_) => [
               const PopupMenuItem(
                 value: "extend",
@@ -150,16 +170,16 @@ class _ChatScreenState extends State<ChatScreen> {
                   ],
                 ),
               ),
-              const PopupMenuItem(
-                value: "location",
-                child: Row(
-                  children: [
-                    Icon(Icons.location_on_outlined, color: Colors.black),
-                    SizedBox(width: 10),
-                    Text("Share Location"),
-                  ],
-                ),
-              ),
+              // const PopupMenuItem(
+              //   value: "location",
+              //   child: Row(
+              //     children: [
+              //       Icon(Icons.location_on_outlined, color: Colors.black),
+              //       SizedBox(width: 10),
+              //       Text("Share Location"),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
 

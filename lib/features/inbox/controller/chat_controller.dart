@@ -23,6 +23,8 @@ class ChatController extends GetxController {
 
   String get chatTitle => chatModel?.name ?? "Unknown";
 
+  String get chattime => chatModel?.createdAt ?? "";
+
   RxList<MessageModel> messages = RxList<MessageModel>([]);
 
   ChatController({required this.chatId}) {

@@ -85,10 +85,11 @@ class MessageTile extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => ChatScreen(
+              chatId: chatController.chatId,
               contactName: chatController.chatTitle,
               avatarUrl: chatController.chatModel?.avatarUrl ?? '',
               chatController: chatController,
-              userId: chatController.chatModel?.id ?? '',
+              userId: chatController.chatModel?.user?.id ?? '',
             ),
           ),
         );

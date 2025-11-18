@@ -6,11 +6,14 @@ import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/controller/filter_people_suggestion_controller.dart';
 import 'package:flutter_ursffiver/features/home/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_verification_screen.dart';
+import 'package:flutter_ursffiver/features/home/presentation/widget/location_sharing_dialog.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/user_profile_card.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/invitation_notification_widget.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/widget/location_share.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 
@@ -43,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _homeInterestController.getCurrentUserProfile();
+    isAvailable = _userProfilecontroller.userProfile.value?.active ?? false;
   }
 
   static const _brandGradient = LinearGradient(
@@ -51,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     colors: [Color(0xFF4C5CFF), Color(0xFF8F79FF)],
   );
 
-  bool isAvailable = true;
+  bool isAvailable = false;
   String? statusMessage;
   final TextEditingController customMessageController = TextEditingController();
   final FocusNode _customStatusFocus = FocusNode();
@@ -196,11 +200,41 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
+                  // Switch(
+                  //   value: isAvailable,
+                  //   onChanged: (val) {
+                  //     setState(() {
+                  //       isAvailable = val;
+                  //     });
+                  //     _filterPeopleSuggestionController.setVisibility(val, () {
+                  //       return true;
+                  //     });
+                  //   },
+                  // ),
                   Switch(
                     value: isAvailable,
-                    onChanged: (val) {
+                    onChanged: (val) async {
+                      // If turning ON, check permission first
+                      if (val == true) {
+                        final permission = await Geolocator.checkPermission();
+
+                        if (permission == LocationPermission.denied ||
+                            permission == LocationPermission.deniedForever) {
+                          // Navigate to the permission screen
+                          Get.to(() => const LocationPermissionScreen());
+
+                          // Do NOT turn the switch ON yet
+                          return;
+                        }
+                      }
+
+                      // If permission is already granted OR turning OFF
                       setState(() {
                         isAvailable = val;
+                      });
+
+                      _filterPeopleSuggestionController.setVisibility(val, () {
+                        return val; // only share when ON
                       });
                     },
                   ),
@@ -388,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         [];
 
                     debugPrint(
-                      "selectedInterests: ${_homeInterestController.userProfile.value?.interests?.length ?? 0}",
+                      "selectedInterests: ${_homeInterestController.userProfile.value?.interests.length ?? 0}",
                     );
 
                     if (selectedInterests.isEmpty) {

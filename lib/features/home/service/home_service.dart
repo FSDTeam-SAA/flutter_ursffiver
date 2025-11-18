@@ -4,6 +4,7 @@ import 'package:flutter_ursffiver/core/constants/api_endpoints.dart';
 import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/home/model/interest_model.dart';
+import 'package:flutter_ursffiver/features/home/model/set_visibility_req.dart';
 import 'package:flutter_ursffiver/features/home/model/verification_model.dart';
 import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
@@ -71,6 +72,19 @@ base class HomeService extends HomeInterface {
           data: formData,
         );
         debugPrint(response.data);
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success> setVisibility(SetVisibilityReq param) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        final response = await appPigeon.patch(
+          ApiEndpoints.setVisibility,
+          data: param.toJson(),
+        );
         return Success(message: extractSuccessMessage(response));
       },
     );

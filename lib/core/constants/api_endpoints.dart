@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _LocalHostWifi.socketUrl;
+  static const String socketUrl = _RemoteServer.socketUrl;
 
-  static const String baseUrl = _LocalHostWifi.baseUrl;
+  static const String baseUrl = _RemoteServer.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -78,6 +78,8 @@ base class ApiEndpoints {
   /// ### get
   static const String allUser = _User.allUser;
 
+  static const String setVisibility = _User.setVisibility;
+
   // ---------------------- RIDE -----------------------------
   /// ### post
   static const String createRide = _Ride.createRide;
@@ -123,6 +125,11 @@ base class ApiEndpoints {
   ///
   static String getUselAllChat(String chatId) =>
       _Message.getUselallChat(chatId);
+
+  ///////////
+  ///
+  static String timeExtend(String chatId) =>
+      _Message.timeExtend(chatId);
 }
 
 //arrow360degree@gmail.com
@@ -200,6 +207,7 @@ class _User {
   static const String uploadProfileAvatar = '$_userRoute/upload-avatar';
   static const String history = '$_userRoute/history';
   static const String allUser = '$_userRoute/all-user';
+  static const String setVisibility = '$_userRoute/visibility';
 }
 
 // ---------------------- RIDE -----------------------------
@@ -252,4 +260,6 @@ class _Message {
   static String deleteMessage(String messageId) => "$_messageRoute/$messageId";
 
   static String getUselallChat(String chatId) => "$_messageRoute/get-chat";
+
+  static String timeExtend(String chatId) => "$_messageRoute/extend-time/$chatId";
 }

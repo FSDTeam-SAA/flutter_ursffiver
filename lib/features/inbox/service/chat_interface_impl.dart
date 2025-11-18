@@ -11,6 +11,7 @@ import 'package:flutter_ursffiver/features/inbox/model/create_chat_request_model
 import 'package:flutter_ursffiver/features/inbox/model/get_messages_param.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
 import 'package:flutter_ursffiver/features/inbox/model/send_message_request_param.dart';
+import 'package:flutter_ursffiver/features/inbox/model/time_extend_model.dart';
 
 import '../model/accept_reject_chat_req_param.dart';
 
@@ -130,7 +131,6 @@ final class ChatInterfaceImpl extends InboxInterface {
         final response = await appPigeon.get(
           ApiEndpoints.getMessages(param.chatId),
           query: param.toMap().isEmpty ? null : param.toMap(),
-          
         );
 
         //parse
@@ -176,14 +176,15 @@ final class ChatInterfaceImpl extends InboxInterface {
   FutureRequest<Success<MessageModel>> sendMessage(
     SendMessageReqParam param,
   ) async {
-    debugPrint("Sending message with param: ${param.chatId}, ${param.content}, attachments: ${param.attachments.length}");
+    debugPrint(
+      "Sending message with param: ${param.chatId}, ${param.content}, attachments: ${param.attachments.length}",
+    );
     return await asyncTryCatch(
       tryFunc: () async {
         //api call
         final response = await appPigeon.post(
           ApiEndpoints.sendMessage(param.chatId),
           data: param.toJson(),
-          
         );
 
         //parse
@@ -191,6 +192,20 @@ final class ChatInterfaceImpl extends InboxInterface {
 
         //return
         return Success(message: extractSuccessMessage(response), data: null);
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success> timeExtend(TimeExtendModel param) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        final response = await appPigeon.patch(
+          ApiEndpoints.timeExtend(param.sendMessageReqParam!.chatId),
+          data: param.toJson(),
+        );
+        final message = extractSuccessMessage(response);
+        return Success(message: message);
       },
     );
   }
