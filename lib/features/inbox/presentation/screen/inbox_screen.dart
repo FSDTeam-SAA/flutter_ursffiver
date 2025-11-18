@@ -14,12 +14,14 @@ import '../../controller/messaging_controller.dart';
 class ChatScreen extends StatefulWidget {
   final String contactName;
   final String avatarUrl;
+  final String userId;
   final ChatController chatController;
 
   const ChatScreen({
     super.key,
     required this.contactName,
     required this.avatarUrl,
+    required this.userId,
     required this.chatController,
   });
 
@@ -67,10 +69,6 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: Row(
           children: [
             SmartNetworkImage.circle(
@@ -99,165 +97,105 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         actions: [
-          // PopupMenuButton<String>(
-          //   icon: const Icon(Icons.more_vert, color: Colors.black),
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(12),
-          //   ),
-          //   onSelected: (value) {
-          //     if (value == "badge") {
-          //       showModalBottomSheet(
-          //         context: context,
-          //         isScrollControlled: true,
-          //         shape: const RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.vertical(
-          //             top: Radius.circular(20),
-          //           ),
-          //         ),
-          //         builder: (context) => SizedBox(
-          //           height: MediaQuery.of(context).size.height * 0.9,
-          //           // child: const AllBadgesWidget(),
-          //         ),
-          //       );
-          //     }
-          //   },
-          //   itemBuilder: (_) => [
-          //     const PopupMenuItem(
-          //       value: "extend",
-          //       child: Row(
-          //         children: [
-          //           Icon(Icons.access_time_outlined, color: Colors.black),
-          //           SizedBox(width: 10),
-          //           Text("Extend Time"),
-          //         ],
-          //       ),
-          //     ),
-          //     const PopupMenuItem(
-          //       value: "badge",
-          //       child: Row(
-          //         children: [
-          //           Icon(Icons.badge, color: Colors.black),
-          //           SizedBox(width: 10),
-          //           Text("Award Badge User"),
-          //         ],
-          //       ),
-          //     ),
-          //     const PopupMenuItem(
-          //       value: "location",
-          //       child: Row(
-          //         children: [
-          //           Icon(Icons.location_on_outlined, color: Colors.black),
-          //           SizedBox(width: 10),
-          //           Text("Share Location"),
-          //         ],
-          //       ),
-          //     ),
-          //   ],
-          // ),
           PopupMenuButton<String>(
-  icon: const Icon(Icons.more_vert, color: Colors.black),
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(12),
-  ),
-  onSelected: (value) {
-    if (value == "badge") {
-      // OPEN BOTTOM SHEET
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
+            icon: const Icon(Icons.more_vert, color: Colors.black),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            onSelected: (value) {
+              if (value == "badge") {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                  ),
+                  builder: (context) => SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.9,
+                    child: GetAllBadgesScreen(userId: widget.userId),
+                  ),
+                );
+              } else if (value == "extend") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Scaffold()),
+                );
+              } else if (value == "location") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Scaffold()),
+                );
+              }
+            },
+            itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: "extend",
+                child: Row(
+                  children: [
+                    Icon(Icons.access_time_outlined, color: Colors.black),
+                    SizedBox(width: 10),
+                    Text("Extend Time"),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: "badge",
+                child: Row(
+                  children: [
+                    Icon(Icons.badge, color: Colors.black),
+                    SizedBox(width: 10),
+                    Text("Award Badge User"),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: "location",
+                child: Row(
+                  children: [
+                    Icon(Icons.location_on_outlined, color: Colors.black),
+                    SizedBox(width: 10),
+                    Text("Share Location"),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ),
-        builder: (context) => SizedBox(
-          height: MediaQuery.of(context).size.height * 0.9,
-          child: GetAllBadgesScreen(),
-        ),
-      );
-    } else if (value == "extend") {
-      // GO TO NEW SCREEN
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => Scaffold()),
-      );
-    } else if (value == "location") {
-      // GO TO LOCATION SCREEN
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => Scaffold()),
-      );
-    }
-  },
-  itemBuilder: (_) => [
-    const PopupMenuItem(
-      value: "extend",
-      child: Row(
-        children: [
-          Icon(Icons.access_time_outlined, color: Colors.black),
-          SizedBox(width: 10),
-          Text("Extend Time"),
-        ],
-      ),
-    ),
-    const PopupMenuItem(
-      value: "badge",
-      child: Row(
-        children: [
-          Icon(Icons.badge, color: Colors.black),
-          SizedBox(width: 10),
-          Text("Award Badge User"),
-        ],
-      ),
-    ),
-    const PopupMenuItem(
-      value: "location",
-      child: Row(
-        children: [
-          Icon(Icons.location_on_outlined, color: Colors.black),
-          SizedBox(width: 10),
-          Text("Share Location"),
-        ],
-      ),
-    ),
-  ],
-),
 
           const SizedBox(width: 8),
         ],
       ),
-      body: ObxValue(
-        (messages) {
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  controller: scrollController,
-                  padding: const EdgeInsets.all(12),
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    final msg = messages[index];
-                    bool isMe = msg.isMe(
-                      Get.find<ProfileDataController>().userProfile.value?.id ?? "",
-                    );
-                    return Column(
-                      children: [
-                        isMe
-                            ? _buildSentMessage(context, msg)
-                            : _buildReceivedMessage(context, msg),
-                        Gap.h16,
-                      ],
-                    );
-                  },
-                ),
+      body: ObxValue((messages) {
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: scrollController,
+                padding: const EdgeInsets.all(12),
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  final msg = messages[index];
+                  bool isMe = msg.isMe(
+                    Get.find<ProfileDataController>().userProfile.value?.id ??
+                        "",
+                  );
+                  return Column(
+                    children: [
+                      isMe
+                          ? _buildSentMessage(context, msg)
+                          : _buildReceivedMessage(context, msg),
+                      Gap.h16,
+                    ],
+                  );
+                },
               ),
-              _buildMessageInput(),
-              Gap.bottomAppBarGap,
-            ],
-          );
-        },
-        widget.chatController.messages,
-      ),
+            ),
+            _buildMessageInput(),
+            Gap.bottomAppBarGap,
+          ],
+        );
+      }, widget.chatController.messages),
     );
   }
 

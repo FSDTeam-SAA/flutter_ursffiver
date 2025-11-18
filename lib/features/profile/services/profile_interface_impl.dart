@@ -6,7 +6,6 @@ import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/profile/interface/profile_interface.dart';
 import 'package:flutter_ursffiver/features/profile/model/change_password_model.dart';
 import 'package:flutter_ursffiver/features/profile/model/report_model.dart';
-import 'package:flutter_ursffiver/features/profile/model/update_profile_avatar_param.dart';
 import 'package:flutter_ursffiver/features/profile/model/update_profile_model.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 

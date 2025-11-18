@@ -7,7 +7,12 @@ import '../../../../core/theme/app_gap.dart';
 import '../../../../core/theme/text_style.dart';
 
 class GetAllBadgesScreen extends StatefulWidget {
-  const GetAllBadgesScreen({super.key});
+  final String userId; // 👈 RECEIVING USER ID
+
+  const GetAllBadgesScreen({
+    super.key,
+    required this.userId,
+  });
 
   @override
   State<GetAllBadgesScreen> createState() => _GetAllBadgesScreenState();
@@ -69,7 +74,18 @@ class _GetAllBadgesScreenState extends State<GetAllBadgesScreen> {
                   color: Colors.black,
                 ),
               ),
+
+              // 👇 PRINT USER ID BELOW TITLE (NO UI CHANGE)
+              Text(
+                "User ID: ${widget.userId}",
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.blueGrey,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               const SizedBox(height: 6),
+
               const Text(
                 "Badges you can award",
                 style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -138,9 +154,13 @@ class _GetAllBadgesScreenState extends State<GetAllBadgesScreen> {
                       ? () {
                           final selectedBadge = badgeController.allBadges
                               .firstWhere((b) => b.id == selectedBadgeId);
-                          print("Selected Badge: ${selectedBadge.name}");
+
+                          print("Selected Badge Name: ${selectedBadge.name}");
+                          print("Selected Badge ID: $selectedBadgeId");
+                          print("Selected User ID: ${widget.userId}");
                         }
                       : null,
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primarybutton,
                     foregroundColor: Colors.black,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/screen/inbox_screen.dart';
@@ -78,10 +79,6 @@ class MessageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final String lastMessageText = message.lastMessage != null
-    //     ? (message.messages.last.text ?? 'No text')
-    //     : 'No messages';
-
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -89,8 +86,9 @@ class MessageTile extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => ChatScreen(
               contactName: chatController.chatTitle,
-              avatarUrl: '',
+              avatarUrl: chatController.chatModel?.avatarUrl ?? '',
               chatController: chatController,
+              userId: chatController.chatModel?.id ?? '',
             ),
           ),
         );
@@ -99,18 +97,31 @@ class MessageTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Row(
           children: [
-            // Avatar
-            CircleAvatar(
-              radius: 25,
-              backgroundColor: Colors.grey[300],
-              child: Text(
-                chatController.chatTitle[0].toUpperCase(),
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-            const SizedBox(width: 12),
+            (chatController.chatModel?.avatarUrl != null &&
+                    chatController.chatModel!.avatarUrl!.isNotEmpty)
+                ? ClipOval(
+                    child: SmartNetworkImage(
+                      imageUrl: chatController.chatModel?.avatarUrl,
+                      height: 40,
+                      width: 40,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Colors.grey[300],
+                    child: Text(
+                      chatController.chatTitle.isNotEmpty
+                          ? chatController.chatTitle[0].toUpperCase()
+                          : "?",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
 
-            // Message content
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
