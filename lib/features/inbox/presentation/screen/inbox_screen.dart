@@ -3,6 +3,7 @@ import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.d
 import 'package:flutter_ursffiver/features/badges/presentation/screen/get_all_badges_screen.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/widget/chat_time_widget.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/widget/time_extend-dialog_widget.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:get/get.dart';
@@ -91,17 +92,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     fontSize: 16,
                   ),
                 ),
-                Row(
-                  children: [
-                    const Text(
-                      "Time left tooo chat",
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    // Text(
-                    //   " ${widget.chatController.chatModel?.createdAt}",
-                    //   style: TextStyle(fontSize: 12, color: Colors.grey),
-                    // ),
-                  ],
+                ChatTimeLeftRow(
+                  chatStartTime: widget.chatController.chatModel?.time,
                 ),
               ],
             ),

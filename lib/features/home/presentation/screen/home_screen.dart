@@ -4,19 +4,15 @@ import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart'
 import 'package:flutter_ursffiver/core/componenet/pagination/widget/paginated_list.dart';
 import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/controller/filter_people_suggestion_controller.dart';
+import 'package:flutter_ursffiver/features/home/controller/status_controller.dart';
 import 'package:flutter_ursffiver/features/home/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_verification_screen.dart';
-import 'package:flutter_ursffiver/features/home/presentation/widget/location_sharing_dialog.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/user_profile_card.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/invitation_notification_widget.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/widget/location_share.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
-
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../common/app_logo.dart';
@@ -41,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final ProfileDataController _userProfilecontroller = Get.put(
     ProfileDataController(),
   ); // userProfilecontroller
+  final statusController = Get.put(StatusController());
 
   @override
   void initState() {
@@ -72,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Define icons (same length as ranges)
   final List<IconData> rangeIcons = [
-    Icons.bluetooth, // Bluetooth
+    Icons.bluetooth,
     Icons.location_on_outlined,
     Icons.location_on_outlined,
     Icons.location_on_outlined,
@@ -200,44 +197,39 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  // Switch(
-                  //   value: isAvailable,
-                  //   onChanged: (val) {
-                  //     setState(() {
-                  //       isAvailable = val;
-                  //     });
-                  //     _filterPeopleSuggestionController.setVisibility(val, () {
-                  //       return true;
-                  //     });
-                  //   },
-                  // ),
                   Switch(
                     value: isAvailable,
-                    onChanged: (val) async {
-                      // If turning ON, check permission first
-                      if (val == true) {
-                        final permission = await Geolocator.checkPermission();
-
-                        if (permission == LocationPermission.denied ||
-                            permission == LocationPermission.deniedForever) {
-                          // Navigate to the permission screen
-                          Get.to(() => const LocationPermissionScreen());
-
-                          // Do NOT turn the switch ON yet
-                          return;
-                        }
-                      }
-
-                      // If permission is already granted OR turning OFF
+                    onChanged: (val) {
                       setState(() {
                         isAvailable = val;
                       });
-
                       _filterPeopleSuggestionController.setVisibility(val, () {
-                        return val; // only share when ON
+                        return true;
                       });
                     },
                   ),
+                  // Switch(
+                  //   value: isAvailable,
+                  //   onChanged: (val) async {
+                  //     if (val == true) {
+                  //       final permission = await Geolocator.checkPermission();
+
+                  //       if (permission == LocationPermission.denied ||
+                  //           permission == LocationPermission.deniedForever) {
+                  //         await showLocationPermissionDialog(context);
+
+                  //         return;
+                  //       }
+                  //     }
+                  //     setState(() {
+                  //       isAvailable = val;
+                  //     });
+
+                  //     _filterPeopleSuggestionController.setVisibility(val, () {
+                  //       return val;
+                  //     });
+                  //   },
+                  // ),
                 ],
               ),
             ),
@@ -263,47 +255,51 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-
-                      /// Status dropdown
                       AbsorbPointer(
                         absorbing: !isAvailable,
                         child: Opacity(
                           opacity: isAvailable ? 1.0 : 0.6,
-                          child: LabeledDropdown(
-                            height: 52,
-                            title: "Status",
-                            hintText: "Ready to connect - tap to set status",
-                            items: const [
-                              "Ready to connect - tap to set status",
-                              "Looking to chat with someone nearby right now",
-                              "Free for coffee or quick meetup",
-                              "Want to grab food together?",
-                              "Walking my dog - join me!",
-                              "New here - looking for local friends",
-                              "Available for spontaneous adventures",
-                              "Study buddy needed",
-                              "Workout partner wanted",
-                            ],
-                            value: statusMessage,
-                            textSize: 14,
-                            textColor: isAvailable
-                                ? Colors.black87
-                                : Colors.grey,
-                            borderColor: isAvailable
-                                ? AppColors.buttonTextColor
-                                : Colors.grey[300]!,
-                            borderRadius: 8,
-                            hintTextColor: Colors.grey,
-                            hintTextSize: 14,
-                            hintTextWeight: FontWeight.w400,
-                            onChanged: (String? value) {
-                              setState(() {
-                                statusMessage = value!;
-                              });
-                            },
+                          child: Obx(
+                            () => LabeledDropdown(
+                              height: 52,
+                              title: "Status",
+                              hintText: "Ready to connect - tap to set status",
+                              items: [
+                                "Ready to connect - tap to set status",
+                                "Looking to chat with someone nearby right now",
+                                "Free for coffee or quick meetup",
+                                "Want to grab food together?",
+                                "Walking my dog - join me!",
+                                "New here - looking for local friends",
+                                "Available for spontaneous adventures",
+                                "Study buddy needed",
+                                "Workout partner wanted",
+                              ],
+                              value:
+                                  statusController.statusMessage.value.isEmpty
+                                  ? null
+                                  : statusController.statusMessage.value,
+                              textSize: 14,
+                              textColor: isAvailable
+                                  ? Colors.black87
+                                  : Colors.grey,
+                              borderColor: isAvailable
+                                  ? AppColors.buttonTextColor
+                                  : Colors.grey[300]!,
+                              borderRadius: 8,
+                              hintTextColor: Colors.grey,
+                              hintTextSize: 14,
+                              hintTextWeight: FontWeight.w400,
+                              onChanged: (value) {
+                                if (value != null) {
+                                  statusController.updateStatus(value);
+                                }
+                              },
+                            ),
                           ),
                         ),
                       ),
+
                       Row(
                         children: [
                           Text(

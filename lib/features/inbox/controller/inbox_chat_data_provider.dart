@@ -10,7 +10,7 @@ import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
 import 'package:get/get.dart';
 
 class InboxChatDataProvider extends GetxController {
-  List<ChatController> chats = [];
+  RxList<ChatController> chats = RxList<ChatController>([]);
   StreamSubscription<MessageModel>? _newMessageSubscription;
   StreamSubscription<ChatModel>? _chatUpdateSubscription;
 
@@ -37,14 +37,14 @@ class InboxChatDataProvider extends GetxController {
       either: result,
       onError: (failure) {},
       onSuccess: (success) {
-        chats = success
+        chats = RxList(success
             .map(
               (chatModel) => ChatController.withChatModel(
                 chatId: chatModel.id,
                 chatModel: chatModel,
               ),
             )
-            .toList();
+            .toList());
         _sortChatsByLastMessage();
         update();
       },
@@ -63,10 +63,11 @@ class InboxChatDataProvider extends GetxController {
           chatModel: chatModel,
         ),
       );
-      chatController.updateWithNewMessage(chatModel.lastMessage!);
+      if(chatModel.lastMessage != null) chatController.updateWithNewMessage(chatModel.lastMessage!);
       //move the chat to top
       chats.removeWhere((chatCtrl) => chatCtrl.chatId == chatModel.id);
       chats.insert(0, chatController);
+      chats.refresh();
       update();
     });
   }

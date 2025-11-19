@@ -103,10 +103,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Spontaneously and on the spot, transform digital\n'
-                    'connections into real-life meetups with nearby\n'
-                    'people who share your interests – all within\n'
-                    'minutes.',
+                    'Spontaneously and on the spot, transform digital connections into real-life meetups with nearby people who share your interests – all within minutes.',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black54,

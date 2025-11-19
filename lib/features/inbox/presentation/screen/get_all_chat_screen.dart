@@ -44,12 +44,12 @@ class _AllChatScreeenState extends State<AllChatScreeen> {
 
             // Messages List
             Expanded(
-              child: GetBuilder<InboxChatDataProvider>(
-                builder: (controller) => chatController.chats.isNotEmpty
+              child: ObxValue(
+                (data) => data.isNotEmpty
                     ? ListView.builder(
                         itemCount: chatController.chats.length,
                         itemBuilder: (context, index) {
-                          final message = chatController.chats[index];
+                          final message = data[index];
                           return MessageTile(chatController: message);
                         },
                       )
@@ -63,6 +63,7 @@ class _AllChatScreeenState extends State<AllChatScreeen> {
                           ),
                         ),
                       ),
+                      chatController.chats,
               ),
             ),
           ],

@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _RemoteServer.socketUrl;
+  static const String socketUrl = _LocalHostWifi.socketUrl;
 
-  static const String baseUrl = _RemoteServer.baseUrl;
+  static const String baseUrl = _LocalHostWifi.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -79,6 +79,8 @@ base class ApiEndpoints {
   static const String allUser = _User.allUser;
 
   static const String setVisibility = _User.setVisibility;
+
+  static const String status = _User.status;
 
   // ---------------------- RIDE -----------------------------
   /// ### post
@@ -208,6 +210,8 @@ class _User {
   static const String history = '$_userRoute/history';
   static const String allUser = '$_userRoute/all-user';
   static const String setVisibility = '$_userRoute/visibility';
+  static const String status = '$_userRoute/status';
+
 }
 
 // ---------------------- RIDE -----------------------------

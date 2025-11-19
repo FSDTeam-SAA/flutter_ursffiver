@@ -74,30 +74,6 @@ class FilterPeopleSuggestionController extends GetxController {
           );
         });
   }
-
-  // Future<void> setVisibility(
-  //   bool visible,
-  //   bool Function() shouldsharelocation,
-  // ) async {
-  //   final yes = shouldsharelocation();
-  //   if (yes) {
-  //     final position = await Geolocator.getCurrentPosition();
-  //     currentLocation = Coordinates(
-  //       latitude: position.latitude,
-  //       longitude: position.longitude,
-  //     );
-  //   }
-  //   final response = await Get.find<HomeInterface>().setVisibility(
-  //     SetVisibilityReq(active: visible, location: currentLocation),
-  //   );
-  //   handleFold(
-  //     either: response,
-  //     onError: (failure) {},
-  //     onSuccess: (data) {
-  //       Get.find<ProfileDataController>().getCurrentUserProfile();
-  //     },
-  //   );
-  // }
   Future<void> setVisibility(
   bool visible,
   bool Function() shouldShareLocation,
@@ -112,12 +88,9 @@ class FilterPeopleSuggestionController extends GetxController {
           permission == LocationPermission.deniedForever) {
         permission = await Geolocator.requestPermission();
       }
-
-      // If still denied, stop here — do NOT call getCurrentPosition
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
         debugPrint("User denied location permission.");
-        // You may show a snackbar or alert here
         return;
       }
 
@@ -128,7 +101,6 @@ class FilterPeopleSuggestionController extends GetxController {
       );
     } catch (e) {
       debugPrint("Location error: $e");
-      // Optionally continue without location
     }
   }
 

@@ -88,7 +88,7 @@ class _UserProfileCardState extends State<UserProfileCard> {
                         const SizedBox(width: 6),
 
                         Text(
-                          widget.user.status ?? '',
+                          widget.user.active ? 'Active Now' : 'Offline',
                           style: TextStyle(
                             fontSize: 16,
                             color: widget.user.status == 'Available'

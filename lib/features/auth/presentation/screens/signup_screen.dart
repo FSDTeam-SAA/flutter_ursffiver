@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ursffiver/core/common/widget/reactive_button/r_icon.dart';
 import 'package:flutter_ursffiver/features/auth/controller/signup_controller.dart';
+import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
@@ -74,20 +75,19 @@ class _SignupScreen extends State<SignupScreen> {
   }
 
   InputDecoration _decoration(String hint) => InputDecoration(
-        hintText: hint,
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: _borderColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFBAC0FF)),
-        ),
-      );
+    hintText: hint,
+    filled: true,
+    fillColor: Colors.white,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: _borderColor),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: Color(0xFFBAC0FF)),
+    ),
+  );
 
   Future<Set<String>?> _openInterestPicker(BuildContext context) {
     return showModalBottomSheet<Set<String>>(
@@ -105,10 +105,9 @@ class _SignupScreen extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final caption = Theme.of(context)
-        .textTheme
-        .bodySmall
-        ?.copyWith(color: Colors.black54);
+    final caption = Theme.of(
+      context,
+    ).textTheme.bodySmall?.copyWith(color: Colors.black54);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -123,8 +122,7 @@ class _SignupScreen extends State<SignupScreen> {
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -163,8 +161,7 @@ class _SignupScreen extends State<SignupScreen> {
                           children: [
                             const SizedBox(height: 15),
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text(
                                   "What interests you ?",
@@ -184,8 +181,7 @@ class _SignupScreen extends State<SignupScreen> {
                               ],
                             ),
                             const Padding(
-                              padding:
-                                  EdgeInsets.symmetric(vertical: 15),
+                              padding: EdgeInsets.symmetric(vertical: 15),
                               child: Text(
                                 "Select interests to find people who share your passions",
                                 style: TextStyle(
@@ -227,8 +223,9 @@ class _SignupScreen extends State<SignupScreen> {
                             // LIVE COUNTER – uses controller's selectedCount
                             Flexible(
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 15),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 15,
+                                ),
                                 child: Obx(() {
                                   final cnt =
                                       signupController.selectedCount.value;
@@ -237,22 +234,25 @@ class _SignupScreen extends State<SignupScreen> {
                                     text: TextSpan(
                                       text: "Selected: ",
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ),
                                       children: [
                                         TextSpan(
                                           text: "$cnt/15",
                                           style: const TextStyle(
-                                              color: Colors.black),
+                                            color: Colors.black,
+                                          ),
                                         ),
                                         if (cnt == 0) ...[
-                                            const WidgetSpan(
-                                                child: SizedBox(width: 80)),
-                                            const TextSpan(
-                                              text: "Please select at least 1",
-                                              style: TextStyle(color: Colors.red),
-                                            ),
-                                          ],
-                                          
+                                          const WidgetSpan(
+                                            child: SizedBox(width: 40),
+                                          ),
+                                          const TextSpan(
+                                            text: "Please select at least 1",
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ],
                                       ],
                                     ),
                                   );
@@ -261,8 +261,7 @@ class _SignupScreen extends State<SignupScreen> {
                             ),
 
                             const Padding(
-                              padding:
-                                  EdgeInsets.symmetric(vertical: 15),
+                              padding: EdgeInsets.symmetric(vertical: 15),
                               child: Text(
                                 "Your interests help us connect you with like-minded people nearby",
                                 textAlign: TextAlign.center,
@@ -285,8 +284,7 @@ class _SignupScreen extends State<SignupScreen> {
                             controller: _firstName,
                             onChanged: signupController.setFirstName,
                             decoration: _decoration('Name Here'),
-                            validator: (v) => (v == null ||
-                                    v.trim().isEmpty)
+                            validator: (v) => (v == null || v.trim().isEmpty)
                                 ? 'Required'
                                 : null,
                           ),
@@ -300,8 +298,7 @@ class _SignupScreen extends State<SignupScreen> {
                             controller: _lastName,
                             onChanged: signupController.setLastName,
                             decoration: _decoration('Name Here'),
-                            validator: (v) => (v == null ||
-                                    v.trim().isEmpty)
+                            validator: (v) => (v == null || v.trim().isEmpty)
                                 ? 'Required'
                                 : null,
                           ),
@@ -317,10 +314,8 @@ class _SignupScreen extends State<SignupScreen> {
                       controller: _userName,
                       onChanged: signupController.setUsername,
                       decoration: _decoration('User Name Here'),
-                      validator: (v) => (v == null ||
-                              v.trim().isEmpty)
-                          ? 'Required'
-                          : null,
+                      validator: (v) =>
+                          (v == null || v.trim().isEmpty) ? 'Required' : null,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -334,8 +329,7 @@ class _SignupScreen extends State<SignupScreen> {
                       decoration: _decoration('hello@example.com'),
                       validator: (v) {
                         if (v == null || v.trim().isEmpty) return 'Required';
-                        final emailRegex =
-                            RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                        final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
                         if (!emailRegex.hasMatch(v.trim()))
                           return 'Invalid email';
                         return null;
@@ -349,15 +343,18 @@ class _SignupScreen extends State<SignupScreen> {
                     child: TextFormField(
                       controller: _dob,
                       readOnly: true,
-                      decoration: _decoration('DD/MM/YY').copyWith(
-                          suffixIcon:
-                              const Icon(Icons.event_outlined)),
+                      decoration: _decoration(
+                        'DD/MM/YY',
+                      ).copyWith(suffixIcon: const Icon(Icons.event_outlined)),
                       onTap: () async {
                         final now = DateTime.now();
                         final picked = await showDatePicker(
                           context: context,
                           initialDate: DateTime(
-                              now.year - 18, now.month, now.day),
+                            now.year - 18,
+                            now.month,
+                            now.day,
+                          ),
                           firstDate: DateTime(1900),
                           lastDate: now,
                         );
@@ -368,10 +365,8 @@ class _SignupScreen extends State<SignupScreen> {
                           signupController.setDateOfBirth(formatted);
                         }
                       },
-                      validator: (v) => (v == null ||
-                              v.trim().isEmpty)
-                          ? 'Required'
-                          : null,
+                      validator: (v) =>
+                          (v == null || v.trim().isEmpty) ? 'Required' : null,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -438,8 +433,7 @@ class _SignupScreen extends State<SignupScreen> {
                       controller: _bio,
                       maxLines: 4,
                       onChanged: signupController.setBio,
-                      decoration:
-                          _decoration('Write something about yourself'),
+                      decoration: _decoration('Write something about yourself'),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -457,8 +451,8 @@ class _SignupScreen extends State<SignupScreen> {
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                           ),
-                          onPressed: () => setState(
-                              () => _showPassword = !_showPassword),
+                          onPressed: () =>
+                              setState(() => _showPassword = !_showPassword),
                         ),
                       ),
                       validator: (v) {
@@ -473,16 +467,17 @@ class _SignupScreen extends State<SignupScreen> {
                   Obx(
                     () => RulesBox(
                       checks: {
-                        'Minimum 8 characters':
-                            _hasMinLength(_password.text),
-                        'At least 1 uppercase letter':
-                            _hasUppercase(signupController.password.value),
-                        'At least 1 lowercase letter':
-                            _hasLowercase(signupController.password.value),
-                        'At least 1 number':
-                            _hasNumber(_password.text),
-                        'At least 1 special character':
-                            _hasSpecial(signupController.password.value),
+                        'Minimum 8 characters': _hasMinLength(_password.text),
+                        'At least 1 uppercase letter': _hasUppercase(
+                          signupController.password.value,
+                        ),
+                        'At least 1 lowercase letter': _hasLowercase(
+                          signupController.password.value,
+                        ),
+                        'At least 1 number': _hasNumber(_password.text),
+                        'At least 1 special character': _hasSpecial(
+                          signupController.password.value,
+                        ),
                       },
                     ),
                   ),
@@ -501,8 +496,8 @@ class _SignupScreen extends State<SignupScreen> {
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                           ),
-                          onPressed: () => setState(
-                              () => _showConfirm = !_showConfirm),
+                          onPressed: () =>
+                              setState(() => _showConfirm = !_showConfirm),
                         ),
                       ),
                       validator: (v) {
@@ -528,15 +523,17 @@ class _SignupScreen extends State<SignupScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           signupController.signup(
-                            buttonNotifier:
-                                signupController.processNotifier,
-                            snackbarNotifier:
-                                SnackbarNotifier(context: context),
+                            buttonNotifier: signupController.processNotifier,
+                            snackbarNotifier: SnackbarNotifier(
+                              context: context,
+                            ),
                             onDone: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) =>
-                                    VerifyScreen(email: _email.text, isFromRegisterScreen: true,),
+                                builder: (_) => VerifyScreen(
+                                  email: _email.text,
+                                  isFromRegisterScreen: true,
+                                ),
                               ),
                             ),
                           );
@@ -588,7 +585,9 @@ class _SignupScreen extends State<SignupScreen> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => Navigator.push(
-                                context, MaterialPageRoute(builder: (_) => const SignupScreen())),
+                              context,
+                              MaterialPageRoute(builder: (_) => SignInScreen()),
+                            ),
                         ),
                       ],
                     ),
@@ -626,8 +625,7 @@ class _Labeled extends StatelessWidget {
           children: [
             Text(
               label,
-              style:
-                  const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
             ),
             const Spacer(),
             if (labelTrailing != null) labelTrailing!,
@@ -665,12 +663,13 @@ class _Dropdown<T> extends StatelessWidget {
         hintText: hint,
         filled: true,
         fillColor: Colors.white,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 12,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide:
-              const BorderSide(color: _SignupScreen._borderColor),
+          borderSide: const BorderSide(color: _SignupScreen._borderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

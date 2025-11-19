@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
+import 'package:flutter_ursffiver/core/common/widget/circle_shape.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:get/get.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -172,10 +173,24 @@ class _NotificationItemState extends State<NotificationItem> {
                   ),
                   child: ClipOval(
                     child: SmartNetworkImage(
-                      imageUrl: data.user.image,
+                      imageUrl: data.user?.image,
                       height: 45,
                       width: 45,
                       fit: BoxFit.cover,
+                      errorWidget: CircleShape(
+                        borderColor: Colors.grey.shade300,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                      placeholder: CircleShape(
+                        borderColor: Colors.grey.shade300,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -357,10 +372,24 @@ class _NotificationItemState extends State<NotificationItem> {
                 ),
                 child: ClipOval(
                   child: SmartNetworkImage(
-                    imageUrl: data.user.image,
+                    imageUrl: data.user?.image,
                     height: 45,
                     width: 45,
                     fit: BoxFit.cover,
+                    errorWidget: CircleShape(
+                        borderColor: Colors.grey.shade300,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    placeholder: CircleShape(
+                        borderColor: Colors.grey.shade300,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
                   ),
                 ),
               ),
@@ -415,6 +444,6 @@ class _NotificationItemState extends State<NotificationItem> {
         ),
       );
     } else {}
-    return GestureDetector(onTap: _handleTap);
+    return Container();
   }
 }

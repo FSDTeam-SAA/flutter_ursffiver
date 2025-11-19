@@ -4,7 +4,8 @@ enum NotificationType {
   general,
   messageRequest,
   accepted,
-  rejected;
+  rejected,
+  badge;
 
   factory NotificationType.fromString(String name) {
     switch (name) {
@@ -16,6 +17,8 @@ enum NotificationType {
         return NotificationType.rejected;
       case "message request":
         return NotificationType.messageRequest;
+      case "badge":
+        return NotificationType.badge;
       default:
         throw Exception("Invalid notification type");
     }
@@ -27,7 +30,7 @@ class NotificationModel {
   final String title;
   final String message;
   final NotificationType type;
-  final UserProfile user;
+  final UserProfile? user;
   final String? chatId;
   final String? badgeId;
   final bool isRead;

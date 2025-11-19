@@ -3,8 +3,8 @@ import 'package:flutter_ursffiver/core/api_handler/success.dart';
 import 'package:flutter_ursffiver/core/constants/api_endpoints.dart';
 import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
-import 'package:flutter_ursffiver/features/home/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/model/set_visibility_req.dart';
+import 'package:flutter_ursffiver/features/home/model/status_model.dart';
 import 'package:flutter_ursffiver/features/home/model/verification_model.dart';
 import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
@@ -39,23 +39,23 @@ base class HomeService extends HomeInterface {
     );
   }
 
-  @override
-  FutureRequest<Success<InterestModel>> getuserbyid(String id) async {
-    return await asyncTryCatch(
-      tryFunc: () async {
-        //api call
-        final response = await appPigeon.get(ApiEndpoints.getuserbyId(id));
+  // @override
+  // FutureRequest<Success<InterestModel>> getuserbyid(String id) async {
+  //   return await asyncTryCatch(
+  //     tryFunc: () async {
+  //       //api call
+  //       final response = await appPigeon.get(ApiEndpoints.getuserbyId(id));
 
-        //patse
-        final data = response.data["data"];
+  //       //patse
+  //       final data = response.data["data"];
 
-        var message = response.data["message"] as String;
+  //       var message = response.data["message"] as String;
 
-        //return
-        return Success(message: message, data: data);
-      },
-    );
-  }
+  //       //return
+  //       return Success(message: message, data: data);
+  //     },
+  //   );
+  // }
 
   @override
   FutureRequest<Success> verification(Attachment param) async {
@@ -83,6 +83,19 @@ base class HomeService extends HomeInterface {
       tryFunc: () async {
         final response = await appPigeon.patch(
           ApiEndpoints.setVisibility,
+          data: param.toJson(),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
+
+  @override
+  FutureRequest<Success> status(StatusModel param) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        final response = await appPigeon.patch(
+          ApiEndpoints.status,
           data: param.toJson(),
         );
         return Success(message: extractSuccessMessage(response));

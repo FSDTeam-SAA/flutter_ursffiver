@@ -68,8 +68,11 @@ final class NotificationInterfaceImpl extends NotificationInterface {
         final List<NotificationModel> notifications = [];
 
         for (int i = 0; i < data.length; i++) {
-          debugPrint("Notification: ${data[i]}");
-          notifications.add(NotificationModel.fromJson(data[i]));
+          tryCatch(
+            tryFunc: () {
+              notifications.add(NotificationModel.fromJson(data[i]));
+            },
+          );
         }
 
         //return
