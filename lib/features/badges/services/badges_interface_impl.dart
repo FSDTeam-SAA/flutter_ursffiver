@@ -15,9 +15,16 @@ final class BadgesInterfaceImpl extends BadgesInterface {
   final AppPigeon appPigeon;
 
   @override
-  FutureRequest<Success> awardBadgestoUser({required AwardBadgesToUser param}) {
-    // TODO: implement awardBadgestoUser
-    throw UnimplementedError();
+  FutureRequest<Success> awardBadgestoUser({required AwardBadgesToUser param}) async{
+    return await asyncTryCatch(
+      tryFunc: () async {
+        final response = await appPigeon.post(
+          ApiEndpoints.giveBadges,
+          data: param.toJson(),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
   }
 
   @override

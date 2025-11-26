@@ -1,5 +1,5 @@
 import 'package:flutter_ursffiver/core/api_handler/success.dart';
-import 'package:flutter_ursffiver/core/api_handler/trycatch.dart';
+import 'package:flutter_ursffiver/core/api_handler/base_repository.dart';
 import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/features/badges/model/award_badges_to_user.dart';
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';

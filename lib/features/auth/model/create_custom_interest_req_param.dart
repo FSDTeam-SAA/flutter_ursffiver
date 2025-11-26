@@ -1,4 +1,4 @@
-import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
+import 'interest_model.dart';
 
 class CreateCustomInterestReqParam {
   final String name;

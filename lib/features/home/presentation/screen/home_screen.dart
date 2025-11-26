@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/app/controller/app_global_controllers.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
@@ -18,6 +19,7 @@ import '../../../../core/theme/text_style.dart';
 import '../../../common/app_logo.dart';
 import '../../../notification/screen/notification_screen.dart';
 import '../../../profile/controller/profile_data_controller.dart';
+import '../widget/interest_grid.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,19 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
       Get.find<AppGlobalControllers>()
           .homeController
           .filterPeopleSuggestionController;
-  final ProfileDataController _homeInterestController = Get.put(
-    ProfileDataController(),
-  );
-  final ProfileDataController _userProfilecontroller = Get.put(
-    ProfileDataController(),
-  ); // userProfilecontroller
+
   final statusController = Get.put(StatusController());
+  final ProfileDataProvider _profieDataController = Get.find<ProfileDataProvider>();
 
   @override
   void initState() {
     super.initState();
-    _homeInterestController.getCurrentUserProfile();
-    isAvailable = _userProfilecontroller.userProfile.value?.active ?? false;
+    _profieDataController.getCurrentUserProfile();
   }
 
   static const _brandGradient = LinearGradient(
@@ -130,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Obx(
             () => IconButton(
               onPressed: () {
-                final user = _userProfilecontroller.userProfile.value;
+                final user = _profieDataController.userProfile.value;
                 if (user != null) {
                   if (user.adminVerify == false) {
                     Navigator.push(
@@ -152,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.verified_user_outlined),
               iconSize: 28,
               color:
-                  _userProfilecontroller.userProfile.value?.adminVerify == true
+                  _profieDataController.userProfile.value?.adminVerify == true
                   ? Colors.green
                   : Colors.red[400],
             ),
@@ -414,11 +411,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 8),
                   Obx(() {
                     final selectedInterests =
-                        _homeInterestController.userProfile.value?.interests ??
+                        _profieDataController.userProfile.value?.interests ??
                         [];
 
                     debugPrint(
-                      "selectedInterests: ${_homeInterestController.userProfile.value?.interests.length ?? 0}",
+                      "selectedInterests: ${_profieDataController.userProfile.value?.interests?.length ?? 0}",
                     );
 
                     if (selectedInterests.isEmpty) {
@@ -624,35 +621,39 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class InterestsGrid extends StatelessWidget {
-  final List<InterestModel> chips;
+// class InterestsGrid extends StatelessWidget {
+//   final List<InterestModel> chips;
 
-  const InterestsGrid({super.key, required this.chips});
+//   const InterestsGrid({super.key, required this.chips});
 
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 6,
-      runSpacing: 6,
-      children: chips.map((chip) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: chip.color.deepColor, // solid background
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Text(
-            chip.name.length > 14
-                ? chip.name.substring(0, 14) + "..."
-                : chip.name,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//   return Wrap(
+//     spacing: 8,
+//     runSpacing: 8,
+//     children: chips.map(
+//       (chip) => Chip(
+//         label: Text(
+//           chip.name,
+//           style: AppText.mdMedium_16_500.copyWith(
+//             color: chip.color.deepColor,
+//             fontWeight: FontWeight.w600,
+//           ),
+//         ),
+//         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+//         backgroundColor: chip.color.softColor,
+//         side: BorderSide(
+//           color: chip.color.deepColor,
+//           width: 1.2,
+//         ),
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(16),
+//         ),
+//         shadowColor: chip.color.deepColor,
+//         elevation: 1,
+//       ),
+//     ).toList(),
+//   );
+// }
+
+// }

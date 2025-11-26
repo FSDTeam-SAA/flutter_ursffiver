@@ -6,6 +6,7 @@ import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:flutter_ursffiver/features/nabber_screen.dart';
+import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
@@ -16,7 +17,7 @@ class AppManager extends GetxController {
   StreamSubscription? _authStreamSubscription;
   AuthStatus _authStatus = AuthLoading();
   AuthStatus get currentAuthStatus => _authStatus;
-  Debouncer authDebouncer = Debouncer(delay: const Duration(milliseconds: 100));
+  Debouncer authDebouncer = Debouncer(delay: const Duration(milliseconds: 10));
 
   /// Initializes the stream to listen to auth status
   AppManager(){
@@ -102,4 +103,5 @@ class AppManager extends GetxController {
           });
     }
   }
+  
 }

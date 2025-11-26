@@ -43,6 +43,7 @@ class _PaginatedListWidgetState<T> extends State<PaginatedListWidget<T>> {
         },
         child: ObxValue((data) {
           return ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
             itemCount: data.value.data.length + 1,
             itemBuilder: (context, index) {
               debugPrint(

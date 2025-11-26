@@ -8,7 +8,6 @@ import 'package:flutter_ursffiver/features/home/model/status_model.dart';
 import 'package:flutter_ursffiver/features/home/model/verification_model.dart';
 import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
-
 import '../model/get_user_suggestion_req_param.dart';
 
 base class HomeService extends HomeInterface {

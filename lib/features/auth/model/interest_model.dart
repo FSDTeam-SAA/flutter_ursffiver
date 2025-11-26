@@ -11,8 +11,16 @@ class InterestModel {
     return InterestModel(
       id: json['_id'],
       name: json['name'],
-      color: InterestColor.fromString(json['color']),
+      color: InterestColor.fromString(json['color'] ?? "yellow"),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'name': name,
+      'color': color.name,
+    };
   }
 
   @override
@@ -76,39 +84,6 @@ enum InterestColor {
       case InterestColor.yellow:
         return const Color(0xFFFFF8E5);
     }
-  }
-}
-class CreateCustomInterestParam {
-  final String name;
-  final InterestColor color;
-
-  CreateCustomInterestParam({
-    required this.name,
-    required this.color,
-  });
-
-  factory CreateCustomInterestParam.fromJson(Map<String, dynamic> json) {
-    return CreateCustomInterestParam(
-      name: json['name'],
-      color: InterestColor.fromString(json['color']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'color': color.name,
-    };
-  }
-
-  CreateCustomInterestParam copyWith({
-    String? name,
-    InterestColor? color,
-  }) {
-    return CreateCustomInterestParam(
-      name: name ?? this.name,
-      color: color ?? this.color,
-    );
   }
 }
 

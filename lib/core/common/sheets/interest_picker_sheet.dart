@@ -7,7 +7,7 @@ import '../../../features/auth/presentation/widget/create_custom_interest_bottom
 import '../../../features/auth/presentation/widget/select_interest_widget.dart';
 
 class InterestPickerSheet extends StatefulWidget {
-  const InterestPickerSheet.forSignUp({
+  const InterestPickerSheet.forSignU({
     super.key,
     required this.interestSelectionCntlr,
     required this.brandGradient,

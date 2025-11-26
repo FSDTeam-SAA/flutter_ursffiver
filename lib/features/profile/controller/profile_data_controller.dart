@@ -6,7 +6,7 @@ import 'package:flutter_ursffiver/features/profile/interface/profile_interface.d
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 import 'package:get/get.dart';
 
-class ProfileDataController extends GetxController {
+class ProfileDataProvider extends GetxController {
   Rx<UserProfile?> userProfile = Rx<UserProfile?>(null);
 
   Future<void> getCurrentUserProfile() async {

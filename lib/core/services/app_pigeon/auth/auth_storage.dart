@@ -128,7 +128,7 @@ class _AuthManger {
   }
   /// Saves the auth
   Future<void> write({required String uId, required Auth auth}) async{
-    _debugger.dekhao("Writing auth with uid: ${userAuthKey(uid: uId)}, data : ${auth.toJson()}");
+    _debugger.dekhao("Writing auth with uid: ${userAuthKey(uid: uId)}, auth-data : ${auth.toJson()}");
     await _secureStorage.write(key: userAuthKey(uid: uId), value: jsonEncode(auth.toJson()));
     _auths[uId] = auth;
   }

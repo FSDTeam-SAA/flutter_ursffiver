@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
+
+import '../../model/interest_model.dart';
 
 class SelectInterestTile extends StatefulWidget {
   final InterestModel interest;

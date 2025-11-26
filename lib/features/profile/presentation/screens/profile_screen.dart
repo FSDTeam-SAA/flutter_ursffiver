@@ -3,14 +3,14 @@ import 'package:flutter_ursffiver/core/theme/app_colors.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
 import 'package:flutter_ursffiver/features/auth/interface/auth_interface.dart';
-import 'package:flutter_ursffiver/features/profile/presentation/screens/change_password_scree.dart';
-import 'package:flutter_ursffiver/features/profile/presentation/screens/privacy_policy_screen.dart';
+import 'package:flutter_ursffiver/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/support_our_mission.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/terms_condition_screen.dart';
 import 'package:get/get.dart';
 import '../widget/invite_friend.dart';
 import '../widget/logout_widget.dart';
 import 'edit_personal_informetion_scree.dart';
+import 'privacy_policy_screen.dart';
 import 'privacy_settings_screen.dart';
 import 'report_problem_screen.dart';
 
