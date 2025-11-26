@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_ursffiver/core/api_handler/failure.dart';
 import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
@@ -10,10 +12,26 @@ class NotificationController extends GetxController {
   final notifications = <NotificationModel>[].obs;
   final isLoading = false.obs;
   final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier();
-
+  StreamSubscription? _streamSubscription;
 
   NotificationController() {
     getAllNotification();
+    _listen();
+  }
+
+  void _listen() {
+    _streamSubscription = Get.find<NotificationInterface>()
+        .notificationStream()
+        .listen((event) {
+          notifications.insert(0, event);
+        });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _streamSubscription?.cancel();
+    super.dispose();
   }
 
   void toggleExpand(int index) {
@@ -32,7 +50,7 @@ class NotificationController extends GetxController {
     if (old.isRead) return false;
 
     final lr = await Get.find<NotificationInterface>().singleNotificationRead(
-      old.id
+      old.id,
     );
     return lr.fold(
       (error) {

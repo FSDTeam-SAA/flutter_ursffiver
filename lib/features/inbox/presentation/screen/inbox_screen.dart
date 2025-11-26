@@ -3,6 +3,8 @@ import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.d
 import 'package:flutter_ursffiver/features/badges/presentation/screen/award_badge_view.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/widget/chat_time_widget.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/widget/time_extend-dialog_widget.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -14,12 +16,16 @@ import '../../controller/messaging_controller.dart';
 class ChatScreen extends StatefulWidget {
   final String contactName;
   final String avatarUrl;
+  final String userId;
+  final String chatId;
   final ChatController chatController;
 
   const ChatScreen({
     super.key,
     required this.contactName,
     required this.avatarUrl,
+    required this.userId,
+    required this.chatId,
     required this.chatController,
   });
 
@@ -67,10 +73,6 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: Row(
           children: [
             SmartNetworkImage.circle(
@@ -90,174 +92,122 @@ class _ChatScreenState extends State<ChatScreen> {
                     fontSize: 16,
                   ),
                 ),
-                const Text(
-                  "Time left tooo chat 14:45",
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ChatTimeLeftRow(
+                  chatStartTime: widget.chatController.chatModel?.time,
                 ),
               ],
             ),
           ],
         ),
         actions: [
-          // PopupMenuButton<String>(
-          //   icon: const Icon(Icons.more_vert, color: Colors.black),
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(12),
-          //   ),
-          //   onSelected: (value) {
-          //     if (value == "badge") {
-          //       showModalBottomSheet(
-          //         context: context,
-          //         isScrollControlled: true,
-          //         shape: const RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.vertical(
-          //             top: Radius.circular(20),
-          //           ),
-          //         ),
-          //         builder: (context) => SizedBox(
-          //           height: MediaQuery.of(context).size.height * 0.9,
-          //           // child: const AllBadgesWidget(),
-          //         ),
-          //       );
-          //     }
-          //   },
-          //   itemBuilder: (_) => [
-          //     const PopupMenuItem(
-          //       value: "extend",
-          //       child: Row(
-          //         children: [
-          //           Icon(Icons.access_time_outlined, color: Colors.black),
-          //           SizedBox(width: 10),
-          //           Text("Extend Time"),
-          //         ],
-          //       ),
-          //     ),
-          //     const PopupMenuItem(
-          //       value: "badge",
-          //       child: Row(
-          //         children: [
-          //           Icon(Icons.badge, color: Colors.black),
-          //           SizedBox(width: 10),
-          //           Text("Award Badge User"),
-          //         ],
-          //       ),
-          //     ),
-          //     const PopupMenuItem(
-          //       value: "location",
-          //       child: Row(
-          //         children: [
-          //           Icon(Icons.location_on_outlined, color: Colors.black),
-          //           SizedBox(width: 10),
-          //           Text("Share Location"),
-          //         ],
-          //       ),
-          //     ),
-          //   ],
-          // ),
           PopupMenuButton<String>(
-  icon: const Icon(Icons.more_vert, color: Colors.black),
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(12),
-  ),
-  onSelected: (value) {
-    if (value == "badge") {
-      // OPEN BOTTOM SHEET
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
+            icon: const Icon(Icons.more_vert, color: Colors.black),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            onSelected: (value) {
+              if (value == "badge") {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                  ),
+                  builder: (context) => SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.9,
+                    child: AwardBadgeView(toUserId: widget.userId),
+                  ),
+                );
+              } else if (value == "extend") {
+                showExtendTimeDialog(
+                  context: context,
+                  chatId: widget.chatController.chatId,
+                );
+              } else if (value == "location") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => Scaffold(
+                      appBar: AppBar(title: const Text("Share Location")),
+                      body: const Center(
+                        child: Text("Location sharing UI goes here"),
+                      ),
+                    ),
+                    fullscreenDialog: true,
+                  ),
+                );
+              }
+            },
+
+            itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: "extend",
+                child: Row(
+                  children: [
+                    Icon(Icons.access_time_outlined, color: Colors.black),
+                    SizedBox(width: 10),
+                    Text("Extend Time"),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: "badge",
+                child: Row(
+                  children: [
+                    Icon(Icons.badge, color: Colors.black),
+                    SizedBox(width: 10),
+                    Text("Award Badge User"),
+                  ],
+                ),
+              ),
+              // const PopupMenuItem(
+              //   value: "location",
+              //   child: Row(
+              //     children: [
+              //       Icon(Icons.location_on_outlined, color: Colors.black),
+              //       SizedBox(width: 10),
+              //       Text("Share Location"),
+              //     ],
+              //   ),
+              // ),
+            ],
           ),
-        ),
-        builder: (context) => SizedBox(
-          height: MediaQuery.of(context).size.height * 0.9,
-          child: AwardBadgeView(toUserId: widget.chatController.otherUserId,),
-        ),
-      );
-    } else if (value == "extend") {
-      // GO TO NEW SCREEN
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => Scaffold()),
-      );
-    } else if (value == "location") {
-      // GO TO LOCATION SCREEN
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => Scaffold()),
-      );
-    }
-  },
-  itemBuilder: (_) => [
-    const PopupMenuItem(
-      value: "extend",
-      child: Row(
-        children: [
-          Icon(Icons.access_time_outlined, color: Colors.black),
-          SizedBox(width: 10),
-          Text("Extend Time"),
-        ],
-      ),
-    ),
-    const PopupMenuItem(
-      value: "badge",
-      child: Row(
-        children: [
-          Icon(Icons.badge, color: Colors.black),
-          SizedBox(width: 10),
-          Text("Award Badge User"),
-        ],
-      ),
-    ),
-    const PopupMenuItem(
-      value: "location",
-      child: Row(
-        children: [
-          Icon(Icons.location_on_outlined, color: Colors.black),
-          SizedBox(width: 10),
-          Text("Share Location"),
-        ],
-      ),
-    ),
-  ],
-),
 
           const SizedBox(width: 8),
         ],
       ),
-      body: ObxValue(
-        (messages) {
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  controller: scrollController,
-                  padding: const EdgeInsets.all(12),
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    final msg = messages[index];
-                    bool isMe = msg.isMe(
-                      Get.find<ProfileDataProvider>().userProfile.value?.id ?? "",
-                    );
-                    return Column(
-                      children: [
-                        isMe
-                            ? _buildSentMessage(context, msg)
-                            : _buildReceivedMessage(context, msg),
-                        Gap.h16,
-                      ],
-                    );
-                  },
-                ),
+      body: ObxValue((messages) {
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: scrollController,
+                padding: const EdgeInsets.all(12),
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  final msg = messages[index];
+                  bool isMe = msg.isMe(
+                    Get.find<ProfileDataProvider>().userProfile.value?.id ??
+                        "",
+                  );
+                  return Column(
+                    children: [
+                      isMe
+                          ? _buildSentMessage(context, msg)
+                          : _buildReceivedMessage(context, msg),
+                      Gap.h16,
+                    ],
+                  );
+                },
               ),
-              _buildMessageInput(),
-              Gap.bottomAppBarGap,
-            ],
-          );
-        },
-        widget.chatController.messages,
-      ),
+            ),
+            _buildMessageInput(),
+            Gap.bottomAppBarGap,
+          ],
+        );
+      }, widget.chatController.messages),
     );
   }
 

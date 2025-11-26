@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/reactive_button/save_button.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
@@ -38,17 +40,13 @@ class _AwardBadgeViewState extends State<AwardBadgeView> {
         automaticallyImplyLeading: false,
         title: Row(
           children: [
-            Icon(
-              Icons.workspace_premium_outlined,
-              size: 32,
-              color: AppColors.primarybutton,
-            ),
+            Icon(Icons.workspace_premium_outlined,
+                size: 32, color: AppColors.primarybutton),
             const SizedBox(width: 4),
             Text(
               'Badge Management',
-              style: AppText.xlSemiBold_20_700.copyWith(
-                color: AppColors.primaryTextblack,
-              ),
+              style: AppText.xlSemiBold_20_700
+                  .copyWith(color: AppColors.primaryTextblack),
             ),
             const Spacer(),
           ],
@@ -70,12 +68,20 @@ class _AwardBadgeViewState extends State<AwardBadgeView> {
               const Text(
                 "All Badges",
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
+              ),
+
+              Text(
+                "User ID: ${widget.toUserId}",
+                style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.blueGrey,
+                    fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 6),
+
               const Text(
                 "Badges you can award",
                 style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -84,6 +90,10 @@ class _AwardBadgeViewState extends State<AwardBadgeView> {
 
               Expanded(
                 child: Obx(() {
+                  if (badgeController.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
                   final badges = badgeController.allBadges;
                   if (badges.isEmpty) {
                     return Center(

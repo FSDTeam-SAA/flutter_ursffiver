@@ -1,3 +1,4 @@
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_ursffiver/app/controller/app_global_controllers.dart';
 import 'package:flutter_ursffiver/features/auth/model/create_custom_interest_req_param.dart';
@@ -9,11 +10,9 @@ import '../interface/interest_interface.dart';
 import '../../helpers/handle_fold.dart' show handleFold;
 // import '../enum/interest_color.dart';
 
-// Filter people suggestion with interest
 class InterestSelectionController extends GetxController {
-
   InterestSelectionController() {
-    // ignore: invalid_use_of_protected_member
+    // Initialize interestList
     interestList.value = _interestList.value;
     search('');
   }
@@ -27,81 +26,89 @@ class InterestSelectionController extends GetxController {
   RxList<InterestCategoryModel> get _interestList =>
       Get.find<AppGlobalControllers>().interestController.interestList;
 
-  RxList<InterestCategoryModel> interestList = RxList<InterestCategoryModel>([]);
+  RxList<InterestCategoryModel> get interestList => _interestList;
+
   @protected
   RxInt selectedIndexCnt = RxInt(0);
 
+  /// Check if interest is selected
   bool isSelected(String id) => (selectedInterests.containsKey(id) && selectedInterests[id] == true);
 
-  static Future<List<InterestCategoryModel>> _isolateSearch(
-  Map<String, dynamic> message,
-) async {
-  debugPrint("isolate search: ${message['query']}");
-  final String query = message['query'] as String;
-  final List<InterestCategoryModel> interests =
-      message['interestList'] as List<InterestCategoryModel>;
+  /// Max selection reached
+  bool get isMaxSelected => selectedIndexCnt.value >= 15;
 
-  final List<InterestCategoryModel> filteredList = [];
+  static Future<List<InterestCategoryModel>> _isolateSearch(Map<String, dynamic> message) async {
+    final String query = message['query'] as String;
+    final List<InterestCategoryModel> interests = message['interestList'] as List<InterestCategoryModel>;
+    final List<InterestCategoryModel> filteredList = [];
 
-  for (final category in interests) {
-    final filteredInterests = category.interests
-        .where((interest) =>
-            interest.name.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    for (final category in interests) {
+      final filteredInterests = category.interests
+          .where((interest) => interest.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
 
-    if (filteredInterests.isNotEmpty) {
-      filteredList.add(category.copyWith(interests: filteredInterests));
-      debugPrint('adding: ${category.name}');
+      if (filteredInterests.isNotEmpty) {
+        filteredList.add(category.copyWith(interests: filteredInterests));
+      }
     }
+
+    return filteredList;
   }
 
-  return filteredList;
-}
+  void search(String query) async {
+    _debouncer.call(() async {
+      final result = await compute(
+        _isolateSearch,
+        {
+          'query': query,
+          'interestList': _interestList.value,
+        },
+      );
 
-void search(String query) async {
-  debugPrint("search: $query");
-  _debouncer.call(() async {
-    final result = await compute(
-      _isolateSearch,
-      {
-        'query': query,
-        // ignore: invalid_use_of_protected_member
-        'interestList': _interestList.value,
-      },
-    );
-
-    interestList.value = result;
-  });
-}
+      interestList.value = result;
+    });
+  }
 
   void toggleSelectInterest(InterestModel interest) {
-    if (!selectedInterests.containsKey(interest.id)) {
-      selectedInterests[interest.id] = true;
-    }
-    else {
-      selectedInterests[interest.id] = !selectedInterests[interest.id]!;
+    // Deselecting is always allowed
+    if (selectedInterests[interest.id] == true) {
+      selectedInterests[interest.id] = false;
+      selectedIndexCnt.value--;
+      return;
     }
 
-    if(selectedInterests[interest.id]!) {
-      selectedIndexCnt.value++;
-    } else {
-      selectedIndexCnt.value--;
+    // Selecting only if max not reached
+    if (isMaxSelected) {
+      Get.snackbar(
+        "Limit reached",
+        "You can select a maximum of 15 interests",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
     }
+
+    selectedInterests[interest.id] = true;
+    selectedIndexCnt.value++;
   }
 
   void toggleSelectCustomInterest(CreateCustomInterestReqParam interest) {
-    if (!customRequests.containsKey(interest)) {
-      customRequests[interest] = true;
-    }
-    else {
-      customRequests[interest] = !customRequests[interest]!;
+    if (customRequests[interest] == true) {
+      customRequests[interest] = false;
+      selectedIndexCnt.value--;
+      return;
     }
 
-    if(customRequests[interest]!) {
-      selectedIndexCnt.value++;
-    } else {
-      selectedIndexCnt.value--;
+    if (isMaxSelected) {
+      Get.snackbar(
+        "Limit reached",
+        "You can select a maximum of 15 interests",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
     }
+
+    customRequests[interest] = true;
+    selectedIndexCnt.value++;
   }
 
   void addCustomInterest(CreateCustomInterestReqParam interest) {
@@ -113,19 +120,17 @@ void search(String query) async {
     required InterestColor color,
   }) async {
     await Get.find<InterestInterface>()
-        .createCustomInterest(
-          CreateCustomInterestReqParam(name: name, color: color),
-        )
+        .createCustomInterest(CreateCustomInterestReqParam(name: name, color: color))
         .then((lr) {
-          handleFold(
-            either: lr,
-            onSuccess: (success) {
-              interestList.value = success;
-            },
-            onError: (failure) {
-              debugPrint(failure.fullError);
-            },
-          );
-        });
+      handleFold(
+        either: lr,
+        onSuccess: (success) {
+          interestList.value = success;
+        },
+        onError: (failure) {
+          debugPrint(failure.fullError);
+        },
+      );
+    });
   }
 }

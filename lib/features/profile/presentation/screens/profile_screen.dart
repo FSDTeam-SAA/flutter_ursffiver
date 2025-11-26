@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import '../widget/invite_friend.dart';
 import '../widget/logout_widget.dart';
 import 'edit_personal_informetion_scree.dart';
+import 'privacy_policy_screen.dart';
 import 'privacy_settings_screen.dart';
 import 'report_problem_screen.dart';
 
@@ -129,16 +130,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         );
                       },
                     ),
-                    // _buildMenuItem(
-                    //   Icons.payment_outlined,
-                    //   'Payment History',
-                    //   () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(builder: (_) => Scaffold()),
-                    //     );
-                    //   },
-                    // ),
+                    _buildMenuItem(
+                      Icons.payment_outlined,
+                      'Privacy Policy',
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => PrivacyPolicyScreen()),
+                        );
+                      },
+                    ),
                     // _buildMenuItem(Icons.payment_outlined, 'CV', () {
                     //   Navigator.push(
                     //     context,

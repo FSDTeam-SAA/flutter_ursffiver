@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import '../pagination.dart';
 
 class PaginatedListWidget<T> extends StatefulWidget {
@@ -8,15 +9,17 @@ class PaginatedListWidget<T> extends StatefulWidget {
 
   /// How many skeletons to show, when there is no data
   final int skeletonCount;
-  final VoidCallback onRefresh;
+  final VoidCallback? onRefresh;
+  final ScrollPhysics physics;
   final Widget Function(int index, T data) builder;
   const PaginatedListWidget({
     super.key,
     required this.pagination,
-    required this.onRefresh,
+    this.onRefresh,
     required this.skeleton,
     required this.skeletonCount,
-    required this.builder,
+    required this.builder, 
+    this.physics = const NeverScrollableScrollPhysics(),
   });
 
   @override
@@ -37,29 +40,27 @@ class _PaginatedListWidgetState<T> extends State<PaginatedListWidget<T>> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async {
-          widget.onRefresh();
+      body: RefreshIndicator.adaptive(
+        onRefresh: () async{
+          if (widget.onRefresh != null) {
+            widget.onRefresh!();
+          }
         },
         child: ObxValue((data) {
           return ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
+            physics: widget.physics,
             itemCount: data.value.data.length + 1,
             itemBuilder: (context, index) {
-              debugPrint(
-                "Index: $index, length: ${data.value.data.length}, data type ${data.value.runtimeType}",
-              );
               if (index == data.value.data.length) {
+                debugPrint("pagination type: ${data.value.runtimeType}");
                 if ((data.value is LoadingMorePage<T> ||
                     data.value is RefreshingPage<T>)) {
                   return Column(
+                    spacing: 8,
                     children: [
                       ...List.generate(
                         widget.skeletonCount,
-                        (_) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: widget.skeleton,
-                        ),
+                        (_) => widget.skeleton,
                       ),
                     ],
                   );

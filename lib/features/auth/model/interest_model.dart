@@ -42,6 +42,7 @@ enum InterestColor {
   blue,
   yellow;
 
+
   static InterestColor fromString(String color) {
     color = color.toLowerCase();
     switch (color) {
@@ -68,6 +69,7 @@ enum InterestColor {
         return Color(0xFF3F42EE);
       case InterestColor.yellow:
         return Color(0xFFFFBF0F);
+      
     }
   }
 

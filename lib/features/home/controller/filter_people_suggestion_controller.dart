@@ -1,67 +1,13 @@
-// import 'package:flutter/foundation.dart';
-// import 'package:flutter_ursffiver/core/common/model/coordinates.dart';
-// import 'package:flutter_ursffiver/core/componenet/pagination/pagination.dart';
-// import 'package:flutter_ursffiver/core/common/controller/select_interest_controller.dart';
-// import 'package:flutter_ursffiver/features/home/model/user_model.dart';
-// import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
-// import 'package:get/get.dart';
-
-// import '../../../core/helpers/handle_fold.dart';
-// import '../model/get_user_suggestion_req_param.dart';
-
-// // Filter people suggestion with interest
-// class FilterPeopleSuggestionController extends GetxController {
-//   final InterestSelectionController selectInterestController =
-//       InterestSelectionController();
-
-//   RxMap<String, bool> get interests =>
-//       selectInterestController.selectedInterests;
-
-//   Rx<Pagination<UserModel>> suggestionList = Rx<Pagination<UserModel>>(
-//     NotInitialized([]),
-//   );
-//   Coordinates? currentLocation;
-//   Rx<LocationRange?> selectedLocationRange = Rx<LocationRange?>(null);
-
-//   Future<void> findSuggestion({bool forceFresh = false}) async {
-//     if (forceFresh) {
-//       suggestionList.value = RefreshingPage([]);
-//     } else {
-//       suggestionList.value = LoadingMorePage(suggestionList.value.data);
-//     }
-
-//     await Get.find<HomeInterface>().getSuggestions(
-//       GetUserSuggestionReqParam(
-//         interests: selectInterestController.selectedInterests.keys.toList(),
-//         location: currentLocation,
-//         locationRange: selectedLocationRange.value,
-//       )
-//     ).then((lr) {
-//       handleFold(
-//         either: lr,
-//         onSuccess: (success) {
-//           final allData = suggestionList.value.data + success;
-//           suggestionList.value = success.isEmpty
-//               ? AllLoaded(allData)
-//               : Loaded(allData);
-//         },
-//         onError: (failure) {
-//           debugPrint(failure.fullError);
-//           suggestionList.value = Loaded(suggestionList.value.data);
-//         },
-//       );
-//     });
-//   }
-// }
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_ursffiver/core/common/model/coordinates.dart';
 import 'package:flutter_ursffiver/core/componenet/pagination/pagination.dart';
 import 'package:flutter_ursffiver/core/common/controller/select_interest_controller.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
-import 'package:flutter_ursffiver/features/home/model/user_model.dart';
+import 'package:flutter_ursffiver/features/home/model/set_visibility_req.dart';
 import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
+import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 import '../../../app/app_manager.dart';
@@ -90,7 +36,6 @@ class FilterPeopleSuggestionController extends GetxController {
     } else {
       suggestionList.value = LoadingMorePage(suggestionList.value.data);
     }
-
     await Get.find<HomeInterface>()
         .getSuggestions(
           GetUserSuggestionReqParam(
@@ -128,4 +73,49 @@ class FilterPeopleSuggestionController extends GetxController {
           );
         });
   }
+  Future<void> setVisibility(
+  bool visible,
+  bool Function() shouldShareLocation,
+) async {
+  final yes = shouldShareLocation();
+
+  if (yes) {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        permission = await Geolocator.requestPermission();
+      }
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        debugPrint("User denied location permission.");
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition();
+      currentLocation = Coordinates(
+        latitude: position.latitude,
+        longitude: position.longitude,
+      );
+    } catch (e) {
+      debugPrint("Location error: $e");
+    }
+  }
+
+  final response = await Get.find<HomeInterface>().setVisibility(
+    SetVisibilityReq(active: visible, location: currentLocation),
+  );
+
+  handleFold(
+    either: response,
+    onError: (failure) {
+      debugPrint("Set visibility error: $failure");
+    },
+    onSuccess: (data) {
+      Get.find<ProfileDataProvider>().getCurrentUserProfile();
+    },
+  );
+}
+
 }

@@ -1,4 +1,6 @@
 import 'package:flutter_ursffiver/core/api_handler/success.dart';
+import 'package:flutter_ursffiver/features/home/model/set_visibility_req.dart';
+import 'package:flutter_ursffiver/features/home/model/status_model.dart';
 import 'package:flutter_ursffiver/features/home/model/verification_model.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 import 'package:flutter_ursffiver/core/api_handler/base_repository.dart';
@@ -12,4 +14,8 @@ abstract base class HomeInterface extends BaseRepository {
   );
 
   FutureRequest<Success> verification(Attachment param);
+
+  FutureRequest<Success> setVisibility(SetVisibilityReq param);
+
+  FutureRequest<Success> status(StatusModel param);
 }

@@ -23,31 +23,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
-          'User Profile',
-          style: AppText.lgMedium_18_500.copyWith(color: AppColors.primaryTextblack),
-        ),
-        centerTitle: false,
         actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 16),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(color: widget.user.active ? Colors.green : Colors.grey, shape: BoxShape.circle),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  widget.user.active ? 'Active Now' : 'Offline',
-                  style: AppText.mdMedium_16_500.copyWith(color: AppColors.secondaryTextblack),
-                ),
-              ],
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              margin: const EdgeInsets.only(left: 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(color: widget.user.active ? Colors.green : Colors.grey, shape: BoxShape.circle),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    widget.user.active ? 'Active Now' : 'Offline',
+                    style: AppText.mdMedium_16_500.copyWith(color: AppColors.secondaryTextblack),
+                  ),
+                ],
+              ),
+              
             ),
           ),
         ],
+        // title: Text(
+        //   'User Profile',
+        //   style: AppText.lgMedium_18_500.copyWith(color: AppColors.primaryTextblack),
+        // ),
+        centerTitle: false,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -81,6 +85,22 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       if (widget.user.adminVerify == true)
                         const Icon(Icons.verified_user_outlined, color: Colors.green, size: 24),
                     ],
+                  ),
+                  if(widget.user.status != null && widget.user.status!.isNotEmpty && widget.user.active) Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primarybutton.withAlpha(30),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8),
+                      child: Text(
+                        "${widget.user.status}",
+                        style: AppText.mdMedium_16_500.copyWith(
+                          color: AppColors.secondaryTextblack,
+                          fontStyle: FontStyle.italic
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 12),
                   if (widget.user.bio != null)
