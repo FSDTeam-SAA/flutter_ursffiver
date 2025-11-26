@@ -132,7 +132,8 @@ class MessageTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        chatController.chatModel?.name ?? 'Unknown',
+                        // chatController.chatModel?.name ?? 'Unknown',
+                        chatController.chatTitle,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

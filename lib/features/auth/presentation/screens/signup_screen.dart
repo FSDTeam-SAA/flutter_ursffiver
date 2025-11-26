@@ -8,7 +8,6 @@ import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_scre
 import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import '../../../common/app_logo.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -400,12 +399,24 @@ class _SignupScreen extends State<SignupScreen> {
                           child: _Dropdown<String>(
                             value: _ageRange,
                             hint: 'Select',
-                            items: const [
-                              '18–24',
-                              '25–34',
-                              '35–44',
-                              '45–54',
-                              '55+',
+                            items: [
+                              '18 - 24',
+                              '21 - 27',
+                              '25 - 32',
+                              '29 - 36',
+                              '35 - 43',
+                              '39 - 46',
+                              '44 - 55',
+                              '53 - 59',
+                              '58 - 66',
+                              '63 - 69',
+                              '68 - 76',
+                              '73 - 79',
+                              '78 - 86',
+                              '83 - 89',
+                              '87 - 96',
+                              '93 - 99',
+                              '100+',
                             ],
                             onChanged: (v) {
                               setState(() => _ageRange = v);
