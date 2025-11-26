@@ -36,7 +36,6 @@ class FilterPeopleSuggestionController extends GetxController {
     } else {
       suggestionList.value = LoadingMorePage(suggestionList.value.data);
     }
-
     await Get.find<HomeInterface>()
         .getSuggestions(
           GetUserSuggestionReqParam(
@@ -114,7 +113,7 @@ class FilterPeopleSuggestionController extends GetxController {
       debugPrint("Set visibility error: $failure");
     },
     onSuccess: (data) {
-      Get.find<ProfileDataController>().getCurrentUserProfile();
+      Get.find<ProfileDataProvider>().getCurrentUserProfile();
     },
   );
 }

@@ -26,7 +26,7 @@ class InterestSelectionController extends GetxController {
   RxList<InterestCategoryModel> get _interestList =>
       Get.find<AppGlobalControllers>().interestController.interestList;
 
-  RxList<InterestCategoryModel> interestList = RxList<InterestCategoryModel>([]);
+  RxList<InterestCategoryModel> get interestList => _interestList;
 
   @protected
   RxInt selectedIndexCnt = RxInt(0);
