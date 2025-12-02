@@ -183,29 +183,29 @@ class _SignInScreenState extends State<SignInScreen> {
                           (v == null || v.isEmpty) ? 'Enter password' : null,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 20),
 
                   // Keep me signed in
-                  Obx(
-                    () => Row(
-                      children: [
-                        Checkbox(
-                          value: controller.keepSignedIn.value,
-                          onChanged: (v) =>
-                              controller.toggleKeepSignedIn(v ?? true),
-                          // onChanged: controller.toggleKeepSignedIn,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          activeColor: brandBlue,
-                          side: const BorderSide(color: borderColor),
-                        ),
-                        const SizedBox(width: 4),
-                        const Text('Keep me signed in'),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
+                  // Obx(
+                  //   () => Row(
+                  //     children: [
+                  //       Checkbox(
+                  //         value: controller.keepSignedIn.value,
+                  //         onChanged: (v) =>
+                  //             controller.toggleKeepSignedIn(v ?? true),
+                  //         // onChanged: controller.toggleKeepSignedIn,
+                  //         shape: RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.circular(4),
+                  //         ),
+                  //         activeColor: brandBlue,
+                  //         side: const BorderSide(color: borderColor),
+                  //       ),
+                  //       const SizedBox(width: 4),
+                  //       const Text('Keep me signed in'),
+                  //     ],
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 8),
 
                   // Log In button
                   Obx(
