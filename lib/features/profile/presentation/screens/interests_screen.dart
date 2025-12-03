@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/features/home/presentation/widget/interest_grid.dart';
+import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
+import 'package:get/get.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_gap.dart';
@@ -13,6 +16,9 @@ class InterestsPage extends StatefulWidget {
 
 class _InterestsPageState extends State<InterestsPage> {
   bool isEditing = false; // flag to toggle edit mode
+
+  final ProfileDataProvider _profieDataController =
+      Get.find<ProfileDataProvider>();
 
   final List<Map<String, dynamic>> interests = [
     {"title": "Acting/Theatre", "color": AppColors.primarybutton},
@@ -75,6 +81,44 @@ class _InterestsPageState extends State<InterestsPage> {
               ),
 
             // Grid of interests
+            // SliverToBoxAdapter(
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       const SizedBox(height: 20),
+            //       const Text(
+            //         "Primary Interests",
+            //         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            //       ),
+            //       const SizedBox(height: 8),
+            //       Obx(() {
+            //         final selectedInterests =
+            //             _profieDataController.userProfile.value?.interests ??
+            //             [];
+
+            //         debugPrint(
+            //           "selectedInterests: ${_profieDataController.userProfile.value?.interests.length ?? 0}",
+            //         );
+
+            //         if (selectedInterests.isEmpty) {
+            //           return const Padding(
+            //             padding: EdgeInsets.symmetric(
+            //               vertical: 8.0,
+            //               horizontal: 0,
+            //             ),
+            //             child: Text(
+            //               "No interests found.",
+            //               style: TextStyle(color: Colors.grey),
+            //             ),
+            //           );
+            //         }
+
+            //         return InterestsGrid(chips: selectedInterests);
+            //       }),
+            //       const SizedBox(height: 20),
+            //     ],
+            //   ),
+            // ),
             Flexible(
               child: GridView.builder(
                 shrinkWrap: true,

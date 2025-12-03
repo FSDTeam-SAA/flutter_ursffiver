@@ -79,29 +79,66 @@ class LoginController extends GetxController {
     keepSignedIn.value = value;
   }
 
+  // Future<void> login({required VoidCallback needVerifyAccount}) async {
+  //   if (!formKey.currentState!.validate()) return;
+
+  //   isLoading.value = true;
+  //   processStatusNotifier.setLoading();
+
+  //   try {
+  //     final lr = await Get.find<AuthInterface>().login(
+  //       LoginRequestParams(email: email, password: password),
+  //     );
+  //     handleFold(
+  //       either: lr,
+  //       processStatusNotifier: processStatusNotifier,
+  //       successSnackbarNotifier: snackbarNotifier,
+  //       errorSnackbarNotifier: snackbarNotifier,
+  //       onError: (error) {
+  //         if (error.failure == Failure.forbidden) {
+  //           needVerifyAccount();
+  //         }
+  //       },
+  //     );
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
   Future<void> login({required VoidCallback needVerifyAccount}) async {
-    if (!formKey.currentState!.validate()) return;
+  if (!formKey.currentState!.validate()) return;
 
-    isLoading.value = true;
-    processStatusNotifier.setLoading();
+  isLoading.value = true;
+  processStatusNotifier.setLoading();
 
-    try {
-      final lr = await Get.find<AuthInterface>().login(
-        LoginRequestParams(email: email, password: password),
-      );
-      handleFold(
-        either: lr,
-        processStatusNotifier: processStatusNotifier,
-        successSnackbarNotifier: snackbarNotifier,
-        errorSnackbarNotifier: snackbarNotifier,
-        onError: (error) {
-          if (error.failure == Failure.forbidden) {
-            needVerifyAccount();
-          }
-        },
-      );
-    } finally {
-      isLoading.value = false;
-    }
+  try {
+    final lr = await Get.find<AuthInterface>().login(
+      LoginRequestParams(email: email, password: password),
+    );
+
+    handleFold(
+      either: lr,
+      processStatusNotifier: processStatusNotifier,
+      successSnackbarNotifier: snackbarNotifier,
+      errorSnackbarNotifier: snackbarNotifier,
+      onError: (error) {
+        debugPrint("LOGIN ERROR: ${error.uiMessage}");
+
+        /// CASE 1: Mapped Failure enum → email not verified
+        if (error.failure == Failure.forbidden) {
+          needVerifyAccount();
+          return;
+        }
+
+        /// CASE 2: Backend gives custom message
+        if (error.uiMessage.toLowerCase().contains("verify")) {
+          needVerifyAccount();
+          return;
+        }
+      },
+    );
+  } finally {
+    isLoading.value = false;
   }
+}
+
 }

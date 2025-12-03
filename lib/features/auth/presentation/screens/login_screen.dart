@@ -24,7 +24,7 @@ class _SignInScreenState extends State<SignInScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller = LoginController(SnackbarNotifier(context: context));
+    controller = Get.put(LoginController(SnackbarNotifier(context: context)));
   }
 
   @override
