@@ -63,7 +63,8 @@ class _UserProfileCardState extends State<UserProfileCard> {
               children: [
                 // user full name
                 Text(
-                  '${widget.user.firstName} ${widget.user.lastName}',
+                  widget.user.userName ?? '',
+                  // '${widget.user.firstName} ${widget.user.lastName}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,

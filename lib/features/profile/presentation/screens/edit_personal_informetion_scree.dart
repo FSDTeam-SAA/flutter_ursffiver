@@ -527,7 +527,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             const Spacer(),
             Obx(() {
               final isVerified =
-                  profileController.userProfile.value?.adminVerify ?? false;
+                  profileController.userProfile.value?.isEmailVerified ?? false;
 
               return Text(
                 isVerified ? 'Verified' : 'Unverified',

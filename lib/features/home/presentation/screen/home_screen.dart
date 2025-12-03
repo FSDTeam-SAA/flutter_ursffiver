@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -40,7 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
           .filterPeopleSuggestionController;
 
   final statusController = Get.put(StatusController());
-  final ProfileDataProvider _profieDataController = Get.find<ProfileDataProvider>();
+  final ProfileDataProvider _profieDataController =
+      Get.find<ProfileDataProvider>();
 
   @override
   void initState() {
@@ -129,7 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
           //     FixedNotificationBanner.show(context);
           //   },
           // ),
-          
           Obx(
             () => IconButton(
               onPressed: () {
@@ -421,7 +420,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         [];
 
                     debugPrint(
-                      "selectedInterests: ${_profieDataController.userProfile.value?.interests?.length ?? 0}",
+                      "selectedInterests: ${_profieDataController.userProfile.value?.interests.length ?? 0}",
                     );
 
                     if (selectedInterests.isEmpty) {
@@ -456,10 +455,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     const Text(
                       "Location Range",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
-                
+
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -523,9 +525,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                
+
                     const SizedBox(height: 20),
-                
+
                     Row(
                       children: [
                         const Text(
@@ -544,8 +546,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           onPressed: () {
-                            _filterPeopleSuggestionController
-                                .findSuggestion(forceFresh: true);
+                            _filterPeopleSuggestionController.findSuggestion(
+                              forceFresh: true,
+                            );
                           },
                           child: Row(
                             children: [
@@ -564,7 +567,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-                
+
                         InkWell(
                           onTap: () {
                             showModalBottomSheet<Set<String>>(
@@ -619,7 +622,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onRefresh: null,
                   skeleton: UserSuggestionSkeleton(),
                   skeletonCount: 3,
-                  builder: (index, data) => _UserSuggestionCard(profile: data,),
+                  builder: (index, data) => _UserSuggestionCard(profile: data),
                 ),
               ),
             ),
@@ -638,7 +641,8 @@ class _UserSuggestionCard extends StatefulWidget {
   State<_UserSuggestionCard> createState() => _UserSuggestionCardState();
 }
 
-class _UserSuggestionCardState extends State<_UserSuggestionCard> with AutomaticKeepAliveClientMixin {
+class _UserSuggestionCardState extends State<_UserSuggestionCard>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -651,7 +655,7 @@ class _UserSuggestionCardState extends State<_UserSuggestionCard> with Automatic
       ],
     ).animate().fadeIn(duration: 300.ms, delay: (100).ms);
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
@@ -699,7 +703,6 @@ class UserSuggestionSkeleton extends StatelessWidget {
               // text skeleton
               LayoutBuilder(
                 builder: (context, constraints) {
-                                  
                   return Column(
                     spacing: 12,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -729,8 +732,8 @@ class UserSuggestionSkeleton extends StatelessWidget {
                       ),
                     ],
                   );
-                }
-              )
+                },
+              ),
             ],
           ),
         ),

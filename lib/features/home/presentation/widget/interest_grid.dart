@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/core/theme/app_colors.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../auth/model/interest_model.dart';
 
@@ -8,26 +9,23 @@ class InterestsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+      spacing: 4,
       children: chips
           .map(
             (chip) => Chip(
               label: Text(
                 chip.name,
                 style: AppText.mdMedium_16_500.copyWith(
-                  color: chip.color.deepColor,
+                  color: AppColors.white,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              backgroundColor: chip.color.softColor,
+              backgroundColor: chip.color.deepColor,
               side: BorderSide(color: chip.color.deepColor, width: 1.2),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(8),
               ),
-              shadowColor: chip.color.deepColor,
-              elevation: 1,
             ),
           )
           .toList(),

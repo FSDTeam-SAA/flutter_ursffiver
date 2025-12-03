@@ -600,7 +600,7 @@ class _SignupScreen extends State<SignupScreen> {
                             decoration: TextDecoration.underline,
                           ),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => Navigator.push(
+                            ..onTap = () => Navigator.pop(
                                 context, MaterialPageRoute(builder: (_) => const SignInScreen())),
                         ),
                       ],
