@@ -19,6 +19,7 @@ class ChatScreen extends StatefulWidget {
   final String userId;
   final String chatId;
   final ChatController chatController;
+  final String? otherUserId;
 
   const ChatScreen({
     super.key,
@@ -27,6 +28,7 @@ class ChatScreen extends StatefulWidget {
     required this.userId,
     required this.chatId,
     required this.chatController,
+    this.otherUserId,
   });
 
   @override
@@ -75,7 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             SmartNetworkImage.circle(
               imageUrl: widget.avatarUrl,
-              diameter: 32,
+              diameter: 45,
               errorWidget: Icon(Icons.image, size: 32),
             ),
             const SizedBox(width: 8),
@@ -84,7 +86,15 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Text(
                   widget.contactName,
-                  style: const TextStyle(
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  widget.chatController.otherUserId,
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                     fontSize: 16,

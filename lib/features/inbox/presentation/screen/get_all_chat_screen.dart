@@ -63,7 +63,7 @@ class _AllChatScreeenState extends State<AllChatScreeen> {
                           ),
                         ),
                       ),
-                      chatController.chats,
+                chatController.chats,
               ),
             ),
           ],
@@ -91,6 +91,8 @@ class MessageTile extends StatelessWidget {
               avatarUrl: chatController.chatModel?.avatarUrl ?? '',
               chatController: chatController,
               userId: chatController.chatModel?.user?.id ?? '',
+              otherUserId: chatController.otherUserId,
+              
             ),
           ),
         );
@@ -116,7 +118,7 @@ class MessageTile extends StatelessWidget {
                       chatController.chatTitle.isNotEmpty
                           ? chatController.chatTitle[0].toUpperCase()
                           : "?",
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -132,7 +134,6 @@ class MessageTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        // chatController.chatModel?.name ?? 'Unknown',
                         chatController.chatTitle,
                         style: const TextStyle(
                           fontSize: 16,
