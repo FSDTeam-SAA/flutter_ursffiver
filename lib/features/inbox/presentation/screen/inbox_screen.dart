@@ -43,8 +43,6 @@ class _ChatScreenState extends State<ChatScreen> {
     messagingController = MessagingController(
       chatId: widget.chatController.chatId,
     );
-
-    // Scroll to bottom after a short delay to ensure messages are loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
       scrollToBottom();
     });

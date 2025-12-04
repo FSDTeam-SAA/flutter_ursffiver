@@ -70,18 +70,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         MaterialPageRoute(builder: (_) => InterestsPage()),
                       );
                     }),
-                    // _buildMenuItem(
-                    //   Icons.settings_outlined,
-                    //   'Privacy Settings',
-                    //   () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         builder: (_) => PrivacySettingsScreen(),
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
+                    _buildMenuItem(
+                      Icons.settings_outlined,
+                      'Privacy Settings',
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => PrivacySettingsScreen(),
+                          ),
+                        );
+                      },
+                    ),
                     _buildMenuItem(
                       Icons.person_2_outlined,
                       'Invite Friend',

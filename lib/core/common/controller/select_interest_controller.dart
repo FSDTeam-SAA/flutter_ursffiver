@@ -8,7 +8,6 @@ import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import '../../../features/auth/model/interest_model.dart';
 import '../interface/interest_interface.dart';
 import '../../helpers/handle_fold.dart' show handleFold;
-// import '../enum/interest_color.dart';
 
 class InterestSelectionController extends GetxController {
   InterestSelectionController() {

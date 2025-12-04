@@ -82,17 +82,9 @@ base class ApiEndpoints {
 
   static const String status = _User.status;
 
-  // ---------------------- RIDE -----------------------------
-  /// ### post
-  static const String createRide = _Ride.createRide;
-  static String updateRide(String id) => _Ride.updateRide(id);
-  static String leaveRide(String id) => _Ride.leaveRide(id);
-  static String finishRide(String id) => _Ride.finishRide(id);
-  static String getRideById(String id) => _Ride.getRideById(id);
-  static String joinRide(String id) => _Ride.joinRide(id);
-  static String voteForKick(String id) => _Ride.voteForKick(id);
-  static String deleteRide(String id) => _Ride.deleteRide(id);
-  static const String filterRide = _Ride.filterRide;
+  static const String updatePrivacy = _User.updatePrivacy;
+
+
 
   // ---------------------- Booking -----------------------------
   static String getAllBookingsForARide(String rideId) =>
@@ -211,21 +203,8 @@ class _User {
   static const String allUser = '$_userRoute/all-user';
   static const String setVisibility = '$_userRoute/visibility';
   static const String status = '$_userRoute/status';
+  static const String updatePrivacy = '$_userRoute/privacy';
 
-}
-
-// ---------------------- RIDE -----------------------------
-class _Ride {
-  static const String _rideRoute = '${ApiEndpoints.baseUrl}/ride';
-  static const String createRide = _rideRoute;
-  static String updateRide(String id) => "$_rideRoute/$id";
-  static String leaveRide(String id) => "$_rideRoute/$id/leave";
-  static String finishRide(String id) => "$_rideRoute/$id/filter";
-  static const String filterRide = _rideRoute;
-  static String getRideById(String id) => "$_rideRoute/$id";
-  static String joinRide(String id) => "$_rideRoute/$id/join";
-  static String voteForKick(String id) => "$_rideRoute/$id/kick";
-  static String deleteRide(String id) => "$_rideRoute/$id";
 }
 
 class _Booking {

@@ -49,50 +49,35 @@ class _InterestsPageState extends State<InterestsPage> {
           brandGradient: const LinearGradient(
             colors: [Color(0xFF4C5CFF), Color(0xFF8F79FF)],
           ),
-          // onConfirm: () {
-          //   // Update profile interests after selection
-          //   final selected = controller.selectedInterests.entries
-          //       .where((e) => e.value)
-          //       .map((e) => _profileDataController
-          //           .allInterestController.interestList
-          //           .expand((cat) => cat.interests)
-          //           .firstWhere((i) => i.id == e.key))
-          //       .toList();
-
-          //   _profileDataController.userProfile.update((user) {
-          //     // user?.interests = selected;
-          //   });
-
-          //   Navigator.pop(context);
-          // },
           onConfirm: () async {
-  final allInterests = _profileDataController
-      .allInterestController.interestList
-      .expand((cat) => cat.interests)
-      .toList();
+            final allInterests = _profileDataController
+                .allInterestController
+                .interestList
+                .expand((cat) => cat.interests)
+                .toList();
 
-  final selected = controller.selectedInterests.entries
-      .where((e) => e.value)
-      .map((e) => allInterests.firstWhereOrNull((i) => i.id == e.key))
-      .where((e) => e != null)
-      .cast<InterestModel>()
-      .toList();
+            final selected = controller.selectedInterests.entries
+                .where((e) => e.value)
+                .map((e) => allInterests.firstWhereOrNull((i) => i.id == e.key))
+                .where((e) => e != null)
+                .cast<InterestModel>()
+                .toList();
 
-  // Update local profile safely
-  final oldUser = _profileDataController.userProfile.value!;
-  _profileDataController.userProfile.value = oldUser.copyWith(
-    interests: selected,
-  );
+            // Update local profile safely
+            final oldUser = _profileDataController.userProfile.value!;
+            _profileDataController.userProfile.value = oldUser.copyWith(
+              interests: selected,
+            );
 
-  // API call
-  await Get.find<ProfileInterface>().updateProfile(
-    UpdateProfileModel(id: oldUser.id, interests: selected),
-  );
+            // API call
+            await Get.find<ProfileInterface>().updateProfile(
+              UpdateProfileModel(id: oldUser.id, interests: selected),
+            );
 
-  await _profileDataController.getCurrentUserProfile();
+            await _profileDataController.getCurrentUserProfile();
 
-  Navigator.pop(context);
-}
+            Navigator.pop(context);
+          },
         );
       },
     );
