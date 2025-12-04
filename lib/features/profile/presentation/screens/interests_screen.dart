@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
+import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
+import 'package:flutter_ursffiver/features/profile/interface/profile_interface.dart';
+import 'package:flutter_ursffiver/features/profile/model/update_profile_model.dart';
 import 'package:get/get.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/interest_grid.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
@@ -25,7 +28,8 @@ class _InterestsPageState extends State<InterestsPage> {
     final controller = _profileDataController.selectInterestController;
 
     // Pre-select existing interests
-    final selectedIds = _profileDataController.userProfile.value?.interests
+    final selectedIds =
+        _profileDataController.userProfile.value?.interests
             .map((e) => e.id)
             .toList() ??
         [];
@@ -43,27 +47,52 @@ class _InterestsPageState extends State<InterestsPage> {
         return InterestPickerSheet.forFiltering(
           interestSelectionCntlr: controller,
           brandGradient: const LinearGradient(
-            colors: [
-              Color(0xFF4C5CFF),
-              Color(0xFF8F79FF),
-            ],
+            colors: [Color(0xFF4C5CFF), Color(0xFF8F79FF)],
           ),
-          onConfirm: () {
-            // Update profile interests after selection
-            final selected = controller.selectedInterests.entries
-                .where((e) => e.value)
-                .map((e) => _profileDataController
-                    .allInterestController.interestList
-                    .expand((cat) => cat.interests)
-                    .firstWhere((i) => i.id == e.key))
-                .toList();
+          // onConfirm: () {
+          //   // Update profile interests after selection
+          //   final selected = controller.selectedInterests.entries
+          //       .where((e) => e.value)
+          //       .map((e) => _profileDataController
+          //           .allInterestController.interestList
+          //           .expand((cat) => cat.interests)
+          //           .firstWhere((i) => i.id == e.key))
+          //       .toList();
 
-            _profileDataController.userProfile.update((user) {
-              // user?.interests = selected;
-            });
+          //   _profileDataController.userProfile.update((user) {
+          //     // user?.interests = selected;
+          //   });
 
-            Navigator.pop(context);
-          },
+          //   Navigator.pop(context);
+          // },
+          onConfirm: () async {
+  final allInterests = _profileDataController
+      .allInterestController.interestList
+      .expand((cat) => cat.interests)
+      .toList();
+
+  final selected = controller.selectedInterests.entries
+      .where((e) => e.value)
+      .map((e) => allInterests.firstWhereOrNull((i) => i.id == e.key))
+      .where((e) => e != null)
+      .cast<InterestModel>()
+      .toList();
+
+  // Update local profile safely
+  final oldUser = _profileDataController.userProfile.value!;
+  _profileDataController.userProfile.value = oldUser.copyWith(
+    interests: selected,
+  );
+
+  // API call
+  await Get.find<ProfileInterface>().updateProfile(
+    UpdateProfileModel(id: oldUser.id, interests: selected),
+  );
+
+  await _profileDataController.getCurrentUserProfile();
+
+  Navigator.pop(context);
+}
         );
       },
     );
@@ -122,7 +151,7 @@ class _InterestsPageState extends State<InterestsPage> {
                 child: Obx(() {
                   final selectedInterests =
                       _profileDataController.userProfile.value?.interests ?? [];
-        
+
                   if (selectedInterests.isEmpty) {
                     return const Center(
                       child: Text(
@@ -131,14 +160,14 @@ class _InterestsPageState extends State<InterestsPage> {
                       ),
                     );
                   }
-        
+
                   return InterestsGrid(
                     chips: selectedInterests,
                     editable: isEditing,
                   );
                 }),
               ),
-        
+
               if (isEditing)
                 SizedBox(
                   width: double.infinity,

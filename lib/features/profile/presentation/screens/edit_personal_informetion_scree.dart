@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_ursffiver/core/theme/app_colors.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/widget/badgeg_widget.dart';
+import 'package:intl/intl.dart';
 
 class MyProfileScreen extends StatefulWidget {
   const MyProfileScreen({super.key});
@@ -36,8 +37,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     return grouped;
   }
 
-  final ProfileDataProvider profileController =
-      Get.find<ProfileDataProvider>();
+  final ProfileDataProvider profileController = Get.find<ProfileDataProvider>();
 
   @override
   void initState() {
@@ -178,10 +178,78 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     });
   }
 
+  // Widget _buildVerificationCard(
+  //   EditProfileInfoController controller,
+  //   bool showVerified,
+  // ) {
+  //   return Container(
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(8),
+  //       border: Border.all(color: const Color(0xFFB3D9FF)),
+  //     ),
+  //     child: Row(
+  //       children: [
+  //         Container(
+  //           padding: const EdgeInsets.all(4),
+  //           decoration: BoxDecoration(
+  //             color: Colors.green,
+  //             shape: BoxShape.circle,
+  //           ),
+  //           child: Icon(Icons.check, color: Colors.white, size: 16),
+  //         ),
+  //         const SizedBox(width: 12),
+  //         Expanded(
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               RichText(
+  //                 text: TextSpan(
+  //                   style: const TextStyle(color: Colors.black, fontSize: 14),
+  //                   children: [
+  //                     const TextSpan(text: 'User Verification Status: '),
+  //                     TextSpan(
+  //                       text: 'Verified',
+  //                       style: TextStyle(
+  //                         color: Colors.green,
+  //                         fontWeight: FontWeight.w600,
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 4),
+  //               if (showVerified)
+  //                 Text(
+  //                   'Verified On: ${controller.verifiedDate.value}',
+  //                   style: TextStyle(color: Colors.grey[600], fontSize: 12),
+  //                 )
+  //               else
+  //                 TextButton(
+  //                   onPressed: controller.verifyEmail,
+  //                   child: const Text("Verify Now"),
+  //                 ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
   Widget _buildVerificationCard(
     EditProfileInfoController controller,
     bool showVerified,
   ) {
+    String formattedDate = "";
+    if (showVerified && controller.verifiedDate.value.isNotEmpty) {
+      try {
+        DateTime parsedDate = DateTime.parse(controller.verifiedDate.value);
+        formattedDate = DateFormat('MM/dd/yyyy – hh:mm a').format(parsedDate);
+      } catch (e) {
+        formattedDate = controller.verifiedDate.value; // fallback
+      }
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -192,11 +260,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.green,
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.check, color: Colors.white, size: 16),
+            child: const Icon(Icons.check, color: Colors.white, size: 16),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -204,10 +272,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 RichText(
-                  text: TextSpan(
-                    style: const TextStyle(color: Colors.black, fontSize: 14),
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black, fontSize: 14),
                     children: [
-                      const TextSpan(text: 'User Verification Status: '),
+                      TextSpan(text: 'User Verification Status: '),
                       TextSpan(
                         text: 'Verified',
                         style: TextStyle(
@@ -221,7 +289,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 const SizedBox(height: 4),
                 if (showVerified)
                   Text(
-                    'Verified On: ${controller.verifiedDate.value}',
+                    'Verified On: $formattedDate',
                     style: TextStyle(color: Colors.grey[600], fontSize: 12),
                   )
                 else
@@ -405,31 +473,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 ),
               ],
             ),
-
-            const SizedBox(height: 12),
-
-            // /// Remove Photo
-            // SizedBox(
-            //   width: double.infinity,
-            //   child: OutlinedButton.icon(
-            //     onPressed: controller.isEditing.value
-            //         ? controller.removePhoto
-            //         : null,
-            //     icon: const Icon(Icons.delete, color: Colors.red, size: 18),
-            //     label: const Text(
-            //       'Remove Photo',
-            //       style: TextStyle(color: Colors.red),
-            //     ),
-            //     style: OutlinedButton.styleFrom(
-            //       foregroundColor: Colors.red,
-            //       side: const BorderSide(color: Colors.red),
-            //       minimumSize: const Size(double.infinity, 48),
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(8),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             const SizedBox(height: 20),
           ],
         ),
