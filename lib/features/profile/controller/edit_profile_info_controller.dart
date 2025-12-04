@@ -110,6 +110,11 @@ class EditProfileInfoController extends GetxController {
         ageRange: ageRangeController.text.trim(),
         bio: bioController.text.trim(),
         profileImage: profileImage.value,
+        fullName: fullNameController.text.trim(),
+        interests: Get.find<ProfileDataProvider>()
+            .userProfile
+            .value
+            ?.interests ?? [],
       ),
     );
 

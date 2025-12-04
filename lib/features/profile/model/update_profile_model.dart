@@ -1,18 +1,21 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
+import 'package:flutter_ursffiver/features/profile/model/interests_model.dart';
 
 class UpdateProfileModel {
   final String id;
-  String? firstName;
-  String? lastName;
-  String? fullName;
-  String? username;
-  String? email;
-  String? gender;
-  String? ageRange;
-  String? bio;
-  File? profileImage;
+  final String? firstName;
+  final String? lastName;
+  final String? fullName;
+  final String? username;
+  final String? email;
+  final String? gender;
+  final String? ageRange;
+  final String? bio;
+  final File? profileImage;
+  final List<InterestModel> interests;
 
   UpdateProfileModel({
     required this.id,
@@ -25,6 +28,7 @@ class UpdateProfileModel {
     this.ageRange,
     this.bio,
     this.profileImage,
+    required this.interests ,
   });
 
   factory UpdateProfileModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +43,11 @@ class UpdateProfileModel {
       ageRange: json['ageRange'],
       bio: json['bio'],
       profileImage: json['profileImage'],
+      interests: json['interest'] == null
+          ? []
+          : List<InterestModel>.from(
+              json['interest']?.map((x) => InterestModel.fromJson(x)) ?? [],
+            ),
     );
   }
 
@@ -53,7 +62,7 @@ class UpdateProfileModel {
       if (ageRange != null) 'ageRange': ageRange,
       if (bio != null) 'bio': bio,
       if (profileImage != null) 'profileImage': profileImage,
-      'userId': id
+      'userId': id,
     };
   }
 

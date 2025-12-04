@@ -196,7 +196,6 @@ class _SignupScreen extends State<SignupScreen> {
                             InkWell(
                               borderRadius: BorderRadius.circular(4),
                               onTap: () async {
-                                // No setState – sheet updates controller directly
                                 await _openInterestPicker(context);
                               },
                               child: Container(

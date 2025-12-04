@@ -8,13 +8,9 @@ import 'package:flutter_ursffiver/core/componenet/pagination/widget/paginated_li
 import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/controller/filter_people_suggestion_controller.dart';
 import 'package:flutter_ursffiver/features/home/controller/status_controller.dart';
-import 'package:flutter_ursffiver/features/home/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_verification_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/user_profile_card.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
-import 'package:flutter_ursffiver/features/home/presentation/widget/invitation_notification_widget.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/screen/map_screen.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/widget/location_share.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -635,7 +631,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class _UserSuggestionCard extends StatefulWidget {
   final UserProfile profile;
-  const _UserSuggestionCard({super.key, required this.profile});
+  const _UserSuggestionCard({required this.profile});
 
   @override
   State<_UserSuggestionCard> createState() => _UserSuggestionCardState();

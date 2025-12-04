@@ -5,14 +5,25 @@ import '../../../auth/model/interest_model.dart';
 
 class InterestsGrid extends StatelessWidget {
   final List<InterestModel> chips;
-  const InterestsGrid({super.key, required this.chips});
+
+  /// NEW → To support edit/delete mode
+  final bool editable;
+
+  const InterestsGrid({
+    super.key,
+    required this.chips,
+    this.editable = false,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 4,
-      children: chips
-          .map(
-            (chip) => Chip(
+      children: chips.map((chip) {
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Chip(
               label: Text(
                 chip.name,
                 style: AppText.mdMedium_16_500.copyWith(
@@ -27,8 +38,9 @@ class InterestsGrid extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-          )
-          .toList(),
+          ],
+        );
+      }).toList(),
     );
   }
 }

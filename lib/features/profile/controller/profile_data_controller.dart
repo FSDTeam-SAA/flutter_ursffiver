@@ -1,5 +1,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter_ursffiver/app/app_manager.dart';
+import 'package:flutter_ursffiver/core/common/controller/interest_fetch_controller.dart';
+import 'package:flutter_ursffiver/core/common/controller/select_interest_controller.dart';
 import 'package:flutter_ursffiver/core/helpers/auth_role.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/profile/interface/profile_interface.dart';
@@ -8,6 +10,13 @@ import 'package:get/get.dart';
 
 class ProfileDataProvider extends GetxController {
   Rx<UserProfile?> userProfile = Rx<UserProfile?>(null);
+
+    // Add this: Interest selection controller
+  final InterestSelectionController selectInterestController = InterestSelectionController();
+
+  // Add this: All interests fetch controller
+  final AllInterestFetchController allInterestController = AllInterestFetchController();
+
 
   Future<void> getCurrentUserProfile() async {
     if (Get.find<AppManager>().currentAuthStatus is Authenticated) {
