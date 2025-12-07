@@ -6,18 +6,36 @@ class AppText {
 
   static const String _fontFamily = 'roboto';
 
+  // static TextStyle _style({
+  //   required double fontSize,
+  //   required FontWeight fontWeight,
+  //   Color? color,
+  // }) {
+  //   return TextStyle(
+  //     fontFamily: _fontFamily,
+  //     fontSize: fontSize,
+  //     fontWeight: fontWeight,
+  //     color: color ?? AppColors.primaryText,
+  //     letterSpacing: ?? 0,
+  //   );
+  // }
   static TextStyle _style({
-    required double fontSize,
-    required FontWeight fontWeight,
-    Color? color,
-  }) {
-    return TextStyle(
-      fontFamily: _fontFamily,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      color: color ?? AppColors.primaryText,
-    );
-  }
+  required double fontSize,
+  required FontWeight fontWeight,
+  Color? color,
+  double letterSpacing = 0,
+  double? height,
+}) {
+  return TextStyle(
+    fontFamily: _fontFamily,
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    color: color ?? AppColors.primaryText,
+    letterSpacing: letterSpacing,
+    height: height,
+  );
+}
+
 
   // Font sizes with common labels:
   // xs: 12, sm: 14, md: 16, lg: 18, xl: 20, xl2: 22, xxl: 24, xxxl: 40

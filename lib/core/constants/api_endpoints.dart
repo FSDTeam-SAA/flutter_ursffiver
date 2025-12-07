@@ -1,0 +1,253 @@
+import 'package:flutter/foundation.dart';
+
+base class ApiEndpoints {
+  static const String socketUrl = _HostedServer.socketUrl;
+
+  static const String baseUrl = _HostedServer.baseUrl;
+
+  /// ### post
+  static const String login = _Auth.login;
+
+  static const String signup = _Auth.signup;
+
+  static const String verifyCode = _Auth.verifyCode;
+
+  //static const String registerVerify = _Auth.registerVerify;
+
+  //static const String resetPassword = _Auth.resetPassword;
+
+  static const String forgetPassword = _Auth.forgetPassword;
+
+  static const String changePassword = _Auth.changePassword;
+
+  static const String createNewPassword = _Auth.resetPassword;
+
+  /// ### post
+  static const String refreshToken = _Auth.refreshToken;
+
+  //------------interest----------------
+  /// ### get
+  static const String getInterests = _Interest.getallInterests;
+
+  //----------------verification----------------
+  /// ### post
+  static const String verification = _Verification.verification;
+
+
+  //-----------------badges----------------
+  static const String getMyBadges = _Badges.getMyBadges;
+  static const String allBadges = _Badges.allBadges;
+  static const String giveBadges = _Badges.giveBadges;
+
+  //---------------report----------------
+
+  /// ### post
+  static const String sendReport = _Report.sendReport;
+
+  //------------notification----------------
+  /// ### get
+  static const String getAllNotifications = _Notification.getAllNotifications;
+
+  /// ### post
+  static const String readAllNotifications = _Notification.readAllNotifications;
+
+  /// ### patch
+  static String markNotificationAsRead({required String notificationId}) =>
+      _Notification.markNotificationAsRead(notificationId);
+
+  /// ### patch
+  static const String markAllAsRead = _Notification.markAllAsRead;
+
+  // ---------------------- USER -----------------------------
+
+  /// ### get
+  static String getuserbyId(String id) => _User.getuserbyId(id);
+
+  /// ### get
+  static const String getCurrentProfile = _User.getCurrentProfile;
+
+  /// ### put
+  static const String editProfile = _User.editProfile;
+
+  /// ### put
+  static const String uploadProfileAvatar = _User.uploadProfileAvatar;
+
+  /// ### get
+  static const String history = _User.history;
+
+  /// ### get
+  static const String allUser = _User.allUser;
+
+  static const String setVisibility = _User.setVisibility;
+
+  static const String status = _User.status;
+
+  static const String updatePrivacy = _User.updatePrivacy;
+
+
+
+  // ---------------------- Booking -----------------------------
+  static String getAllBookingsForARide(String rideId) =>
+      _Booking.getAllBookingsForARide(rideId);
+  static const String getMyBookings = _Booking.getMyBookings;
+
+  // ---------------------- Message -----------------------------
+  /// ### Get
+  static const String getAllChat = _Message.getAllChat;
+
+  /// ### Get
+  static String getMessages(String chatId) => _Message.getMessages(chatId);
+
+  static String getSingleChat(String chatId) => _Message.getSingleChat(chatId);
+
+  /// ### Post
+  static String sendMessage(String chatId) => _Message.sendMessage(chatId);
+
+  /// ### Put
+  static String messageRead(String messageId) =>
+      _Message.messageRead(messageId);
+
+  /// ### Put
+  static String editMessage(String messageId) =>
+      _Message.editMessage(messageId);
+
+  /// ### Delete
+  static String deleteMessage(String messageId) =>
+      _Message.deleteMessage(messageId);
+
+  ////////////
+  ///
+  static String getUselAllChat(String chatId) =>
+      _Message.getUselallChat(chatId);
+
+  ///////////
+  ///
+  static String timeExtend(String chatId) =>
+      _Message.timeExtend(chatId);
+}
+
+//arrow360degree@gmail.com
+
+class _RemoteServer {
+  static const String socketUrl = 'https://ursffiver-backend.onrender.com';
+
+  static const String baseUrl = 'https://ursffiver-backend.onrender.com/api/v1';
+}
+
+class _LocalHostWifi {
+  static const String socketUrl = 'http://10.10.5.46:5001';
+  static const String baseUrl = 'http://10.10.5.46:5001/api/v1';
+}
+
+class _HostedServer {
+  static const String socketUrl = 'http://72.60.169.91';
+  static const String baseUrl = 'http://72.60.169.91/api/v1';
+}
+
+class _Auth {
+  @protected
+  static const String _authRoute = '${ApiEndpoints.baseUrl}/auth';
+  static const String login = '$_authRoute/login';
+  static const String signup = '$_authRoute/signup';
+  static const String forgetPassword = '$_authRoute/forgot-password';
+  static const String refreshToken = '$_authRoute/refresh-token';
+  static const String verifyCode = '$_authRoute/verify-otp';
+  //static const String registerVerify = '$_authRoute/verify-otp';
+  static const String changePassword = '$_authRoute/change-password';
+  static const String resetPassword = '$_authRoute/reset-password';
+}
+
+//------------------------------ Interest -----------------------------
+class _Interest {
+  static const String _interestRoute = '${ApiEndpoints.baseUrl}/interest';
+  static const String getallInterests = '$_interestRoute/';
+}
+
+// ---------------------- Verification -----------------------------
+class _Verification {
+  static const String _verificationRoute =
+      '${ApiEndpoints.baseUrl}/verification';
+  static const String verification = '$_verificationRoute/create';
+}
+
+// ---------------------- Badges -----------------------------
+class _Badges {
+  static const String _badgesRoute = '${ApiEndpoints.baseUrl}/badges';
+  static const String getMyBadges = '$_badgesRoute/all-badges';
+  static const String allBadges = '$_badgesRoute/';
+  static const String giveBadges = '$_badgesRoute/give';
+}
+
+// ---------------------- Report -----------------------------
+class _Report {
+  static const String _reportRoute = '${ApiEndpoints.baseUrl}/reports';
+  static const String sendReport = '$_reportRoute/';
+}
+
+// ---------------------- Notification -----------------------------
+class _Notification {
+  static const String _notificationRoute =
+      '${ApiEndpoints.baseUrl}/notification';
+  static String markNotificationAsRead(String notificationId) =>
+      '$_notificationRoute/mark-as-read/$notificationId';
+  static const String readAllNotifications =
+      '$_notificationRoute/mark-all-as-read';
+  static const String markAllAsRead = '$_notificationRoute/mark-all-as-read';
+  static const String getAllNotifications = '$_notificationRoute/';
+}
+
+// ---------------------- USER -----------------------------
+class _User {
+  static const String _userRoute = '${ApiEndpoints.baseUrl}/user';
+  static String getuserbyId(String id) => '$_userRoute/single-user/$id';
+  static const String getCurrentProfile = '$_userRoute/';
+
+  static const String editProfile = '$_userRoute/update-profile';
+  static const String uploadProfileAvatar = '$_userRoute/upload-avatar';
+  static const String history = '$_userRoute/history';
+  static const String allUser = '$_userRoute/all-user';
+  static const String setVisibility = '$_userRoute/visibility';
+  static const String status = '$_userRoute/status';
+  static const String updatePrivacy = '$_userRoute/privacy';
+
+}
+
+class _Booking {
+  static const String _bookingRoute = '${ApiEndpoints.baseUrl}/booking';
+  static const String getMyBookings = "$_bookingRoute/my";
+  static String getAllBookingsForARide(String rideId) =>
+      "$_bookingRoute/ride/$rideId";
+}
+
+// ---------------------- MESSAGE -----------------------------
+class _Message {
+  static const String _messageRoute = '${ApiEndpoints.baseUrl}/chat';
+
+  static const String getAllChat = "$_messageRoute/get-chat";
+
+  static String getSingleChat(String chatId) =>
+      "$_messageRoute/get-single-chat/$chatId";
+
+  /// Get
+  static String getMessages(String chatId) => "$_messageRoute/messages/$chatId";
+
+  /// Post
+  static String sendMessage(String chatId) => "$_messageRoute/send-message";
+
+
+
+
+  /// Put
+  static String messageRead(String messageId) =>
+      "$_messageRoute/read/$messageId";
+
+  /// Put
+  static String editMessage(String messageId) => "$_messageRoute/$messageId";
+
+  /// Delete
+  static String deleteMessage(String messageId) => "$_messageRoute/$messageId";
+
+  static String getUselallChat(String chatId) => "$_messageRoute/get-chat";
+
+  static String timeExtend(String chatId) => "$_messageRoute/extend-time/$chatId";
+}
