@@ -155,4 +155,30 @@ class InboxChatDataProvider extends GetxController {
       },
     );
   }
+
+  Future<void> refreshChats() async {
+  try {
+    final result = await Get.find<InboxInterface>().getAllChat(); // your API
+
+    handleFold(
+      either: result,
+      onError: (failure) {
+        debugPrint("Failed to refresh chats: ${failure.fullError}");
+      },
+      onSuccess: (success) {
+        chats = RxList(success
+            .map(
+              (chatModel) => ChatController.withChatModel(
+                chatId: chatModel.id,
+                chatModel: chatModel,
+              ),
+            )
+            .toList());
+            },
+    );
+  } catch (e) {
+    debugPrint("Error refreshing chats: $e");
+  }
+}
+
 }

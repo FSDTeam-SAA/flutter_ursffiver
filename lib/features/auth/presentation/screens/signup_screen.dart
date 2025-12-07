@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
 import '../../../common/app_logo.dart';
-import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -98,7 +97,10 @@ class _SignupScreen extends State<SignupScreen> {
       builder: (_) => InterestPickerSheet.forSignU(
         interestSelectionCntlr: signupController.interestSelectionCntlr,
         brandGradient: _brandGradient,
-        onConfirm: () => Navigator.pop(context),
+        onConfirm: (selectedInterest) {
+          Navigator.pop(context);
+          
+        },
       ),
     );
   }
@@ -197,7 +199,6 @@ class _SignupScreen extends State<SignupScreen> {
                             InkWell(
                               borderRadius: BorderRadius.circular(4),
                               onTap: () async {
-                                // No setState – sheet updates controller directly
                                 await _openInterestPicker(context);
                               },
                               child: Container(
@@ -600,8 +601,12 @@ class _SignupScreen extends State<SignupScreen> {
                             decoration: TextDecoration.underline,
                           ),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => Navigator.push(
-                                context, MaterialPageRoute(builder: (_) => const SignInScreen())),
+                            ..onTap = () => Navigator.pop(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const SignInScreen(),
+                              ),
+                            ),
                         ),
                       ],
                     ),

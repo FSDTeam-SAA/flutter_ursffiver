@@ -5,13 +5,14 @@ import 'package:flutter_ursffiver/core/di/external_service_di.dart';
 import 'package:flutter_ursffiver/core/di/internal_service_di.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/splash_screen.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   externalServiceDI();
   initServices();
-  
+  Intl.defaultLocale = 'en_US';
   runApp(const MyApp());
 }
 

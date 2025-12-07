@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../core/common/model/create_custom_interest_param.dart';
 import '../../../core/notifiers/button_status_notifier.dart';
 import '../../../core/notifiers/snackbar_notifier.dart';
+import '../model/create_custom_interest_req_param.dart';
 import '../model/interest_model.dart';
 import '../presentation/screens/verify_screen.dart';
 
@@ -22,7 +23,7 @@ class SignUpController extends GetxController {
 
   SnackbarNotifier? snackbarNotifier;
 
-  RxList<CreateCustomInterestParam> customInterests = RxList([]);
+  RxList<CreateCustomInterestReqParam> customInterests = RxList([]);
 
   // NEW – live count of selected interests
   RxInt get selectedCount =>
@@ -90,28 +91,28 @@ class SignUpController extends GetxController {
     processNotifier.setEnabled();
   }
 
-  void addCustomInterest(String interest, InterestColor color) {
-    customInterests.add(
-      CreateCustomInterestParam(name: interest, color: color),
-    );
-  }
+  // void addCustomInterest(String interest, InterestColor color) {
+  //   customInterests.add(
+  //     CreateCustomInterestReqParam(name: interest, color: color),
+  //   );
+  // }
 
-  void removeCustomInterestAt(int index) {
-    if (index < customInterests.length && index >= 0) {
-      customInterests.removeAt(index);
-      customInterests.refresh();
-    }
-  }
+  // void removeCustomInterestAt(int index) {
+  //   if (index < customInterests.length && index >= 0) {
+  //     customInterests.removeAt(index);
+  //     customInterests.refresh();
+  //   }
+  // }
 
-  void editCustomInterestAt(int index, String? interest, InterestColor? color) {
-    if (index < customInterests.length && index >= 0) {
-      customInterests[index] = customInterests[index].copyWith(
-        name: interest,
-        color: color,
-      );
-      customInterests.refresh();
-    }
-  }
+  // void editCustomInterestAt(int index, String? interest, InterestColor? color) {
+  //   if (index < customInterests.length && index >= 0) {
+  //     customInterests[index] = customInterests[index].copyWith(
+  //       name: interest,
+  //       color: color,
+  //     );
+  //     customInterests.refresh();
+  //   }
+  // }
 
   // --- Build request model ---
   SignupRequestParam get signupModel => SignupRequestParam(
@@ -127,7 +128,7 @@ class SignUpController extends GetxController {
         confirmPassword: confirmPassword.value,
         selectedInterests:
             interestSelectionCntlr.selectedInterests.keys.toList(),
-        customInterests: customInterests,
+        customInterests: interestSelectionCntlr.customRequests.keys.toList(),
       );
 
   // --- Signup method ---

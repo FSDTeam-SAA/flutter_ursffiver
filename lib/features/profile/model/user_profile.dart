@@ -1,5 +1,4 @@
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
-import 'package:flutter_ursffiver/features/home/model/interest_model.dart';
 
 import '../../auth/model/interest_model.dart';
 
@@ -119,4 +118,46 @@ class UserProfile {
     'active': active,
     'isEmailVerified': isEmailVerified
   };
+
+
+  UserProfile copyWith({
+  String? id,
+  String? firstName,
+  String? lastName,
+  String? userName,
+  String? email,
+  String? gender,
+  String? ageRange,
+  String? bio,
+  DateTime? dateOfBirth,
+  String? image,
+  bool? adminVerify,
+  String? status,
+  bool? active,
+  bool? isEmailVerified,
+  List<BadgeModel>? badges,
+  List<InterestModel>? interests,
+  List<InterestModel>? customInterests,
+}) {
+  return UserProfile(
+    id: id ?? this.id,
+    firstName: firstName ?? this.firstName,
+    lastName: lastName ?? this.lastName,
+    userName: userName ?? this.userName,
+    email: email ?? this.email,
+    gender: gender ?? this.gender,
+    ageRange: ageRange ?? this.ageRange,
+    bio: bio ?? this.bio,
+    image: image ?? this.image,
+    adminVerify: adminVerify ?? this.adminVerify,
+    status: status ?? this.status,
+    dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+    active: active ?? this.active,
+    isEmailVerified: isEmailVerified ?? this.isEmailVerified,
+    badges: badges ?? this.badges,
+    interests: interests ?? this.interests,
+    customInterests: customInterests ?? this.customInterests,
+  );
+}
+
 }

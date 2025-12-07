@@ -1,12 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import '../../../../core/theme/app_gap.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InviteFriend extends StatelessWidget {
   final String shareLink;
 
   const InviteFriend({super.key, required this.shareLink});
+
+  /// ------------ SAFE SHARE ACTIONS for Android + iOS ------------ ///
+
+  void _shareToWhatsApp(String url) async {
+    final uri = Uri.parse("https://wa.me/?text=$url");
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      Share.share(url);
+    }
+  }
+
+  void _shareToFacebook(String url) async {
+    final uri = Uri.parse("https://www.facebook.com/sharer/sharer.php?u=$url");
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      Share.share(url);
+    }
+  }
+
+  void _shareToInstagram(String url) async {
+    Share.share("Check this out: $url");
+  }
+
+  void _shareToTwitter(String url) async {
+    final uri = Uri.parse("https://twitter.com/intent/tweet?text=$url");
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      Share.share(url);
+    }
+  }
+
+  void _shareGeneric(String url) {
+    Share.share(url);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,50 +60,35 @@ class InviteFriend extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            
+            /// ---------- HEADER ---------- ///
             Row(
               children: [
-                Column(
-                  children: [
-                    Text(
-                      "Invite Friends to SPEET",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
+                const Text(
+                  "Invite Friends to SPEET",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                Spacer(),
-                Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: const Icon(Icons.close, color: Colors.black54),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    ),
-                  ],
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
               ],
             ),
+
             const Text(
               "Share SPEET with your friends!",
               style: TextStyle(fontSize: 14, color: Colors.black54),
             ),
             const SizedBox(height: 20),
 
-            // Share link field with copy button
+            /// ---------- SHARE LINK ---------- ///
             const Text(
               "Share Link",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 8),
+
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
               decoration: BoxDecoration(
@@ -74,19 +100,11 @@ class InviteFriend extends StatelessWidget {
                   Expanded(
                     child: Text(
                       shareLink,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black87,
-                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(
-                      Icons.copy,
-                      size: 20,
-                      color: Colors.black54,
-                    ),
+                    icon: const Icon(Icons.copy),
                     onPressed: () {
                       Clipboard.setData(ClipboardData(text: shareLink));
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -100,53 +118,49 @@ class InviteFriend extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // QR Code
+            /// ---------- QR CODE ---------- ///
             const Text(
               "QR Code",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 12),
+
             Center(
               child: QrImageView(
                 data: shareLink,
                 version: QrVersions.auto,
-                size: 256.0,
+                size: 200,
               ),
             ),
 
             const SizedBox(height: 20),
 
+            /// ---------- SHARE BUTTONS ---------- ///
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildSocialButton(
                   imagePath: 'assets/icon/wh.png',
-                  onTap: () {},
+                  onTap: () => _shareToWhatsApp(shareLink),
                 ),
                 _buildSocialButton(
                   imagePath: 'assets/icon/fa.png',
-                  onTap: () {},
+                  onTap: () => _shareToFacebook(shareLink),
                 ),
                 _buildSocialButton(
                   imagePath: 'assets/icon/in.png',
-                  onTap: () {},
+                  onTap: () => _shareToInstagram(shareLink),
                 ),
                 _buildSocialButton(
                   imagePath: 'assets/icon/tw.png',
-                  onTap: () {},
+                  onTap: () => _shareToTwitter(shareLink),
                 ),
                 _buildSocialButton(
                   imagePath: 'assets/icon/we.png',
-                  onTap: () {},
+                  onTap: () => _shareGeneric(shareLink),
                 ),
               ],
             ),
-
-            Gap.h20,
           ],
         ),
       ),
@@ -154,21 +168,16 @@ class InviteFriend extends StatelessWidget {
   }
 
   Widget _buildSocialButton({
-    required String imagePath, // local asset image path
+    required String imagePath,
     required VoidCallback onTap,
-    double size = 40, // button size
+    double size = 40,
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: SizedBox(
         width: size,
         height: size,
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle, // circular button
-          // no border
-        ),
-        child: Image.asset(imagePath, fit: BoxFit.contain),
+        child: Image.asset(imagePath),
       ),
     );
   }

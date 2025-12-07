@@ -243,52 +243,6 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     },
                   ),
                 ),
-                // SizedBox(
-                //   height: 50,
-                //   child: RSaveButton(
-                //     key: UniqueKey(),
-                //     width: double.infinity,
-                //     height: 54,
-                //     buttonStatusNotifier: controller.prcessNotifier,
-                //     saveText: "Verify",
-                //     loadingText: "Verifying...",
-                //     doneText: "Done",
-
-                //     // When verification process is done
-                //     onDone: () {
-                //       if (widget.isFromRegisterScreen) {
-                //         // After account verification during signup
-                //         Navigator.of(context).pushAndRemoveUntil(
-                //           MaterialPageRoute(
-                //             builder: (context) => const SignInScreen(),
-                //           ),
-                //           (route) => false, // remove all previous routes
-                //         );
-                //       } else {
-                //         // After verifying OTP for password reset
-                //         Navigator.of(context).pushReplacement(
-                //           MaterialPageRoute(
-                //             builder: (context) => ResetPasswordScreen(
-                //               email: controller.email,
-                //               otp: controller.otp,
-                //             ),
-                //           ),
-                //         );
-                //       }
-                //     },
-
-                //     // When "Verify" button is pressed
-                //     onSaveTap: () async {
-                //       FocusScope.of(context).unfocus(); // hide keyboard
-                //       if (widget.isFromRegisterScreen) {
-                //         verifyAccountCntlr.verify();
-                //       } else {
-                //         controller.verify();
-                //       }
-                //     },
-                //   ),
-                // ),
-
                 const SizedBox(height: 10),
               ],
             ),

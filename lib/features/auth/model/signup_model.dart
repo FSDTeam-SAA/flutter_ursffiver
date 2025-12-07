@@ -1,5 +1,6 @@
 
 import '../../../core/common/model/create_custom_interest_param.dart';
+import 'create_custom_interest_req_param.dart';
 
 class SignupRequestParam {
   final String? firstName;
@@ -13,7 +14,7 @@ class SignupRequestParam {
   final String? password;
   final String? confirmPassword;
   final List<String> selectedInterests;
-  final List<CreateCustomInterestParam> customInterests;
+  final List<CreateCustomInterestReqParam> customInterests;
 
   SignupRequestParam({
     required this.firstName,

@@ -19,6 +19,7 @@ class ChatScreen extends StatefulWidget {
   final String userId;
   final String chatId;
   final ChatController chatController;
+  final String? otherUserId;
 
   const ChatScreen({
     super.key,
@@ -27,6 +28,7 @@ class ChatScreen extends StatefulWidget {
     required this.userId,
     required this.chatId,
     required this.chatController,
+    this.otherUserId,
   });
 
   @override
@@ -43,8 +45,6 @@ class _ChatScreenState extends State<ChatScreen> {
     messagingController = MessagingController(
       chatId: widget.chatController.chatId,
     );
-
-    // Scroll to bottom after a short delay to ensure messages are loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
       scrollToBottom();
     });
@@ -77,7 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             SmartNetworkImage.circle(
               imageUrl: widget.avatarUrl,
-              diameter: 32,
+              diameter: 45,
               errorWidget: Icon(Icons.image, size: 32),
             ),
             const SizedBox(width: 8),
@@ -86,12 +86,20 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Text(
                   widget.contactName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                     fontSize: 16,
                   ),
                 ),
+                // Text(
+                //   widget.chatController.otherUserId,
+                //   style: TextStyle(
+                //     fontWeight: FontWeight.bold,
+                //     color: Colors.black,
+                //     fontSize: 16,
+                //   ),
+                // ),
                 ChatTimeLeftRow(
                   chatStartTime: widget.chatController.chatModel?.time,
                 ),
@@ -101,7 +109,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         actions: [
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: Colors.black),
+            icon: Icon(Icons.more_vert, color: Colors.black),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -117,7 +125,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   builder: (context) => SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
-                    child: AwardBadgeView(toUserId: widget.userId),
+                    child: AwardBadgeView(
+                      toUserId: widget.userId,
+                      otherUserId: widget.otherUserId ?? "",
+                    ),
                   ),
                 );
               } else if (value == "extend") {
@@ -162,16 +173,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   ],
                 ),
               ),
-              // const PopupMenuItem(
-              //   value: "location",
-              //   child: Row(
-              //     children: [
-              //       Icon(Icons.location_on_outlined, color: Colors.black),
-              //       SizedBox(width: 10),
-              //       Text("Share Location"),
-              //     ],
-              //   ),
-              // ),
             ],
           ),
 
@@ -189,8 +190,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemBuilder: (context, index) {
                   final msg = messages[index];
                   bool isMe = msg.isMe(
-                    Get.find<ProfileDataProvider>().userProfile.value?.id ??
-                        "",
+                    Get.find<ProfileDataProvider>().userProfile.value?.id ?? "",
                   );
                   return Column(
                     children: [

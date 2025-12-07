@@ -29,7 +29,7 @@ class InterestPickerSheet extends StatefulWidget {
   final InterestSelectionController interestSelectionCntlr;
   final Gradient brandGradient;
   final String confirmButtonText;
-  final VoidCallback onConfirm;
+  final Function(SelectedInterestPostData selectedInterests) onConfirm;
 
   @override
   State<InterestPickerSheet> createState() => _InterestPickerSheetState();
@@ -239,7 +239,7 @@ class _InterestPickerSheetState extends State<InterestPickerSheet> {
                       height: 48,
                       child: ElevatedButton(
                           onPressed: () {
-                            widget.onConfirm();
+                            widget.onConfirm(selectInterestController.selectedInterestPostData);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF4C5CFF),

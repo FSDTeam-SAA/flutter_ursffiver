@@ -78,7 +78,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '${widget.user.firstName ?? ''} ${widget.user.lastName ?? ''}',
+                        // '${widget.user.firstName ?? ''} ${widget.user.lastName ?? ''}',
+                        widget.user.userName ?? '',
                         style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                       const SizedBox(width: 6),

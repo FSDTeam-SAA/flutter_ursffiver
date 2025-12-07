@@ -6,6 +6,8 @@ import 'package:flutter_ursffiver/features/auth/controller/signin_controller.dar
 import 'package:flutter_ursffiver/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
+import 'package:flutter_ursffiver/features/profile/presentation/screens/privacy_policy_screen.dart';
+import 'package:flutter_ursffiver/features/profile/presentation/screens/terms_condition_screen.dart';
 import 'package:get/get.dart';
 import '../../../common/app_logo.dart';
 
@@ -22,7 +24,7 @@ class _SignInScreenState extends State<SignInScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller = LoginController(SnackbarNotifier(context: context));
+    controller = Get.put(LoginController(SnackbarNotifier(context: context)));
   }
 
   @override
@@ -183,31 +185,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           (v == null || v.isEmpty) ? 'Enter password' : null,
                     ),
                   ),
-                  const SizedBox(height: 12),
-
-                  // Keep me signed in
-                  Obx(
-                    () => Row(
-                      children: [
-                        Checkbox(
-                          value: controller.keepSignedIn.value,
-                          onChanged: (v) =>
-                              controller.toggleKeepSignedIn(v ?? true),
-                          // onChanged: controller.toggleKeepSignedIn,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          activeColor: brandBlue,
-                          side: const BorderSide(color: borderColor),
-                        ),
-                        const SizedBox(width: 4),
-                        const Text('Keep me signed in'),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Log In button
+                  const SizedBox(height: 20),
                   Obx(
                     () => SizedBox(
                       height: 48,
@@ -223,7 +201,6 @@ class _SignInScreenState extends State<SignInScreen> {
                             ? null
                             : () => controller.login(
                                 needVerifyAccount: () {
-                                  //Get.toNamed(RouteNames.verifyScreen);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -265,11 +242,6 @@ class _SignInScreenState extends State<SignInScreen> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () =>
                                   Get.to(() => const SignupScreen()),
-
-                            // Navigator.pushNamed(
-                            //       context,
-                            //       RouteNames.signup
-                            // ),
                           ),
                         ],
                       ),
@@ -277,32 +249,49 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                   const SizedBox(height: 40),
-
-                  // Terms
                   Center(
                     child: Text.rich(
                       TextSpan(
                         text: 'By continuing, you agree to SPEET’s ',
                         style: caption,
-                        children: const [
+                        children: [
                           TextSpan(
                             text: 'Terms of Service',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: brandBlue,
                               fontWeight: FontWeight.w700,
                               decoration: TextDecoration.underline,
                             ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        TermsConditionScreen(),
+                                  ),
+                                );
+                              },
                           ),
-                          TextSpan(text: ' and '),
+                          const TextSpan(text: ' and '),
                           TextSpan(
                             text: 'Privacy Policy',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: brandBlue,
                               fontWeight: FontWeight.w700,
                               decoration: TextDecoration.underline,
                             ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PrivacyPolicyScreen(),
+                                  ),
+                                );
+                              },
                           ),
-                          TextSpan(text: '.'),
+                          const TextSpan(text: '.'),
                         ],
                       ),
                       textAlign: TextAlign.center,
