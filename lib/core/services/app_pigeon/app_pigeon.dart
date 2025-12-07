@@ -40,6 +40,9 @@ class AppPigeon {
   }) {
     // Set base url
     _dio.options.baseUrl = baseUrl;
+    _dio.options.connectTimeout = const Duration(seconds: 90);    
+    _dio.options.receiveTimeout = const Duration(seconds: 90);
+
     // Initializes and adds auth interceptor
     _authService = AuthService(_secureStorage, _dio, refreshTokenManager);
     _dio.interceptors.add(_authService);

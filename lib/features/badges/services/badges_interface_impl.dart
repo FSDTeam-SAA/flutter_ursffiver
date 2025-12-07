@@ -15,7 +15,9 @@ final class BadgesInterfaceImpl extends BadgesInterface {
   final AppPigeon appPigeon;
 
   @override
-  FutureRequest<Success> awardBadgestoUser({required AwardBadgesToUser param}) async{
+  FutureRequest<Success> awardBadgestoUser({
+    required AwardBadgesToUser param,
+  }) async {
     return await asyncTryCatch(
       tryFunc: () async {
         final response = await appPigeon.post(
@@ -68,17 +70,16 @@ final class BadgesInterfaceImpl extends BadgesInterface {
   }
 
   @override
-FutureRequest<Success> giveBadge({required GiveBadge param}) async {
-  return await asyncTryCatch(
-    tryFunc: () async {
-      // Use the correct parameter for appPigeon.post
-      final response = await appPigeon.post(
-        ApiEndpoints.giveBadges,
-        data: param.toJson(),
-      );
-      return Success(message: extractSuccessMessage(response));
-    },
-  );
-}
-
+  FutureRequest<Success> giveBadge({required GiveBadge param}) async {
+    return await asyncTryCatch(
+      tryFunc: () async {
+        // Use the correct parameter for appPigeon.post
+        final response = await appPigeon.post(
+          ApiEndpoints.giveBadges,
+          data: param.toJson(),
+        );
+        return Success(message: extractSuccessMessage(response));
+      },
+    );
+  }
 }

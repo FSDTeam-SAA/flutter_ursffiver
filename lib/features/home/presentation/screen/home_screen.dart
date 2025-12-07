@@ -576,7 +576,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     _filterPeopleSuggestionController
                                         .selectInterestController,
                                 brandGradient: _brandGradient,
-                                onConfirm: () {
+                                onConfirm: (selectedInterest) {
                                   _filterPeopleSuggestionController
                                       .findSuggestion(forceFresh: true);
                                   Navigator.pop(context);

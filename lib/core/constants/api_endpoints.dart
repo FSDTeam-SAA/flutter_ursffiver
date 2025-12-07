@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 base class ApiEndpoints {
-  static const String socketUrl = _LocalHostWifi.socketUrl;
+  static const String socketUrl = _HostedServer.socketUrl;
 
-  static const String baseUrl = _LocalHostWifi.baseUrl;
+  static const String baseUrl = _HostedServer.baseUrl;
 
   /// ### post
   static const String login = _Auth.login;
@@ -137,6 +137,11 @@ class _RemoteServer {
 class _LocalHostWifi {
   static const String socketUrl = 'http://10.10.5.46:5001';
   static const String baseUrl = 'http://10.10.5.46:5001/api/v1';
+}
+
+class _HostedServer {
+  static const String socketUrl = 'http://72.60.169.91';
+  static const String baseUrl = 'http://72.60.169.91/api/v1';
 }
 
 class _Auth {

@@ -201,7 +201,6 @@ class _SignInScreenState extends State<SignInScreen> {
                             ? null
                             : () => controller.login(
                                 needVerifyAccount: () {
-                                  //Get.toNamed(RouteNames.verifyScreen);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

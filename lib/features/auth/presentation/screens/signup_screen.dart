@@ -97,7 +97,10 @@ class _SignupScreen extends State<SignupScreen> {
       builder: (_) => InterestPickerSheet.forSignU(
         interestSelectionCntlr: signupController.interestSelectionCntlr,
         brandGradient: _brandGradient,
-        onConfirm: () => Navigator.pop(context),
+        onConfirm: (selectedInterest) {
+          Navigator.pop(context);
+          
+        },
       ),
     );
   }
@@ -599,7 +602,11 @@ class _SignupScreen extends State<SignupScreen> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => Navigator.pop(
-                                context, MaterialPageRoute(builder: (_) => const SignInScreen())),
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const SignInScreen(),
+                              ),
+                            ),
                         ),
                       ],
                     ),

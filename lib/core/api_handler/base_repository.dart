@@ -32,10 +32,9 @@ base class BaseRepository {
           fullError: 'Internet connection failed!',
         ),
       );
-    } on DioException catch (e) {
-      debugPrint(".. \n..\n");
+    } on DioException catch (e, stackTrace) {
       debugPrint(e.response?.data["message"].toString());
-      debugPrint(".. \n..\n");
+      debugPrint(stackTrace.toString());
       //debugger?.dekhao("DioFailure $e");
       switch (e.type) {
         case DioExceptionType.connectionTimeout:

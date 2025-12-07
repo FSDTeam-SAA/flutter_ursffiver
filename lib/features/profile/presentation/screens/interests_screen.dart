@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
-import 'package:flutter_ursffiver/features/auth/model/interest_model.dart';
 import 'package:flutter_ursffiver/features/profile/interface/profile_interface.dart';
 import 'package:flutter_ursffiver/features/profile/model/update_profile_model.dart';
 import 'package:get/get.dart';
@@ -44,39 +43,40 @@ class _InterestsPageState extends State<InterestsPage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) {
-        return InterestPickerSheet.forFiltering(
+        return InterestPickerSheet.forSignU(
           interestSelectionCntlr: controller,
           brandGradient: const LinearGradient(
             colors: [Color(0xFF4C5CFF), Color(0xFF8F79FF)],
           ),
-          onConfirm: () async {
-            final allInterests = _profileDataController
-                .allInterestController
-                .interestList
-                .expand((cat) => cat.interests)
-                .toList();
+          onConfirm: (selectedInterests) async {
+            // final allInterests = _profileDataController
+            //     .allInterestController
+            //     .interestList
+            //     .expand((cat) => cat.interests)
+            //     .toList();
 
-            final selected = controller.selectedInterests.entries
-                .where((e) => e.value)
-                .map((e) => allInterests.firstWhereOrNull((i) => i.id == e.key))
-                .where((e) => e != null)
-                .cast<InterestModel>()
-                .toList();
+            // final selected = controller.selectedInterests.entries
+            //     .where((e) => e.value)
+            //     .map((e) => allInterests.firstWhereOrNull((i) => i.id == e.key))
+            //     .where((e) => e != null)
+            //     .cast<InterestModel>()
+            //     .toList();
 
             // Update local profile safely
             final oldUser = _profileDataController.userProfile.value!;
-            _profileDataController.userProfile.value = oldUser.copyWith(
-              interests: selected,
-            );
 
             // API call
             await Get.find<ProfileInterface>().updateProfile(
-              UpdateProfileModel(id: oldUser.id, interests: selected),
+              UpdateProfileModel(
+                id: oldUser.id, 
+                interests: selectedInterests.interestIds,
+                customInterests: selectedInterests.customInterests,
+              ),
             );
 
             await _profileDataController.getCurrentUserProfile();
 
-            Navigator.pop(context);
+            if(mounted) Navigator.pop(context);
           },
         );
       },

@@ -129,11 +129,7 @@ class ReceivedBadgesWidget extends StatelessWidget {
           children: [
             const Text(
               "Your Received Badges",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 6),
             const Text(
@@ -141,49 +137,62 @@ class ReceivedBadgesWidget extends StatelessWidget {
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             Gap.h20,
-            Obx(() {
-              if (controller.receivedBadges.isEmpty) {
-                return Expanded(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+
+            /// 🔥 Pull To Refresh
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await controller.refreshReceivedBadges();
+                },
+                child: Obx(() {
+                  if (controller.receivedBadges.isEmpty) {
+                    return ListView(
                       children: [
-                        Container(
-                          width: 180,
-                          height: 180,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(16),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.40,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 180,
+                                  height: 180,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Icon(
+                                    Icons.card_giftcard,
+                                    size: 160,
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  "You haven't received any badges yet",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Icon(
-                            Icons.card_giftcard,
-                            size: 160,
-                            color: Colors.grey[400],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "You haven't received any badges yet",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey[600],
-                          ),
-                        ),
+                        )
                       ],
-                    ),
-                  ),
-                );
-              }
-              return Expanded(
-                child: ListView.builder(
-                  itemCount: controller.receivedBadges.length,
-                  itemBuilder: (context, index) {
-                    final badge = controller.receivedBadges[index];
-                    return BadgeRecordWidget(badge: badge);
-                  },
-                ),
-              );
-            }),
+                    );
+                  }
+
+                  return ListView.builder(
+                    itemCount: controller.receivedBadges.length,
+                    itemBuilder: (context, index) {
+                      final badge = controller.receivedBadges[index];
+                      return BadgeRecordWidget(badge: badge);
+                    },
+                  );
+                }),
+              ),
+            ),
           ],
         ),
       ),
@@ -212,11 +221,7 @@ class AwardedBadgesWidget extends StatelessWidget {
           children: [
             const Text(
               "Badges You've Awarded",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 6),
             const Text(
@@ -224,52 +229,66 @@ class AwardedBadgesWidget extends StatelessWidget {
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             Gap.h20,
-            Obx(() {
-              if (controller.awardedBadges.isEmpty) {
-                return Expanded(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+
+            /// 🔥 Pull To Refresh
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await controller.refreshAwardedBadges();
+                },
+                child: Obx(() {
+                  if (controller.awardedBadges.isEmpty) {
+                    return ListView(
                       children: [
-                        Container(
-                          width: 180,
-                          height: 180,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(16),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.40,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 180,
+                                  height: 180,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Icon(
+                                    Icons.card_giftcard,
+                                    size: 160,
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  "You haven't awarded any badges yet",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Icon(
-                            Icons.card_giftcard,
-                            size: 160,
-                            color: Colors.grey[400],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "You haven't awarded any badges yet",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey[600],
-                          ),
-                        ),
+                        )
                       ],
-                    ),
-                  ),
-                );
-              }
-              return Expanded(
-                child: ListView.builder(
-                  itemCount: controller.awardedBadges.length,
-                  itemBuilder: (context, index) {
-                    final badge = controller.awardedBadges[index];
-                    return BadgeRecordWidget(badge: badge);
-                  },
-                ),
-              );
-            }),
+                    );
+                  }
+
+                  return ListView.builder(
+                    itemCount: controller.awardedBadges.length,
+                    itemBuilder: (context, index) {
+                      final badge = controller.awardedBadges[index];
+                      return BadgeRecordWidget(badge: badge);
+                    },
+                  );
+                }),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
+

@@ -13,7 +13,8 @@ import '../../../../core/theme/text_style.dart';
 
 class AwardBadgeView extends StatefulWidget {
   final String toUserId;
-  const AwardBadgeView({super.key, required this.toUserId});
+  final String otherUserId;
+  const AwardBadgeView({super.key, required this.toUserId, required this.otherUserId});
 
   @override
   State<AwardBadgeView> createState() => _AwardBadgeViewState();
@@ -28,7 +29,7 @@ class _AwardBadgeViewState extends State<AwardBadgeView> {
   void initState() {
     super.initState();
     badgeController = Get.put(AllBadgesController());
-    awardBadgeController = AwardBadgeController(toUserId: widget.toUserId);
+    awardBadgeController = AwardBadgeController(toUserId: widget.otherUserId);
   }
 
   @override
@@ -72,9 +73,8 @@ class _AwardBadgeViewState extends State<AwardBadgeView> {
                     fontWeight: FontWeight.w600,
                     color: Colors.black),
               ),
-
               Text(
-                "User ID: ${widget.toUserId}",
+                "User ID: ${widget.otherUserId}",
                 style: const TextStyle(
                     fontSize: 14,
                     color: Colors.blueGrey,
