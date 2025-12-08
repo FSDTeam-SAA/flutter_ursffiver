@@ -92,7 +92,7 @@
 //               chatController: chatController,
 //               userId: chatController.chatModel?.user?.id ?? '',
 //               otherUserId: chatController.otherUserId,
-              
+
 //             ),
 //           ),
 //         );
@@ -164,8 +164,8 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
@@ -188,60 +188,66 @@ class _AllChatScreeenState extends State<AllChatScreeen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Messages',
-                style: AppText.xxlSemiBold_24_600.copyWith(
-                  color: AppColors.primaryTextblack,
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Messages',
+                    style: AppText.xxlSemiBold_24_600.copyWith(
+                      color: AppColors.primaryTextblack,
+                    ),
+                  ),
                 ),
-              ),
-            ),
 
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  await chatController.refreshChats();
-                },
-                child: Obx(() {
-                  if (chatController.chats.isEmpty) {
-                    return ListView(
-                      children: const [
-                        SizedBox(height: 200),
-                        Center(
-                          child: Text(
-                            'No messages yet.',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-
-                  return ListView.builder(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: chatController.chats.length,
-                    itemBuilder: (context, index) {
-                      final message = chatController.chats[index];
-                      return MessageTile(chatController: message);
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await chatController.refreshChats();
                     },
-                  );
-                }),
-              ),
+                    child: Obx(() {
+                      if (chatController.chats.isEmpty) {
+                        return ListView(
+                          children: const [
+                            SizedBox(height: 200),
+                            Center(
+                              child: Text(
+                                'No messages yet.',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+
+                      return ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: chatController.chats.length,
+                        itemBuilder: (context, index) {
+                          final message = chatController.chats[index];
+                          return MessageTile(chatController: message);
+                        },
+                      );
+                    }),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        )
+        .animate()
+        .scaleY(begin: 0.8, end: 1.0, duration: 500.ms, curve: Curves.easeIn)
+        .fadeIn(duration: 500.ms, curve: Curves.easeIn);
   }
 }
 

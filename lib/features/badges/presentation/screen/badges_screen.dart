@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_ursffiver/features/badges/controller/all_badges_controller.dart';
 import 'package:flutter_ursffiver/features/badges/presentation/screen/badge_guide_screen.dart';
 import 'package:get/get.dart';
@@ -37,74 +38,74 @@ class _BadgesPageState extends State<BadgesPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            Icon(
-              Icons.workspace_premium_outlined,
-              size: 32,
-              color: AppColors.primarybutton,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              'Badge Management',
-              style: AppText.xlSemiBold_20_700.copyWith(
-                color: AppColors.primaryTextblack,
-              ),
-            ),
-            const Spacer(),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => BadgeGuideScreen()),
-                );
-              },
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.contact_support_outlined,
-                    color: AppColors.primarybutton,
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            title: Row(
+              children: [
+                Icon(
+                  Icons.workspace_premium_outlined,
+                  size: 32,
+                  color: AppColors.primarybutton,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  'Badge Management',
+                  style: AppText.xlSemiBold_20_700.copyWith(
+                    color: AppColors.primaryTextblack,
                   ),
-                  const SizedBox(width: 6),
-                  Text(
-                    "Badge Guide",
-                    style: AppText.smMedium_14_600.copyWith(
-                      color: AppColors.primarybutton,
-                    ),
+                ),
+                const Spacer(),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => BadgeGuideScreen()),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.contact_support_outlined,
+                        color: AppColors.primarybutton,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        "Badge Guide",
+                        style: AppText.smMedium_14_600.copyWith(
+                          color: AppColors.primarybutton,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-        centerTitle: false,
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: AppColors.primarybutton,
-          unselectedLabelColor: AppColors.primarybutton,
-          indicatorColor: AppColors.primarybutton,
-          labelStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+            centerTitle: false,
+            bottom: TabBar(
+              controller: _tabController,
+              labelColor: AppColors.primarybutton,
+              unselectedLabelColor: AppColors.primarybutton,
+              indicatorColor: AppColors.primarybutton,
+              labelStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              tabs: const [
+                Tab(text: 'Received'),
+                Tab(text: 'Awarded'),
+              ],
+            ),
           ),
-          tabs: const [
-            Tab(text: 'Received'),
-            Tab(text: 'Awarded'),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: const [
-          ReceivedBadgesWidget(),
-          AwardedBadgesWidget(),
-        ],
-      ),
-    );
+          body: TabBarView(
+            controller: _tabController,
+            children: const [ReceivedBadgesWidget(), AwardedBadgesWidget()],
+          ),
+        )
+        .animate()
+        .slideY(begin: 0.8, end: 0, duration: 500.ms, curve: Curves.easeOutCirc)
+        .fadeIn(duration: 500.ms, curve: Curves.easeOutCirc);
   }
 }
 
@@ -178,7 +179,7 @@ class ReceivedBadgesWidget extends StatelessWidget {
                               ],
                             ),
                           ),
-                        )
+                        ),
                       ],
                     );
                   }
@@ -270,7 +271,7 @@ class AwardedBadgesWidget extends StatelessWidget {
                               ],
                             ),
                           ),
-                        )
+                        ),
                       ],
                     );
                   }
@@ -291,4 +292,3 @@ class AwardedBadgesWidget extends StatelessWidget {
     );
   }
 }
-

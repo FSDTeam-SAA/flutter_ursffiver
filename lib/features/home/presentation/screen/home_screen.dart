@@ -84,47 +84,6 @@ class _HomeScreenState extends State<HomeScreen> {
         title: AppLogo(height: 30, width: 100),
         centerTitle: false,
         actions: [
-          // IconButton(
-          //   icon: const Icon(Icons.donut_large_rounded, color: Colors.black),
-          //   iconSize: 28,
-          //   onPressed: () {
-          //     showDialog(
-          //       context: context,
-          //       barrierDismissible: false,
-          //       builder: (context) => Center(
-          //         child: SizedBox(
-          //           width: MediaQuery.of(context).size.width * 0.9,
-          //           child: LocationShare(
-          //             onAccept: () {
-          //               Navigator.push(
-          //                 context,
-          //                 MaterialPageRoute(
-          //                   builder: (context) => LiveLocationSharingWidget(
-          //                     sharingWith: '',
-          //                     userInitials: '',
-          //                     userName: '',
-          //                   ),
-          //                 ),
-          //               );
-          //             },
-          //             onDecline: () {
-          //               debugPrint("❌ Declined");
-          //             },
-          //           ),
-          //         ),
-          //       ),
-          //     );
-          //   },
-          // ),
-
-          // ///
-          // IconButton(
-          //   icon: Icon(Icons.donut_large_rounded, color: Colors.black),
-          //   iconSize: 28,
-          //   onPressed: () {
-          //     FixedNotificationBanner.show(context);
-          //   },
-          // ),
           Obx(
             () => IconButton(
               onPressed: () {
@@ -206,28 +165,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       });
                     },
                   ),
-                  // Switch(
-                  //   value: isAvailable,
-                  //   onChanged: (val) async {
-                  //     if (val == true) {
-                  //       final permission = await Geolocator.checkPermission();
-
-                  //       if (permission == LocationPermission.denied ||
-                  //           permission == LocationPermission.deniedForever) {
-                  //         await showLocationPermissionDialog(context);
-
-                  //         return;
-                  //       }
-                  //     }
-                  //     setState(() {
-                  //       isAvailable = val;
-                  //     });
-
-                  //     _filterPeopleSuggestionController.setVisibility(val, () {
-                  //       return val;
-                  //     });
-                  //   },
-                  // ),
                 ],
               ),
             ),
@@ -615,7 +552,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: PaginatedListWidget(
                   physics: AlwaysScrollableScrollPhysics(),
                   pagination: _filterPeopleSuggestionController.suggestionList,
-                  onRefresh: null,
+                  onRefresh:()=> _filterPeopleSuggestionController
+                      .findSuggestion(forceFresh: true),
                   skeleton: UserSuggestionSkeleton(),
                   skeletonCount: 3,
                   builder: (index, data) => _UserSuggestionCard(profile: data),
@@ -623,7 +561,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ],
-        ),
+        ).animate()
+          .slideY(
+            begin: .9,
+            end: 0,
+            duration: 500.ms,
+            curve: Curves.easeOutCirc,
+          )
+          .fadeIn(duration: 400.ms, curve: Curves.easeOutCirc),
       ),
     );
   }

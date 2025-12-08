@@ -25,7 +25,7 @@ class _InterestsPageState extends State<InterestsPage> {
 
   void _openInterestPicker() {
     final controller = _profileDataController.selectInterestController;
-
+    controller.search('');
     // Pre-select existing interests
     final selectedIds =
         _profileDataController.userProfile.value?.interests
@@ -49,26 +49,12 @@ class _InterestsPageState extends State<InterestsPage> {
             colors: [Color(0xFF4C5CFF), Color(0xFF8F79FF)],
           ),
           onConfirm: (selectedInterests) async {
-            // final allInterests = _profileDataController
-            //     .allInterestController
-            //     .interestList
-            //     .expand((cat) => cat.interests)
-            //     .toList();
-
-            // final selected = controller.selectedInterests.entries
-            //     .where((e) => e.value)
-            //     .map((e) => allInterests.firstWhereOrNull((i) => i.id == e.key))
-            //     .where((e) => e != null)
-            //     .cast<InterestModel>()
-            //     .toList();
-
-            // Update local profile safely
             final oldUser = _profileDataController.userProfile.value!;
 
             // API call
             await Get.find<ProfileInterface>().updateProfile(
               UpdateProfileModel(
-                id: oldUser.id, 
+                id: oldUser.id,
                 interests: selectedInterests.interestIds,
                 customInterests: selectedInterests.customInterests,
               ),
@@ -76,7 +62,7 @@ class _InterestsPageState extends State<InterestsPage> {
 
             await _profileDataController.getCurrentUserProfile();
 
-            if(mounted) Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
           },
         );
       },
@@ -96,11 +82,7 @@ class _InterestsPageState extends State<InterestsPage> {
         centerTitle: false,
         actions: [
           TextButton(
-            onPressed: () {
-              setState(() {
-                isEditing = !isEditing;
-              });
-            },
+            onPressed: _openInterestPicker,
             child: Text(
               isEditing ? "Done" : "Edit Interests",
               style: AppText.mdMedium_16_500.copyWith(
@@ -116,6 +98,30 @@ class _InterestsPageState extends State<InterestsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              
+              Text("Your Custom Interests",
+                  style: AppText.lgMedium_18_500
+                      .copyWith(color: AppColors.primaryTextblack)),
+              Obx(() {
+                final selectedInterests =
+                    _profileDataController.userProfile.value?.customInterests ?? [];
+              
+                if (selectedInterests.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "No interests added.",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                }
+              
+                return InterestsGrid(
+                  chips: selectedInterests,
+                  editable: isEditing,
+                );
+              }),
+              Gap.h24,
+
               if (!isEditing) ...[
                 Text(
                   "Primary Interests",
@@ -152,27 +158,6 @@ class _InterestsPageState extends State<InterestsPage> {
                   );
                 }),
               ),
-
-              if (isEditing)
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primarybutton,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: _openInterestPicker,
-                    child: Text(
-                      "Add More Interests",
-                      style: AppText.mdMedium_16_500.copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
             ],
           ),
         ),

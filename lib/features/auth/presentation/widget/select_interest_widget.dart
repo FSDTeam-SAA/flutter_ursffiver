@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../model/interest_model.dart';
+import '../../../../core/common/model/interest_model.dart';
 
 class SelectInterestTile extends StatefulWidget {
   final InterestModel interest;

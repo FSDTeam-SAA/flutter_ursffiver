@@ -188,7 +188,6 @@ final class ChatInterfaceImpl extends InboxInterface {
         );
 
         //parse
-        final data = response.data["data"];
 
         //return
         return Success(message: extractSuccessMessage(response), data: null);
