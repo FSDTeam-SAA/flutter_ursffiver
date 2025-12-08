@@ -9,7 +9,7 @@ import 'package:flutter_ursffiver/features/inbox/presentation/widget/send_messag
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 import 'package:get/get.dart';
 
-import '../../../auth/model/interest_model.dart';
+import '../../../../core/common/model/interest_model.dart';
 
 class UserProfileCard extends StatefulWidget {
   final UserProfile user;

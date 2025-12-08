@@ -7,7 +7,7 @@ import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/widget/send_message-dialog.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 
-import '../../../auth/model/interest_model.dart';
+import '../../../../core/common/model/interest_model.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final UserProfile user;

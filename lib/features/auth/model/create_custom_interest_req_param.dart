@@ -1,4 +1,4 @@
-import 'interest_model.dart';
+import '../../../core/common/model/interest_model.dart';
 
 class CreateCustomInterestReqParam {
   final String name;
@@ -11,6 +11,21 @@ class CreateCustomInterestReqParam {
       'name': name,
       'color': color.name,
     };
+  }
+
+  InterestModel toInterestModel() {
+    return InterestModel(
+      id:"${DateTime.now().millisecondsSinceEpoch}", // Custom interests can have a temporary negative ID
+      name: name,
+      color: color,
+    );
+  }
+
+  factory CreateCustomInterestReqParam.fromInterest(InterestModel interest) {
+    return CreateCustomInterestReqParam(
+      name: interest.name,
+      color: interest.color,
+    );
   }
 
   @override

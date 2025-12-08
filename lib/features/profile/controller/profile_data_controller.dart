@@ -11,12 +11,19 @@ import 'package:get/get.dart';
 class ProfileDataProvider extends GetxController {
   Rx<UserProfile?> userProfile = Rx<UserProfile?>(null);
 
-    // Add this: Interest selection controller
-  final InterestSelectionController selectInterestController = InterestSelectionController();
+  // Add this: Interest selection controller
+  final InterestSelectionController selectInterestController =
+      InterestSelectionController();
 
   // Add this: All interests fetch controller
-  final AllInterestFetchController allInterestController = AllInterestFetchController();
-
+  final AllInterestFetchController allInterestController =
+      AllInterestFetchController();
+  @override
+  void onInit() {
+    super.onInit();
+    allInterestController.fetchInterests();
+    getCurrentUserProfile();
+  }
 
   Future<void> getCurrentUserProfile() async {
     if (Get.find<AppManager>().currentAuthStatus is Authenticated) {
@@ -28,7 +35,12 @@ class ProfileDataProvider extends GetxController {
 
       lr.fold((failure) {}, (success) {
         userProfile.value = success.data;
+        selectInterestController.init(
+          preSelectedInterests: success.data?.interests,
+          preSelectedCustomInterest: success.data?.customInterests,
+        );
         debugPrint("✅ Profile fetched: ${success.data?.email}");
+        userProfile.refresh();
       });
     }
   }

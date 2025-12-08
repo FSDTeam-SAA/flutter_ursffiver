@@ -131,6 +131,36 @@ class _InterestPickerSheetState extends State<InterestPickerSheet> {
                         prefixIcon: const Icon(Icons.search),
                       ),
                     ),
+                    SizedBox(height: 16,),
+                    
+                    // Custom Interests
+
+                    ObxValue(
+                      (data) {
+                        final list = data.keys.toList();
+                        return ListView.builder(
+                          itemCount: list.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.only(top: 8),
+                          itemBuilder: (_, idx) {
+                            final interest = list[idx].toInterestModel();
+                            return SelectInterestTile(
+                              interest: interest,
+                              isSelected: data[list[idx]] ?? false,
+                              onTap: () {
+                                selectInterestController.toggleSelectInterest(
+                                  interest,
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                        widget.interestSelectionCntlr.customRequests
+                    ),
+
+
                     const SizedBox(height: 8),
                     if(widget.forSignUp) GestureDetector(
                       onTap: () => showCreateCustomInterest(
@@ -149,6 +179,8 @@ class _InterestPickerSheetState extends State<InterestPickerSheet> {
                   ],
                 ),
               ),
+
+
 
               const SizedBox(height: 8),
 
