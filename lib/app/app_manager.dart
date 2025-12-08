@@ -49,7 +49,7 @@ class AppManager extends GetxController {
   void _decideRoute(AuthStatus? authStatus) async {
     if (authStatus is UnAuthenticated) {
        _authStatus = authStatus;
-        Get.to(() => SignInScreen());
+        Get.offAll(() => SignInScreen());
         // navigatorKey.currentState?.pushNamedAndRemoveUntil(
         //   RouteNames.login,
         //   (route) => false,

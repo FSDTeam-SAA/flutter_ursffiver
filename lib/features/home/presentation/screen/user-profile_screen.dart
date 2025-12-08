@@ -34,23 +34,23 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   Container(
                     width: 8,
                     height: 8,
-                    decoration: BoxDecoration(color: widget.user.active ? Colors.green : Colors.grey, shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                      color: widget.user.active ? Colors.green : Colors.grey,
+                      shape: BoxShape.circle,
+                    ),
                   ),
                   const SizedBox(width: 6),
                   Text(
                     widget.user.active ? 'Active Now' : 'Offline',
-                    style: AppText.mdMedium_16_500.copyWith(color: AppColors.secondaryTextblack),
+                    style: AppText.mdMedium_16_500.copyWith(
+                      color: AppColors.secondaryTextblack,
+                    ),
                   ),
                 ],
               ),
-              
             ),
           ),
         ],
-        // title: Text(
-        //   'User Profile',
-        //   style: AppText.lgMedium_18_500.copyWith(color: AppColors.primaryTextblack),
-        // ),
         centerTitle: false,
       ),
       body: SingleChildScrollView(
@@ -69,8 +69,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     errorWidget: Container(
                       height: 120,
                       width: 120,
-                      decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(8)),
-                      child: const Icon(Icons.person, size: 50, color: Colors.grey),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(
+                        Icons.person,
+                        size: 50,
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -80,29 +87,43 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Text(
                         // '${widget.user.firstName ?? ''} ${widget.user.lastName ?? ''}',
                         widget.user.userName ?? '',
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                       const SizedBox(width: 6),
                       if (widget.user.adminVerify == true)
-                        const Icon(Icons.verified_user_outlined, color: Colors.green, size: 24),
+                        const Icon(
+                          Icons.verified_user_outlined,
+                          color: Colors.green,
+                          size: 24,
+                        ),
                     ],
                   ),
-                  if(widget.user.status != null && widget.user.status!.isNotEmpty && widget.user.active) Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.primarybutton.withAlpha(30),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8),
-                      child: Text(
-                        "${widget.user.status}",
-                        style: AppText.mdMedium_16_500.copyWith(
-                          color: AppColors.secondaryTextblack,
-                          fontStyle: FontStyle.italic
+                  if (widget.user.status != null &&
+                      widget.user.status!.isNotEmpty &&
+                      widget.user.active)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.primarybutton.withAlpha(30),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4.0,
+                          horizontal: 8,
+                        ),
+                        child: Text(
+                          "${widget.user.status}",
+                          style: AppText.mdMedium_16_500.copyWith(
+                            color: AppColors.secondaryTextblack,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                   const SizedBox(height: 12),
                   if (widget.user.bio != null)
                     Padding(
@@ -110,7 +131,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       child: Text(
                         widget.user.bio!,
                         textAlign: TextAlign.center,
-                        style: AppText.mdRegular_16_400.copyWith(color: AppColors.secondaryTextblack),
+                        style: AppText.mdRegular_16_400.copyWith(
+                          color: AppColors.secondaryTextblack,
+                        ),
                       ),
                     ),
                 ],
@@ -123,24 +146,36 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               children: [
                 _buildStatItem(Icons.location_on_outlined, '1 ft away'),
                 _buildStatItem(Icons.female, widget.user.gender ?? ''),
-                _buildStatItem(Icons.check_circle_outline, widget.user.ageRange ?? ''),
+                _buildStatItem(
+                  Icons.check_circle_outline,
+                  widget.user.ageRange ?? '',
+                ),
               ],
             ),
 
             const SizedBox(height: 32),
-
             const Text(
               'Primary Interests',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(height: 16),
-            InterestsGrid(chips: widget.user.interests + widget.user.customInterests),
+            InterestsGrid(
+              chips: widget.user.interests + widget.user.customInterests,
+            ),
 
             const SizedBox(height: 32),
 
             const Text(
               'Earned Badges',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(height: 16),
             BadgeList(badges: widget.user.badges),
@@ -168,7 +203,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primarybutton,
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -177,7 +214,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         SizedBox(width: 8),
                         Text(
                           'Invite to Chat',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),
@@ -197,7 +237,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       children: [
         Icon(icon, color: AppColors.primarybutton, size: 20),
         const SizedBox(width: 4),
-        Text(text, style: AppText.smMedium_14_600.copyWith(color: AppColors.secondaryTextblack)),
+        Text(
+          text,
+          style: AppText.smMedium_14_600.copyWith(
+            color: AppColors.secondaryTextblack,
+          ),
+        ),
       ],
     );
   }
@@ -231,7 +276,11 @@ class BadgeIconWithCount extends StatelessWidget {
   final BadgeModel badge;
   final int count;
 
-  const BadgeIconWithCount({super.key, required this.badge, required this.count});
+  const BadgeIconWithCount({
+    super.key,
+    required this.badge,
+    required this.count,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -248,11 +297,7 @@ class BadgeIconWithCount extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            badge.badgeIcon,
-            color: badgeColor,
-            size: 16,
-          ),
+          Icon(badge.badgeIcon, color: badgeColor, size: 16),
           const SizedBox(width: 4),
           Text(
             "x$count",
@@ -279,7 +324,9 @@ class InterestsGrid extends StatelessWidget {
       spacing: 8,
       runSpacing: 8,
       children: chips.map((interest) {
-        final name = interest.name.length > 12 ? '${interest.name.substring(0, 10)}...' : interest.name;
+        final name = interest.name.length > 12
+            ? '${interest.name.substring(0, 10)}...'
+            : interest.name;
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
@@ -288,7 +335,10 @@ class InterestsGrid extends StatelessWidget {
           ),
           child: Text(
             name,
-            style: TextStyle(color: interest.color.deepColor, fontWeight: FontWeight.w500),
+            style: TextStyle(
+              color: interest.color.deepColor,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         );
       }).toList(),

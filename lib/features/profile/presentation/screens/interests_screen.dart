@@ -49,20 +49,6 @@ class _InterestsPageState extends State<InterestsPage> {
             colors: [Color(0xFF4C5CFF), Color(0xFF8F79FF)],
           ),
           onConfirm: (selectedInterests) async {
-            // final allInterests = _profileDataController
-            //     .allInterestController
-            //     .interestList
-            //     .expand((cat) => cat.interests)
-            //     .toList();
-
-            // final selected = controller.selectedInterests.entries
-            //     .where((e) => e.value)
-            //     .map((e) => allInterests.firstWhereOrNull((i) => i.id == e.key))
-            //     .where((e) => e != null)
-            //     .cast<InterestModel>()
-            //     .toList();
-
-            // Update local profile safely
             final oldUser = _profileDataController.userProfile.value!;
 
             // API call

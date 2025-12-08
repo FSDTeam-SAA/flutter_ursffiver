@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_ursffiver/core/common/widget/reactive_button/r_icon.dart';
 import 'package:flutter_ursffiver/features/auth/controller/signup_controller.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
@@ -99,7 +100,6 @@ class _SignupScreen extends State<SignupScreen> {
         brandGradient: _brandGradient,
         onConfirm: (selectedInterest) {
           Navigator.pop(context);
-          
         },
       ),
     );
@@ -123,499 +123,551 @@ class _SignupScreen extends State<SignupScreen> {
         child: SafeArea(
           child: Form(
             key: _formKey,
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  AppLogo(height: 110, width: 80),
-                  const SizedBox(height: 8),
-                  const Text(
-                    "Create your account",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    "Transform digital connections into real-life meetups with nearby people who share your interests.",
-                    textAlign: TextAlign.center,
-                    style: caption,
-                  ),
-                  const SizedBox(height: 20),
-
-                  // === INTEREST PICKER ===
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        color: Colors.grey[200],
+            child:
+                SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 12,
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 15),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  "What interests you ?",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          AppLogo(height: 110, width: 80),
+                          const SizedBox(height: 8),
+                          const Text(
+                            "Create your account",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "Transform digital connections into real-life meetups with nearby people who share your interests.",
+                            textAlign: TextAlign.center,
+                            style: caption,
+                          ),
+                          const SizedBox(height: 20),
+
+                          // === INTEREST PICKER ===
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                color: Colors.grey[200],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 15),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          "What interests you ?",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 80,
+                                          height: 7,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              4,
+                                            ),
+                                            color: Colors.deepPurpleAccent,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 15,
+                                      ),
+                                      child: Text(
+                                        "Select interests to find people who share your passions",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey,
+                                          fontSize: 16,
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                      ),
+                                    ),
+
+                                    // TRIGGER (tap to open bottom sheet)
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(4),
+                                      onTap: () async {
+                                        await _openInterestPicker(context);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                          color: Colors.white,
+                                        ),
+                                        height: 48,
+                                        width: double.infinity,
+                                        child: const Center(
+                                          child: Text(
+                                            "Click to select your interests",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    // LIVE COUNTER – uses controller's selectedCount
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 15,
+                                        ),
+                                        child: Obx(() {
+                                          final cnt = signupController
+                                              .selectedCount
+                                              .value;
+                                          return RichText(
+                                            textAlign: TextAlign.center,
+                                            text: TextSpan(
+                                              text: "Selected: ",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                              children: [
+                                                TextSpan(
+                                                  text: "$cnt/15",
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                if (cnt == 0) ...[
+                                                  const WidgetSpan(
+                                                    child: SizedBox(width: 40),
+                                                  ),
+                                                  const TextSpan(
+                                                    text:
+                                                        "Please select at least 1",
+                                                    style: TextStyle(
+                                                      color: Colors.red,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ],
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    ),
+
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 15,
+                                      ),
+                                      child: Text(
+                                        "Your interests help us connect you with like-minded people nearby",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // === INPUT FIELDS ===
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _Labeled(
+                                  label: 'First Name',
+                                  child: TextFormField(
+                                    controller: _firstName,
+                                    onChanged: signupController.setFirstName,
+                                    decoration: _decoration('Name Here'),
+                                    validator: (v) =>
+                                        (v == null || v.trim().isEmpty)
+                                        ? 'Required'
+                                        : null,
                                   ),
                                 ),
-                                Container(
-                                  width: 80,
-                                  height: 7,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4),
-                                    color: Colors.deepPurpleAccent,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _Labeled(
+                                  label: 'Last Name',
+                                  child: TextFormField(
+                                    controller: _lastName,
+                                    onChanged: signupController.setLastName,
+                                    decoration: _decoration('Name Here'),
+                                    validator: (v) =>
+                                        (v == null || v.trim().isEmpty)
+                                        ? 'Required'
+                                        : null,
                                   ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+
+                          _Labeled(
+                            label: 'User Name',
+                            child: TextFormField(
+                              controller: _userName,
+                              onChanged: signupController.setUsername,
+                              decoration: _decoration('User Name Here'),
+                              validator: (v) => (v == null || v.trim().isEmpty)
+                                  ? 'Required'
+                                  : null,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
+                          _Labeled(
+                            label: 'Email Address',
+                            child: TextFormField(
+                              controller: _email,
+                              onChanged: signupController.setEmail,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: _decoration('hello@example.com'),
+                              validator: (v) {
+                                if (v == null || v.trim().isEmpty)
+                                  return 'Required';
+                                final emailRegex = RegExp(
+                                  r'^[^@]+@[^@]+\.[^@]+',
+                                );
+                                if (!emailRegex.hasMatch(v.trim()))
+                                  return 'Invalid email';
+                                return null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
+                          _Labeled(
+                            label: 'Date of Birth',
+                            child: TextFormField(
+                              controller: _dob,
+                              readOnly: true,
+                              decoration: _decoration('DD/MM/YY').copyWith(
+                                suffixIcon: const Icon(Icons.event_outlined),
+                              ),
+                              onTap: () async {
+                                final now = DateTime.now();
+
+                                // If user already selected a date, use it as initial date
+                                DateTime initialDate;
+                                if (_dob.text.isNotEmpty) {
+                                  initialDate = DateTime.parse(_dob.text);
+                                } else {
+                                  initialDate = DateTime(
+                                    now.year - 18,
+                                    now.month,
+                                    now.day,
+                                  );
+                                }
+
+                                final picked = await showDatePicker(
+                                  context: context,
+                                  initialDate: initialDate,
+                                  firstDate: DateTime(1900),
+                                  lastDate: now,
+                                );
+
+                                if (picked != null) {
+                                  final formatted =
+                                      "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                                  _dob.text = formatted;
+                                  signupController.setDateOfBirth(formatted);
+                                }
+                              },
+                              validator: (v) => (v == null || v.trim().isEmpty)
+                                  ? 'Required'
+                                  : null,
+                            ),
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          // Gender + Age Range
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _Labeled(
+                                  label: 'Gender',
+                                  child: _Dropdown<String>(
+                                    value: _gender,
+                                    hint: 'Select',
+                                    items: const [
+                                      'Male',
+                                      'Female',
+                                      'Non-binary',
+                                      'Prefer not to say',
+                                    ],
+                                    onChanged: (v) {
+                                      setState(() => _gender = v);
+                                      signupController.setGender(v ?? '');
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _Labeled(
+                                  label: 'Age Range',
+                                  child: _Dropdown<String>(
+                                    value: _ageRange,
+                                    hint: 'Select',
+                                    items: [
+                                      '18 - 24',
+                                      '21 - 27',
+                                      '25 - 32',
+                                      '29 - 36',
+                                      '35 - 43',
+                                      '39 - 46',
+                                      '44 - 55',
+                                      '53 - 59',
+                                      '58 - 66',
+                                      '63 - 69',
+                                      '68 - 76',
+                                      '73 - 79',
+                                      '78 - 86',
+                                      '83 - 89',
+                                      '87 - 96',
+                                      '93 - 99',
+                                      '100+',
+                                    ],
+                                    onChanged: (v) {
+                                      setState(() => _ageRange = v);
+                                      signupController.setAgeRange(v ?? '');
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+
+                          _Labeled(
+                            label: 'Bio (Optional)',
+                            labelTrailing: Obx(
+                              () => Text(
+                                '${signupController.bio.value.length}/500',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ),
+                            child: TextFormField(
+                              controller: _bio,
+                              maxLines: 4,
+                              onChanged: signupController.setBio,
+                              decoration: _decoration(
+                                'Write something about yourself',
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          _Labeled(
+                            label: 'Create Password',
+                            child: TextFormField(
+                              controller: _password,
+                              obscureText: !_showPassword,
+                              onChanged: signupController.setPassword,
+                              decoration: _decoration('Password').copyWith(
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _showPassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
+                                  onPressed: () => setState(
+                                    () => _showPassword = !_showPassword,
+                                  ),
+                                ),
+                              ),
+                              validator: (v) {
+                                if (v == null || v.isEmpty) return 'Required';
+                                if (!_hasMinLength(v))
+                                  return 'Minimum 8 characters';
+                                return null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+
+                          Obx(
+                            () => RulesBox(
+                              checks: {
+                                'Minimum 8 characters': _hasMinLength(
+                                  _password.text,
+                                ),
+                                'At least 1 uppercase letter': _hasUppercase(
+                                  signupController.password.value,
+                                ),
+                                'At least 1 lowercase letter': _hasLowercase(
+                                  signupController.password.value,
+                                ),
+                                'At least 1 number': _hasNumber(_password.text),
+                                'At least 1 special character': _hasSpecial(
+                                  signupController.password.value,
+                                ),
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
+                          _Labeled(
+                            label: 'Confirm Password',
+                            child: TextFormField(
+                              controller: _confirmPassword,
+                              obscureText: !_showConfirm,
+                              onChanged: signupController.setConfirmPassword,
+                              decoration: _decoration('Confirm Password')
+                                  .copyWith(
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        _showConfirm
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                      ),
+                                      onPressed: () => setState(
+                                        () => _showConfirm = !_showConfirm,
+                                      ),
+                                    ),
+                                  ),
+                              validator: (v) {
+                                if (v == null || v.isEmpty) return 'Required';
+                                if (v != _password.text)
+                                  return 'Passwords do not match';
+                                return null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF4C5CFF),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  signupController.signup(
+                                    buttonNotifier:
+                                        signupController.processNotifier,
+                                    snackbarNotifier: SnackbarNotifier(
+                                      context: context,
+                                    ),
+                                    onDone: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => VerifyScreen(
+                                          email: _email.text,
+                                          isFromRegisterScreen: true,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                spacing: 8,
+                                children: [
+                                  const Text(
+                                    'Create Account',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  RIcon(
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    ),
+                                    key: UniqueKey(),
+                                    processStatusNotifier:
+                                        signupController.processNotifier,
+                                    iconWidget: Container(),
+                                    loadingStateWidget: const FittedBox(
+                                      child: SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
+                          Text.rich(
+                            TextSpan(
+                              text: 'Already have an account? ',
+                              style: caption,
+                              children: [
+                                TextSpan(
+                                  text: 'Sign in',
+                                  style: const TextStyle(
+                                    color: Color(0xFF4C5CFF),
+                                    fontWeight: FontWeight.w700,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () => Navigator.pop(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => const SignInScreen(),
+                                      ),
+                                    ),
                                 ),
                               ],
                             ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 15),
-                              child: Text(
-                                "Select interests to find people who share your passions",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.grey,
-                                  fontSize: 16,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            ),
-
-                            // TRIGGER (tap to open bottom sheet)
-                            InkWell(
-                              borderRadius: BorderRadius.circular(4),
-                              onTap: () async {
-                                await _openInterestPicker(context);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  color: Colors.white,
-                                ),
-                                height: 48,
-                                width: double.infinity,
-                                child: const Center(
-                                  child: Text(
-                                    "Click to select your interests",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            // LIVE COUNTER – uses controller's selectedCount
-                            Flexible(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 15,
-                                ),
-                                child: Obx(() {
-                                  final cnt =
-                                      signupController.selectedCount.value;
-                                  return RichText(
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                      text: "Selected: ",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: "$cnt/15",
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        if (cnt == 0) ...[
-                                          const WidgetSpan(
-                                            child: SizedBox(width: 40),
-                                          ),
-                                          const TextSpan(
-                                            text: "Please select at least 1",
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                        ],
-                                      ],
-                                    ),
-                                  );
-                                }),
-                              ),
-                            ),
-
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 15),
-                              child: Text(
-                                "Your interests help us connect you with like-minded people nearby",
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // === INPUT FIELDS ===
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _Labeled(
-                          label: 'First Name',
-                          child: TextFormField(
-                            controller: _firstName,
-                            onChanged: signupController.setFirstName,
-                            decoration: _decoration('Name Here'),
-                            validator: (v) => (v == null || v.trim().isEmpty)
-                                ? 'Required'
-                                : null,
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _Labeled(
-                          label: 'Last Name',
-                          child: TextFormField(
-                            controller: _lastName,
-                            onChanged: signupController.setLastName,
-                            decoration: _decoration('Name Here'),
-                            validator: (v) => (v == null || v.trim().isEmpty)
-                                ? 'Required'
-                                : null,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-
-                  _Labeled(
-                    label: 'User Name',
-                    child: TextFormField(
-                      controller: _userName,
-                      onChanged: signupController.setUsername,
-                      decoration: _decoration('User Name Here'),
-                      validator: (v) =>
-                          (v == null || v.trim().isEmpty) ? 'Required' : null,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  _Labeled(
-                    label: 'Email Address',
-                    child: TextFormField(
-                      controller: _email,
-                      onChanged: signupController.setEmail,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: _decoration('hello@example.com'),
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) return 'Required';
-                        final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                        if (!emailRegex.hasMatch(v.trim()))
-                          return 'Invalid email';
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  _Labeled(
-                    label: 'Date of Birth',
-                    child: TextFormField(
-                      controller: _dob,
-                      readOnly: true,
-                      decoration: _decoration(
-                        'DD/MM/YY',
-                      ).copyWith(suffixIcon: const Icon(Icons.event_outlined)),
-                      onTap: () async {
-                        final now = DateTime.now();
-                        final picked = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime(
-                            now.year - 18,
-                            now.month,
-                            now.day,
-                          ),
-                          firstDate: DateTime(1900),
-                          lastDate: now,
-                        );
-                        if (picked != null) {
-                          final formatted =
-                              "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
-                          _dob.text = formatted;
-                          signupController.setDateOfBirth(formatted);
-                        }
-                      },
-                      validator: (v) =>
-                          (v == null || v.trim().isEmpty) ? 'Required' : null,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Gender + Age Range
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _Labeled(
-                          label: 'Gender',
-                          child: _Dropdown<String>(
-                            value: _gender,
-                            hint: 'Select',
-                            items: const [
-                              'Male',
-                              'Female',
-                              'Non-binary',
-                              'Prefer not to say',
-                            ],
-                            onChanged: (v) {
-                              setState(() => _gender = v);
-                              signupController.setGender(v ?? '');
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _Labeled(
-                          label: 'Age Range',
-                          child: _Dropdown<String>(
-                            value: _ageRange,
-                            hint: 'Select',
-                            items: [
-                              '18 - 24',
-                              '21 - 27',
-                              '25 - 32',
-                              '29 - 36',
-                              '35 - 43',
-                              '39 - 46',
-                              '44 - 55',
-                              '53 - 59',
-                              '58 - 66',
-                              '63 - 69',
-                              '68 - 76',
-                              '73 - 79',
-                              '78 - 86',
-                              '83 - 89',
-                              '87 - 96',
-                              '93 - 99',
-                              '100+',
-                            ],
-                            onChanged: (v) {
-                              setState(() => _ageRange = v);
-                              signupController.setAgeRange(v ?? '');
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-
-                  _Labeled(
-                    label: 'Bio (Optional)',
-                    labelTrailing: Obx(
-                      () => Text(
-                        '${signupController.bio.value.length}/500',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ),
-                    child: TextFormField(
-                      controller: _bio,
-                      maxLines: 4,
-                      onChanged: signupController.setBio,
-                      decoration: _decoration('Write something about yourself'),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  _Labeled(
-                    label: 'Create Password',
-                    child: TextFormField(
-                      controller: _password,
-                      obscureText: !_showPassword,
-                      onChanged: signupController.setPassword,
-                      decoration: _decoration('Password').copyWith(
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _showPassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                          onPressed: () =>
-                              setState(() => _showPassword = !_showPassword),
-                        ),
-                      ),
-                      validator: (v) {
-                        if (v == null || v.isEmpty) return 'Required';
-                        if (!_hasMinLength(v)) return 'Minimum 8 characters';
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  Obx(
-                    () => RulesBox(
-                      checks: {
-                        'Minimum 8 characters': _hasMinLength(_password.text),
-                        'At least 1 uppercase letter': _hasUppercase(
-                          signupController.password.value,
-                        ),
-                        'At least 1 lowercase letter': _hasLowercase(
-                          signupController.password.value,
-                        ),
-                        'At least 1 number': _hasNumber(_password.text),
-                        'At least 1 special character': _hasSpecial(
-                          signupController.password.value,
-                        ),
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  _Labeled(
-                    label: 'Confirm Password',
-                    child: TextFormField(
-                      controller: _confirmPassword,
-                      obscureText: !_showConfirm,
-                      onChanged: signupController.setConfirmPassword,
-                      decoration: _decoration('Confirm Password').copyWith(
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _showConfirm
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                          onPressed: () =>
-                              setState(() => _showConfirm = !_showConfirm),
-                        ),
-                      ),
-                      validator: (v) {
-                        if (v == null || v.isEmpty) return 'Required';
-                        if (v != _password.text)
-                          return 'Passwords do not match';
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4C5CFF),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          signupController.signup(
-                            buttonNotifier: signupController.processNotifier,
-                            snackbarNotifier: SnackbarNotifier(
-                              context: context,
-                            ),
-                            onDone: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => VerifyScreen(
-                                  email: _email.text,
-                                  isFromRegisterScreen: true,
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: 8,
-                        children: [
-                          const Text(
-                            'Create Account',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                          RIcon(
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                            key: UniqueKey(),
-                            processStatusNotifier:
-                                signupController.processNotifier,
-                            iconWidget: Container(),
-                            loadingStateWidget: const FittedBox(
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
+                          const SizedBox(height: 18),
                         ],
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  Text.rich(
-                    TextSpan(
-                      text: 'Already have an account? ',
-                      style: caption,
-                      children: [
-                        TextSpan(
-                          text: 'Sign in',
-                          style: const TextStyle(
-                            color: Color(0xFF4C5CFF),
-                            fontWeight: FontWeight.w700,
-                            decoration: TextDecoration.underline,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => Navigator.pop(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const SignInScreen(),
-                              ),
-                            ),
-                        ),
-                      ],
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 18),
-                ],
-              ),
-            ),
+                    )
+                    .animate()
+                    .scaleY(
+                      begin: 0.8,
+                      end: 1.0,
+                      duration: 500.ms,
+                      curve: Curves.easeIn,
+                    )
+                    .fadeIn(duration: 500.ms, curve: Curves.easeIn),
           ),
         ),
       ),
