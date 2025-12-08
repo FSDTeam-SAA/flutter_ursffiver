@@ -552,7 +552,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: PaginatedListWidget(
                   physics: AlwaysScrollableScrollPhysics(),
                   pagination: _filterPeopleSuggestionController.suggestionList,
-                  onRefresh: null,
+                  onRefresh:()=> _filterPeopleSuggestionController
+                      .findSuggestion(forceFresh: true),
                   skeleton: UserSuggestionSkeleton(),
                   skeletonCount: 3,
                   builder: (index, data) => _UserSuggestionCard(profile: data),
