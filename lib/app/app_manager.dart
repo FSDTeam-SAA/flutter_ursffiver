@@ -63,7 +63,7 @@ class AppManager extends GetxController {
         );
         _authStatus = authStatus;
         await _initializeControllers();
-        Get.to(() => AppGround());
+        Get.offAll(() => AppGround());
         // navigatorKey.currentState?.pushNamedAndRemoveUntil(
         //   RouteNames.home,
         //   (route) => false,
