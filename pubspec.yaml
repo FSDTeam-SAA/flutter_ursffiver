@@ -50,9 +50,6 @@ dependencies:
   socket_io_client: ^2.0.3
   share_plus: ^10.0.0
   url_launcher: ^6.3.0
-
-  
-
   get: ^4.7.2
   intl: ^0.20.2
   timeago: ^3.6.0
@@ -63,6 +60,15 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.3
+
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icon/logo.png"
+  adaptive_icon_background: "#FFFFFF"
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
