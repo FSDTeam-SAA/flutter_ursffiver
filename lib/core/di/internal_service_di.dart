@@ -18,21 +18,20 @@ void initServices() {
   // Initialize other interfaces here
   Get.put<AuthInterface>(AuthInterfaceImpl(Get.find()));
 
-  Get.lazyPut<InterestInterface>(
-    () => InterestInterfaceImpl(appPigeon: Get.find()),
+  Get.put<InterestInterface>(
+    InterestInterfaceImpl(appPigeon: Get.find()),
   );
-  Get.lazyPut<NotificationInterface>(
-    () => NotificationInterfaceImpl(appPigeon: Get.find()),
+  Get.put<NotificationInterface>(
+    NotificationInterfaceImpl(appPigeon: Get.find()),
   );
-  Get.lazyPut<HomeInterface>(
-    () => HomeService(appPigeon: Get.find()),
-    fenix: true,
+  Get.put<HomeInterface>(
+    HomeService(appPigeon: Get.find()),
   );
-  Get.lazyPut<ProfileInterface>(
-    () => ProfileInterfaceImpl(appPigeon: Get.find()),
+  Get.put<ProfileInterface>(
+    ProfileInterfaceImpl(appPigeon: Get.find()),
   );
-  Get.lazyPut<BadgesInterface>(
-    () => BadgesInterfaceImpl(appPigeon: Get.find()),
+  Get.put<BadgesInterface>(
+    BadgesInterfaceImpl(appPigeon: Get.find()),
   );
   Get.put<InboxInterface>(
     ChatInterfaceImpl(appPigeon: Get.find()),

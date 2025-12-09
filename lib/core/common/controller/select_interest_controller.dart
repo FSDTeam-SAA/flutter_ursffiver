@@ -7,6 +7,7 @@ import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import '../model/interest_model.dart';
 import '../interface/interest_interface.dart';
 import '../../helpers/handle_fold.dart' show handleFold;
+import 'interest_fetch_controller.dart';
 
 class SelectedInterestPostData {
   final List<String> interestIds;
@@ -20,6 +21,7 @@ class SelectedInterestPostData {
 
 class InterestSelectionController extends GetxController {
   InterestSelectionController({List<InterestModel>? preSelectedInterests, List<InterestModel>? preSelectedCustomInterest}):preselectedInterests = preSelectedInterests ?? [] {
+    
     init(
       preSelectedInterests: preSelectedInterests,
       preSelectedCustomInterest: preSelectedCustomInterest,
@@ -28,6 +30,7 @@ class InterestSelectionController extends GetxController {
 
   final Debouncer _debouncer = Debouncer(delay: Duration(milliseconds: 500));
   final List<InterestModel> preselectedInterests;
+  final AllInterestDataProvider interestDataProvider = AllInterestDataProvider();
 
   /// [Interest id] : bool
   RxMap<String, bool> selectedInterests = RxMap<String, bool>({});
@@ -60,7 +63,9 @@ class InterestSelectionController extends GetxController {
   /// Max selection reached
   bool get isMaxSelected => selectedIndexCnt.value >= 15;
 
-  void init({List<InterestModel>? preSelectedInterests, List<InterestModel>? preSelectedCustomInterest}) {
+  void init({List<InterestModel>? preSelectedInterests, List<InterestModel>? preSelectedCustomInterest}) async{
+    await interestDataProvider.fetchInterests();
+    interestList.value = interestDataProvider.interestList.value;
     for (var interest in preselectedInterests) {
       selectedInterests[interest.id] = true;
       selectedIndexCnt.value++;
@@ -101,7 +106,7 @@ class InterestSelectionController extends GetxController {
     _debouncer.call(() async {
       final result = await compute(_isolateSearch, {
         'query': query,
-        'interestList': Get.find<AppGlobalControllers>().interestController.interestList.value,
+        'interestList': interestDataProvider.interestList.value,
       });
       interestList.value = result;
     });

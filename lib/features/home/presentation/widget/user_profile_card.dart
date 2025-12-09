@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user-profile_screen.dart';
-import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/widget/send_message-dialog.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/widget/send_message_dialog.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
-import 'package:get/get.dart';
 
 import '../../../../core/common/model/interest_model.dart';
 
@@ -21,8 +19,6 @@ class UserProfileCard extends StatefulWidget {
 }
 
 class _UserProfileCardState extends State<UserProfileCard> {
-  final InboxChatDataProvider inboxDataProvider =
-      Get.find<InboxChatDataProvider>();
 
   @override
   Widget build(BuildContext context) {

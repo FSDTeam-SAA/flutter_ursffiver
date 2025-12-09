@@ -24,10 +24,12 @@ class InboxChatDataProvider extends GetxController {
     super.dispose();
   }
 
-  InboxChatDataProvider() {
-    _getChats();
+  InboxChatDataProvider();
+
+  void init() {
     _listenToNewMessageStream();
     _listenToChatStream();
+    _getChats();
   }
 
   Future<void> _getChats() async {

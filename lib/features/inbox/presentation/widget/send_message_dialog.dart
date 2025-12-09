@@ -13,7 +13,7 @@ class SendChatRequestDialog extends StatefulWidget {
 }
 
 class _SendChatRequestDialogState extends State<SendChatRequestDialog> {
-  final InboxChatDataProvider inboxchatdatacontroller = Get.find<InboxChatDataProvider>();
+  // final InboxChatDataProvider inboxchatdatacontroller = Get.find<InboxChatDataProvider>();
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -78,7 +78,7 @@ class _SendChatRequestDialogState extends State<SendChatRequestDialog> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () {
-                      inboxchatdatacontroller.inviteChat(userId: widget.user.id);
+                      Get.find<InboxChatDataProvider>().inviteChat(userId: widget.user.id);
                       Navigator.pop(
                         context,
                         // MaterialPageRoute(

@@ -16,8 +16,8 @@ class ProfileDataProvider extends GetxController {
       InterestSelectionController();
 
   // Add this: All interests fetch controller
-  final AllInterestFetchController allInterestController =
-      AllInterestFetchController();
+  final AllInterestDataProvider allInterestController =
+      AllInterestDataProvider();
   @override
   void onInit() {
     super.onInit();

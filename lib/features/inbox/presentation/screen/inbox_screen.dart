@@ -4,7 +4,7 @@ import 'package:flutter_ursffiver/features/badges/presentation/screen/award_badg
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/widget/chat_time_widget.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/widget/time_extend-dialog_widget.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/widget/time_extend_dialog_widget.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

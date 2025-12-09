@@ -182,8 +182,14 @@ class AllChatScreeen extends StatefulWidget {
 }
 
 class _AllChatScreeenState extends State<AllChatScreeen> {
-  final InboxChatDataProvider chatController =
-      Get.find<InboxChatDataProvider>();
+  late final InboxChatDataProvider chatController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    chatController = Get.put<InboxChatDataProvider>(InboxChatDataProvider());
+  }
 
   @override
   Widget build(BuildContext context) {

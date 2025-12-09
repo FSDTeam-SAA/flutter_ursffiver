@@ -16,7 +16,7 @@ class BadgesPage extends StatefulWidget {
 }
 
 class _BadgesPageState extends State<BadgesPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late TabController _tabController;
   late AllBadgesController badgeController;
 
@@ -107,6 +107,10 @@ class _BadgesPageState extends State<BadgesPage>
         .slideY(begin: 0.8, end: 0, duration: 500.ms, curve: Curves.easeOutCirc)
         .fadeIn(duration: 500.ms, curve: Curves.easeOutCirc);
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class ReceivedBadgesWidget extends StatelessWidget {

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../model/interest_model.dart';
 import '../interface/interest_interface.dart';
 
-class AllInterestFetchController extends GetxController {
+class AllInterestDataProvider extends GetxController {
   RxList<InterestCategoryModel> interestList = RxList([]);
 
   // fetch

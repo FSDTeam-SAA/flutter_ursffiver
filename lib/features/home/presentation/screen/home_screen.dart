@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_ursffiver/app/controller/app_global_controllers.dart';
+import 'package:flutter_ursffiver/app/controller/home_controller.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
 import 'package:flutter_ursffiver/core/componenet/pagination/widget/paginated_list.dart';
 import 'package:flutter_ursffiver/features/common/textfield.dart';
@@ -30,8 +31,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final FilterPeopleSuggestionController _filterPeopleSuggestionController =
-      Get.find<AppGlobalControllers>()
-          .homeController
+      Get.find<HomeController>()
           .filterPeopleSuggestionController;
 
   final statusController = Get.put(StatusController());
