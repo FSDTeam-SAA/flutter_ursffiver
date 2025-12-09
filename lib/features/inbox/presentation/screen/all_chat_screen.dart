@@ -246,8 +246,8 @@ class _AllChatScreeenState extends State<AllChatScreeen> {
           ),
         )
         .animate()
-        .scaleY(begin: 0.8, end: 1.0, duration: 500.ms, curve: Curves.easeIn)
-        .fadeIn(duration: 500.ms, curve: Curves.easeIn);
+        .slideY(begin: 0.8, end: 0, duration: 500.ms, curve: Curves.easeOutCirc)
+        .fadeIn(duration: 500.ms, curve: Curves.easeOutCirc);
   }
 }
 
