@@ -11,6 +11,10 @@ import 'package:get/get.dart';
 import '../model/chat_model.dart';
 
 class InboxChatDataProvider extends GetxController {
+  InboxChatDataProvider() {
+    _init();
+  }
+  
   RxList<ChatController> chats = RxList<ChatController>([]);
   StreamSubscription<MessageModel>? _newMessageSubscription;
   StreamSubscription<ChatModel>? _chatUpdateSubscription;
@@ -25,9 +29,7 @@ class InboxChatDataProvider extends GetxController {
     super.dispose();
   }
 
-  InboxChatDataProvider();
-
-  void init() {
+  void _init() {
     _listenToNewMessageStream();
     _listenToChatStream();
     _getChats();

@@ -188,7 +188,8 @@ class _AllChatScreeenState extends State<AllChatScreeen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    chatController = Get.put<InboxChatDataProvider>(InboxChatDataProvider());
+    chatController = Get.find<InboxChatDataProvider>();
+    
   }
 
   @override

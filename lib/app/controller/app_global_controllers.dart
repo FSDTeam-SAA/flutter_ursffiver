@@ -25,15 +25,26 @@
 // }
 
 
+import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/app/controller/home_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:get/get.dart';
 
-class AppControllerInitializer extends GetxController {
+class AppControllerInitializer {
+  
+  AppControllerInitializer() {
+    debugPrint("AppControllerInitializer initialized");
+  }
 
-  final HomeController homeController = Get.put(HomeController());
-  final InboxChatDataProvider inboxChatDataProvider = Get.put(InboxChatDataProvider());
-  final ProfileDataProvider profileDataProvider = Get.put(ProfileDataProvider());
+  final HomeController homeController = HomeController();
+  final InboxChatDataProvider inboxChatDataProvider = InboxChatDataProvider();
+  final ProfileDataProvider profileDataProvider = ProfileDataProvider();
+
+  void init() {
+    Get.put<HomeController>(homeController);
+    Get.put<InboxChatDataProvider>(inboxChatDataProvider);
+    Get.put<ProfileDataProvider>(profileDataProvider);
+  }
 
 }

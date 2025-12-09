@@ -39,13 +39,13 @@ class SocketService {
 
   bool get isConnected => _socket?.connected ?? false;
 
-  void init(SocketConnectParam socketConnectParam) {
+  Future<void> init(SocketConnectParam socketConnectParam)async {
     _attempts++;
     debugPrint("Socket init attempt: $_attempts");
     _param = socketConnectParam;
     // Dispose previous socket, if exists
     _disposeSocket();
-    _init();
+    await _init();
   }
 
   Future<void> _init() async {

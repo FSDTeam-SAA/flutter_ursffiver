@@ -6,6 +6,7 @@ import 'package:flutter_ursffiver/core/theme/text_style.dart';
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 import 'package:flutter_ursffiver/features/inbox/presentation/widget/send_message_dialog.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
+import 'package:get/get.dart';
 
 import '../../../../core/common/model/interest_model.dart';
 
@@ -195,7 +196,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         builder: (context) {
                           return BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                            child: SendChatRequestDialog(user: widget.user),
+                            child: SendChatRequestDialog(user: widget.user, inboxchatdatacontroller: Get.find(),),
                           );
                         },
                       );

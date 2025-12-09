@@ -88,7 +88,7 @@ class ChatModel {
     };
   }
 
-  factory ChatModel.fromMap(Map<String, dynamic> map) {
+  factory ChatModel.fromJson(Map<String, dynamic> map) {
     return ChatModel(
       id: map['_id'] as String,
       requestedBy: UserProfile.fromJson(
@@ -109,8 +109,6 @@ class ChatModel {
 
   String toJson() => json.encode(toMap());
 
-  factory ChatModel.fromJson(String source) =>
-      ChatModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {

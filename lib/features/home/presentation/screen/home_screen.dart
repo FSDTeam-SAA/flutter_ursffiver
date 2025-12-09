@@ -9,6 +9,7 @@ import 'package:flutter_ursffiver/core/componenet/pagination/widget/paginated_li
 import 'package:flutter_ursffiver/features/common/textfield.dart';
 import 'package:flutter_ursffiver/features/home/controller/filter_people_suggestion_controller.dart';
 import 'package:flutter_ursffiver/features/home/controller/status_controller.dart';
+import 'package:flutter_ursffiver/features/home/model/get_user_suggestion_req_param.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_verification_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/user_profile_card.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
@@ -17,6 +18,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../common/app_logo.dart';
+import '../../../inbox/controller/inbox_chat_data_provider.dart';
 import '../../../notification/screen/notification_screen.dart';
 import '../../../profile/controller/profile_data_controller.dart';
 import '../../../profile/model/user_profile.dart';
@@ -55,24 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController customMessageController = TextEditingController();
   final FocusNode _customStatusFocus = FocusNode();
   bool isEditing = false;
-  int selectedRange = 2;
-
-  final List<String> ranges = [
-    "Bluetooth",
-    "Nearby",
-    "Up to 1 mile",
-    "Up to 5 miles",
-    "Up to 10 miles",
-  ];
-
-  // Define icons (same length as ranges)
-  final List<IconData> rangeIcons = [
-    Icons.bluetooth,
-    Icons.location_on_outlined,
-    Icons.location_on_outlined,
-    Icons.location_on_outlined,
-    Icons.location_on_outlined,
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -376,6 +360,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
+
+
             SliverAppBar(
               automaticallyImplyLeading: false,
               pinned: true,
@@ -395,70 +381,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 8),
 
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(
-                          ranges.length,
-                          (index) => Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: ChoiceChip(
-                              label: SizedBox(
-                                height: 62,
-                                width: 58,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      rangeIcons[index],
-                                      size: 24,
-                                      color: selectedRange == index
-                                          ? AppColors.primarybutton
-                                          : Colors.grey,
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Flexible(
-                                      child: Text(
-                                        ranges[index],
-                                        maxLines: 2,
-                                        textAlign: TextAlign.center,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: selectedRange == index
-                                              ? AppColors.primarybutton
-                                              : Colors.black87,
-                                          fontSize: 12,
-                                          height: 1.2,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              selected: selectedRange == index,
-                              onSelected: (val) {
-                                setState(() {
-                                  selectedRange = index;
-                                });
-                              },
-                              selectedColor: const Color(0xFFECEDFD),
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  color: selectedRange == index
-                                      ? AppColors.primarybutton
-                                      : AppColors.textFieldBorder,
-                                  width: 1.5,
-                                ),
-                              ),
-                              showCheckmark: false,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
+                    _SelectRange(onSelect: (selectedRange) {
+                      _filterPeopleSuggestionController.selectedLocationRange.value = selectedRange;
+                      _filterPeopleSuggestionController.findSuggestion(forceFresh: true);
+                    }),
+                    
                     const SizedBox(height: 20),
 
                     Row(
@@ -582,11 +509,15 @@ class _UserSuggestionCard extends StatefulWidget {
   State<_UserSuggestionCard> createState() => _UserSuggestionCardState();
 }
 
-class _UserSuggestionCardState extends State<_UserSuggestionCard>
-    with AutomaticKeepAliveClientMixin {
+class _UserSuggestionCardState extends State<_UserSuggestionCard> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Column(
       children: [
         UserProfileCard(user: widget.profile),
@@ -597,9 +528,6 @@ class _UserSuggestionCardState extends State<_UserSuggestionCard>
     ).animate().fadeIn(duration: 300.ms, delay: (100).ms);
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
 
 // skeleton for user suggestion card
@@ -680,6 +608,87 @@ class UserSuggestionSkeleton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _SelectRange extends StatefulWidget {
+  final Function(LocationRange selected) onSelect;
+  const _SelectRange({super.key, required this.onSelect});
+
+  @override
+  State<_SelectRange> createState() => _SelectRangeState();
+}
+
+class _SelectRangeState extends State<_SelectRange> {
+  int selectedRange = 0;
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(
+            LocationRange.values.length,
+            (index) => Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: ChoiceChip(
+                label: SizedBox(
+                  height: 62,
+                  width: 58,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        LocationRange.values[index].icon,
+                        size: 24,
+                        color: selectedRange == index
+                            ? AppColors.primarybutton
+                            : Colors.grey,
+                      ),
+                      const SizedBox(height: 6),
+                      Flexible(
+                        child: Text(
+                          LocationRange.values[index].name,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: selectedRange == index
+                                ? AppColors.primarybutton
+                                : Colors.black87,
+                            fontSize: 12,
+                            height: 1.2,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                selected: selectedRange == index,
+                onSelected: (val) {
+                  widget.onSelect(LocationRange.values[index]);
+                  selectedRange = index;
+                  setState(() {
+                    
+                  });
+                },
+                selectedColor: const Color(0xFFECEDFD),
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(
+                    color: selectedRange == index
+                        ? AppColors.primarybutton
+                        : AppColors.textFieldBorder,
+                    width: 1.5,
+                  ),
+                ),
+                showCheckmark: false,
+              ),
+            ),
+          ),
+        ),
+      );
+
   }
 }
 

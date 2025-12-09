@@ -73,7 +73,7 @@ class AppPigeon {
       token: token,
       joinId: param.joinId,
     );
-    _socketService.init(socketConnectParam);
+    await _socketService.init(socketConnectParam);
   }
 
   Stream<AuthStatus> get authStream => _authService.authStream;

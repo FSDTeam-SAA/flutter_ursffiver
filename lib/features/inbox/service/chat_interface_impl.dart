@@ -35,7 +35,7 @@ final class ChatInterfaceImpl extends InboxInterface {
 
           if (dataMap['data'] is List) {
             final chatList = (dataMap['data'] as List)
-                .map((item) => ChatModel.fromMap(item))
+                .map((item) => ChatModel.fromJson(item))
                 .toList();
             return Success(message: "Chats Loaded", data: chatList);
           }

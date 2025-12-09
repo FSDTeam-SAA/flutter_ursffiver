@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 
 class SendChatRequestDialog extends StatefulWidget {
   final UserProfile user;
-  const SendChatRequestDialog({super.key, required this.user});
+  final InboxChatDataProvider inboxchatdatacontroller;
+  const SendChatRequestDialog({super.key, required this.user, required this.inboxchatdatacontroller});
 
   @override
   State<SendChatRequestDialog> createState() => _SendChatRequestDialogState();
@@ -78,7 +79,7 @@ class _SendChatRequestDialogState extends State<SendChatRequestDialog> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () {
-                      Get.find<InboxChatDataProvider>().inviteChat(userId: widget.user.id);
+                      widget.inboxchatdatacontroller.inviteChat(userId: widget.user.id);
                       Navigator.pop(
                         context,
                         // MaterialPageRoute(

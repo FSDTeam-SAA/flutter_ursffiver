@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/model/coordinates.dart';
 
 enum LocationRange {
@@ -8,6 +9,19 @@ enum LocationRange {
   
   final String name;
   const LocationRange(this.name);
+
+  IconData get icon {
+    switch(this) {
+      case LocationRange.bluetooth:
+        return Icons.bluetooth;
+      case LocationRange.nearby:
+        return Icons.near_me;
+      case LocationRange.uptoOneMile:
+        return Icons.location_on;
+      case LocationRange.uptoFiveMile:
+        return Icons.location_on;
+    }
+  }
 }
 
 class GetUserSuggestionReqParam {
