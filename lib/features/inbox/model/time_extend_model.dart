@@ -1,25 +1,13 @@
 import 'package:flutter_ursffiver/features/inbox/model/send_message_request_param.dart';
 
-class TimeExtendModel {
+class TimeExtendReqParam {
   final int time;
-  final SendMessageReqParam? sendMessageReqParam;
+  final String chatId;
 
-  TimeExtendModel({
-    required this.time,
-    this.sendMessageReqParam,
-  });
+  TimeExtendReqParam({required this.time, required this.chatId});
 
-  Map<String, dynamic> toFormData() {
-    return {
-      "time": time,
-      "sendMessageReqParam": sendMessageReqParam?.toJson(),
-    };
-  }
 
   Map<String, dynamic> toJson() {
-    return {
-      "time": time,
-      "sendMessageReqParam": sendMessageReqParam?.toJson(),
-    };
+    return {"time": time, "chatId": chatId};
   }
 }

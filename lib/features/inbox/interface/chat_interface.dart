@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_ursffiver/core/api_handler/failure.dart';
 import 'package:flutter_ursffiver/core/api_handler/success.dart';
 import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
-import 'package:flutter_ursffiver/features/inbox/model/chat_data.dart';
 import 'package:flutter_ursffiver/features/inbox/model/create_chat_request_model.dart';
 import 'package:flutter_ursffiver/features/inbox/model/get_messages_param.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
@@ -10,6 +9,7 @@ import 'package:flutter_ursffiver/features/inbox/model/send_message_request_para
 import 'package:flutter_ursffiver/features/inbox/model/time_extend_model.dart';
 import '../../../core/api_handler/base_repository.dart';
 import '../model/accept_reject_chat_req_param.dart';
+import '../model/chat_model.dart';
 
 abstract base class InboxInterface extends BaseRepository {
   Future<Either<DataCRUDFailure, Success<List<ChatModel>>>> getAllChat();
@@ -35,5 +35,5 @@ abstract base class InboxInterface extends BaseRepository {
 
   Stream<ChatModel> chatStream();
 
-  FutureRequest<Success> timeExtend(TimeExtendModel param);
+  FutureRequest<Success> extendTime(TimeExtendReqParam param);
 }

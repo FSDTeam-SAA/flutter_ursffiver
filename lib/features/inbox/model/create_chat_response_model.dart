@@ -66,6 +66,8 @@
 import 'package:flutter_ursffiver/features/inbox/model/chat_data.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
 
+import 'chat_model.dart';
+
 class CreateChatResponseModel {
   final String id;
   final String name;
