@@ -9,6 +9,7 @@ import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_scre
 import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
+import 'package:intl/intl.dart';
 import '../../../common/app_logo.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -349,60 +350,54 @@ class _SignupScreen extends State<SignupScreen> {
                               keyboardType: TextInputType.emailAddress,
                               decoration: _decoration('hello@example.com'),
                               validator: (v) {
-                                if (v == null || v.trim().isEmpty)
+                                if (v == null || v.trim().isEmpty) {
                                   return 'Required';
+                                }
                                 final emailRegex = RegExp(
                                   r'^[^@]+@[^@]+\.[^@]+',
                                 );
-                                if (!emailRegex.hasMatch(v.trim()))
+                                if (!emailRegex.hasMatch(v.trim())) {
                                   return 'Invalid email';
+                                }
                                 return null;
                               },
                             ),
                           ),
                           const SizedBox(height: 12),
 
-                          _Labeled(
-                            label: 'Date of Birth',
-                            child: TextFormField(
-                              controller: _dob,
-                              readOnly: true,
-                              decoration: _decoration('DD/MM/YY').copyWith(
-                                suffixIcon: const Icon(Icons.event_outlined),
-                              ),
-                              onTap: () async {
-                                final now = DateTime.now();
-
-                                // If user already selected a date, use it as initial date
-                                DateTime initialDate;
-                                if (_dob.text.isNotEmpty) {
-                                  initialDate = DateTime.parse(_dob.text);
-                                } else {
-                                  initialDate = DateTime(
-                                    now.year - 18,
-                                    now.month,
-                                    now.day,
-                                  );
-                                }
-
-                                final picked = await showDatePicker(
-                                  context: context,
-                                  initialDate: initialDate,
-                                  firstDate: DateTime(1900),
-                                  lastDate: now,
+                          ObxValue(
+                            (date){
+                              _dob.text = date.value == null ? '' : DateFormat.yMMMEd().format(date.value!);
+                              return _Labeled(
+                                  label: 'Date of Birth',
+                                  child: TextFormField(
+                                    controller: _dob,
+                                    readOnly: true,
+                                    decoration: _decoration('DD/MM/YY').copyWith(
+                                      suffixIcon: const Icon(Icons.event_outlined),
+                                    ),
+                                    onTap: () async {
+                                      final initialDate = date.value ?? DateTime(
+                                        2007
+                                      );
+                                
+                                      final picked = await showDatePicker(
+                                        context: context,
+                                        initialDate: initialDate,
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2010),                                );
+                                
+                                      if (picked != null) {
+                                        signupController.setDateOfBirth(picked);
+                                      }
+                                    },
+                                    validator: (v) => (v == null || v.trim().isEmpty)
+                                        ? 'Required'
+                                        : null,
+                                  ),
                                 );
-
-                                if (picked != null) {
-                                  final formatted =
-                                      "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
-                                  _dob.text = formatted;
-                                  signupController.setDateOfBirth(formatted);
-                                }
-                              },
-                              validator: (v) => (v == null || v.trim().isEmpty)
-                                  ? 'Required'
-                                  : null,
-                            ),
+                            },
+                            signupController.dateOfBirth,
                           ),
 
                           const SizedBox(height: 12),
@@ -508,8 +503,9 @@ class _SignupScreen extends State<SignupScreen> {
                               ),
                               validator: (v) {
                                 if (v == null || v.isEmpty) return 'Required';
-                                if (!_hasMinLength(v))
+                                if (!_hasMinLength(v)) {
                                   return 'Minimum 8 characters';
+                                }
                                 return null;
                               },
                             ),
@@ -558,8 +554,9 @@ class _SignupScreen extends State<SignupScreen> {
                                   ),
                               validator: (v) {
                                 if (v == null || v.isEmpty) return 'Required';
-                                if (v != _password.text)
+                                if (v != _password.text) {
                                   return 'Passwords do not match';
+                                }
                                 return null;
                               },
                             ),
@@ -661,13 +658,13 @@ class _SignupScreen extends State<SignupScreen> {
                       ),
                     )
                     .animate()
-                    .scaleY(
+                    .slideY(
                       begin: 0.8,
-                      end: 1.0,
+                      end: 0,
                       duration: 500.ms,
-                      curve: Curves.easeIn,
+                      curve: Curves.easeOutCirc,
                     )
-                    .fadeIn(duration: 500.ms, curve: Curves.easeIn),
+                    .fadeIn(duration: 500.ms, curve: Curves.easeOutCirc),
           ),
         ),
       ),

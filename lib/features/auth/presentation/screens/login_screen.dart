@@ -300,11 +300,11 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ],
               ).animate()
-              .scaleY(
-                begin: .5,
-                end: 1,
+              .slideY(
+                begin: .8,
+                end: 0,
                 duration: 500.ms,
-                curve: Curves.easeInCirc,
+                curve: Curves.easeOutCubic,
               )
               .fadeIn(duration: 500.ms, curve: Curves.easeOutCubic),
             ),

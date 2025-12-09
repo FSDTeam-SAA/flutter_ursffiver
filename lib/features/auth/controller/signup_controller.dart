@@ -34,7 +34,7 @@ class SignUpController extends GetxController {
   final lastName = ''.obs;
   final username = ''.obs;
   final email = ''.obs;
-  final dateOfBirth = ''.obs;
+  final dateOfBirth = Rx<DateTime?>(null);
   final gender = ''.obs;
   final ageRange = ''.obs;
   final bio = ''.obs;
@@ -61,7 +61,7 @@ class SignUpController extends GetxController {
     processNotifier.setEnabled();
   }
 
-  void setDateOfBirth(String value) {
+  void setDateOfBirth(DateTime value) {
     dateOfBirth.value = value;
     processNotifier.setEnabled();
   }
@@ -115,12 +115,25 @@ class SignUpController extends GetxController {
   // }
 
   // --- Build request model ---
-  SignupRequestParam get signupModel => SignupRequestParam(
+  
+
+  // --- Signup method ---
+  Future<void> signup({
+    ProcessStatusNotifier? buttonNotifier,
+    SnackbarNotifier? snackbarNotifier,
+    VoidCallback? onDone,
+  }) async {
+    if(dateOfBirth.value == null) {
+      snackbarNotifier?.notify(message: "Please select your date of birth.");
+      return;
+    }
+    buttonNotifier?.setLoading();
+    SignupRequestParam signupModel = SignupRequestParam(
         firstName: firstName.value,
         lastName: lastName.value,
         username: username.value,
         email: email.value,
-        dateOfBirth: dateOfBirth.value,
+        dateOfBirth: dateOfBirth.value!,
         gender: gender.value,
         ageRange: ageRange.value,
         bio: bio.value,
@@ -130,14 +143,6 @@ class SignUpController extends GetxController {
             interestSelectionCntlr.selectedInterests.keys.toList(),
         customInterests: interestSelectionCntlr.customRequests.keys.toList(),
       );
-
-  // --- Signup method ---
-  Future<void> signup({
-    ProcessStatusNotifier? buttonNotifier,
-    SnackbarNotifier? snackbarNotifier,
-    VoidCallback? onDone,
-  }) async {
-    buttonNotifier?.setLoading();
     final lr = await Get.find<AuthInterface>().signup(signupModel);
     return handleFold(
       either: lr,
