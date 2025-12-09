@@ -4,10 +4,11 @@ import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/interface/chat_interface.dart';
 import 'package:flutter_ursffiver/features/inbox/model/accept_reject_chat_req_param.dart';
-import 'package:flutter_ursffiver/features/inbox/model/chat_data.dart';
 import 'package:flutter_ursffiver/features/inbox/model/create_chat_request_model.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
 import 'package:get/get.dart';
+
+import '../model/chat_model.dart';
 
 class InboxChatDataProvider extends GetxController {
   RxList<ChatController> chats = RxList<ChatController>([]);

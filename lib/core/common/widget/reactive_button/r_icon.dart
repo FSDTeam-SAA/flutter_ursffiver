@@ -58,9 +58,7 @@ class _RIconState extends State<RIcon> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return ListenableBuilder(
+    return ListenableBuilder(
           listenable: widget.processStatusNotifier,
           builder: (context, before) {
             return AnimatedSwitcher(
@@ -79,8 +77,7 @@ class _RIconState extends State<RIcon> {
             );
           }
         );
-      },
-    );
+      
   }
 
 }

@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ursffiver/features/inbox/controller/time_extend_controller.dart';
-import 'package:flutter_ursffiver/features/inbox/interface/chat_interface.dart';
-import 'package:get/get.dart';
+import 'package:flutter_ursffiver/core/notifiers/button_status_notifier.dart';
+
+import '../../../../core/common/widget/reactive_button/r_icon.dart';
 
 Future<void> showExtendTimeDialog({
+  required Function(int extendenMinutes, ProcessStatusNotifier notifier)
+  onConfirm,
   required BuildContext context,
   String title = "Extend Time",
   String hintText = "Enter time in minutes",
   required String chatId,
 }) async {
-  final TimeExtendController controller = Get.put(
-  TimeExtendController(inboxInterface: Get.find<InboxInterface>()),
-);
-  controller.timeController.clear();
-
+  final TextEditingController timeExtendTextCntlr = TextEditingController();
+  final ProcessStatusNotifier notifier = ProcessStatusNotifier(
+    initialStatus: EnabledStatus(),
+  );
+  int timeExtend = 0;
   await showDialog(
     context: context,
-    barrierDismissible: false,
+    barrierDismissible: true,
     builder: (context) {
-      return Obx(
-        () => AlertDialog(
+      return StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -27,69 +29,56 @@ Future<void> showExtendTimeDialog({
             title,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: controller.timeController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: hintText,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
+          content: TextField(
+            controller: timeExtendTextCntlr,
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              if (int.tryParse(value) == null) {
+                timeExtendTextCntlr.text = timeExtend.toString();
+              }
+              timeExtend = int.parse(timeExtendTextCntlr.text);
+            },
+            decoration: InputDecoration(
+              hintText: hintText,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-              if (controller.isLoading.value)
-                const Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: CircularProgressIndicator(),
-                ),
-            ],
+            ),
           ),
           actions: [
             TextButton(
-              onPressed: controller.isLoading.value
-                  ? null
-                  : () {
+              onPressed: () => onConfirm(timeExtend, notifier),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Confirm"),
+                  const SizedBox(width: 4),
+                  RIcon(
+                    key: UniqueKey(),
+                    height: 20,
+                    width: 20,
+                    iconWidget: Container(),
+                    loadingStateWidget: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    ),
+                    processStatusNotifier: notifier,
+                    onDone: () {
                       Navigator.pop(context);
                     },
-              child: const Text("Cancel"),
+                  ),
+                ],
+              ),
             ),
             TextButton(
-              onPressed: controller.isLoading.value
-                  ? null
-                  : () async {
-                      final input = controller.timeController.text.trim();
-                      if (input.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Please enter a value")),
-                        );
-                        return;
-                      }
-
-                      try {
-                        await controller.extendTime(
-                          input: input,
-                          chatId: chatId,
-                        );
-
-                        // Optionally show success message
-                        if (!controller.isLoading.value) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Time extended successfully"),
-                            ),
-                          );
-                          Navigator.pop(context);
-                        }
-                      } catch (e) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text("Error: $e")));
-                      }
-                    },
-              child: const Text("Confirm"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Cancel"),
             ),
           ],
         ),

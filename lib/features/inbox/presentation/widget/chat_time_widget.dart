@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class ChatTimeLeftRow extends StatefulWidget {
   final DateTime? chatStartTime;
-  final int chatDurationMinutes; // Total duration of chat in minutes
+  final DateTime chatEndsAt; // Total duration of chat in minutes
 
   const ChatTimeLeftRow({
-    Key? key,
+    super.key,
     required this.chatStartTime,
-    this.chatDurationMinutes = 35,
-  }) : super(key: key);
+    required this.chatEndsAt,
+  });
 
   @override
   _ChatTimeLeftRowState createState() => _ChatTimeLeftRowState();
@@ -20,22 +20,26 @@ class _ChatTimeLeftRowState extends State<ChatTimeLeftRow> {
   int minutesLeft = 0;
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    _updateTimeLeft();
+  }
+
+  @override
   void initState() {
     super.initState();
     _updateTimeLeft();
-    timer = Timer.periodic(const Duration(seconds: 10), (_) => _updateTimeLeft());
+    timer = Timer.periodic(const Duration(seconds: 10), (_) => setState(() {}));
   }
 
   void _updateTimeLeft() {
     if (widget.chatStartTime == null) return;
 
-    final chatEndTime =
-        widget.chatStartTime!.add(Duration(minutes: widget.chatDurationMinutes));
-    final duration = chatEndTime.difference(DateTime.now());
-
-    setState(() {
-      minutesLeft = duration.isNegative ? 0 : duration.inMinutes;
-    });
+    final chatEndTime = widget.chatEndsAt;
+    debugPrint("Current time: ${DateTime.now()}, Chat ends at: $chatEndTime");
+    final duration = chatEndTime.difference(DateTime.now()).inMinutes;
+    minutesLeft = duration.isNegative ? 0 : duration;
   }
 
   @override
@@ -45,6 +49,7 @@ class _ChatTimeLeftRowState extends State<ChatTimeLeftRow> {
   }
 
   String _formatMinutes(int minutes) {
+    debugPrint("Minutes: $minutes");  
     if (minutes >= 60) {
       final h = minutes ~/ 60;
       final m = minutes % 60;
@@ -56,6 +61,7 @@ class _ChatTimeLeftRowState extends State<ChatTimeLeftRow> {
 
   @override
   Widget build(BuildContext context) {
+    _updateTimeLeft();
     return Row(
       children: [
         const Text(

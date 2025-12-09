@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
+import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/badges/presentation/screen/award_badge_view.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/chat_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
@@ -100,9 +103,13 @@ class _ChatScreenState extends State<ChatScreen> {
                 //     fontSize: 16,
                 //   ),
                 // ),
-                ChatTimeLeftRow(
-                  chatStartTime: widget.chatController.chatModel?.time,
-                ),
+                ObxValue((data) {
+                  debugPrint("time limit: ${data.value}");
+                  return ChatTimeLeftRow(
+                    chatStartTime: widget.chatController.chatModel?.createdAt,
+                    chatEndsAt: widget.chatController.timeLimit.value
+                  );
+                }, widget.chatController.timeLimit),
               ],
             ),
           ],
@@ -135,6 +142,13 @@ class _ChatScreenState extends State<ChatScreen> {
                 showExtendTimeDialog(
                   context: context,
                   chatId: widget.chatController.chatId,
+                  onConfirm: (extendenMinutes, notifier) {
+                    widget.chatController.extendTime(
+                      timeInMinutes: extendenMinutes,
+                      snackbarNotifier: SnackbarNotifier(context: context),
+                      processStatusNotifier: notifier,
+                    );
+                  },
                 );
               } else if (value == "location") {
                 Navigator.push(
