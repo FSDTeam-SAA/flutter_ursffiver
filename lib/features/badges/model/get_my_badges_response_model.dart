@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_ursffiver/features/badges/model/badge_record.dart';
 
 class GetMyBadgesResponseModel {
@@ -7,13 +8,27 @@ class GetMyBadgesResponseModel {
   GetMyBadgesResponseModel({required this.received, required this.given});
 
   factory GetMyBadgesResponseModel.fromJson(Map<String, dynamic> json) {
+    final List<BadgeRecord> received = [];
+    final List<BadgeRecord> given = [];
+    // received
+    for(final x in json['received']) {
+      try {
+        received.add(BadgeRecord.fromJson(x));
+      } catch(e) {
+        debugPrint(e.toString());
+      }
+    }
+
+    for(final x in json['given']) {
+      try {
+        given.add(BadgeRecord.fromJson(x));
+      } catch(e) {
+        debugPrint(e.toString());
+      }
+    }
     return GetMyBadgesResponseModel(
-      received: List<BadgeRecord>.from(
-        json['received'].map((x) => BadgeRecord.fromJson(x)),
-      ),
-      given: List<BadgeRecord>.from(
-        json['given'].map((x) => BadgeRecord.fromJson(x)),
-      ),
+      received:received,
+      given:given
     );
   }
 }

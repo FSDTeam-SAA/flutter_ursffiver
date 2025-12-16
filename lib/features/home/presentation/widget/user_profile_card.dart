@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user-profile_screen.dart';
-import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
-import 'package:flutter_ursffiver/features/inbox/presentation/widget/send_message-dialog.dart';
+import 'package:flutter_ursffiver/features/inbox/presentation/widget/send_message_dialog.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 import 'package:get/get.dart';
 
-import '../../../auth/model/interest_model.dart';
+import '../../../../app/controller/home_controller.dart';
+import '../../../../core/common/model/interest_model.dart';
+import '../../../inbox/controller/inbox_chat_data_provider.dart';
+import '../../../profile/controller/profile_data_controller.dart';
 
 class UserProfileCard extends StatefulWidget {
   final UserProfile user;
@@ -21,8 +23,12 @@ class UserProfileCard extends StatefulWidget {
 }
 
 class _UserProfileCardState extends State<UserProfileCard> {
-  final InboxChatDataProvider inboxDataProvider =
-      Get.find<InboxChatDataProvider>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +128,7 @@ class _UserProfileCardState extends State<UserProfileCard> {
                                   ),
                                   child: SendChatRequestDialog(
                                     user: widget.user,
+                                    inboxchatdatacontroller: Get.find(),
                                   ),
                                 );
                               },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_ursffiver/core/theme/app_colors.dart';
 import 'package:flutter_ursffiver/core/theme/app_gap.dart';
 import 'package:flutter_ursffiver/core/theme/text_style.dart';
@@ -22,9 +23,10 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -169,7 +171,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ],
-          ),
+          ).animate()
+          .slideY(
+            begin: .9,
+            end: 0,
+            duration: 500.ms,
+            curve: Curves.easeOutCirc,
+          )
+          .fadeIn(duration: 400.ms, curve: Curves.easeOutCirc),
         ),
       ),
     );
@@ -205,4 +214,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

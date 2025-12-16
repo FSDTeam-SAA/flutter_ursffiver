@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
 import 'package:get/get.dart';
-import '../../../features/auth/model/interest_model.dart';
+import '../model/interest_model.dart';
 import '../interface/interest_interface.dart';
 
-class AllInterestFetchController extends GetxController {
+class AllInterestDataProvider extends GetxController {
   RxList<InterestCategoryModel> interestList = RxList([]);
 
   // fetch

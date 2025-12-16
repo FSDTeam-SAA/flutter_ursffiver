@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_ursffiver">
+    package="com.speet.app2">
 
     <!-- ✅ Location + Internet permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="flutter_ursffiver"
+        android:label="Speet"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

@@ -1,6 +1,4 @@
-// import 'package:flutter_ursffiver/app/controller/home_controller.dart';
-// import 'package:flutter_ursffiver/core/common/controller/interest_fetch_controller.dart';
-// import 'package:get/get.dart';
+
 
 // // Why do we need this controller?
 // //
@@ -27,57 +25,26 @@
 // }
 
 
+import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/app/controller/home_controller.dart';
-import 'package:flutter_ursffiver/core/common/controller/interest_fetch_controller.dart';
 import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
 import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
 import 'package:get/get.dart';
 
-class AppGlobalControllers extends GetxController {
-  final AllInterestFetchController interestController =
-      AllInterestFetchController();
-
-  late final HomeController homeController;
-  late final InboxChatDataProvider inboxChatDataProvider;
-  late final ProfileDataProvider profileDataProvider;
-
-  void beforeAuthInit() {
-    interestController.fetchInterests();
+class AppControllerInitializer {
+  
+  AppControllerInitializer() {
+    debugPrint("AppControllerInitializer initialized");
   }
 
-  void afterAuthInit() {
-    interestController.fetchInterests();
+  final HomeController homeController = HomeController();
+  final InboxChatDataProvider inboxChatDataProvider = InboxChatDataProvider();
+  final ProfileDataProvider profileDataProvider = ProfileDataProvider();
 
-    if (!Get.isRegistered<HomeController>()) {
-      homeController = Get.put(HomeController());
-    } else {
-      homeController = Get.find<HomeController>();
-    }
-
-    if(!Get.isRegistered<InboxChatDataProvider>()){
-      Get.put<InboxChatDataProvider>(InboxChatDataProvider());
-    } else {
-      inboxChatDataProvider = Get.find<InboxChatDataProvider>();
-    }
-
-    if(!Get.isRegistered<ProfileDataProvider>()){
-      Get.put<ProfileDataProvider>(ProfileDataProvider());
-    } else {
-      profileDataProvider = Get.find<ProfileDataProvider>();
-    }
+  void init() {
+    Get.put<HomeController>(homeController);
+    Get.put<InboxChatDataProvider>(inboxChatDataProvider);
+    Get.put<ProfileDataProvider>(profileDataProvider);
   }
 
-  void clearControllers() {
-    if (Get.isRegistered<HomeController>()) {
-      Get.delete<HomeController>();
-    }
-
-    if (Get.isRegistered<InboxChatDataProvider>()) {
-      Get.delete<InboxChatDataProvider>();
-    }
-
-    if (Get.isRegistered<ProfileDataProvider>()) {
-      Get.delete<ProfileDataProvider>();
-    }
-  }
 }

@@ -28,7 +28,7 @@ class FilterPeopleSuggestionController extends GetxController {
   );
 
   Coordinates? currentLocation;
-  Rx<LocationRange?> selectedLocationRange = Rx<LocationRange?>(null);
+  Rx<LocationRange?> selectedLocationRange = Rx<LocationRange?>(LocationRange.nearby);
 
   Future<void> findSuggestion({bool forceFresh = false}) async {
     if (forceFresh) {

@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/helpers/auth_role.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
-import 'package:flutter_ursffiver/features/inbox/controller/inbox_chat_data_provider.dart';
-import 'package:flutter_ursffiver/features/nabber_screen.dart';
-import 'package:flutter_ursffiver/features/profile/controller/profile_data_controller.dart';
+import 'package:flutter_ursffiver/app/main_app.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
@@ -27,20 +25,15 @@ class AppManager extends GetxController {
   // listen to auth change
   void _init() async {
     debugPrint("AppManager initialized");
-    final appGlobalControllers = Get.put<AppGlobalControllers>(
-      AppGlobalControllers(),
-    )..beforeAuthInit();
 
     await Get.find<AppPigeon>().currentAuth().then((initialAuthStatus) {
       _decideRoute(initialAuthStatus);
     });
-
     // Start listening to the auth status changes
     _authStreamSubscription = Get.find<AppPigeon>().authStream.listen((
       newStatus,
     ) async {
       authDebouncer.call(() {
-        debugPrint("Inside debouncer");
         _decideRoute(newStatus);
       });
     });
@@ -49,59 +42,30 @@ class AppManager extends GetxController {
   void _decideRoute(AuthStatus? authStatus) async {
     if (authStatus is UnAuthenticated) {
        _authStatus = authStatus;
-        Get.to(() => SignInScreen());
-        // navigatorKey.currentState?.pushNamedAndRemoveUntil(
-        //   RouteNames.login,
-        //   (route) => false,
-        // );
-      } else if (authStatus is Authenticated) {
-        debugPrint(
-          "currentAuthStatus: $_authStatus, beforeAuthStatus: $authStatus",
-        );
-        debugPrint(
-          "New auth:: ${!(currentAuthStatus is Authenticated && (authStatus).auth.userId != (currentAuthStatus as Authenticated).auth.userId)}",
-        );
+        Get.offAll(() => SignInScreen());
+      } else if (authStatus is Authenticated && (authStatus).auth.userId.isNotEmpty) {
         _authStatus = authStatus;
-        await _initializeControllers();
-        Get.to(() => AppGround());
-        // navigatorKey.currentState?.pushNamedAndRemoveUntil(
-        //   RouteNames.home,
-        //   (route) => false,
-        // );
+        await _initSocket();
+        Get.offAll(() => MainApp());
       }
       update();
-    // if (authStatus != null && authStatus != _authStatus) {
-    //   debugPrint("(In Appmanager)Auth status: $authStatus");
-
-      
-    // }
   }
 
-  // initiate controllers on auth change[Authenticated]
-  Future<void> _initializeControllers() async {
-    if ((currentAuthStatus as Authenticated).auth.userId.isNotEmpty) {
-      await Get.find<AppPigeon>()
-          .socketInit(
-            SocketConnetParamX(
-              token: null,
-              socketUrl: ApiEndpoints.socketUrl,
-              joinId: (currentAuthStatus as Authenticated).auth.userId,
-            ),
-          )
-          .then((_) async {
-            Get.find<AppPigeon>().emit(
-              "join",
-              ((currentAuthStatus as Authenticated).auth.userId),
-            );
-            if (Get.isRegistered<AppGlobalControllers>()) {
-              await Get.delete<AppGlobalControllers>();
-            }
+  Future<void> _initSocket() async{
+    if(!(currentAuthStatus as Authenticated).auth.userId.isNotEmpty ) return;
 
-            Get.put<AppGlobalControllers>(
-              AppGlobalControllers(),
-            ).afterAuthInit();
-          });
-    }
+    await Get.find<AppPigeon>()
+      .socketInit(
+        SocketConnetParamX(
+          token: null,
+          socketUrl: ApiEndpoints.socketUrl,
+          joinId: (currentAuthStatus as Authenticated).auth.userId,
+        ),
+      );
+  Get.find<AppPigeon>().emit(
+    "join",
+    ((currentAuthStatus as Authenticated).auth.userId),
+  );
   }
   
 }

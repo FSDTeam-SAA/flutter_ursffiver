@@ -1,5 +1,4 @@
 
-import '../../../core/common/model/create_custom_interest_param.dart';
 import 'create_custom_interest_req_param.dart';
 
 class SignupRequestParam {
@@ -7,7 +6,7 @@ class SignupRequestParam {
   final String? lastName;
   final String? username;
   final String? email;
-  final String? dateOfBirth;
+  final DateTime dateOfBirth;
   final String? gender;
   final String? ageRange;
   final String? bio;
@@ -35,7 +34,7 @@ class SignupRequestParam {
     'lastName': lastName,
     'username': username,
     'email': email,
-    'dateOfBirth': dateOfBirth,
+    'dateOfBirth': dateOfBirth.toIso8601String(),
     'gender': gender?.trim().toLowerCase(),
     'ageRange': ageRange,
     'bio': bio,

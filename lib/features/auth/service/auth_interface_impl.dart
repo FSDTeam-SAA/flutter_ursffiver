@@ -117,7 +117,7 @@ final class AuthInterfaceImpl extends AuthInterface {
         return Success(message: extractSuccessMessage(response));
       },
     );
-  }
+  } 
 
   @override
   FutureRequest<Success> forgetpassword(ForgetPasswordModel param) async {

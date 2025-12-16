@@ -14,6 +14,7 @@ import 'package:flutter_ursffiver/features/inbox/model/send_message_request_para
 import 'package:flutter_ursffiver/features/inbox/model/time_extend_model.dart';
 
 import '../model/accept_reject_chat_req_param.dart';
+import '../model/chat_model.dart';
 
 final class ChatInterfaceImpl extends InboxInterface {
   final AppPigeon appPigeon;
@@ -188,7 +189,6 @@ final class ChatInterfaceImpl extends InboxInterface {
         );
 
         //parse
-        final data = response.data["data"];
 
         //return
         return Success(message: extractSuccessMessage(response), data: null);
@@ -197,11 +197,11 @@ final class ChatInterfaceImpl extends InboxInterface {
   }
 
   @override
-  FutureRequest<Success> timeExtend(TimeExtendModel param) async {
+  FutureRequest<Success> extendTime(TimeExtendReqParam param) async {
     return await asyncTryCatch(
       tryFunc: () async {
         final response = await appPigeon.patch(
-          ApiEndpoints.timeExtend(param.sendMessageReqParam!.chatId),
+          ApiEndpoints.timeExtend(param.chatId),
           data: param.toJson(),
         );
         final message = extractSuccessMessage(response);

@@ -34,6 +34,7 @@ class UpdateProfileModel {
   });
 
   Map<String, dynamic> toJson() {
+    debugPrint("custom interests len: ${customInterests?.length}");
     return {
       "userId": id,
       if (firstName != null) "firstName": firstName,

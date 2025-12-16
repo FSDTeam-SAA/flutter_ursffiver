@@ -192,6 +192,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/text_style.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
@@ -331,7 +332,14 @@ class PrivacyPolicyScreen extends StatelessWidget {
               const SizedBox(height: 20),
             ],
           ),
-        ),
+        ).animate()
+              .slideY(
+                begin: .8,
+                end: 0,
+                duration: 500.ms,
+                curve: Curves.easeOutCubic,
+              )
+              .fadeIn(duration: 500.ms, curve: Curves.easeOutCubic),
       ),
     );
   }

@@ -401,8 +401,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
             /// Header (Name + Age + Username)
             BadgeHeader(
-              nameAndAge:
-                  '${controller.fullNameController.text}. ${controller.ageRangeController.text}',
+              // nameAndAge: controller.fullNameController.text,
+              // nameAndAge:
+              //     '${controller.fullNameController.text}. ${controller.ageRangeController.text}',
               username: controller.usernameController.text,
               sectionTitle: 'Social Impact Badges',
             ),

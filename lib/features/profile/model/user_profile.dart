@@ -1,6 +1,6 @@
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
 
-import '../../auth/model/interest_model.dart';
+import '../../../core/common/model/interest_model.dart';
 
 class UserProfile {
   final String id;

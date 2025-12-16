@@ -39,16 +39,16 @@ class BadgeWidget extends StatelessWidget {
 
 // Badge Header (dynamic text)
 class BadgeHeader extends StatelessWidget {
-  final String nameAndAge;
-  final String username;
+  final String? nameAndAge;
+  final String? username;
   final String sectionTitle;
   final IconData sectionIcon;
   final Color sectionIconColor;
 
   const BadgeHeader({
     super.key,
-    required this.nameAndAge,
-    required this.username,
+    this.nameAndAge,
+    this.username,
     required this.sectionTitle,
     this.sectionIcon = Icons.emoji_events_outlined,
     this.sectionIconColor = Colors.blueAccent,
@@ -59,12 +59,11 @@ class BadgeHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          nameAndAge,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 4),
-        Text(username, style: TextStyle(fontSize: 16, color: Colors.grey[700])),
+        // Text(
+        //   nameAndAge ?? '',
+        //   style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black),
+        // ),
+        Text(username ?? "", style: TextStyle(fontSize: 24, color: Colors.black)),
         const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
