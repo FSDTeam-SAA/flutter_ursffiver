@@ -24,8 +24,7 @@ class VerifyScreen extends StatefulWidget {
 }
 
 class _VerifyScreenState extends State<VerifyScreen> {
-  late final VerifyForgetPasswordOtpController controller;
-  late final VerifyAccountViewController verifyAccountCntlr;
+  late final VerifyOtpController verifyAccountCntlr;
   late final ForgetPasswordController resendController;
 
   static const _brandBlue = Color(0xFF4C5CFF);
@@ -40,12 +39,10 @@ class _VerifyScreenState extends State<VerifyScreen> {
   void initState() {
     super.initState();
 
-    verifyAccountCntlr = VerifyAccountViewController(
+    verifyAccountCntlr = (widget.isFromRegisterScreen == true) ? VerifyAccountViewController(
       snackbarNotifier: SnackbarNotifier(context: context),
       email: widget.email,
-    );
-
-    controller = VerifyForgetPasswordOtpController(
+    ) : VerifyForgetPasswordOtpController(
       email: widget.email,
       snackbarNotifier: SnackbarNotifier(context: context),
     );
@@ -93,7 +90,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
     }
 
     final String otp = _controllers.map((e) => e.text).join();
-    controller.otp = otp;
+    verifyAccountCntlr.otp = otp;
     verifyAccountCntlr.otp = otp;
   }
 
@@ -249,7 +246,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     key: UniqueKey(),
                     width: double.infinity,
                     height: 54,
-                    buttonStatusNotifier: controller.prcessNotifier,
+                    buttonStatusNotifier: verifyAccountCntlr.prcessNotifier,
                     saveText: "Verify",
                     loadingText: "Verifying...",
                     doneText: "Done",
@@ -265,8 +262,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ResetPasswordScreen(
-                              email: controller.email,
-                              otp: controller.otp,
+                              email: verifyAccountCntlr.email,
+                              otp: verifyAccountCntlr.otp,
                             ),
                           ),
                         );
@@ -276,7 +273,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                       if (widget.isFromRegisterScreen) {
                         verifyAccountCntlr.verify();
                       } else {
-                        controller.verify();
+                        verifyAccountCntlr.verify();
                       }
                     },
                   ),

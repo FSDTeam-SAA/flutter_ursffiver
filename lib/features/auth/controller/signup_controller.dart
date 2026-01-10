@@ -44,6 +44,8 @@ class SignUpController extends GetxController {
   final bio = ''.obs;
   final password = ''.obs;
   final confirmPassword = ''.obs;
+  final RxBool showPassword = false.obs;
+  final RxBool showConfirmPassword = false.obs;
   final Rx<UsernameCheckResponse?> usernameCheckResponse = Rx<UsernameCheckResponse?>(null);
 
   void setFirstName(String value) {
@@ -143,6 +145,20 @@ class SignUpController extends GetxController {
     ProcessStatusNotifier? buttonNotifier,
     SnackbarNotifier? snackbarNotifier,
     VoidCallback? onDone,
+  }) async{
+    _debouncer.call(() {
+      _signup(
+        buttonNotifier: buttonNotifier,
+        snackbarNotifier: snackbarNotifier,
+        onDone: onDone,
+      );
+    });
+  }
+
+  Future<void> _signup({
+    ProcessStatusNotifier? buttonNotifier,
+    SnackbarNotifier? snackbarNotifier,
+    VoidCallback? onDone,
   }) async {
     if(dateOfBirth.value == null) {
       snackbarNotifier?.notify(message: "Please select your date of birth.");
@@ -174,8 +190,6 @@ class SignUpController extends GetxController {
       },
       onSuccess: (success) {
         buttonNotifier?.setSuccess();
-        Get.to(() => VerifyScreen(email: email.value, isFromRegisterScreen: true,));
-        // navigatorKey.currentState?.pushNamed(RouteNames.emailVerification);
         onDone?.call();
       },
     );

@@ -567,29 +567,32 @@ class _SignupScreen extends State<SignupScreen> {
                                 _password.selection = TextSelection.fromPosition(
                                   TextPosition(offset: _password.text.length),
                                 );
-                                return TextFormField(
-                                  controller: _password,
-                                  obscureText: !_showPassword,
-                                  onChanged: signupController.setPassword,
-                                  decoration: _decoration('Password').copyWith(
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        _showPassword
-                                            ? Icons.visibility_off
-                                            : Icons.visibility,
+                                return Obx(
+                                  () => TextFormField(
+                                    controller: _password,
+                                    obscureText: !signupController.showPassword.value,
+                                    onChanged: signupController.setPassword,
+                                    decoration: _decoration('Password').copyWith(
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          signupController.showPassword.value
+                                              ? Icons.visibility_off
+                                              : Icons.visibility,
+                                        ),
+                                        onPressed: () {
+                                          signupController.showPassword.value =
+                                              !signupController.showPassword.value;
+                                        }
                                       ),
-                                      onPressed: () {
-                                        _showPassword = !_showPassword;
-                                      }
                                     ),
+                                    validator: (v) {
+                                      if (v == null || v.isEmpty) return 'Required';
+                                      if (!_hasMinLength(v)) {
+                                        return 'Minimum 8 characters';
+                                      }
+                                      return null;
+                                    },
                                   ),
-                                  validator: (v) {
-                                    if (v == null || v.isEmpty) return 'Required';
-                                    if (!_hasMinLength(v)) {
-                                      return 'Minimum 8 characters';
-                                    }
-                                    return null;
-                                  },
                                 );
                               }, signupController.password,)
                           ),
@@ -624,30 +627,33 @@ class _SignupScreen extends State<SignupScreen> {
                                 _confirmPassword.selection = TextSelection.fromPosition(
                                   TextPosition(offset: _confirmPassword.text.length),
                                 );
-                                return TextFormField(
-                                  controller: _confirmPassword,
-                                  obscureText: !_showConfirm,
-                                  onChanged: signupController.setConfirmPassword,
-                                  decoration: _decoration('Confirm Password')
-                                      .copyWith(
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            _showConfirm
-                                                ? Icons.visibility_off
-                                                : Icons.visibility,
+                                return Obx(
+                                  ()=> TextFormField(
+                                    controller: _confirmPassword,
+                                    obscureText: !signupController.showConfirmPassword.value,
+                                    onChanged: signupController.setConfirmPassword,
+                                    decoration: _decoration('Confirm Password')
+                                        .copyWith(
+                                          suffixIcon: IconButton(
+                                            icon: Icon(
+                                              signupController.showConfirmPassword.value
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                            ),
+                                            onPressed: () {
+                                              signupController.showConfirmPassword.value =
+                                                  !signupController.showConfirmPassword.value;
+                                            }
                                           ),
-                                          onPressed: () {
-                                            _showConfirm = !_showConfirm;
-                                          }
                                         ),
-                                      ),
-                                  validator: (v) {
-                                    if (v == null || v.isEmpty) return 'Required';
-                                    if (v != _password.text) {
-                                      return 'Passwords do not match';
-                                    }
-                                    return null;
-                                  },
+                                    validator: (v) {
+                                      if (v == null || v.isEmpty) return 'Required';
+                                      if (v != _password.text) {
+                                        return 'Passwords do not match';
+                                      }
+                                      return null;
+                                    },
+                                  ),
                                 );
                               },
                               signupController.confirmPassword,
