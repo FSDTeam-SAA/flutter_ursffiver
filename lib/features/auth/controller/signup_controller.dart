@@ -35,19 +35,21 @@ class SignUpController extends GetxController {
   final username = ''.obs;
   final email = ''.obs;
   final dateOfBirth = Rx<DateTime?>(null);
-  final gender = ''.obs;
-  final ageRange = ''.obs;
+  final Rx<String?> gender = Rx<String?>(null);
+  final Rx<String?> ageRange = Rx<String?>(null);
   final bio = ''.obs;
   final password = ''.obs;
   final confirmPassword = ''.obs;
 
   void setFirstName(String value) {
     firstName.value = value;
+    if(firstName.value.isNotEmpty && firstName.value[0] != firstName.value[0].toUpperCase()) firstName.value = firstName.value[0].toUpperCase() + firstName.value.substring(1);
     processNotifier.setEnabled();
   }
 
   void setLastName(String value) {
     lastName.value = value;
+    if(lastName.value.isNotEmpty && lastName.value[0] != lastName.value[0].toUpperCase()) lastName.value = lastName.value[0].toUpperCase() + lastName.value.substring(1);
     processNotifier.setEnabled();
   }
 
