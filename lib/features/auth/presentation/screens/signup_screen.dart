@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_ursffiver/core/common/widget/reactive_button/r_icon.dart';
+import 'package:flutter_ursffiver/core/extensions/textstyle_ext.dart';
 import 'package:flutter_ursffiver/features/auth/controller/signup_controller.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
@@ -349,13 +350,61 @@ class _SignupScreen extends State<SignupScreen> {
 
                           _Labeled(
                             label: 'User Name',
-                            child: TextFormField(
-                              controller: _userName,
-                              onChanged: signupController.setUsername,
-                              decoration: _decoration('User Name Here'),
-                              validator: (v) => (v == null || v.trim().isEmpty)
-                                  ? 'Required'
-                                  : null,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFormField(
+                                  controller: _userName,
+                                  onChanged: signupController.setUsername,
+                                  decoration: _decoration('User Name Here'),
+                                  validator: (v) => (v == null || v.trim().isEmpty)
+                                      ? 'Required'
+                                      : null,
+                                ),
+
+                                ObxValue(
+                                  (val){
+                                    if(val.value == null) {
+                                      return Container();
+                                    }
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: val.value!.isUnique ? Row(
+                                        spacing: 8,
+                                        children: [
+                                          Icon(
+                                            Icons.check_circle,
+                                            color: const Color.fromARGB(255, 91, 201, 95),
+                                            size: 16,
+                                          ),
+                                          Text(
+                                            val.value!.message, 
+                                            style: TextStyle(color: const Color.fromARGB(255, 91, 201, 95) ).bold,
+                                          ),
+                                        ],
+                                      ).animate()
+                                      .slideY(duration: 500.ms, curve: Curves.easeOutCirc)
+                                      .fadeIn(duration: 500.ms, curve: Curves.easeOutCirc) : Row(
+                                        spacing: 8,
+                                        children: [
+                                          Icon(
+                                            Icons.cancel,
+                                            color:  Colors.red,
+                                            size: 16,
+                                          ),
+                                          Text(
+                                            val.value!.message, 
+                                            style: TextStyle(color: Colors.red).bold,
+                                          ),
+                                        ],
+                                      ).animate()
+                                        .slideY(duration: 500.ms, curve: Curves.easeOutCirc)
+                                        .fadeIn(duration: 500.ms, curve: Curves.easeOutCirc)
+                                    );
+                                  }, 
+                                  signupController.usernameCheckResponse
+                                )
+                              ],
                             ),
                           ),
                           const SizedBox(height: 12),

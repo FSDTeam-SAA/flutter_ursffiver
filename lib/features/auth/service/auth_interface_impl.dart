@@ -9,6 +9,7 @@ import 'package:flutter_ursffiver/features/auth/model/create_new_password_model.
 import 'package:flutter_ursffiver/features/auth/model/forget_password_model.dart';
 import 'package:flutter_ursffiver/features/auth/model/signin_model.dart';
 import 'package:flutter_ursffiver/features/auth/model/signup_model.dart';
+import 'package:flutter_ursffiver/features/auth/model/username_check_response.dart';
 import 'package:flutter_ursffiver/features/auth/model/verify_otp_param.dart';
 
 final class AuthInterfaceImpl extends AuthInterface {
@@ -131,4 +132,24 @@ final class AuthInterfaceImpl extends AuthInterface {
       },
     );
   }
+
+  @override
+  FutureRequest<Success<UsernameCheckResponse>> checkUsernameAvailability(String username) {
+    return asyncTryCatch(
+      tryFunc: () async {
+        final response = await appPigeon.get(
+          '${ApiEndpoints.isUsernameUnique}?username=$username',
+        );
+        final body = extractBodyData(response);
+        debugPrint('Check Username Availability Response Body: $body');
+        final usernameCheckResponse = UsernameCheckResponse.fromJson(body);
+        return Success<UsernameCheckResponse>(
+          data: usernameCheckResponse,
+          message: extractSuccessMessage(response),
+        );
+      },
+    );
+  }
+  
+  
 }

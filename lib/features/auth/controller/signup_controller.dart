@@ -3,17 +3,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ursffiver/core/common/controller/select_interest_controller.dart';
 import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
+import 'package:flutter_ursffiver/core/utils/helpers/handle_future_request.dart';
 import 'package:flutter_ursffiver/features/auth/interface/auth_interface.dart';
 import 'package:flutter_ursffiver/features/auth/model/signup_model.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import '../../../core/common/model/create_custom_interest_param.dart';
 import '../../../core/notifiers/button_status_notifier.dart';
 import '../../../core/notifiers/snackbar_notifier.dart';
 import '../model/create_custom_interest_req_param.dart';
 import '../../../core/common/model/interest_model.dart';
+import '../model/username_check_response.dart';
 import '../presentation/screens/verify_screen.dart';
 
 class SignUpController extends GetxController {
+  final Debouncer _debouncer = Debouncer(delay: const Duration(milliseconds: 500));
   final InterestSelectionController interestSelectionCntlr =
       InterestSelectionController();
 
@@ -40,6 +44,7 @@ class SignUpController extends GetxController {
   final bio = ''.obs;
   final password = ''.obs;
   final confirmPassword = ''.obs;
+  final Rx<UsernameCheckResponse?> usernameCheckResponse = Rx<UsernameCheckResponse?>(null);
 
   void setFirstName(String value) {
     firstName.value = value;
@@ -56,6 +61,20 @@ class SignUpController extends GetxController {
   void setUsername(String value) {
     username.value = value;
     processNotifier.setEnabled();
+    _debouncer.call(() {
+      _checkUsernameAvailability(value);
+    });
+  }
+
+  Future<void> _checkUsernameAvailability(String username) async {
+    if(username.isEmpty) {
+      usernameCheckResponse.value = null;
+      return;
+    }
+    final UsernameCheckResponse? response = await handleFutureRequest(futureRequest: () {
+      return  Get.find<AuthInterface>().checkUsernameAvailability(username);
+    });
+    usernameCheckResponse.value = response;
   }
 
   void setEmail(String value) {
