@@ -1,11 +1,11 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_ursffiver/app/controller/home_controller.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
-import 'package:flutter_ursffiver/core/componenet/pagination/widget/paginated_list.dart';
+import 'package:flutter_ursffiver/core/component/pagination/widget/paginated_list.dart';
 import 'package:flutter_ursffiver/core/common/widget/labeled_dropdown.dart';
+import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/home/controller/filter_people_suggestion_controller.dart';
 import 'package:flutter_ursffiver/features/home/controller/status_controller.dart';
 import 'package:flutter_ursffiver/features/home/model/get_user_suggestion_req_param.dart';
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Get.find<HomeController>()
           .filterPeopleSuggestionController;
 
-  final statusController = Get.put(StatusController());
+  
   final ProfileDataProvider _profieDataController =
       Get.find<ProfileDataProvider>();
 
@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _profieDataController.getCurrentUserProfile();
+    snackbarNotifier = SnackbarNotifier(context: context);
   }
 
   static const _brandGradient = LinearGradient(
@@ -50,11 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
     colors: [Color(0xFF4C5CFF), Color(0xFF8F79FF)],
   );
 
-  bool isAvailable = false;
+  
   String? statusMessage;
-  final TextEditingController customMessageController = TextEditingController();
-  final FocusNode _customStatusFocus = FocusNode();
-  bool isEditing = false;
+  late final SnackbarNotifier snackbarNotifier;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -114,209 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
           slivers: [
             /// Availability Switch
             SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Your Availability",
-                        style: AppText.smMedium_14_600.copyWith(
-                          color: AppColors.primaryTextblack,
-                        ),
-                      ),
-                      Text(
-                        isAvailable
-                            ? "You are visible to other nearby"
-                            : "You are not available to connect",
-                        style: AppText.xsRegular_12_400.copyWith(
-                          color: AppColors.secondaryText,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Switch(
-                    value: isAvailable,
-                    onChanged: (val) {
-                      setState(() {
-                        isAvailable = val;
-                      });
-                      _filterPeopleSuggestionController.setVisibility(val, () {
-                        return true;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-            SliverToBoxAdapter(child: const SizedBox(height: 20)),
-            SliverToBoxAdapter(
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 1,
-                color: isAvailable ? const Color(0xFFF5F5FE) : Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Share what you’re up for and\nconnect with nearby SPEETsters:",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      AbsorbPointer(
-                        absorbing: !isAvailable,
-                        child: Opacity(
-                          opacity: isAvailable ? 1.0 : 0.6,
-                          child: Obx(
-                            () => LabeledDropdown(
-                              height: 52,
-                              title: "Status",
-                              hintText: "Ready to connect - tap to set status",
-                              items: [
-                                "Ready to connect - tap to set status",
-                                "Looking to chat with someone nearby right now",
-                                "Free for coffee or quick meetup",
-                                "Want to grab food together?",
-                                "Walking my dog - join me!",
-                                "New here - looking for local friends",
-                                "Available for spontaneous adventures",
-                                "Study buddy needed",
-                                "Workout partner wanted",
-                              ],
-                              value:
-                                  statusController.statusMessage.value.isEmpty
-                                  ? null
-                                  : statusController.statusMessage.value,
-                              textSize: 14,
-                              textColor: isAvailable
-                                  ? Colors.black87
-                                  : Colors.grey,
-                              borderColor: isAvailable
-                                  ? AppColors.buttonTextColor
-                                  : Colors.grey[300]!,
-                              borderRadius: 8,
-                              hintTextColor: Colors.grey,
-                              hintTextSize: 14,
-                              hintTextWeight: FontWeight.w400,
-                              onChanged: (value) {
-                                if (value != null) {
-                                  statusController.updateStatus(value);
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      Row(
-                        children: [
-                          Text(
-                            "Or enter a custom status:",
-                            style: AppText.xsRegular_12_400.copyWith(
-                              color: AppColors.primaryTextblack,
-                            ),
-                          ),
-                          const Spacer(),
-                          if (!isEditing) ...[
-                            TextButton(
-                              onPressed: isAvailable
-                                  ? () {
-                                      setState(() {
-                                        isEditing = true;
-                                      });
-                                      FocusScope.of(
-                                        context,
-                                      ).requestFocus(_customStatusFocus);
-                                    }
-                                  : null,
-                              child: const Text("Edit"),
-                            ),
-                          ] else ...[
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  isEditing = false;
-                                });
-                                FocusScope.of(context).unfocus();
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.cancel,
-                                    size: 18,
-                                    color: Colors.red,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    "cancel",
-                                    style: AppText.mdMedium_16_500.copyWith(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  isEditing = false;
-                                });
-                                FocusScope.of(context).unfocus();
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.check,
-                                    size: 18,
-                                    color: AppColors.primarybutton,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    "Save",
-                                    style: AppText.mdMedium_16_500.copyWith(
-                                      color: AppColors.primarybutton,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                      SizedBox(
-                        height: 52,
-                        child: TextField(
-                          enabled: isAvailable,
-                          focusNode: _customStatusFocus,
-                          controller: customMessageController,
-                          decoration: InputDecoration(
-                            hintText:
-                                "Click to enter a custom status message...",
-                            hintStyle: AppText.xsRegular_12_400.copyWith(
-                              color: AppColors.primaryTextblack,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              child: _SpeetAvailability(filterPeopleSuggestionController: _filterPeopleSuggestionController),
             ),
 
             SliverToBoxAdapter(
@@ -495,6 +293,244 @@ class _HomeScreenState extends State<HomeScreen> {
           )
           .fadeIn(duration: 400.ms, curve: Curves.easeOutCirc),
       ),
+    );
+  }
+}
+
+class _SpeetAvailability extends StatefulWidget {
+  final FilterPeopleSuggestionController filterPeopleSuggestionController;
+  const _SpeetAvailability({super.key, required this.filterPeopleSuggestionController});
+
+  @override
+  State<_SpeetAvailability> createState() => __SpeetAvailabilityState();
+}
+
+class __SpeetAvailabilityState extends State<_SpeetAvailability> {
+  bool isAvailable = false;
+  final statusController = Get.put(StatusController());
+  late final SnackbarNotifier snackbarNotifier;
+  final FocusNode _customStatusFocus = FocusNode();
+  bool isEditing = false;
+  final TextEditingController customMessageController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    snackbarNotifier = SnackbarNotifier(context: context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Your Availability",
+                  style: AppText.smMedium_14_600.copyWith(
+                    color: AppColors.primaryTextblack,
+                  ),
+                ),
+                Text(
+                  isAvailable
+                      ? "You are visible to other nearby"
+                      : "You are not available to connect",
+                  style: AppText.xsRegular_12_400.copyWith(
+                    color: AppColors.secondaryText,
+                  ),
+                ),
+              ],
+            ),
+            Switch(
+              value: isAvailable,
+              onChanged: (val) {
+                setState(() {
+                  isAvailable = val;
+                });
+                widget.filterPeopleSuggestionController.setVisibility(val, () {
+                    return true;
+                  },
+                  notifier: snackbarNotifier
+                );
+              },
+            ),
+          ],
+        ),
+
+        Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 1,
+          color: isAvailable ? const Color(0xFFF5F5FE) : Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Share what you’re up for and\nconnect with nearby SPEETsters:",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                AbsorbPointer(
+                  absorbing: !isAvailable,
+                  child: Opacity(
+                    opacity: isAvailable ? 1.0 : 0.6,
+                    child: Obx(
+                      () => LabeledDropdown(
+                        height: 52,
+                        title: "Status",
+                        hintText: "Ready to connect - tap to set status",
+                        items: [
+                          "Ready to connect - tap to set status",
+                          "Looking to chat with someone nearby right now",
+                          "Free for coffee or quick meetup",
+                          "Want to grab food together?",
+                          "Walking my dog - join me!",
+                          "New here - looking for local friends",
+                          "Available for spontaneous adventures",
+                          "Study buddy needed",
+                          "Workout partner wanted",
+                        ],
+                        value:
+                            statusController.statusMessage.value.isEmpty
+                            ? null
+                            : statusController.statusMessage.value,
+                        textSize: 14,
+                        textColor: isAvailable
+                            ? Colors.black87
+                            : Colors.grey,
+                        borderColor: isAvailable
+                            ? AppColors.buttonTextColor
+                            : Colors.grey[300]!,
+                        borderRadius: 8,
+                        hintTextColor: Colors.grey,
+                        hintTextSize: 14,
+                        hintTextWeight: FontWeight.w400,
+                        onChanged: (value) {
+                          if (value != null) {
+                            statusController.updateStatus(value);
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20),
+
+                Row(
+                  children: [
+                    Text(
+                      "Or enter a custom status:",
+                      style: AppText.xsRegular_12_400.copyWith(
+                        color: AppColors.primaryTextblack,
+                      ),
+                    ),
+                    const Spacer(),
+                    if (!isEditing) ...[
+                      TextButton(
+                        onPressed: isAvailable
+                            ? () {
+                                setState(() {
+                                  isEditing = true;
+                                });
+                                FocusScope.of(
+                                  context,
+                                ).requestFocus(_customStatusFocus);
+                              }
+                            : null,
+                        child: const Text("Edit"),
+                      ),
+                    ] else ...[
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            isEditing = false;
+                          });
+                          FocusScope.of(context).unfocus();
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.cancel,
+                              size: 18,
+                              color: Colors.red,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              "cancel",
+                              style: AppText.mdMedium_16_500.copyWith(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            isEditing = false;
+                          });
+                          FocusScope.of(context).unfocus();
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.check,
+                              size: 18,
+                              color: AppColors.primarybutton,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              "Save",
+                              style: AppText.mdMedium_16_500.copyWith(
+                                color: AppColors.primarybutton,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                SizedBox(
+                  height: 52,
+                  child: TextField(
+                    enabled: isAvailable,
+                    focusNode: _customStatusFocus,
+                    controller: customMessageController,
+                    decoration: InputDecoration(
+                      hintText:
+                          "Click to enter a custom status message...",
+                      hintStyle: AppText.xsRegular_12_400.copyWith(
+                        color: AppColors.primaryTextblack,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

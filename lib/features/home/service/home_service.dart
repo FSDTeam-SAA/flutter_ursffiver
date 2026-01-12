@@ -24,7 +24,7 @@ base class HomeService extends HomeInterface {
       tryFunc: () async {
         final res = await appPigeon.get(
           ApiEndpoints.allUser,
-          //query: param.toMap().isEmpty ? null : param.toMap(),
+          query: param.toMap().isEmpty ? null : param.toMap(),
         );
 
         debugPrint(res.toString());

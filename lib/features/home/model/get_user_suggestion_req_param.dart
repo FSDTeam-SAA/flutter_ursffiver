@@ -22,6 +22,19 @@ enum LocationRange {
         return Icons.location_on;
     }
   }
+
+  double get rangeInMiles {
+    switch(this) {
+      case LocationRange.bluetooth:
+        return 0.05;
+      case LocationRange.nearby:
+        return 0.5;
+      case LocationRange.uptoOneMile:
+        return 1.0;
+      case LocationRange.uptoFiveMile:
+        return 5.0;
+    }
+  }
 }
 
 class GetUserSuggestionReqParam {
@@ -40,8 +53,10 @@ class GetUserSuggestionReqParam {
     String interestString = interests.join(',');
     return {
       if(interests.isNotEmpty) 'interest': interestString,
-      if(location != null) 'location': location?.toJson(),
-      if(locationRange != null && location != null)'locationRange': locationRange!.name,
+      if(location != null) 'lat': location?.latitude,
+      if(location != null) 'lng': location?.longitude,
+      if(locationRange != null && location != null)'radius': locationRange!.rangeInMiles,
+      if(locationRange != null && location != null)'unit': "mile",
     };
   }
 
