@@ -1,4 +1,4 @@
-enum Failure {dioFailure, socketFailure, authFailure, severFailure, firebaseFailure, unknownFailure, outOfMemoryError, noData, timeout, forbidden}
+enum Failure {dioFailure, socketFailure, authFailure, severFailure, firebaseFailure, unknownFailure, outOfMemoryError, noData, timeout, forbidden, unauthorized}
 class DataCRUDFailure {
   final Failure failure;
   /// Message to be shown to the user

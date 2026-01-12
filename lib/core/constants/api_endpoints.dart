@@ -23,6 +23,9 @@ base class ApiEndpoints {
   static const String createNewPassword = _Auth.resetPassword;
 
   /// ### post
+  static const String isUsernameUnique = _Auth.isUsernameUnique;
+
+  /// ### post
   static const String refreshToken = _Auth.refreshToken;
 
   //------------interest----------------
@@ -129,14 +132,14 @@ base class ApiEndpoints {
 //arrow360degree@gmail.com
 
 class _RemoteServer {
-  static const String socketUrl = 'https://ursffiver-backend.onrender.com';
+  static const String socketUrl = 'https://ursffiver-backend-pfg8.onrender.com';
 
-  static const String baseUrl = 'https://ursffiver-backend.onrender.com/api/v1';
+  static const String baseUrl = 'https://ursffiver-backend-pfg8.onrender.com/api/v1';
 }
 
 class _LocalHostWifi {
-  static const String socketUrl = 'http://10.10.5.46:5001';
-  static const String baseUrl = 'http://10.10.5.46:5001/api/v1';
+  static const String socketUrl = 'http://10.10.5.90:5001';
+  static const String baseUrl = 'http://10.10.5.90:5001/api/v1';
 }
 
 class _HostedServer {
@@ -155,6 +158,7 @@ class _Auth {
   //static const String registerVerify = '$_authRoute/verify-otp';
   static const String changePassword = '$_authRoute/change-password';
   static const String resetPassword = '$_authRoute/reset-password';
+  static const String isUsernameUnique = '$_authRoute/is-username-unique';
 }
 
 //------------------------------ Interest -----------------------------

@@ -14,6 +14,7 @@ Future<T?> handleFutureRequest<T>({
     void Function(T data)? onSuccess,
     void Function(DataCRUDFailure failure)? onError,
   }) async{
+    processStatusNotifier?.setLoading();
     final either = await futureRequest();
     return either.fold(
       (failure) {

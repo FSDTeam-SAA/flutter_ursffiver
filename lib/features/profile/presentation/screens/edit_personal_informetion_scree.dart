@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ursffiver/core/common/widget/cache/smart_network_image.dart';
 import 'package:flutter_ursffiver/core/common/widget/reactive_button/save_button.dart';
+import 'package:flutter_ursffiver/core/constants/assets.dart';
 import 'package:flutter_ursffiver/core/notifiers/button_status_notifier.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/badges/model/badge_model.dart';
@@ -61,89 +63,21 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           controller.emailController.text != controller.originalEmail;
       final bool showVerified = controller.isVerified.value && !emailChanged;
 
-      return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: const Text(
-            'My Profile',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          centerTitle: false,
-          actions: [
-            TextButton(
-              onPressed: () => controller.isEditing.toggle(),
-              child: Text(
-                controller.isEditing.value ? 'Cancel' : 'Edit Profile',
-                style: const TextStyle(
-                  color: AppColors.primarybutton,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ],
+      return AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        transitionBuilder: (child, animation) => ScaleTransition(
+          scale: animation,
+          child: child,
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Obx(() {
-                if (profileController.userProfile.value?.adminVerify == true) {
-                  return _buildVerificationCard(controller, showVerified);
-                } else {
-                  return _buildUnVerificationCard(controller);
-                }
-              }),
-              const SizedBox(height: 24),
-              _buildProfilePhotoSection(controller),
-              const SizedBox(height: 20),
-              // _buildFormField(
-              //   'Full Name',
-              //   controller.fullNameController,
-              //   alwaysDisabled: true,
-              // ),
-              // const SizedBox(height: 20),
-              _buildFormField('First Name', controller.firstNameController),
-              const SizedBox(height: 20),
-              _buildFormField('Last Name', controller.lastNameController),
-              const SizedBox(height: 20),
-              _buildFormField(
-                'User Name',
-                controller.usernameController,
-                alwaysDisabled: true,
-              ),
-              const SizedBox(height: 20),
-              _buildEmailField(controller, showVerified),
-              const SizedBox(height: 20),
-              _buildFormField(
-                'Gender',
-                controller.genderController,
-                helperText:
-                    'Your gender can be shown based on your privacy settings',
-              ),
-              const SizedBox(height: 20),
-              _buildFormField(
-                'Age Range',
-                controller.ageRangeController,
-                helperText:
-                    'Your age range helps match you with people in similar life stages',
-              ),
-              const SizedBox(height: 20),
-              _buildBioField(controller),
-              const SizedBox(height: 20),
-              if (controller.isEditing.value)
-                SizedBox(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          bottomNavigationBar: (controller.isEditing.value) ?
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
                   height: 50,
+                  width: double.infinity,
                   child: RSaveButton(
                     key: UniqueKey(),
                     width: double.infinity,
@@ -151,7 +85,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     saveText: "Save Changes",
                     loadingText: "Saving...",
                     doneText: "Done",
-
+                  
                     onSaveTap: () async {
                       controller.saveProfile(
                         buttonNotifier: processNotifier,
@@ -170,8 +104,91 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     buttonStatusNotifier: processNotifier,
                   ),
                 ),
-              const SizedBox(height: 80),
+              ),
+            ) : null,
+                
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+              onPressed: () => Navigator.pop(context),
+            ),
+            title: const Text(
+              'My Profile',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            centerTitle: false,
+            actions: [
+              TextButton(
+                onPressed: () => controller.isEditing.toggle(),
+                child: Text(
+                  controller.isEditing.value ? 'Cancel' : 'Edit Profile',
+                  style: const TextStyle(
+                    color: AppColors.primarybutton,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
             ],
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(() {
+                  if (profileController.userProfile.value?.adminVerify == true) {
+                    return _buildVerificationCard(controller, showVerified);
+                  } else {
+                    return _buildUnVerificationCard(controller);
+                  }
+                }),
+                const SizedBox(height: 24),
+                _buildProfilePhotoSection(controller),
+                const SizedBox(height: 20),
+                // _buildFormField(
+                //   'Full Name',
+                //   controller.fullNameController,
+                //   alwaysDisabled: true,
+                // ),
+                // const SizedBox(height: 20),
+                _buildFormField('First Name', controller.firstNameController),
+                const SizedBox(height: 20),
+                _buildFormField('Last Name', controller.lastNameController),
+                const SizedBox(height: 20),
+                _buildFormField(
+                  'User Name',
+                  controller.usernameController,
+                  alwaysDisabled: true,
+                ),
+                const SizedBox(height: 20),
+                _buildEmailField(controller, showVerified),
+                const SizedBox(height: 20),
+                _buildFormField(
+                  'Gender',
+                  controller.genderController,
+                  helperText:
+                      'Your gender can be shown based on your privacy settings',
+                ),
+                const SizedBox(height: 20),
+                _buildFormField(
+                  'Age Range',
+                  controller.ageRangeController,
+                  helperText:
+                      'Your age range helps match you with people in similar life stages',
+                ),
+                const SizedBox(height: 20),
+                _buildBioField(controller),
+                const SizedBox(height: 20),
+                
+                const SizedBox(height: 80),
+              ],
+            ),
           ),
         ),
       );
@@ -385,8 +402,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       } else if (user?.image != null && user!.image!.isNotEmpty) {
         imageProvider = NetworkImage(user.image!);
       } else {
-        imageProvider = const NetworkImage(
-          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+        imageProvider = const AssetImage(
+          Assets.placeholderPerson,
         );
       }
 
@@ -396,7 +413,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       return Center(
         child: Column(
           children: [
-            CircleAvatar(radius: 50, backgroundImage: imageProvider),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey[300]!, width: 2),
+                shape: BoxShape.circle,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: CircleAvatar(radius: 50, backgroundImage: imageProvider),
+              )),
             const SizedBox(height: 20),
 
             /// Header (Name + Age + Username)
@@ -449,32 +474,36 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 }).toList(),
               ),
             ] else ...[
-              const Text('No badges found'),
+              const Text('No badges!', style: TextStyle(color: Colors.grey)),
             ],
-
-            const SizedBox(height: 20),
-
             /// Upload + Take Photo buttons
-            Row(
+            if(controller.isEditing.value) Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: _buildPhotoButton(
-                    Icons.upload,
-                    'Upload Photo',
-                    () => controller.pickImage(ImageSource.gallery),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildPhotoButton(
-                    Icons.camera_alt,
-                    'Take Photo',
-                    () => controller.pickImage(ImageSource.camera),
-                  ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildPhotoButton(
+                        Icons.upload,
+                        'Upload Photo',
+                        () => controller.pickImage(ImageSource.gallery),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildPhotoButton(
+                        Icons.camera_alt,
+                        'Take Photo',
+                        () => controller.pickImage(ImageSource.camera),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            
           ],
         ),
       );

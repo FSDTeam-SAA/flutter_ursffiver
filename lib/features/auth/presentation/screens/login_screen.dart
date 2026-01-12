@@ -10,7 +10,7 @@ import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_scre
 import 'package:flutter_ursffiver/features/profile/presentation/screens/privacy_policy_screen.dart';
 import 'package:flutter_ursffiver/features/profile/presentation/screens/terms_condition_screen.dart';
 import 'package:get/get.dart';
-import '../../../common/app_logo.dart';
+import '../../../../core/common/widget/app_logo.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -25,7 +25,7 @@ class _SignInScreenState extends State<SignInScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller = Get.put(LoginController(SnackbarNotifier(context: context)));
+    controller = LoginController(SnackbarNotifier(context: context));
   }
 
   @override

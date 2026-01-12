@@ -4,7 +4,7 @@ import 'package:flutter_ursffiver/core/common/widget/reactive_button/save_button
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/auth/controller/create_new_password_controller.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
-import 'package:flutter_ursffiver/features/common/app_logo.dart';
+import 'package:flutter_ursffiver/core/common/widget/app_logo.dart';
 import 'package:get/get.dart';
 
 class ResetPasswordScreen extends StatefulWidget {

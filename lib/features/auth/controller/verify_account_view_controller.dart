@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
 import 'package:flutter_ursffiver/core/notifiers/button_status_notifier.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
+import 'package:flutter_ursffiver/core/utils/helpers/handle_future_request.dart';
 import 'package:flutter_ursffiver/features/auth/interface/auth_interface.dart';
 import 'package:flutter_ursffiver/features/auth/model/verify_otp_param.dart';
 import 'package:get/get.dart';
@@ -42,18 +43,14 @@ class VerifyAccountViewController extends VerifyOtpController {
 
   @override
   void verify() async {
-    if (prcessNotifier.status is LoadingStatus) return;
-    debugPrint("verifying...");
-    prcessNotifier.setLoading();
-    await authInterface
-        .verifyAccount(VerifyOtpParam(email: email, otp: otp))
-        .then((lr) {
-          handleFold(
-            either: lr,
-            processStatusNotifier: prcessNotifier,
-            successSnackbarNotifier: snackbarNotifier,
-          );
-        });
+    await handleFutureRequest(
+      futureRequest: () {
+        return authInterface.verifyCode(VerifyOtpParam(email: email, otp: otp));
+      },
+      processStatusNotifier: prcessNotifier,
+      successSnackbarNotifier: snackbarNotifier,
+      errorSnackbarNotifier: snackbarNotifier,
+    );
   }
 }
 
@@ -65,18 +62,13 @@ class VerifyForgetPasswordOtpController extends VerifyOtpController {
 
   @override
   void verify() async {
-    if (prcessNotifier.status is LoadingStatus) return;
-    debugPrint("verifying...");
-    prcessNotifier.setLoading();
-    await authInterface.verifyCode(VerifyOtpParam(email: email, otp: otp)).then(
-      (lr) {
-        handleFold(
-          either: lr,
-          processStatusNotifier: prcessNotifier,
-          successSnackbarNotifier: snackbarNotifier,
-          errorSnackbarNotifier: snackbarNotifier,
-        );
+    await handleFutureRequest(
+      futureRequest: () {
+        return authInterface.verifyCode(VerifyOtpParam(email: email, otp: otp));
       },
+      processStatusNotifier: prcessNotifier,
+      successSnackbarNotifier: snackbarNotifier,
+      errorSnackbarNotifier: snackbarNotifier,
     );
   }
 }

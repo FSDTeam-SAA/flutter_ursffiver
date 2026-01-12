@@ -123,8 +123,8 @@ class LoginController extends GetxController {
       onError: (error) {
         debugPrint("LOGIN ERROR: ${error.uiMessage}");
 
-        /// CASE 1: Mapped Failure enum → email not verified
-        if (error.failure == Failure.forbidden) {
+        /// CASE 1: If Backend sends 401 status code
+        if (error.failure == Failure.unauthorized) {
           needVerifyAccount();
           return;
         }

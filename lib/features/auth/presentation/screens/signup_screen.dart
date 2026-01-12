@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_ursffiver/core/common/widget/reactive_button/r_icon.dart';
+import 'package:flutter_ursffiver/core/extensions/textstyle_ext.dart';
 import 'package:flutter_ursffiver/features/auth/controller/signup_controller.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/verify_screen.dart';
@@ -10,7 +11,7 @@ import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
 import 'package:intl/intl.dart';
-import '../../../common/app_logo.dart';
+import '../../../../core/common/widget/app_logo.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -299,14 +300,23 @@ class _SignupScreen extends State<SignupScreen> {
                               Expanded(
                                 child: _Labeled(
                                   label: 'First Name',
-                                  child: TextFormField(
-                                    controller: _firstName,
-                                    onChanged: signupController.setFirstName,
-                                    decoration: _decoration('Name Here'),
-                                    validator: (v) =>
-                                        (v == null || v.trim().isEmpty)
-                                        ? 'Required'
-                                        : null,
+                                  child: ObxValue(
+                                    (val){
+                                      _firstName.text = val.value;
+                                      _firstName.selection = TextSelection.fromPosition(
+                                        TextPosition(offset: _firstName.text.length),
+                                      );
+                                      return TextFormField(
+                                        controller: _firstName,
+                                        onChanged: signupController.setFirstName,
+                                        decoration: _decoration('Name Here'),
+                                        validator: (v) =>
+                                            (v == null || v.trim().isEmpty)
+                                            ? 'Required'
+                                            : null,
+                                      );
+                                    },
+                                    signupController.firstName,
                                   ),
                                 ),
                               ),
@@ -314,14 +324,23 @@ class _SignupScreen extends State<SignupScreen> {
                               Expanded(
                                 child: _Labeled(
                                   label: 'Last Name',
-                                  child: TextFormField(
-                                    controller: _lastName,
-                                    onChanged: signupController.setLastName,
-                                    decoration: _decoration('Name Here'),
-                                    validator: (v) =>
-                                        (v == null || v.trim().isEmpty)
-                                        ? 'Required'
-                                        : null,
+                                  child:  ObxValue(
+                                    (val){
+                                      _lastName.text = val.value;
+                                      _lastName.selection = TextSelection.fromPosition(
+                                        TextPosition(offset: _lastName.text.length),
+                                      );
+                                      return TextFormField(
+                                        controller: _lastName,
+                                        onChanged: signupController.setLastName,
+                                        decoration: _decoration('Name Here'),
+                                        validator: (v) =>
+                                            (v == null || v.trim().isEmpty)
+                                            ? 'Required'
+                                            : null,
+                                      );
+                                    },
+                                    signupController.lastName,
                                   ),
                                 ),
                               ),
@@ -331,13 +350,61 @@ class _SignupScreen extends State<SignupScreen> {
 
                           _Labeled(
                             label: 'User Name',
-                            child: TextFormField(
-                              controller: _userName,
-                              onChanged: signupController.setUsername,
-                              decoration: _decoration('User Name Here'),
-                              validator: (v) => (v == null || v.trim().isEmpty)
-                                  ? 'Required'
-                                  : null,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFormField(
+                                  controller: _userName,
+                                  onChanged: signupController.setUsername,
+                                  decoration: _decoration('User Name Here'),
+                                  validator: (v) => (v == null || v.trim().isEmpty)
+                                      ? 'Required'
+                                      : null,
+                                ),
+
+                                ObxValue(
+                                  (val){
+                                    if(val.value == null) {
+                                      return Container();
+                                    }
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: val.value!.isUnique ? Row(
+                                        spacing: 8,
+                                        children: [
+                                          Icon(
+                                            Icons.check_circle,
+                                            color: const Color.fromARGB(255, 91, 201, 95),
+                                            size: 16,
+                                          ),
+                                          Text(
+                                            val.value!.message, 
+                                            style: TextStyle(color: const Color.fromARGB(255, 91, 201, 95) ).bold,
+                                          ),
+                                        ],
+                                      ).animate()
+                                      .slideY(duration: 500.ms, curve: Curves.easeOutCirc)
+                                      .fadeIn(duration: 500.ms, curve: Curves.easeOutCirc) : Row(
+                                        spacing: 8,
+                                        children: [
+                                          Icon(
+                                            Icons.cancel,
+                                            color:  Colors.red,
+                                            size: 16,
+                                          ),
+                                          Text(
+                                            val.value!.message, 
+                                            style: TextStyle(color: Colors.red).bold,
+                                          ),
+                                        ],
+                                      ).animate()
+                                        .slideY(duration: 500.ms, curve: Curves.easeOutCirc)
+                                        .fadeIn(duration: 500.ms, curve: Curves.easeOutCirc)
+                                    );
+                                  }, 
+                                  signupController.usernameCheckResponse
+                                )
+                              ],
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -373,7 +440,7 @@ class _SignupScreen extends State<SignupScreen> {
                                   child: TextFormField(
                                     controller: _dob,
                                     readOnly: true,
-                                    decoration: _decoration('DD/MM/YY').copyWith(
+                                    decoration: _decoration('MM/DD/YYYY').copyWith(
                                       suffixIcon: const Icon(Icons.event_outlined),
                                     ),
                                     onTap: () async {
@@ -408,55 +475,64 @@ class _SignupScreen extends State<SignupScreen> {
                               Expanded(
                                 child: _Labeled(
                                   label: 'Gender',
-                                  child: _Dropdown<String>(
-                                    value: _gender,
-                                    hint: 'Select',
-                                    items: const [
-                                      'Male',
-                                      'Female',
-                                      'Non-binary',
-                                      'Prefer not to say',
-                                    ],
-                                    onChanged: (v) {
-                                      setState(() => _gender = v);
-                                      signupController.setGender(v ?? '');
-                                    },
-                                  ),
+                                  child: ObxValue(
+                                    (gender){
+                                      return _Dropdown<String>(
+                                        key: UniqueKey(),
+                                        value: gender.value,
+                                        hint: 'Select',
+                                        items: const [
+                                          'Male',
+                                          'Female',
+                                          'Non-binary',
+                                          'Prefer not to say',
+                                        ],
+                                        onChanged: (v) {
+                                          signupController.setGender(v ?? '');
+                                        },
+                                      );
+                                    }, signupController.gender,
+                                  )
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: _Labeled(
                                   label: 'Age Range',
-                                  child: _Dropdown<String>(
-                                    value: _ageRange,
-                                    hint: 'Select',
-                                    items: [
-                                      '18 - 24',
-                                      '21 - 27',
-                                      '25 - 32',
-                                      '29 - 36',
-                                      '35 - 43',
-                                      '39 - 46',
-                                      '44 - 55',
-                                      '53 - 59',
-                                      '58 - 66',
-                                      '63 - 69',
-                                      '68 - 76',
-                                      '73 - 79',
-                                      '78 - 86',
-                                      '83 - 89',
-                                      '87 - 96',
-                                      '93 - 99',
-                                      '100+',
-                                    ],
-                                    onChanged: (v) {
-                                      setState(() => _ageRange = v);
-                                      signupController.setAgeRange(v ?? '');
+                                  child: ObxValue(
+                                    (ageRange) {
+                                      return _Dropdown<String>(
+                                        value: ageRange.value,
+                                        hint: 'Select',
+                                        items: [
+                                          '18 - 24',
+                                          '21 - 27',
+                                          '25 - 32',
+                                          '29 - 36',
+                                          '35 - 43',
+                                          '39 - 46',
+                                          '44 - 55',
+                                          '53 - 59',
+                                          '58 - 66',
+                                          '63 - 69',
+                                          '68 - 76',
+                                          '73 - 79',
+                                          '78 - 86',
+                                          '83 - 89',
+                                          '87 - 96',
+                                          '93 - 99',
+                                          '100+',
+                                        ],
+                                        onChanged: (v) {
+                                          signupController.setAgeRange(v ?? '');
+                                        },
+                                      );
                                     },
-                                  ),
+                                    signupController.ageRange,
+                                  )
                                 ),
                               ),
+                            
                             ],
                           ),
                           const SizedBox(height: 12),
@@ -485,30 +561,40 @@ class _SignupScreen extends State<SignupScreen> {
 
                           _Labeled(
                             label: 'Create Password',
-                            child: TextFormField(
-                              controller: _password,
-                              obscureText: !_showPassword,
-                              onChanged: signupController.setPassword,
-                              decoration: _decoration('Password').copyWith(
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _showPassword
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
+                            child: ObxValue(
+                              (val){
+                                _password.text = val.value ?? '';
+                                _password.selection = TextSelection.fromPosition(
+                                  TextPosition(offset: _password.text.length),
+                                );
+                                return Obx(
+                                  () => TextFormField(
+                                    controller: _password,
+                                    obscureText: !signupController.showPassword.value,
+                                    onChanged: signupController.setPassword,
+                                    decoration: _decoration('Password').copyWith(
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          signupController.showPassword.value
+                                              ? Icons.visibility_off
+                                              : Icons.visibility,
+                                        ),
+                                        onPressed: () {
+                                          signupController.showPassword.value =
+                                              !signupController.showPassword.value;
+                                        }
+                                      ),
+                                    ),
+                                    validator: (v) {
+                                      if (v == null || v.isEmpty) return 'Required';
+                                      if (!_hasMinLength(v)) {
+                                        return 'Minimum 8 characters';
+                                      }
+                                      return null;
+                                    },
                                   ),
-                                  onPressed: () => setState(
-                                    () => _showPassword = !_showPassword,
-                                  ),
-                                ),
-                              ),
-                              validator: (v) {
-                                if (v == null || v.isEmpty) return 'Required';
-                                if (!_hasMinLength(v)) {
-                                  return 'Minimum 8 characters';
-                                }
-                                return null;
-                              },
-                            ),
+                                );
+                              }, signupController.password,)
                           ),
                           const SizedBox(height: 8),
 
@@ -535,31 +621,43 @@ class _SignupScreen extends State<SignupScreen> {
 
                           _Labeled(
                             label: 'Confirm Password',
-                            child: TextFormField(
-                              controller: _confirmPassword,
-                              obscureText: !_showConfirm,
-                              onChanged: signupController.setConfirmPassword,
-                              decoration: _decoration('Confirm Password')
-                                  .copyWith(
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        _showConfirm
-                                            ? Icons.visibility_off
-                                            : Icons.visibility,
-                                      ),
-                                      onPressed: () => setState(
-                                        () => _showConfirm = !_showConfirm,
-                                      ),
-                                    ),
+                            child: ObxValue(
+                              (val) {
+                                _confirmPassword.text = val.value ?? '';
+                                _confirmPassword.selection = TextSelection.fromPosition(
+                                  TextPosition(offset: _confirmPassword.text.length),
+                                );
+                                return Obx(
+                                  ()=> TextFormField(
+                                    controller: _confirmPassword,
+                                    obscureText: !signupController.showConfirmPassword.value,
+                                    onChanged: signupController.setConfirmPassword,
+                                    decoration: _decoration('Confirm Password')
+                                        .copyWith(
+                                          suffixIcon: IconButton(
+                                            icon: Icon(
+                                              signupController.showConfirmPassword.value
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                            ),
+                                            onPressed: () {
+                                              signupController.showConfirmPassword.value =
+                                                  !signupController.showConfirmPassword.value;
+                                            }
+                                          ),
+                                        ),
+                                    validator: (v) {
+                                      if (v == null || v.isEmpty) return 'Required';
+                                      if (v != _password.text) {
+                                        return 'Passwords do not match';
+                                      }
+                                      return null;
+                                    },
                                   ),
-                              validator: (v) {
-                                if (v == null || v.isEmpty) return 'Required';
-                                if (v != _password.text) {
-                                  return 'Passwords do not match';
-                                }
-                                return null;
+                                );
                               },
-                            ),
+                              signupController.confirmPassword,
+                            )
                           ),
                           const SizedBox(height: 20),
 
@@ -712,6 +810,7 @@ class _Dropdown<T> extends StatelessWidget {
     required this.items,
     required this.onChanged,
     required this.hint,
+    super.key,
   });
   final T? value;
   final List<String> items;
@@ -721,7 +820,7 @@ class _Dropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
-      value: value,
+      initialValue: value,
       isExpanded: true,
       items: items
           .map((e) => DropdownMenuItem<T>(value: e as T, child: Text(e)))

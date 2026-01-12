@@ -7,9 +7,7 @@ import 'package:flutter_ursffiver/features/auth/presentation/screens/login_scree
 import 'package:flutter_ursffiver/app/main_app.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
-
 import '../core/constants/api_endpoints.dart';
-import 'controller/app_global_controllers.dart';
 
 class AppManager extends GetxController {
   StreamSubscription? _authStreamSubscription;
@@ -62,10 +60,16 @@ class AppManager extends GetxController {
           joinId: (currentAuthStatus as Authenticated).auth.userId,
         ),
       );
-  Get.find<AppPigeon>().emit(
-    "join",
-    ((currentAuthStatus as Authenticated).auth.userId),
-  );
+    Get.find<AppPigeon>().emit(
+      "join",
+      ((currentAuthStatus as Authenticated).auth.userId),
+    );
+  }
+
+  @override
+  dispose() {
+    _authStreamSubscription?.cancel();
+    super.dispose();
   }
   
 }

@@ -36,6 +36,15 @@ base class BaseRepository {
       debugPrint(e.response?.data["message"].toString());
       debugPrint(stackTrace.toString());
       //debugger?.dekhao("DioFailure $e");
+      if(e.response?.statusCode == 401){
+        return Left(
+          DataCRUDFailure(
+            failure: Failure.unauthorized,
+            uiMessage: "Unauthorized access!",
+            fullError: 'Unauthorized access! ${'\n'} Error: ${e.toString()}',
+          ),
+        );
+      }
       switch (e.type) {
         case DioExceptionType.connectionTimeout:
           return Left(
