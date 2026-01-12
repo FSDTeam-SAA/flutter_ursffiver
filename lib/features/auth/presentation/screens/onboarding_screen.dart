@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/signup_screen.dart';
 import 'package:get/get.dart';
-import '../../../common/app_logo.dart';
+import '../../../../core/common/widget/app_logo.dart';
 
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({super.key});

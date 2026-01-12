@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
 import 'package:intl/intl.dart';
-import '../../../common/app_logo.dart';
+import '../../../../core/common/widget/app_logo.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

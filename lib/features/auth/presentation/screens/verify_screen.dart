@@ -7,7 +7,7 @@ import 'package:flutter_ursffiver/features/auth/controller/forget_password contr
 import 'package:flutter_ursffiver/features/auth/controller/verify_account_view_controller.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/reset_password_screen.dart';
-import 'package:flutter_ursffiver/features/common/app_logo.dart';
+import 'package:flutter_ursffiver/core/common/widget/app_logo.dart';
 
 class VerifyScreen extends StatefulWidget {
   final String email;
@@ -270,11 +270,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                       }
                     },
                     onSaveTap: () async {
-                      if (widget.isFromRegisterScreen) {
-                        verifyAccountCntlr.verify();
-                      } else {
-                        verifyAccountCntlr.verify();
-                      }
+                      verifyAccountCntlr.verify();
                     },
                   ),
                 ),
