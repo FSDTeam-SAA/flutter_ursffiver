@@ -1,4 +1,3 @@
-import 'package:flutter_ursffiver/features/inbox/model/send_message_request_param.dart';
 
 class TimeExtendReqParam {
   final int time;

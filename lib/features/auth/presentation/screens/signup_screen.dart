@@ -47,8 +47,8 @@ class _SignupScreen extends State<SignupScreen> {
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
 
-  bool _showPassword = false;
-  bool _showConfirm = false;
+  final bool _showPassword = false;
+  final bool _showConfirm = false;
 
   String? _gender;
   String? _ageRange;

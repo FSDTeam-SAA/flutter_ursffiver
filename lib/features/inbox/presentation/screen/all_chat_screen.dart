@@ -275,7 +275,7 @@ class MessageTile extends StatelessWidget {
               contactName: chatController.chatTitle,
               avatarUrl: chatController.chatModel?.avatarUrl ?? '',
               chatController: chatController,
-              userId: chatController.chatModel?.user?.id ?? '',
+              userId: chatController.chatModel?.user.id ?? '',
               otherUserId: chatController.otherUserId,
             ),
           ),

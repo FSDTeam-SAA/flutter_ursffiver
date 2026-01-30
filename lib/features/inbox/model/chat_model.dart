@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 
@@ -63,7 +62,7 @@ class ChatModel {
       id: id ?? this.id,
       requestedBy: requestedBy ?? this.requestedBy,
       user: user ?? this.user,
-      name: title ?? this.name,
+      name: title ?? name,
       status: status ?? this.status,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       lastMessage: lastMessage ?? this.lastMessage,
@@ -84,7 +83,7 @@ class ChatModel {
       'lastMessage': lastMessage?.toJson(),
       //'participants': participants,
       'createdAt': createdAt.toUtc().toIso8601String(),
-      'time': time?.toUtc().toIso8601String(),
+      'time': time.toUtc().toIso8601String(),
     };
   }
 

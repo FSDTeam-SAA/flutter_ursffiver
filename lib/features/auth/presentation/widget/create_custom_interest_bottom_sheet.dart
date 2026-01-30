@@ -9,7 +9,7 @@ void showCreateCustomInterest(
 ) {
   final TextEditingController nameCtl = TextEditingController();
   List<InterestColor> interestColors = InterestColor.values;
-  InterestColor _selectedColor = InterestColor.red;
+  InterestColor selectedColor = InterestColor.red;
 
   showDialog(
     context: context,
@@ -64,7 +64,7 @@ void showCreateCustomInterest(
                       child: GestureDetector(
                         onTap: () {
                           setLocal(() {
-                            _selectedColor = e;
+                            selectedColor = e;
                           });
                         },
                         child: Container(
@@ -75,7 +75,7 @@ void showCreateCustomInterest(
                             color: e.deepColor,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: e == _selectedColor ? const Icon(Icons.check, color: Colors.white,) : const Icon(Icons.check, color: Colors.transparent,)
+                          child: e == selectedColor ? const Icon(Icons.check, color: Colors.white,) : const Icon(Icons.check, color: Colors.transparent,)
                         ),
                       ),
                     );
@@ -88,7 +88,7 @@ void showCreateCustomInterest(
                 child: ElevatedButton(
                   onPressed: () {
                     controller.addCustomInterest(
-                          CreateCustomInterestReqParam(name: nameCtl.text, color: _selectedColor),
+                          CreateCustomInterestReqParam(name: nameCtl.text, color: selectedColor),
                         );
                         Navigator.pop(context);
                   },

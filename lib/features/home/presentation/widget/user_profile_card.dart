@@ -8,10 +8,7 @@ import 'package:flutter_ursffiver/features/inbox/presentation/widget/send_messag
 import 'package:flutter_ursffiver/features/profile/model/user_profile.dart';
 import 'package:get/get.dart';
 
-import '../../../../app/controller/home_controller.dart';
 import '../../../../core/common/model/interest_model.dart';
-import '../../../inbox/controller/inbox_chat_data_provider.dart';
-import '../../../profile/controller/profile_data_controller.dart';
 
 class UserProfileCard extends StatefulWidget {
   final UserProfile user;

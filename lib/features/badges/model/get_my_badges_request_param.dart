@@ -1,5 +1,5 @@
 class GetmyBadgesRequestParam {
 
-  toJson() => {};
+  Map toJson() => {};
 
 }

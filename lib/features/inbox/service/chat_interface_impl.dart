@@ -6,7 +6,6 @@ import 'package:flutter_ursffiver/core/constants/api_endpoints.dart';
 import 'package:flutter_ursffiver/core/helpers/typedefs.dart';
 import 'package:flutter_ursffiver/core/services/app_pigeon/app_pigeon.dart';
 import 'package:flutter_ursffiver/features/inbox/interface/chat_interface.dart';
-import 'package:flutter_ursffiver/features/inbox/model/chat_data.dart';
 import 'package:flutter_ursffiver/features/inbox/model/create_chat_request_model.dart';
 import 'package:flutter_ursffiver/features/inbox/model/get_messages_param.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';

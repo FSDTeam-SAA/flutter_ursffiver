@@ -156,7 +156,7 @@ class LabeledDropdown extends StatelessWidget {
             const SizedBox(height: 6),
           ],
           DropdownButtonFormField<String>(
-            value: value,
+            initialValue: value,
             style: TextStyle(fontSize: textSize, color: textColor),
             decoration: InputDecoration(
               hintText: hintText,

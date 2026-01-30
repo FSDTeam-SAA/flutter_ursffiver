@@ -2,7 +2,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
 import 'package:flutter_ursffiver/core/notifiers/button_status_notifier.dart';
 import 'package:flutter_ursffiver/features/inbox/interface/chat_interface.dart';
-import 'package:flutter_ursffiver/features/inbox/model/chat_data.dart';
 import 'package:flutter_ursffiver/features/inbox/model/get_messages_param.dart';
 import 'package:flutter_ursffiver/features/inbox/model/message_model.dart';
 import 'package:flutter_ursffiver/features/inbox/model/time_extend_model.dart';
@@ -43,7 +42,7 @@ class ChatController extends GetxController {
     final currentUser =
         Get.find<ProfileDataProvider>().userProfile.value?.id ?? "";
     return chatModel?.requestedBy.id == currentUser
-        ? chatModel?.user?.id ?? ""
+        ? chatModel?.user.id ?? ""
         : chatModel?.requestedBy.id ?? "";
   }
 

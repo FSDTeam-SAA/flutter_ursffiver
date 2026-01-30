@@ -1,4 +1,3 @@
-import 'chat_data.dart';
 import 'chat_model.dart';
 
 class SendMessageResponseModel {

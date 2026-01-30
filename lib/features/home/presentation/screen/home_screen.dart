@@ -299,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class _SpeetAvailability extends StatefulWidget {
   final FilterPeopleSuggestionController filterPeopleSuggestionController;
-  const _SpeetAvailability({super.key, required this.filterPeopleSuggestionController});
+  const _SpeetAvailability({required this.filterPeopleSuggestionController});
 
   @override
   State<_SpeetAvailability> createState() => __SpeetAvailabilityState();
@@ -647,7 +647,7 @@ class UserSuggestionSkeleton extends StatelessWidget {
 
 class _SelectRange extends StatefulWidget {
   final Function(LocationRange selected) onSelect;
-  const _SelectRange({super.key, required this.onSelect});
+  const _SelectRange({required this.onSelect});
 
   @override
   State<_SelectRange> createState() => _SelectRangeState();

@@ -373,7 +373,7 @@ class SupportScreen extends StatelessWidget {
                       // ),
                       ElevatedButton.icon(
                         onPressed: () {
-                          final TextEditingController _controller =
+                          final TextEditingController controller =
                               TextEditingController();
 
                           showDialog(
@@ -391,7 +391,7 @@ class SupportScreen extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               content: ContributionDialogField(
-                                controller: _controller,
+                                controller: controller,
                               ),
                             ),
                           );

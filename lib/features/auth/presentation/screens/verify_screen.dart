@@ -73,8 +73,12 @@ class _VerifyScreenState extends State<VerifyScreen> {
 
   @override
   void dispose() {
-    for (final n in _nodes) n.dispose();
-    for (final c in _controllers) c.dispose();
+    for (final n in _nodes) {
+      n.dispose();
+    }
+    for (final c in _controllers) {
+      c.dispose();
+    }
     _timer?.cancel();
     super.dispose();
   }

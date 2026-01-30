@@ -8,13 +8,10 @@ import 'package:flutter_ursffiver/features/auth/interface/auth_interface.dart';
 import 'package:flutter_ursffiver/features/auth/model/signup_model.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
-import '../../../core/common/model/create_custom_interest_param.dart';
 import '../../../core/notifiers/button_status_notifier.dart';
 import '../../../core/notifiers/snackbar_notifier.dart';
 import '../model/create_custom_interest_req_param.dart';
-import '../../../core/common/model/interest_model.dart';
 import '../model/username_check_response.dart';
-import '../presentation/screens/verify_screen.dart';
 
 class SignUpController extends GetxController {
   final Debouncer _debouncer = Debouncer(delay: const Duration(milliseconds: 500));

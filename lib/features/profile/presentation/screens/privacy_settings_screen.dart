@@ -117,7 +117,7 @@ class PrivacySettingsScreen extends StatelessWidget {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: AppColors.primarybutton,
+            activeThumbColor: AppColors.primarybutton,
           ),
         ],
       ),
