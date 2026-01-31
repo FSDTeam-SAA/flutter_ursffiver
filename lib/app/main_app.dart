@@ -50,7 +50,7 @@ class _MainAppState extends State<MainApp> with TickerProviderStateMixin{
         height: 100,
         decoration: BoxDecoration(
           color: const Color(0xFFECEDFD),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(0),
         ),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         child: SafeArea(

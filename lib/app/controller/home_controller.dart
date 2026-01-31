@@ -3,12 +3,8 @@ import 'package:flutter_ursffiver/features/home/controller/filter_people_suggest
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  HomeController() {
-    filterPeopleSuggestionController.findSuggestion(forceFresh: true);
-  }
+  HomeController();
 
   final FilterPeopleSuggestionController filterPeopleSuggestionController = FilterPeopleSuggestionController();
   final InterestSelectionController interestSelectionController = InterestSelectionController();
-
-  
 }

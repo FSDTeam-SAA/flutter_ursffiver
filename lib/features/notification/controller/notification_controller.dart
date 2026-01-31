@@ -12,6 +12,7 @@ class NotificationController extends GetxController {
   final notifications = <NotificationModel>[].obs;
   final isLoading = false.obs;
   final ProcessStatusNotifier processStatusNotifier = ProcessStatusNotifier();
+  // For realtime updates
   StreamSubscription? _streamSubscription;
 
   NotificationController() {
@@ -32,6 +33,11 @@ class NotificationController extends GetxController {
     // TODO: implement dispose
     _streamSubscription?.cancel();
     super.dispose();
+  }
+
+  void removeAt(int index) {
+    notifications.removeAt(index);
+    notifications.refresh();
   }
 
   void toggleExpand(int index) {

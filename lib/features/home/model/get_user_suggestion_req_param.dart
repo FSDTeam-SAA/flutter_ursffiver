@@ -42,11 +42,15 @@ class GetUserSuggestionReqParam {
   List<String> interests;
   Coordinates? location;
   LocationRange? locationRange;
+  final int page;
+  final int limit;
 
   GetUserSuggestionReqParam({
     required this.interests,
     required this.location,
     required this.locationRange,
+    required this.page,
+    required this.limit,
   });
 
   Map<String, dynamic> toMap() {
@@ -57,11 +61,13 @@ class GetUserSuggestionReqParam {
       if(location != null) 'lng': location?.longitude,
       if(locationRange != null && location != null)'radius': locationRange!.rangeInMiles,
       if(locationRange != null && location != null)'unit': "mile",
+      'page': page,
+      'limit': limit,
     };
   }
 
   @override
   String toString() {
-    return 'GetUserSuggestionReqParam(interests: $interests, location: $location, locationRange: $locationRange)';
+    return 'GetUserSuggestionReqParam(interests: $interests, location: $location, locationRange: $locationRange, page: $page, limit: $limit)';
   }
 }

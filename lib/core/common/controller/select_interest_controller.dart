@@ -114,7 +114,7 @@ class InterestSelectionController extends GetxController {
   void toggleSelectInterest(InterestModel interest) {
     // Deselecting is always allowed
     if (selectedInterests[interest.id] == true) {
-      selectedInterests[interest.id] = false;
+      selectedInterests.remove(interest.id);
       selectedIndexCnt.value--;
       return;
     }

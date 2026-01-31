@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_ursffiver/app/controller/home_controller.dart';
 import 'package:flutter_ursffiver/core/common/sheets/interest_picker_sheet.dart';
+import 'package:flutter_ursffiver/core/component/pagination/pagination.dart';
 import 'package:flutter_ursffiver/core/component/pagination/widget/paginated_list.dart';
 import 'package:flutter_ursffiver/core/common/widget/labeled_dropdown.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_ursffiver/features/home/model/get_user_suggestion_req_pa
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_verification_screen.dart';
 import 'package:flutter_ursffiver/features/home/presentation/widget/user_profile_card.dart';
 import 'package:flutter_ursffiver/features/home/presentation/screen/user_unvarifaid_screen.dart';
+import 'package:flutter_ursffiver/features/home/service/home_interface.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -33,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final FilterPeopleSuggestionController _filterPeopleSuggestionController =
       Get.find<HomeController>()
           .filterPeopleSuggestionController;
+  late final PaginationController<UserProfile> _userSuggestions;
 
   
   final ProfileDataProvider _profieDataController =
@@ -42,6 +45,29 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _profieDataController.getCurrentUserProfile();
+    _filterPeopleSuggestionController.selectInterestController.init(preSelectedInterests: (_profieDataController.userProfile.value?.interests.toSet() ?? {}).toList());
+    _userSuggestions = PaginationController(
+      [], 
+      onRefresh: ({required searchText}) async=> await Get.find<HomeInterface>().getSuggestions(
+        GetUserSuggestionReqParam(
+          interests: _filterPeopleSuggestionController.selectedInterestIds,
+          locationRange: _filterPeopleSuggestionController.selectedLocationRange.value,
+          location: _filterPeopleSuggestionController.currentLocation,
+          page: 1,
+          limit: 20,
+        )
+      ),
+      onLoadMore:({required lastData, required limit, required nextPage, required searchText}) => Get.find<HomeInterface>().getSuggestions(
+        GetUserSuggestionReqParam(
+          interests: _filterPeopleSuggestionController.selectedInterestIds,
+          locationRange: _filterPeopleSuggestionController.selectedLocationRange.value,
+          location: _filterPeopleSuggestionController.currentLocation,
+          page: nextPage,
+          limit: limit,
+        ))
+    );
+    _userSuggestions.loadNextPage();
+
     snackbarNotifier = SnackbarNotifier(context: context);
   }
 
@@ -179,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     _SelectRange(onSelect: (selectedRange) {
                       _filterPeopleSuggestionController.selectedLocationRange.value = selectedRange;
-                      _filterPeopleSuggestionController.findSuggestion(forceFresh: true);
+                      _userSuggestions.refresh();
                     }),
                     
                     const SizedBox(height: 20),
@@ -202,9 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           onPressed: () {
-                            _filterPeopleSuggestionController.findSuggestion(
-                              forceFresh: true,
-                            );
+                            _userSuggestions.refresh();
                           },
                           child: Row(
                             children: [
@@ -237,8 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .selectInterestController,
                                 brandGradient: _brandGradient,
                                 onConfirm: (selectedInterest) {
-                                  _filterPeopleSuggestionController
-                                      .findSuggestion(forceFresh: true);
+                                  _userSuggestions.refresh();
                                   Navigator.pop(context);
                                 },
                               ),
@@ -273,10 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: PaginatedListWidget(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  pagination: _filterPeopleSuggestionController.suggestionList,
-                  onRefresh:()=> _filterPeopleSuggestionController
-                      .findSuggestion(forceFresh: true),
+                  pagination: _userSuggestions,
                   skeleton: UserSuggestionSkeleton(),
                   skeletonCount: 3,
                   builder: (index, data) => _UserSuggestionCard(profile: data),

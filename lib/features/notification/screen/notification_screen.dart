@@ -88,6 +88,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
               final data = controller.notifications[index];
               return NotificationItem(
                 data: data,
+                onAccept: () {
+                  controller.removeAt(index);
+                },
+                onReject: () => {
+                  controller.removeAt(index)
+                },
                 timeText: _formatDateTime(data.createdAt),
                 onExpandToggle: () async {
                   await controller.markAsRead(index);
@@ -113,7 +119,7 @@ class NotificationItem extends StatefulWidget {
     super.key,
     required this.data,
     required this.onExpandToggle,
-    this.onAccept,
+    required this.onAccept,
     this.onReject,
     required this.timeText,
   });
@@ -275,13 +281,12 @@ class _NotificationItemState extends State<NotificationItem> {
                                             debugPrint(
                                               "Reject chat...${data.chatId}",
                                             );
-                                            await Get.find<
-                                                  InboxChatDataProvider
-                                                >()
+                                            await Get.find<InboxChatDataProvider>()
                                                 .rejectChat(data.chatId ?? "")
                                                 .then((value) {
                                                   setState(() {
                                                     minimized = true;
+                                                    widget.onReject?.call();
                                                   });
                                                 });
                                             Get.snackbar(
@@ -310,13 +315,12 @@ class _NotificationItemState extends State<NotificationItem> {
                                             debugPrint(
                                               "Accepting chat...${data.chatId}",
                                             );
-                                            await Get.find<
-                                                  InboxChatDataProvider
-                                                >()
+                                            await Get.find<InboxChatDataProvider>()
                                                 .acceptChat(data.chatId ?? "")
                                                 .then((value) {
                                                   setState(() {
                                                     minimized = true;
+                                                    widget.onAccept?.call();
                                                   });
                                                 });
                                             Get.snackbar(
