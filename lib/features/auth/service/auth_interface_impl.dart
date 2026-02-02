@@ -46,6 +46,7 @@ final class AuthInterfaceImpl extends AuthInterface {
   FutureRequest<Success> login(LoginRequestParams params) async {
     return await asyncTryCatch(
       tryFunc: () async {
+        debugPrint("params ${params.email}, ${params.password}");
         //call api
         final response = await appPigeon.post(
           ApiEndpoints.login,

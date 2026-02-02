@@ -11,9 +11,9 @@ enum NotificationType {
     switch (name) {
       case "general":
         return NotificationType.general;
-      case "accepted":
+      case "accepted request":
         return NotificationType.accepted;
-      case "rejected":
+      case "rejected request":
         return NotificationType.rejected;
       case "message request":
         return NotificationType.messageRequest;
@@ -110,5 +110,10 @@ class NotificationModel {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
+  }
+
+  @override
+  String toString() {
+    return 'NotificationModel(id: $id, title: $title, message: $message, type: $type, user: $user, chatId: $chatId, badgeId: $badgeId, isRead: $isRead, imageUrl: $imageUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }

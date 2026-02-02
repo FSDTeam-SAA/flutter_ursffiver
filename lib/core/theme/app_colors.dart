@@ -24,7 +24,7 @@ class AppColors {
   static const Color secondaryTextblack = Color(0xFF7E8492);
   static const Color messageBoxbackground = Color(0xFFE5E5E5);
   static const Color buttonTextColor = Colors.black;
-  static const Color buttonInactiveTextColor = Color(0xFF3F42EE);
+  static const Color buttonInactiveTextColor = Color.fromARGB(161, 83, 83, 84);
   static const Color secondaryText = Color(0xFF7E8492);
   static const Color buttontext = Color(0xFF000000);
 

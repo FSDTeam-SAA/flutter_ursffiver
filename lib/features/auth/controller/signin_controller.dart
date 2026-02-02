@@ -4,6 +4,7 @@ import 'package:flutter_ursffiver/core/helpers/handle_fold.dart';
 import 'package:flutter_ursffiver/core/helpers/validation.dart';
 import 'package:flutter_ursffiver/core/notifiers/button_status_notifier.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
+import 'package:flutter_ursffiver/core/utils/helpers/handle_future_request.dart';
 import 'package:flutter_ursffiver/features/auth/interface/auth_interface.dart';
 import 'package:flutter_ursffiver/features/auth/model/signin_model.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,6 @@ class LoginController extends GetxController {
   final passwordController = TextEditingController();
   final isPasswordVisible = false.obs;
   final keepSignedIn = false.obs;
-  final isLoading = false.obs;
 
   String _email = '';
   String get email => _email;
@@ -54,6 +54,7 @@ class LoginController extends GetxController {
       _email = value;
       canLogin();
     }
+    processStatusNotifier.setEnabled();
   }
 
   set password(String value) {
@@ -61,6 +62,7 @@ class LoginController extends GetxController {
       _password = value;
       canLogin();
     }
+    processStatusNotifier.setEnabled();
   }
 
   void canLogin() {
@@ -105,29 +107,21 @@ class LoginController extends GetxController {
   //   }
   // }
   Future<void> login({required VoidCallback needVerifyAccount}) async {
-  if (!formKey.currentState!.validate()) return;
-
-  isLoading.value = true;
-  processStatusNotifier.setLoading();
-
-  try {
-    final lr = await Get.find<AuthInterface>().login(
-      LoginRequestParams(email: email, password: password),
-    );
-
-    handleFold(
-      either: lr,
+    handleFutureRequest(
+      futureRequest:() async => await Get.find<AuthInterface>().login(
+        LoginRequestParams(email: email, password: password),
+      ),
       processStatusNotifier: processStatusNotifier,
       successSnackbarNotifier: snackbarNotifier,
       errorSnackbarNotifier: snackbarNotifier,
       onError: (error) {
         debugPrint("LOGIN ERROR: ${error.uiMessage}");
 
-        /// CASE 1: If Backend sends 401 status code
-        if (error.failure == Failure.unauthorized) {
-          needVerifyAccount();
-          return;
-        }
+        // /// CASE 1: If Backend sends 401 status code
+        // if (error.failure == Failure.unauthorized) {
+        //   needVerifyAccount();
+        //   return;
+        // }
 
         /// CASE 2: Backend gives custom message
         if (error.uiMessage.toLowerCase().contains("verify")) {
@@ -136,9 +130,6 @@ class LoginController extends GetxController {
         }
       },
     );
-  } finally {
-    isLoading.value = false;
   }
-}
 
 }

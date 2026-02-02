@@ -73,19 +73,26 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
         ],
       ),
-      body: Obx(() {
+      body: ObxValue((notifications) {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
         if (controller.notifications.isEmpty) {
           return const Center(child: Text("No notifications found"));
         }
+        debugPrint("Rendering ${controller.notifications.length} notifications");
         return ListView.builder(
           padding: const EdgeInsets.all(16),
-          itemCount: controller.notifications.length,
+          itemCount: notifications.length,
           itemBuilder: (context, index) {
             return Obx(() {
               final data = controller.notifications[index];
+              debugPrint("Notification data: ${data.toString()}");
+              // return Container(
+              //   height: 100,
+              //   width: 100,
+              //   color: Colors.amber,
+              // );
               return NotificationItem(
                 data: data,
                 onAccept: () {
@@ -103,7 +110,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             });
           },
         );
-      }),
+      }, controller.notifications),
     );
   }
 }
@@ -146,10 +153,10 @@ class _NotificationItemState extends State<NotificationItem> {
     if (data.type == NotificationType.messageRequest) {
       return AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        height: !minimized ? 130 : 0,
+        height: !minimized ? double.infinity : 0,
 
         // width: !minimized ? null : 0,
-        constraints: BoxConstraints(maxHeight: !minimized ? 100 : 0),
+        constraints: BoxConstraints(maxHeight: !minimized ? double.infinity : 0),
         child: GestureDetector(
           onTap: _handleTap,
           child: Container(
@@ -286,7 +293,7 @@ class _NotificationItemState extends State<NotificationItem> {
                                                 .then((value) {
                                                   setState(() {
                                                     minimized = true;
-                                                    widget.onReject?.call();
+                                                    //widget.onReject?.call();
                                                   });
                                                 });
                                             Get.snackbar(
@@ -320,7 +327,7 @@ class _NotificationItemState extends State<NotificationItem> {
                                                 .then((value) {
                                                   setState(() {
                                                     minimized = true;
-                                                    widget.onAccept?.call();
+                                                    // widget.onAccept?.call();
                                                   });
                                                 });
                                             Get.snackbar(

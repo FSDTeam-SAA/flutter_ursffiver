@@ -112,7 +112,6 @@ class NotificationController extends GetxController {
           notifications.value = data;
           print("data >> ${data.length}");
           notifications.refresh();
-          update();
         },
       );
     });

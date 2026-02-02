@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_ursffiver/core/common/widget/reactive_button/save_button.dart';
 import 'package:flutter_ursffiver/core/notifiers/snackbar_notifier.dart';
 import 'package:flutter_ursffiver/features/auth/controller/signin_controller.dart';
 import 'package:flutter_ursffiver/features/auth/presentation/screens/forget_password_screen.dart';
@@ -187,43 +188,32 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Obx(
-                    () => SizedBox(
+                  SizedBox(
                       height: 48,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: brandBlue,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        onPressed: controller.isLoading.value
-                            ? null
-                            : () => controller.login(
-                                needVerifyAccount: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => VerifyScreen(
-                                        email: controller.email,
-                                        isFromRegisterScreen: true,
-                                      ),
-                                    ),
-                                  );
-                                },
+                      child: RSaveButton(
+                        key: UniqueKey(),
+                        saveText: "Login",
+                        loadingText: "Logging in...",
+                        doneText: "Welcome!",
+                        buttonStatusNotifier:
+                            controller.processStatusNotifier,
+                        onSaveTap: () async{
+                          controller.login(needVerifyAccount: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => VerifyScreen(
+                                  email: controller.email,
+                                  isFromRegisterScreen: false,
+                                ),
                               ),
-                        child: controller.isLoading.value
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                            : const Text(
-                                'Log In',
-                                style: TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                      ),
+                            );
+                          });
+                        },
+                        onDone: () {},
+                      )
                     ),
-                  ),
+                  
                   const SizedBox(height: 16),
 
                   // Sign up

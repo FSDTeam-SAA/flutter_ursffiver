@@ -76,7 +76,7 @@ class _RSaveButtonState extends State<RSaveButton> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        print(constraints);
+        debugPrint(constraints.toString());
         return AnimatedContainer(
           duration: const Duration(milliseconds: 100),
           height: widget.height ?? 52,
@@ -84,15 +84,15 @@ class _RSaveButtonState extends State<RSaveButton> {
           decoration: BoxDecoration(
             color: switch (buttonStatusNotifier.status) {
               EnabledStatus _=> AppColors.primarybutton,
-              DisabledStatus _=> AppColors.buttonInactiveTextColor,
+              DisabledStatus _=> const Color.fromARGB(160, 126, 126, 128),
               LoadingStatus _=> AppColors.buttonInactiveTextColor,
               ErrorStatus _=> AppColors.buttonInactiveTextColor,
               SuccessStatus _=> AppColors.buttonInactiveTextColor,
             },
-            borderRadius: widget.borderRadius ?? BorderRadius.circular(20),
+            borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
           ),
           child: RInkwellButton(
-            borderRadius: widget.borderRadius ?? BorderRadius.circular(20),
+            borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
             onTap: () async {
               if (buttonStatusNotifier.status is EnabledStatus) {
                 widget.onSaveTap();
