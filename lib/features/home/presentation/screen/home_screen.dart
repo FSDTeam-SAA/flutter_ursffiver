@@ -134,16 +134,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: CustomScrollView(
-          slivers: [
-            /// Availability Switch
-            SliverToBoxAdapter(
+      body: NestedScrollView(
+        headerSliverBuilder:(context, innerBoxIsScrolled) => [
+          /// Availability Switch
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
               child: _SpeetAvailability(filterPeopleSuggestionController: _filterPeopleSuggestionController),
             ),
-
-            SliverToBoxAdapter(
+          ),
+      
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -157,11 +160,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     final selectedInterests =
                         _profieDataController.userProfile.value?.interests ??
                         [];
-
+                    
                     debugPrint(
                       "selectedInterests: ${_profieDataController.userProfile.value?.interests.length ?? 0}",
                     );
-
+                    
                     if (selectedInterests.isEmpty) {
                       return const Padding(
                         padding: EdgeInsets.symmetric(
@@ -174,145 +177,143 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       );
                     }
-
+                    
                     return InterestsGrid(chips: selectedInterests);
                   }),
                   const SizedBox(height: 20),
                 ],
               ),
             ),
-
-
-
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              pinned: true,
-              toolbarHeight: 196,
-              flexibleSpace: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      "Location Range",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+          ),
+      
+      
+      
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            pinned: true,
+            toolbarHeight: 196,
+            flexibleSpace: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Location Range",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+      
+                  _SelectRange(onSelect: (selectedRange) {
+                    _filterPeopleSuggestionController.selectedLocationRange.value = selectedRange;
+                    _userSuggestions.refresh();
+                  }),
+                  
+                  const SizedBox(height: 16),
+      
+                  Row(
+                    children: [
+                      const Text(
+                        "People Nearby",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-
-                    _SelectRange(onSelect: (selectedRange) {
-                      _filterPeopleSuggestionController.selectedLocationRange.value = selectedRange;
-                      _userSuggestions.refresh();
-                    }),
-                    
-                    const SizedBox(height: 20),
-
-                    Row(
-                      children: [
-                        const Text(
-                          "People Nearby",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                      const Spacer(),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
                           ),
                         ),
-                        const Spacer(),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
+                        onPressed: () {
+                          _userSuggestions.refresh();
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.refresh,
+                              size: 24,
+                              color: AppColors.primarybutton,
                             ),
-                          ),
-                          onPressed: () {
-                            _userSuggestions.refresh();
-                          },
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.refresh,
-                                size: 24,
+                            const SizedBox(width: 6),
+                            Text(
+                              "Refresh",
+                              style: AppText.smMedium_14_500.copyWith(
                                 color: AppColors.primarybutton,
                               ),
-                              const SizedBox(width: 6),
-                              Text(
-                                "Refresh",
-                                style: AppText.mdMedium_16_500.copyWith(
-                                  color: AppColors.primarybutton,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-
-                        InkWell(
-                          onTap: () {
-                            showModalBottomSheet<Set<String>>(
-                              context: context,
-                              isScrollControlled: true,
-                              useSafeArea: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (_) => InterestPickerSheet.forFiltering(
-                                interestSelectionCntlr:
-                                    _filterPeopleSuggestionController
-                                        .selectInterestController,
-                                brandGradient: _brandGradient,
-                                onConfirm: (selectedInterest) {
-                                  _userSuggestions.refresh();
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(8),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.filter_alt_outlined,
+                      ),
+      
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet<Set<String>>(
+                            context: context,
+                            isScrollControlled: true,
+                            useSafeArea: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => InterestPickerSheet.forFiltering(
+                              interestSelectionCntlr:
+                                  _filterPeopleSuggestionController
+                                      .selectInterestController,
+                              brandGradient: _brandGradient,
+                              onConfirm: (selectedInterest) {
+                                _userSuggestions.refresh();
+                                Navigator.pop(context);
+                              },
+                            ),
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.filter_alt_outlined,
+                              color: AppColors.primarybutton,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "Filtering",
+                              style: AppText.smMedium_14_500.copyWith(
                                 color: AppColors.primarybutton,
                               ),
-                              const SizedBox(width: 8),
-                              Text(
-                                "Filtering",
-                                style: AppText.mdMedium_16_500.copyWith(
-                                  color: AppColors.primarybutton,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-
-            SliverFillRemaining(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: PaginatedListWidget(
-                  pagination: _userSuggestions,
-                  skeleton: UserSuggestionSkeleton(),
-                  skeletonCount: 3,
-                  builder: (index, data) => _UserSuggestionCard(profile: data),
-                ),
-              ),
-            ),
-          ],
-        ).animate()
-          .slideY(
-            begin: .9,
-            end: 0,
-            duration: 500.ms,
-            curve: Curves.easeOutCirc,
-          )
-          .fadeIn(duration: 400.ms, curve: Curves.easeOutCirc),
-      ),
+          ),
+          
+        ],
+        body: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: PaginatedListWidget(
+            pagination: _userSuggestions,
+            skeleton: UserSuggestionSkeleton(),
+            skeletonCount: 3,
+            builder: (index, data) => _UserSuggestionCard(profile: data),
+          ),
+        ),
+      ).animate()
+        .slideY(
+          begin: .9,
+          end: 0,
+          duration: 500.ms,
+          curve: Curves.easeOutCirc,
+        )
+        .fadeIn(duration: 400.ms, curve: Curves.easeOutCirc),
     );
   }
 }

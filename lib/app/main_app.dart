@@ -47,56 +47,36 @@ class _MainAppState extends State<MainApp> with TickerProviderStateMixin{
         ],
       ),
       bottomNavigationBar: Container(
-        height: 100,
+        height: 80,
         decoration: BoxDecoration(
           color: const Color(0xFFECEDFD),
           borderRadius: BorderRadius.circular(0),
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey.shade300,
+              width: 1
+            )
+          )
         ),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        child: SafeArea(
-          child: TabBar(
-            dividerColor: Colors.transparent,
-            unselectedLabelColor: Colors.grey,
-            controller: _controller,
-            tabs: [
-              Tab(
-                child: Icon(Icons.home_outlined),
-              ),
-              Tab(
-                child: Icon(Icons.chat_bubble_outline), 
-              ),
-              Tab(
-                child: Icon(Icons.emoji_events_outlined),
-              ),
-              Tab(
-                child: Icon(Icons.person_outline),
-              )
-            ],
-          ),
-          // child: Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //   children: List.generate(4, (index) {
-          //     final icons = [
-          //       Icons.home_outlined,
-          //       Icons.chat_bubble_outline,
-          //       Icons.emoji_events_outlined,
-          //       Icons.person_outline,
-          //     ];
-          
-          //     final isSelected = _currentIndex == index;
-          
-          //     return GestureDetector(
-          //       onTap: () {
-          //         _controller.
-          //       }
-          //       child: Icon(
-          //         icons[index],
-          //         size: 28,
-          //         color: isSelected ? AppColors.primarybutton : Colors.grey,
-          //       ),
-          //     );
-          //   }),
-          // ),
+        child: TabBar(
+          dividerColor: Colors.transparent,
+          unselectedLabelColor: Colors.grey,
+          controller: _controller,
+          tabs: [
+            Tab(
+              child: Icon(Icons.home_outlined),
+            ),
+            Tab(
+              child: Icon(Icons.chat_bubble_outline), 
+            ),
+            Tab(
+              child: Icon(Icons.emoji_events_outlined),
+            ),
+            Tab(
+              child: Icon(Icons.person_outline),
+            )
+          ],
         ),
       ),
     );

@@ -28,14 +28,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     appManager = Get.put(AppManager());
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     appManager.dispose();
   }

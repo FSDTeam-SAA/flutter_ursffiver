@@ -37,6 +37,7 @@ class _BadgesPageState extends State<BadgesPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -46,14 +47,16 @@ class _BadgesPageState extends State<BadgesPage>
               children: [
                 Icon(
                   Icons.workspace_premium_outlined,
-                  size: 32,
+                  size: 24,
                   color: AppColors.primarybutton,
                 ),
                 const SizedBox(width: 4),
-                Text(
-                  'Badge Management',
-                  style: AppText.xlSemiBold_20_700.copyWith(
-                    color: AppColors.primaryTextblack,
+                FittedBox(
+                  child: Text(
+                    'Badge Management',
+                    style: AppText.mdMedium_16_500.copyWith(
+                      color: AppColors.primaryTextblack,
+                    ),
                   ),
                 ),
                 const Spacer(),

@@ -356,6 +356,10 @@ class _SignupScreen extends State<SignupScreen> {
                                 TextFormField(
                                   controller: _userName,
                                   onChanged: signupController.setUsername,
+                                  // No space allowed and no uppercases and special characters
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(RegExp(r'[a-z0-9]')),
+                                  ],
                                   decoration: _decoration('User Name Here'),
                                   validator: (v) => (v == null || v.trim().isEmpty)
                                       ? 'Required'
